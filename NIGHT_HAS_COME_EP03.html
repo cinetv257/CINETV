@@ -28,7 +28,6 @@
             overflow-x: hidden;
         }
         
-        /* Navigation simplifiée */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -77,7 +76,6 @@
             cursor: pointer;
         }
         
-        /* Main Content Layout */
         .main-container {
             display: flex;
             flex-direction: column;
@@ -85,7 +83,6 @@
             min-height: calc(100vh - 160px);
         }
         
-        /* Player Section */
         .player-section {
             width: 100%;
             margin-bottom: 30px;
@@ -101,7 +98,7 @@
         .video-player {
             width: 100%;
             height: 0;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
             position: relative;
         }
         
@@ -132,44 +129,62 @@
         .interpreter i {
             color: #e94560;
         }
+
+        .video-stats {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            color: #aaa;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+        }
         
-        /* Social and action buttons */
+        .video-stats i {
+            margin-right: 5px;
+            color: #e94560;
+            font-size: 0.9rem;
+        }
+        
         .action-buttons {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 10px;
             margin: 15px 0;
         }
         
         .like-share {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
         
-        .like-btn, .share-btn {
+        .like-btn, .share-btn, .comments-btn {
             display: flex;
             align-items: center;
             gap: 5px;
             background: rgba(255, 255, 255, 0.1);
             border: none;
             color: white;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
             cursor: pointer;
             transition: background 0.3s;
+            font-size: 0.9rem;
         }
         
-        .like-btn:hover, .share-btn:hover {
+        .like-btn:hover, .share-btn:hover, .comments-btn:hover {
             background: rgba(255, 255, 255, 0.2);
         }
         
-        .like-count {
+        .like-btn i, .share-btn i, .comments-btn i {
             font-size: 0.9rem;
+        }
+        
+        .like-count, .comments-count {
+            font-size: 0.8rem;
             color: #ccc;
         }
         
-        /* Episodes Grid */
         .episodes-grid {
             width: 100%;
         }
@@ -194,7 +209,7 @@
             overflow: hidden;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s;
-            aspect-ratio: 1/1.414; /* Ratio A4 */
+            aspect-ratio: 1/1.414;
             position: relative;
         }
         
@@ -226,8 +241,7 @@
             background: rgba(0,0,0,0.5);
             padding: 3px;
         }
-        
-        /* Footer */
+
         footer {
             background: #0d0d15;
             padding: 20px 5%;
@@ -247,8 +261,7 @@
             font-style: italic;
         }
 
-        /* Share Modal */
-        .share-modal {
+        .share-modal, .comments-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -261,7 +274,7 @@
             align-items: center;
         }
 
-        .share-modal-content {
+        .share-modal-content, .comments-modal-content {
             background: #1a1a2e;
             padding: 30px;
             border-radius: 10px;
@@ -270,9 +283,18 @@
             text-align: center;
         }
 
-        .share-modal h2 {
+        .comments-modal-content {
+            max-width: 800px;
+            width: 95%;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .share-modal h2, .comments-modal h2 {
             margin-bottom: 20px;
             color: #e94560;
+            text-align: center;
         }
 
         .share-options {
@@ -323,7 +345,7 @@
             background: #555;
         }
 
-        .close-share {
+        .close-share, .close-comments {
             position: absolute;
             top: 15px;
             right: 15px;
@@ -331,8 +353,70 @@
             font-size: 24px;
             cursor: pointer;
         }
+
+        /* Comment Section */
+        .comment-form {
+            margin-bottom: 20px;
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 8px;
+        }
         
-        /* Responsive */
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            margin-bottom: 10px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .comment-form button {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .comment {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .comment-user {
+            font-weight: bold;
+            color: #e94560;
+        }
+        
+        .comment-text {
+            line-height: 1.5;
+        }
+
+        .comments-count-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .comments-modal .comments-list {
+            margin-top: 20px;
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 padding: 8px 5%;
@@ -345,6 +429,28 @@
             
             .search-box input {
                 width: 120px;
+            }
+            
+            .episode-title {
+                font-size: 1.5rem;
+            }
+            
+            .video-stats {
+                gap: 12px;
+                font-size: 0.8rem;
+            }
+            
+            .video-stats i {
+                font-size: 0.8rem;
+            }
+            
+            .action-buttons {
+                gap: 8px;
+            }
+            
+            .like-btn, .share-btn, .comments-btn {
+                padding: 5px 10px;
+                font-size: 0.85rem;
             }
             
             .episodes-container {
@@ -361,12 +467,62 @@
                 font-size: 0.7rem;
                 padding: 2px;
             }
+
+            .comments-modal-content {
+                width: 90%;
+                padding: 20px;
+            }
         }
         
         @media (max-width: 480px) {
+            .navbar {
+                padding: 8px 4%;
+            }
+            
+            .logo {
+                font-size: 1.2rem;
+            }
+            
+            .search-box {
+                padding: 5px 10px;
+            }
+            
+            .search-box input {
+                width: 100px;
+                font-size: 0.9rem;
+            }
+            
+            .episode-title {
+                font-size: 1.3rem;
+            }
+            
+            .interpreter {
+                font-size: 0.8rem;
+            }
+            
+            .video-stats {
+                gap: 10px;
+                font-size: 0.75rem;
+            }
+            
+            .action-buttons {
+                gap: 6px;
+            }
+            
+            .like-btn, .share-btn, .comments-btn {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+                gap: 3px;
+            }
+            
+            .like-btn i, .share-btn i, .comments-btn i {
+                font-size: 0.8rem;
+            }
+            
             .episodes-container {
                 grid-template-columns: repeat(3, 1fr);
                 max-width: 350px;
+                gap: 6px;
             }
             
             .episode-card {
@@ -382,11 +538,15 @@
                 height: 40px;
                 font-size: 20px;
             }
+
+            .comments-modal-content {
+                width: 95%;
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation simplifiée -->
     <nav class="navbar">
         <a href="0.html" class="logo"><i class="fas fa-film"></i> CINETV</a>
         <div class="search-box">
@@ -395,9 +555,7 @@
         </div>
     </nav>
     
-    <!-- Main Content -->
     <div class="main-container">
-        <!-- Player Section -->
         <section class="player-section">
             <div class="video-container">
                 <div class="video-player">
@@ -411,21 +569,35 @@
                 <span>ROCKY KIMONO</span>
             </div>
             
+            <div class="video-stats">
+                <div class="views-count">
+                    <i class="fas fa-eye"></i> <span id="viewsCount">0</span>
+                </div>
+                <div class="likes-count">
+                    <i class="fas fa-heart"></i> <span id="likeCount">0</span>
+                </div>
+                <div class="comments-count-container">
+                    <i class="fas fa-comment"></i> <span id="commentsCount">0</span>
+                </div>
+            </div>
+            
             <div class="action-buttons">
                 <div class="like-share">
                     <button class="like-btn" id="likeButton">
-                        <i class="far fa-heart"></i> J'aime
+                        <i class="far fa-heart"></i> <span class="btn-text">J'aime</span>
                     </button>
-                    <span class="like-count" id="likeCount">0</span>
+                    
+                    <button class="comments-btn" id="commentsButton">
+                        <i class="far fa-comment"></i> <span class="btn-text">Commenter</span>
+                    </button>
                     
                     <button class="share-btn" id="shareButton">
-                        <i class="fas fa-share"></i> Partager
+                        <i class="fas fa-share"></i> <span class="btn-text">Partager</span>
                     </button>
                 </div>
             </div>
         </section>
         
-        <!-- Episodes Grid -->
         <section class="episodes-grid">
             <h2 class="section-title">Tous les Épisodes</h2>
             <div class="episodes-container">
@@ -454,13 +626,11 @@
                     <div class="episode-number">Épisode 5</div>
                 </a>
                 
-                <!-- Élément vide pour compléter la grille -->
                 <div class="episode-card" style="visibility: hidden;"></div>
             </div>
         </section>
     </div>
     
-    <!-- Footer -->
     <footer>
         <div class="copyright">
             &copy; 2025 CINETV. Tous droits réservés.
@@ -504,57 +674,142 @@
         </div>
     </div>
 
+    <!-- Comments Modal -->
+    <div class="comments-modal" id="commentsModal">
+        <div class="comments-modal-content">
+            <span class="close-comments" id="closeComments">&times;</span>
+            <h2>Commentaires</h2>
+            <div class="comment-form">
+                <textarea id="commentInput" placeholder="Ajouter un commentaire public..."></textarea>
+                <button id="submitComment">Commenter</button>
+            </div>
+            <div class="comments-list" id="commentsList"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    
     <script>
-        // Fonctionnalité de recherche basique
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
+            authDomain: "cinetv257.firebaseapp.com",
+            databaseURL: "https://cinetv257-default-rtdb.firebaseio.com",
+            projectId: "cinetv257",
+            storageBucket: "cinetv257.appspot.com",
+            messagingSenderId: "402664770835",
+            appId: "1:402664770835:web:1adaea98f40ca609645ee6"
+        };
+        
+        // Initialiser Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Génération de l'ID utilisateur unique
+        const userId = localStorage.getItem('userId') || 'user_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('userId', userId);
+
+        // Fonctionnalité de recherche
         document.getElementById('searchButton').addEventListener('click', function() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             if (searchTerm.trim() !== '') {
-                alert('Résultats de recherche pour: ' + searchTerm + '\n\nCette fonctionnalité est en démonstration. Dans une application réelle, cela afficherait les résultats correspondants.');
+                alert('Résultats de recherche pour: ' + searchTerm);
             }
         });
 
-        // Permettre la recherche avec la touche Entrée
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('searchButton').click();
             }
         });
 
-        // Fonctionnalité de like avec stockage local
-        const likeButton = document.getElementById('likeButton');
-        const likeCount = document.getElementById('likeCount');
-        
-        // Charger les likes depuis le localStorage ou initialiser à 0
-        let likes = localStorage.getItem('nightHasComeEp3Likes') ? parseInt(localStorage.getItem('nightHasComeEp3Likes')) : 0;
-        let userLiked = localStorage.getItem('userLikedNightHasComeEp3') === 'true';
-        
-        // Mettre à jour l'affichage initial
-        updateLikeDisplay();
-        
-        likeButton.addEventListener('click', function() {
-            if (userLiked) {
-                likes--;
-                userLiked = false;
-            } else {
-                likes++;
-                userLiked = true;
+        // ========= SYSTÈME DE VUES (1 vue/appareil) =========
+        const viewsRef = database.ref('episodes/NIGHT_HAS_COME_EP03/views');
+
+        viewsRef.transaction(currentData => {
+            currentData = currentData || { count: 0, devices: {} };
+            
+            if (!currentData.devices[userId]) {
+                currentData.count++;
+                currentData.devices[userId] = true;
             }
             
-            // Sauvegarder dans le localStorage
-            localStorage.setItem('nightHasComeEp3Likes', likes);
-            localStorage.setItem('userLikedNightHasComeEp3', userLiked);
-            
-            updateLikeDisplay();
+            return currentData;
         });
-        
-        function updateLikeDisplay() {
-            likeCount.textContent = likes;
-            
-            if (userLiked) {
-                likeButton.innerHTML = '<i class="fas fa-heart" style="color:#e94560"></i> J\'aime';
-            } else {
-                likeButton.innerHTML = '<i class="far fa-heart"></i> J\'aime';
+
+        viewsRef.on('value', (snapshot) => {
+            const data = snapshot.val() || { count: 0 };
+            document.getElementById('viewsCount').textContent = data.count;
+        });
+
+        // ========= SYSTÈME DE LIKES =========
+        const likeButton = document.getElementById('likeButton');
+        const likesRef = database.ref('episodes/NIGHT_HAS_COME_EP03/likes');
+
+        likesRef.on('value', (snapshot) => {
+            const data = snapshot.val() || { count: 0, users: {} };
+            document.getElementById('likeCount').textContent = data.count;
+            likeButton.innerHTML = data.users[userId] 
+                ? '<i class="fas fa-heart" style="color:#e94560"></i> <span class="btn-text">J\'aime</span>' 
+                : '<i class="far fa-heart"></i> <span class="btn-text">J\'aime</span>';
+        });
+
+        likeButton.addEventListener('click', () => {
+            likesRef.transaction(data => {
+                data = data || { count: 0, users: {} };
+                if (data.users[userId]) {
+                    data.count--;
+                    delete data.users[userId];
+                } else {
+                    data.count++;
+                    data.users[userId] = true;
+                }
+                return data;
+            });
+        });
+
+        // ========= SYSTÈME DE COMMENTAIRES =========
+        const commentsRef = database.ref('episodes/NIGHT_HAS_COME_EP03/comments');
+
+        // Mettre à jour le compteur de commentaires
+        commentsRef.on('value', (snapshot) => {
+            const count = snapshot.numChildren();
+            document.getElementById('commentsCount').textContent = count;
+        });
+
+        document.getElementById('submitComment').addEventListener('click', () => {
+            const text = document.getElementById('commentInput').value.trim();
+            if (text) {
+                commentsRef.push({
+                    text: text,
+                    userId: userId,
+                    timestamp: Date.now(),
+                    userName: "Anonyme"
+                });
+                document.getElementById('commentInput').value = '';
             }
+        });
+
+        // Afficher les commentaires
+        function displayComments() {
+            commentsRef.orderByChild('timestamp').on('value', (snapshot) => {
+                const commentsList = document.getElementById('commentsList');
+                commentsList.innerHTML = '';
+                snapshot.forEach(child => {
+                    const comment = child.val();
+                    commentsList.innerHTML += `
+                        <div class="comment">
+                            <div class="comment-header">
+                                <span class="comment-user">${comment.userName}</span>
+                                <span class="comment-time">${new Date(comment.timestamp).toLocaleString()}</span>
+                            </div>
+                            <div class="comment-text">${comment.text}</div>
+                        </div>
+                    `;
+                });
+            });
         }
 
         // Gestion de la fenêtre de partage
@@ -570,14 +825,12 @@
             shareModal.style.display = 'none';
         });
         
-        // Fermer la fenêtre en cliquant à l'extérieur
         window.addEventListener('click', function(event) {
             if (event.target === shareModal) {
                 shareModal.style.display = 'none';
             }
         });
         
-        // Fonctionnalités de partage
         const shareFacebook = document.getElementById('shareFacebook');
         const shareTwitter = document.getElementById('shareTwitter');
         const shareWhatsapp = document.getElementById('shareWhatsapp');
@@ -608,6 +861,29 @@
                 shareModal.style.display = 'none';
             });
         });
+
+        // Gestion de la fenêtre de commentaires
+        const commentsModal = document.getElementById('commentsModal');
+        const commentsButton = document.getElementById('commentsButton');
+        const closeComments = document.getElementById('closeComments');
+        
+        commentsButton.addEventListener('click', function() {
+            commentsModal.style.display = 'flex';
+            displayComments(); // Charger les commentaires quand la modal s'ouvre
+        });
+        
+        closeComments.addEventListener('click', function() {
+            commentsModal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === commentsModal) {
+                commentsModal.style.display = 'none';
+            }
+        });
+
+        // Charger les commentaires au démarrage
+        displayComments();
     </script>
 </body>
 </html>
