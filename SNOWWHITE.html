@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5YGXCXLV6N"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-5YGXCXLV6N');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNOWWHITE | CinéTV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0f0f1b;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            background: linear-gradient(to right, #1a1a2e, #16213e);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            height: 60px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e94560;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 5px 15px;
+        }
+        
+        .search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            width: 150px;
+            padding: 5px;
+        }
+        
+        .search-box i {
+            color: #ccc;
+            cursor: pointer;
+        }
+        
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            padding: 20px 5%;
+            min-height: calc(100vh - 160px);
+        }
+        
+        .player-section {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        
+        .video-container {
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .video-player {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+        }
+        
+        .video-player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .episode-title {
+            font-size: 1.8rem;
+            margin: 15px 0 5px 0;
+            color: #e94560;
+        }
+        
+        .interpreter {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .interpreter i {
+            color: #e94560;
+        }
+
+        .video-stats {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            color: #aaa;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+        }
+        
+        .video-stats i {
+            margin-right: 5px;
+            color: #e94560;
+            font-size: 0.9rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .like-share {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .like-btn, .share-btn, .comments-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .like-btn:hover, .share-btn:hover, .comments-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .like-btn i, .share-btn i, .comments-btn i {
+            font-size: 0.9rem;
+        }
+        
+        .like-count, .comments-count {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+        
+        .similar-movies {
+            width: 100%;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #e94560;
+        }
+        
+        .movies-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .movie-card {
+            background: #1a1a2e;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+            aspect-ratio: 1/1.414;
+            position: relative;
+        }
+        
+        .movie-card:hover {
+            transform: scale(1.03);
+        }
+        
+        .movie-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .movie-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: bold;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background: #0d0d15;
+            padding: 20px 5%;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .copyright {
+            color: #777;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .designer-credit {
+            color: #aaa;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        .share-modal, .comments-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .share-modal-content, .comments-modal-content {
+            background: #1a1a2e;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .comments-modal-content {
+            max-width: 800px;
+            width: 95%;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .share-modal h2, .comments-modal h2 {
+            margin-bottom: 20px;
+            color: #e94560;
+            text-align: center;
+        }
+
+        .share-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            color: white;
+            text-decoration: none;
+        }
+
+        .share-option:hover {
+            transform: scale(1.1);
+        }
+
+        .share-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .facebook-bg {
+            background: #3b5998;
+        }
+
+        .twitter-bg {
+            background: #1da1f2;
+        }
+
+        .whatsapp-bg {
+            background: #25d366;
+        }
+
+        .link-bg {
+            background: #555;
+        }
+
+        .close-share, .close-comments {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Comment Section */
+        .comment-form {
+            margin-bottom: 20px;
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            margin-bottom: 10px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .comment-form button {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .comment {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .comment-user {
+            font-weight: bold;
+            color: #e94560;
+        }
+        
+        .comment-text {
+            line-height: 1.5;
+        }
+
+        .comments-count-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .comments-modal .comments-list {
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 8px 5%;
+                height: 50px;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .search-box input {
+                width: 120px;
+            }
+            
+            .episode-title {
+                font-size: 1.5rem;
+            }
+            
+            .video-stats {
+                gap: 12px;
+                font-size: 0.8rem;
+            }
+            
+            .video-stats i {
+                font-size: 0.8rem;
+            }
+            
+            .action-buttons {
+                gap: 8px;
+            }
+            
+            .like-btn, .share-btn, .comments-btn {
+                padding: 5px 10px;
+                font-size: 0.85rem;
+            }
+            
+            .movies-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .movie-title {
+                font-size: 0.8rem;
+                padding: 5px;
+            }
+
+            .comments-modal-content {
+                width: 90%;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 8px 4%;
+            }
+            
+            .logo {
+                font-size: 1.2rem;
+            }
+            
+            .search-box {
+                padding: 5px 10px;
+            }
+            
+            .search-box input {
+                width: 100px;
+                font-size: 0.9rem;
+            }
+            
+            .episode-title {
+                font-size: 1.3rem;
+            }
+            
+            .interpreter {
+                font-size: 0.8rem;
+            }
+            
+            .video-stats {
+                gap: 10px;
+                font-size: 0.75rem;
+            }
+            
+            .action-buttons {
+                gap: 6px;
+            }
+            
+            .like-btn, .share-btn, .comments-btn {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+                gap: 3px;
+            }
+            
+            .like-btn i, .share-btn i, .comments-btn i {
+                font-size: 0.8rem;
+            }
+            
+            .movies-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            
+            .movie-title {
+                font-size: 0.7rem;
+                padding: 4px;
+            }
+
+            .share-options {
+                gap: 10px;
+            }
+
+            .share-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .comments-modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="0.html" class="logo"><i class="fas fa-film"></i> CINETV</a>
+        <div class="search-box">
+            <input type="text" placeholder="Rechercher..." id="searchInput">
+            <i class="fas fa-search" id="searchButton"></i>
+        </div>
+    </nav>
+    
+    <div class="main-container">
+        <section class="player-section">
+            <div class="video-container">
+                <div class="video-player">
+                    <iframe src="https://drive.google.com/file/d/1N1_-Z9nEiln1QVJmj4xIGY8Z1_x8jdHF/preview" allowfullscreen></iframe>
+                </div>
+            </div>
+            
+            <h1 class="episode-title">SNOW WHITE</h1>
+            <div class="interpreter">
+                <i class="fas fa-microphone"></i>
+                <span>GAHEZA SIMBA</span>
+            </div>
+            
+            <div class="video-stats">
+                <div class="views-count">
+                    <i class="fas fa-eye"></i> <span id="viewsCount">0</span>
+                </div>
+                <div class="likes-count">
+                    <i class="fas fa-heart"></i> <span id="likeCount">0</span>
+                </div>
+                <div class="comments-count-container">
+                    <i class="fas fa-comment"></i> <span id="commentsCount">0</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <div class="like-share">
+                    <button class="like-btn" id="likeButton">
+                        <i class="far fa-heart"></i> <span class="btn-text">J'aime</span>
+                    </button>
+                    
+                    <button class="comments-btn" id="commentsButton">
+                        <i class="far fa-comment"></i> <span class="btn-text">Commenter</span>
+                    </button>
+                    
+                    <button class="share-btn" id="shareButton">
+                        <i class="fas fa-share"></i> <span class="btn-text">Partager</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <section class="similar-movies">
+            <h2 class="section-title">Films Similaires</h2>
+            <div class="movies-container">
+                <a href="HALLOWEEN.html" class="movie-card">
+                    <img src="halloween.png" alt="HALLOWEEN KILLS">
+                    <div class="movie-title">HALLOWEEN KILLS</div>
+                </a>
+                
+                <a href="LEGION.html" class="movie-card">
+                    <img src="legion.png" alt="LEGION">
+                    <div class="movie-title">LEGION</div>
+                </a>
+                
+                <a href="ZIAM.html" class="movie-card">
+                    <img src="ziam.png" alt="ZIAM">
+                    <div class="movie-title">ZIAM</div>
+                </a>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="copyright">
+            &copy; 2025 CINETV. Tous droits réservés.
+        </div>
+        <div class="designer-credit">
+            Créé par AUDRY DESIGNER
+        </div>
+    </footer>
+
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+        <div class="share-modal-content">
+            <span class="close-share" id="closeShare">&times;</span>
+            <h2>Partager cette vidéo</h2>
+            <div class="share-options">
+                <a href="#" class="share-option" id="shareFacebook">
+                    <div class="share-icon facebook-bg">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <span>Facebook</span>
+                </a>
+                <a href="#" class="share-option" id="shareTwitter">
+                    <div class="share-icon twitter-bg">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <span>Twitter</span>
+                </a>
+                <a href="#" class="share-option" id="shareWhatsapp">
+                    <div class="share-icon whatsapp-bg">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="#" class="share-option" id="shareLink">
+                    <div class="share-icon link-bg">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <span>Copier lien</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Modal -->
+    <div class="comments-modal" id="commentsModal">
+        <div class="comments-modal-content">
+            <span class="close-comments" id="closeComments">&times;</span>
+            <h2>Commentaires</h2>
+            <div class="comment-form">
+                <textarea id="commentInput" placeholder="Ajouter un commentaire public..."></textarea>
+                <button id="submitComment">Commenter</button>
+            </div>
+            <div class="comments-list" id="commentsList"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    
+    <script>
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
+            authDomain: "cinetv257.firebaseapp.com",
+            databaseURL: "https://cinetv257-default-rtdb.firebaseio.com",
+            projectId: "cinetv257",
+            storageBucket: "cinetv257.appspot.com",
+            messagingSenderId: "402664770835",
+            appId: "1:402664770835:web:1adaea98f40ca609645ee6"
+        };
+        
+        // Initialiser Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Génération de l'ID utilisateur unique
+        const userId = localStorage.getItem('userId') || 'user_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('userId', userId);
+
+        // Fonctionnalité de recherche
+        document.getElementById('searchButton').addEventListener('click', function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (searchTerm.trim() !== '') {
+                alert('Résultats de recherche pour: ' + searchTerm);
+            }
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('searchButton').click();
+            }
+        });
+
+        // ========= SYSTÈME DE VUES (incrémentation à chaque visite) =========
+        const viewsRef = database.ref('movies/SNOWWHITE/views');
+        
+        // Incrémenter le compteur de vues à chaque chargement de la page
+        viewsRef.transaction(currentViews => {
+            return (currentViews || 0) + 1;
+        });
+
+        viewsRef.on('value', (snapshot) => {
+            const views = snapshot.val() || 0;
+            document.getElementById('viewsCount').textContent = views;
+        });
+
+        // ========= SYSTÈME DE LIKES (avec limite de 1 like par utilisateur) =========
+        const likeButton = document.getElementById('likeButton');
+        const likesRef = database.ref('movies/SNOWWHITE/likes');
+        const userLikesRef = database.ref('movies/SNOWWHITE/userLikes/' + userId);
+
+        userLikesRef.on('value', (snapshot) => {
+            const hasLiked = snapshot.val() === true;
+            likeButton.innerHTML = hasLiked 
+                ? '<i class="fas fa-heart" style="color:#e94560"></i> <span class="btn-text">J\'aime</span>' 
+                : '<i class="far fa-heart"></i> <span class="btn-text">J\'aime</span>';
+        });
+
+        likesRef.on('value', (snapshot) => {
+            const likes = snapshot.val() || 0;
+            document.getElementById('likeCount').textContent = likes;
+        });
+
+        likeButton.addEventListener('click', () => {
+            userLikesRef.transaction(currentLike => {
+                if (currentLike === true) {
+                    // Retirer le like
+                    likesRef.transaction(likes => (likes || 1) - 1);
+                    return null;
+                } else {
+                    // Ajouter le like
+                    likesRef.transaction(likes => (likes || 0) + 1);
+                    return true;
+                }
+            });
+        });
+
+        // ========= SYSTÈME DE COMMENTAIRES =========
+        const commentsRef = database.ref('movies/SNOWWHITE/comments');
+
+        // Mettre à jour le compteur de commentaires
+        commentsRef.on('value', (snapshot) => {
+            const count = snapshot.numChildren();
+            document.getElementById('commentsCount').textContent = count;
+        });
+
+        document.getElementById('submitComment').addEventListener('click', () => {
+            const text = document.getElementById('commentInput').value.trim();
+            if (text) {
+                commentsRef.push({
+                    text: text,
+                    userId: userId,
+                    timestamp: Date.now(),
+                    userName: "Anonyme"
+                });
+                document.getElementById('commentInput').value = '';
+            }
+        });
+
+        // Afficher les commentaires
+        function displayComments() {
+            commentsRef.orderByChild('timestamp').on('value', (snapshot) => {
+                const commentsList = document.getElementById('commentsList');
+                commentsList.innerHTML = '';
+                snapshot.forEach(child => {
+                    const comment = child.val();
+                    commentsList.innerHTML += `
+                        <div class="comment">
+                            <div class="comment-header">
+                                <span class="comment-user">${comment.userName}</span>
+                                <span class="comment-time">${new Date(comment.timestamp).toLocaleString()}</span>
+                            </div>
+                            <div class="comment-text">${comment.text}</div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        // Gestion de la fenêtre de partage
+        const shareModal = document.getElementById('shareModal');
+        const shareButton = document.getElementById('shareButton');
+        const closeShare = document.getElementById('closeShare');
+        
+        shareButton.addEventListener('click', function() {
+            shareModal.style.display = 'flex';
+        });
+        
+        closeShare.addEventListener('click', function() {
+            shareModal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === shareModal) {
+                shareModal.style.display = 'none';
+            }
+        });
+        
+        const shareFacebook = document.getElementById('shareFacebook');
+        const shareTwitter = document.getElementById('shareTwitter');
+        const shareWhatsapp = document.getElementById('shareWhatsapp');
+        const shareLink = document.getElementById('shareLink');
+        
+        const pageUrl = encodeURIComponent(window.location.href);
+        const title = encodeURIComponent('Regardez SNOWWHITE sur CinéTV');
+        
+        shareFacebook.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`, '_blank');
+        });
+        
+        shareTwitter.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.open(`https://twitter.com/intent/tweet?url=${pageUrl}&text=${title}`, '_blank');
+        });
+        
+        shareWhatsapp.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.open(`https://wa.me/?text=${title}%20${pageUrl}`, '_blank');
+        });
+        
+        shareLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Lien copié dans le presse-papiers !');
+                shareModal.style.display = 'none';
+            });
+        });
+
+        // Gestion de la fenêtre de commentaires
+        const commentsModal = document.getElementById('commentsModal');
+        const commentsButton = document.getElementById('commentsButton');
+        const closeComments = document.getElementById('closeComments');
+        
+        commentsButton.addEventListener('click', function() {
+            commentsModal.style.display = 'flex';
+            displayComments(); // Charger les commentaires quand la modal s'ouvre
+        });
+        
+        closeComments.addEventListener('click', function() {
+            commentsModal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === commentsModal) {
+                commentsModal.style.display = 'none';
+            }
+        });
+
+        // Charger les commentaires au démarrage
+        displayComments();
+    </script>
+</body>
+</html>
