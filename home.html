@@ -28,6 +28,7 @@
       --interpreter-color: #88d3ff;
       --year-color: #ff88b1;
       --gradient: linear-gradient(135deg, #6a67ff 0%, #4a6cf7 100%);
+      --badge-color: #ff6b6b;
     }
     
     body {
@@ -498,6 +499,20 @@
       text-decoration: none;
     }
 
+    .badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--badge-color);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
     .scroll-indicator {
       display: flex;
       justify-content: center;
@@ -789,7 +804,6 @@
   </style>
 </head>
 <body>
-  <!-- Le reste du code HTML reste exactement le même -->
   <!-- Top Navbar -->
   <nav class="navbar">
     <a href="home.html" class="logo"><i class="fas fa-play-circle"></i><span>CINETV</span></a>
@@ -890,12 +904,12 @@
           Nous offrons une vaste collection de contenus allant des dernières sorties aux classiques intemporels.
         </p>
         <p>
-          Notre mission est de fournir une expérience de visionnage exceptionnelle avec une qualité HD, 
-          des recommandations personnalisées et un catalogue en constante expansion.
+          Our mission is to provide an exceptional viewing experience with HD quality, 
+          personalized recommendations and an ever-expanding catalog.
         </p>
         <p>
-          Abonnez-vous à notre offre Premium pour profiter de contenus exclusifs, 
-          d'une lecture sans publicité et de fonctionnalités avancées.
+          Subscribe to our Premium offer to enjoy exclusive content, 
+          ad-free playback and advanced features.
         </p>
       </div>
     </div>
@@ -923,7 +937,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
   <script>
-    // Le code JavaScript reste exactement le même
     const firebaseConfig = {
       apiKey: "AIzaSyBwne5XqrXMcK1ogeTqBKvHDj_ONy85mYo",
       authDomain: "cinetv2025-cbf2e.firebaseapp.com",
@@ -941,12 +954,20 @@
       const a = document.createElement('a');
       a.href = `watch.html?id=${key}`;
       a.className = 'card';
+      
+      // Ajouter le badge s'il existe et n'est pas vide
+      const badgeHtml = m.badge ? `<div class="badge">${m.badge}</div>` : '';
+      
+      // Masquer l'interprète si un badge est présent
+      const interpreterHtml = m.badge ? '' : `<span class="interpreter"><i class="fas fa-microphone"></i> ${m.interpreter || 'Non spécifié'}</span>`;
+      
       a.innerHTML = `
         <img class="poster" src="${m.imageUrl || ''}" alt="${m.title || ''}" loading="lazy">
+        ${badgeHtml}
         <div class="info">
           <div class="title">${m.title || ''}</div>
           <div class="meta">
-            <span class="interpreter"><i class="fas fa-microphone"></i> ${m.interpreter || 'Non spécifié'}</span>
+            ${interpreterHtml}
             <span class="year"><i class="fas fa-calendar-alt"></i> ${m.year || ''}</span>
           </div>
         </div>
@@ -1004,7 +1025,8 @@
             <h1>${movie.title || ''}</h1>
             <div class="slide-meta">
               ${movie.year ? `<span><i class="fas fa-calendar-alt"></i> ${movie.year}</span>` : ''}
-              ${movie.interpreter ? `<span><i class="fas fa-microphone"></i> ${movie.interpreter}</span>` : ''}
+              ${movie.interpreter && !movie.badge ? `<span><i class="fas fa-microphone"></i> ${movie.interpreter}</span>` : ''}
+              ${movie.badge ? `<span><i class="fas fa-tag"></i> ${movie.badge}</span>` : ''}
               ${movie.category && movie.category.length ? `<span><i class="fas fa-tag"></i> ${movie.category.join(' • ')}</span>` : ''}
             </div>
             <a class="btn btn-primary" href="watch.html?id=${key}"><i class="fas fa-play"></i> Regarder</a>

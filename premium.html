@@ -2,537 +2,562 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upgrade Premium - CINETV</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Premium - CINETV</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #0f0f1b;
-            background-image: linear-gradient(135deg, #1a1a2e 0%, #0a0a12 100%);
-            color: #fff;
-            overflow-x: hidden;
-            position: relative;
-            padding-bottom: 60px;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
         
         :root {
-            --gold: #d4af37;
-            --gold-light: #f9d423;
-            --dark-bg: #0f0f1b;
-            --darker-bg: #0a0a12;
-            --gold-gradient: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-            --gold-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            --bg: #0a0a12;
+            --panel: rgba(18, 18, 32, 0.95);
+            --panel-2: #1e2038;
+            --text: #ffffff;
+            --muted: #b2b4d6;
+            --gold: #ffd700;
+            --gold-light: #ffdf40;
+            --gold-dark: #d4af37;
+            --platinum: #e5e4e2;
+            --platinum-light: #f5f4f2;
+            --platinum-dark: #c5c4c2;
+            --diamond: #b9f2ff;
+            --diamond-light: #d9f7ff;
+            --diamond-dark: #89e2f2;
+            --transition: all 0.3s ease;
+            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
         }
         
+        body {
+            background: var(--bg) url('background.jpg') center/cover no-repeat fixed;
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 74px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 18, 0.88);
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+        
+        /* ======= NAVBAR ======= */
         .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 5%;
-            background: var(--darker-bg);
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 0 20px;
+            background: rgba(18, 18, 32, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
         
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--gold);
-            text-decoration: none;
             display: flex;
             align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text);
+            letter-spacing: 0.5px;
+            font-size: 1.35rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .logo i {
-            margin-right: 10px;
+            font-size: 1.5rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        .premium-badge {
-            background: var(--gold-gradient);
-            color: #121212;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            margin-left: 10px;
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         
-        .main-container {
-            padding: 30px 5%;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .upgrade-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .upgrade-title {
-            font-size: 2.5rem;
-            color: var(--gold);
-            margin-bottom: 15px;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .upgrade-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: var(--gold-gradient);
-        }
-        
-        .upgrade-subtitle {
-            color: #aaa;
-            font-size: 1.1rem;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .pricing-plans {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-        
-        .plan-card {
-            background: var(--darker-bg);
+        .hamburger {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 10px;
             border-radius: 10px;
-            padding: 30px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            transition: all 0.3s;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .hamburger:hover {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--gold);
+        }
+        
+        /* ======= MAIN CONTENT ======= */
+        .main-container {
+            padding: 88px 6% 20px;
+            min-height: calc(100vh - 74px);
+        }
+        
+        /* ======= HERO SECTION ======= */
+        .hero-section {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        /* ======= PREMIUM INFO ======= */
+        .premium-info {
+            background: var(--panel);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
         }
         
-        .plan-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--gold-shadow);
-            border-color: var(--gold);
-        }
-        
-        .plan-card.popular::before {
-            content: 'POPULAIRE';
+        .premium-info::before {
+            content: "";
             position: absolute;
-            top: 15px;
-            right: -30px;
-            background: var(--gold);
-            color: #121212;
-            padding: 3px 30px;
-            transform: rotate(45deg);
-            font-size: 0.7rem;
-            font-weight: bold;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-gold);
         }
         
-        .plan-name {
-            font-size: 1.5rem;
+        .premium-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
             color: var(--gold);
-            margin-bottom: 10px;
+            animation: pulse 2s infinite;
         }
         
-        .plan-price {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 15px;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
         
-        .plan-price span {
-            font-size: 1rem;
-            color: #aaa;
+        .premium-info h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--gold);
         }
         
-        .plan-features {
-            list-style: none;
+        .premium-info p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--muted);
             margin-bottom: 25px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
-        .plan-features li {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .plan-features i {
+        .highlight {
             color: var(--gold);
-            margin-right: 10px;
+            font-weight: 600;
         }
         
-        .plan-button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background: var(--gold-gradient);
-            color: #121212;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            text-decoration: none;
-        }
-        
-        .plan-button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--gold-shadow);
-        }
-        
-        .payment-methods {
-            background: var(--darker-bg);
-            border-radius: 10px;
-            padding: 30px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            margin-bottom: 30px;
+        /* ======= FEATURES SECTION ======= */
+        .features-section {
+            margin-bottom: 50px;
         }
         
         .section-title {
-            font-size: 1.8rem;
-            color: var(--gold);
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 10px;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
         }
         
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 2px;
-            background: var(--gold-gradient);
-        }
-        
-        .payment-options {
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
         }
         
-        .payment-option {
-            background: rgba(212, 175, 55, 0.1);
-            border-radius: 8px;
-            padding: 20px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            transition: all 0.3s;
+        .feature-card {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
-        .payment-option:hover {
-            background: rgba(212, 175, 55, 0.2);
-            transform: translateY(-3px);
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
         }
         
-        .payment-logo {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
+        .feature-icon {
+            font-size: 2.5rem;
             margin-bottom: 15px;
-            background: white;
-            padding: 5px;
-            border-radius: 8px;
-        }
-        
-        .payment-name {
-            font-weight: bold;
-            margin-bottom: 10px;
             color: var(--gold);
         }
         
-        .payment-details {
-            font-size: 0.9rem;
-            color: #aaa;
-            margin-bottom: 15px;
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--gold);
         }
         
-        .payment-steps {
-            margin-top: 30px;
+        .feature-description {
+            color: var(--muted);
+            line-height: 1.6;
         }
         
-        .step {
-            display: flex;
+        /* ======= NOTIFICATION SECTION ======= */
+        .notification-section {
+            text-align: center;
+            padding: 50px 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(212, 175, 55, 0.1) 100%);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .notification-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+        
+        .notification-section p {
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        .notification-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid var(--gold);
+        }
+        
+        .notification-icon {
+            font-size: 3rem;
+            color: var(--gold);
             margin-bottom: 20px;
         }
         
-        .step-number {
-            background: var(--gold);
-            color: #121212;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+        .notification-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-gold);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.35);
+            text-decoration: none;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+        }
+        
+        /* ======= FOOTER ======= */
+        footer {
+            background: rgba(13, 13, 21, 0.8);
+            padding: 24px 6%;
+            text-align: center;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        .footer-links {
             display: flex;
             justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            margin-right: 15px;
-            flex-shrink: 0;
+            gap: 22px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
         }
         
-        .step-content {
-            flex: 1;
-        }
-        
-        .step-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: var(--gold);
-        }
-        
-        .whatsapp-contact {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            background: rgba(37, 211, 102, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(37, 211, 102, 0.3);
-        }
-        
-        .whatsapp-icon {
-            color: #25D366;
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        .whatsapp-text {
-            margin-bottom: 15px;
-        }
-        
-        .whatsapp-button {
-            display: inline-block;
-            background: #25D366;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .whatsapp-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
-        }
-        
-        .bottom-navbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--darker-bg);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-            z-index: 100;
-            border-top: 1px solid rgba(212, 175, 55, 0.3);
-        }
-        
-        .nav-item {
-            color: #fff;
+        .footer-links a {
+            color: var(--muted);
             text-decoration: none;
             font-size: 0.9rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            transition: var(--transition);
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 8px;
         }
         
-        .nav-item i {
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-        }
-        
-        .nav-item:hover {
+        .footer-links a:hover {
             color: var(--gold);
-        }
-        
-        .premium-nav {
-            color: var(--gold);
-        }
-        
-        footer {
-            background: var(--darker-bg);
-            padding: 30px 5%;
-            text-align: center;
-            margin-top: 50px;
+            background: rgba(255, 215, 0, 0.1);
         }
         
         .copyright {
-            color: #777;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .designer-credit {
+            color: var(--muted);
             font-size: 0.8rem;
+            margin-top: 8px;
+            font-style: italic;
+            opacity: 0.7;
         }
         
+        /* ======= RESPONSIVE ======= */
         @media (max-width: 768px) {
-            .upgrade-title {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .premium-info {
+                padding: 30px 20px;
+            }
+            
+            .premium-info h2 {
+                font-size: 1.8rem;
+            }
+            
+            .notification-section h2 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 78px 4% 20px;
+            }
+            
+            .hero-title {
                 font-size: 2rem;
             }
             
-            .pricing-plans {
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .premium-info {
+                padding: 25px 15px;
+            }
+            
+            .premium-info h2 {
+                font-size: 1.6rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .features-grid {
                 grid-template-columns: 1fr;
             }
             
-            .payment-options {
-                grid-template-columns: 1fr;
+            .notification-section h2 {
+                font-size: 1.6rem;
+            }
+            
+            .notification-text {
+                font-size: 1rem;
+            }
+            
+            .footer-links {
+                gap: 16px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+    <!-- Top Navbar -->
     <nav class="navbar">
-        <a href="0.html" class="logo">
-            <i class="fas fa-crown"></i> CINETV <span class="premium-badge">PREMIUM</span>
-        </a>
+        <a href="home.html" class="logo"><i class="fas fa-crown"></i> CINETV PREMIUM</a>
+        <div class="navbar-right">
+            <a href="home.html" class="btn" style="padding: 8px 16px; font-size: 0.9rem; width: auto;">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
     </nav>
-    
+
     <!-- Main Content -->
     <div class="main-container">
-        <div class="upgrade-header">
-            <h1 class="upgrade-title">Devenez Membre Premium</h1>
-            <p class="upgrade-subtitle">Accédez à tous nos films et séries exclusifs en qualité 4K, sans publicité et avec des fonctionnalités premium.</p>
-        </div>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">L'Avenir du Streaming Premium</h1>
+            <p class="hero-subtitle">Découvrez le futur de l'expérience cinématographique avec CINETV Premium - Bientôt disponible</p>
+        </section>
         
-        <div class="pricing-plans">
-            <div class="plan-card">
-                <h3 class="plan-name">Mensuel</h3>
-                <div class="plan-price">15K BIF <span>/mois</span></div>
-                <ul class="plan-features">
-                    <li><i class="fas fa-check"></i> Accès à tous les films</li>
-                    <li><i class="fas fa-check"></i> Qualité 4K Ultra HD</li>
-                    <li><i class="fas fa-check"></i> Sans publicité</li>
-                    
-                </ul>
-                <a href="#payment" class="plan-button">Choisir ce plan</a>
-            </div>
-            
-            <div class="plan-card popular">
-                <h3 class="plan-name">Annuel</h3>
-                <div class="plan-price">150K BIF <span>/an</span></div>
-                <ul class="plan-features">
-                    <li><i class="fas fa-check"></i> Tout le contenu mensuel</li>
-                    <li><i class="fas fa-check"></i> Économisez plus de 15%</li>
-                    <li><i class="fas fa-check"></i> Accès anticipé aux nouveautés</li>
-                    <li><i class="fas fa-check"></i> Support prioritaire</li>
-                </ul>
-                <a href="#payment" class="plan-button">Choisir ce plan</a>
-            </div>
+        <!-- Premium Info Section -->
+        <section class="premium-info">
+            <i class="fas fa-crown premium-icon"></i>
+            <h2>Programme Premium en Préparation</h2>
+            <p>Nous travaillons actuellement sur notre offre <span class="highlight">CINETV Premium</span> pour vous offrir une expérience de streaming exceptionnelle, avec du contenu exclusif et de qualité supérieure.</p>
+            <p>Notre équipe développe une plateforme sécurisée et innovante qui révolutionnera votre façon de regarder films et séries.</p>
+            <p>Vous serez informé automatiquement par une notification sur la page d'accueil dès que le service sera disponible !</p>
+        </section>
         
-        <div class="payment-methods" id="payment">
-            <h2 class="section-title">Méthodes de Paiement</h2>
-            <p style="margin-bottom: 20px; color: #aaa;">Choisissez votre méthode de paiement préférée pour devenir membre premium.</p>
-            
-            <div class="payment-options">
-                <div class="payment-option">
-                    <img src="lumicash.png" alt="Lumicash" class="payment-logo">
-                    <h3 class="payment-name">Lumicash</h3>
-                    <p class="payment-details">Envoyez le paiement au numéro : <strong>76389163</strong></p>
-                    <p class="payment-details">Nom: <strong>AUDRY PAULIN</strong></p>
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">Avantages Exclusifs</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-film feature-icon"></i>
+                    <h3 class="feature-title">Contenu Exclusif</h3>
+                    <p class="feature-description">Accédez à des films et séries exclusifs non disponibles dans l'offre standard.</p>
                 </div>
                 
-                <div class="payment-option">
-                    <img src="ecocash.png" alt="Ecocash" class="payment-logo">
-                    <h3 class="payment-name">Ecocash</h3>
-                    <p class="payment-details">Envoyez le paiement au numéro : <strong>76389163</strong></p>
-                    <p class="payment-details">Nom: <strong>AUDRY PAULIN</strong></p>
+                <div class="feature-card">
+                    <i class="fas fa-trophy feature-icon"></i>
+                    <h3 class="feature-title">Qualité Ultra HD</h3>
+                    <p class="feature-description">Profitez de tous vos contenus en qualité 4K Ultra HD avec son immersif.</p>
                 </div>
                 
-                <div class="payment-option">
-                    <img src="bancobu.png" alt="Bancobu enoti" class="payment-logo">
-                    <h3 class="payment-name">Bancobu enoti</h3>
-                    <p class="payment-details">Compte: <strong>76389163</strong></p>
-                    <p class="payment-details">Titulaire: <strong>AUDRY PAULIN</strong></p>
+                <div class="feature-card">
+                    <i class="fas fa-download feature-icon"></i>
+                    <h3 class="feature-title">Téléchargement Hors Ligne</h3>
+                    <p class="feature-description">Téléchargez vos films et séries préférés pour les regarder sans connexion.</p>
                 </div>
                 
-                <div class="payment-option">
-                    <img src="ihela.png" alt="Ihela" class="payment-logo">
-                    <h3 class="payment-name">Ihela Ryanje</h3>
-                    <p class="payment-details">Compte: <strong>76389163</strong></p>
-                    <p class="payment-details">Titulaire: <strong>AUDRY PAULIN</strong></p>
+                <div class="feature-card">
+                    <i class="fas fa-theater-masks feature-icon"></i>
+                    <h3 class="feature-title">Accès Avant Première</h3>
+                    <p class="feature-description">Soyez parmi les premiers à visionner les nouvelles sorties avant tout le monde.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-user-secret feature-icon"></i>
+                    <h3 class="feature-title">Environnement Sécurisé</h3>
+                    <p class="feature-description">Plateforme sécurisée avec chiffrement de pointe pour protéger votre vie privée.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-users feature-icon"></i>
+                    <h3 class="feature-title">Profils Multiples</h3>
+                    <p class="feature-description">Créez jusqu'à 5 profils différents pour toute la famille avec recommandations personnalisées.</p>
                 </div>
             </div>
+        </section>
+        
+        <!-- Notification Section -->
+        <section class="notification-section">
+            <h2>Comment être informé ?</h2>
+            <p>Nous vous informerons du lancement de CINETV Premium directement sur la page d'accueil</p>
             
-            <div class="payment-steps">
-                <h3 class="section-title">Comment procéder</h3>
-                
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4 class="step-title">Effectuez le paiement</h4>
-                        <p>Choisissez votre méthode de paiement préférée et envoyez le montant correspondant à votre abonnement.</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4 class="step-title">Capturez la preuve</h4>
-                        <p>Prenez une capture d'écran ou photo du reçu de paiement avec le numéro de transaction visible.</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h4 class="step-title">Envoyez la preuve</h4>
-                        <p>Transmettez-nous la preuve de paiement via WhatsApp pour activation immédiate.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="whatsapp-contact">
-                <div class="whatsapp-icon">
-                    <i class="fab fa-whatsapp"></i>
-                </div>
-                <h3>Activation WhatsApp</h3>
-                <p class="whatsapp-text">Envoyez votre preuve de paiement à ce numéro pour activer votre compte premium immédiatement :</p>
-                <a href="https://wa.me/25776389163" class="whatsapp-button">
-                    <i class="fab fa-whatsapp"></i> 76389163
+            <div class="notification-info">
+                <i class="fas fa-bell notification-icon"></i>
+                <p class="notification-text">Une notification s'affichera automatiquement sur la page d'accueil dès que CINETV Premium sera disponible. Pas besoin de formulaire d'inscription !</p>
+                <a href="home.html" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Retour à l'accueil
                 </a>
             </div>
-        </div>
-    </div>
-    
-    <!-- Bottom Navigation -->
-    <div class="bottom-navbar">
-        <a href="0.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>Accueil</span>
-        </a>
-        <a href="#" class="nav-item">
-            <i class="fas fa-envelope"></i>
-            <span>Contact</span>
-        </a>
-        <a href="premium.html" class="nav-item premium-nav">
-            <i class="fas fa-crown"></i>
-            <span>Premium</span>
-        </a>
-        <a href="download_app.html" class="nav-item">
-            <i class="fas fa-download"></i>
-            <span>App</span>
-        </a>
+        </section>
     </div>
     
     <!-- Footer -->
     <footer>
-        <div class="copyright">
-            &copy; 2025 CINETV PREMIUM. Tous droits réservés.
+        <div class="footer-links">
+            <a href="home.html">Accueil</a>
+            <a href="#">À propos</a>
+            <a href="#">Contact</a>
+            <a href="privacy.html">Confidentialité</a>
+            <a href="terms.html">Conditions d'utilisation</a>
         </div>
+        <div class="copyright">&copy; 2025 CINETV. Tous droits réservés.</div>
+        <div class="designer-credit">Conçu par @audrypaulin</div>
     </footer>
+
+    <script>
+        // Animation au défilement
+        document.addEventListener('DOMContentLoaded', function() {
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            featureCards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>
