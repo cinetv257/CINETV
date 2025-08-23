@@ -37,19 +37,10 @@
         }
         
         body {
-            background: var(--bg) url('background.jpg') center/cover no-repeat fixed;
+            background: var(--bg);
             color: var(--text);
             min-height: 100vh;
             padding-bottom: 74px;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: rgba(10, 10, 18, 0.88);
-            backdrop-filter: blur(10px);
-            z-index: -1;
         }
 
         /* ======= NAVBAR ======= */
@@ -90,36 +81,20 @@
             -webkit-text-fill-color: transparent;
         }
         
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 8px 14px;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        
-        .search-box:hover {
-            background: rgba(106, 103, 255, 0.15);
-            border-color: var(--brand);
-        }
-        
-        .search-box input {
+        .search-icon {
             background: transparent;
             border: none;
-            outline: none;
-            color: white;
-            width: 120px;
-            padding: 4px;
-            font-size: 0.9rem;
+            color: var(--muted);
+            font-size: 1.3rem;
             cursor: pointer;
+            padding: 10px;
+            border-radius: 10px;
+            transition: var(--transition);
         }
         
-        .search-box i {
-            color: var(--muted);
-            font-size: 0.95rem;
+        .search-icon:hover {
+            color: var(--brand);
+            background: rgba(106, 103, 255, 0.1);
         }
 
         /* ======= MAIN CONTENT ======= */
@@ -140,33 +115,6 @@
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             position: relative;
-        }
-        
-        .video-container::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            padding: 2px;
-            border-radius: 16px;
-            background: conic-gradient(from var(--angle), #6a67ff, #4a6cf7, #3dd598, #8b88ff, #6a67ff);
-            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            animation: spin 6s linear infinite;
-            z-index: 1;
-        }
-        
-        @property --angle {
-            syntax: '<angle>';
-            initial-value: 0deg;
-            inherits: false;
-        }
-        
-        @keyframes spin {
-            to {
-                --angle: 360deg;
-            }
         }
         
         .video-player {
@@ -401,21 +349,6 @@
             border-color: rgba(106, 103, 255, 0.3);
         }
         
-        .movie-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            padding: 1.8px;
-            border-radius: 16px;
-            background: conic-gradient(from var(--angle), #6a67ff, #4a6cf7, #3dd598, #8b88ff, #6a67ff);
-            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            animation: spin 6s linear infinite;
-            z-index: 1;
-        }
-        
         .movie-card img {
             width: 100%;
             height: 100%;
@@ -495,6 +428,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 15px;
         }
         
         .close {
@@ -709,6 +643,14 @@
             color: var(--muted);
             font-size: 0.85rem;
         }
+        
+        .designer-credit {
+            color: var(--muted);
+            font-size: 0.75rem;
+            margin-top: 10px;
+            font-style: italic;
+            opacity: 0.7;
+        }
 
         /* ======= LOADING & ERROR STATES ======= */
         .loading-dots {
@@ -796,6 +738,49 @@
         .movie-card:nth-child(4) { animation-delay: 0.25s; }
         .movie-card:nth-child(5) { animation-delay: 0.3s; }
 
+        /* ======= BOTTOM NAV ======= */
+        .bottom-navbar {
+            position: fixed;
+            inset: auto 0 0 0;
+            background: rgba(20, 20, 39, 0.9);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 12px 0;
+            z-index: 100;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+        }
+        
+        .nav-item {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .nav-item i {
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+        
+        .nav-item:hover {
+            color: var(--brand);
+            background: rgba(106, 103, 255, 0.1);
+        }
+        
+        .nav-item.active {
+            color: var(--brand);
+            background: rgba(106, 103, 255, 0.15);
+        }
+
         /* ======= RESPONSIVE ======= */
         @media (max-width: 768px) {
             .movie-title {
@@ -853,7 +838,7 @@
             }
             
             .movies-container {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
             
             .episode-card {
@@ -871,10 +856,9 @@
     <!-- Top Navbar -->
     <nav class="navbar">
         <a href="home.html" class="logo"><i class="fas fa-play-circle"></i> CINETV</a>
-        <div class="search-box" id="openSearch">
-            <input type="text" placeholder="Rechercher..." readonly>
+        <button class="search-icon" id="openSearch">
             <i class="fas fa-search"></i>
-        </div>
+        </button>
     </nav>
     
     <!-- Main Content -->
@@ -897,7 +881,16 @@
         <div class="copyright">
             &copy; 2025 CINETV. Tous droits réservés.
         </div>
+        <div class="designer-credit">Conçu par @audrypaulin</div>
     </footer>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-navbar">
+        <a href="home.html" class="nav-item"><i class="fas fa-home"></i><span>Accueil</span></a>
+        <a href="#" class="nav-item" id="bottomSearch"><i class="fas fa-search"></i><span>Recherche</span></a>
+        <a href="premium.html" class="nav-item" style="color:#ffd166"><i class="fas fa-crown"></i><span>Premium</span></a>
+        <a href="#" class="nav-item" id="bottomContact"><i class="fas fa-envelope"></i><span>Contact</span></a>
+    </div>
 
     <!-- Share Modal -->
     <div class="modal" id="shareModal">
@@ -928,6 +921,12 @@
                         <i class="fas fa-link"></i>
                     </div>
                     <span>Copier lien</span>
+                </a>
+                <a href="https://github.com/cinetv257/CINETV/raw/main/CINETV%20v1.0.0.apk" class="share-option" id="shareApp">
+                    <div class="share-icon" style="background: var(--brand);">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <span>Télécharger l'App</span>
                 </a>
             </div>
         </div>
@@ -961,15 +960,14 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
     
     <script>
-        // Configuration Firebase
+        // Configuration Firebase (mise à jour avec la configuration de home.html)
         const firebaseConfig = {
-            apiKey: "AIzaSyBwne5XqrXMcK1ogeTqBKvHDj_ONy85mYo",
-            authDomain: "cinetv2025-cbf2e.firebaseapp.com",
-            projectId: "cinetv2025-cbf2e",
-            storageBucket: "cinetv2025-cbf2e.appspot.com",
-            messagingSenderId: "906942974846",
-            appId: "1:906942974846:web:545bd24a090c4f7d4a412f",
-            measurementId: "G-FDK5CE6X97"
+            apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
+            authDomain: "cinetv257.firebaseapp.com",
+            projectId: "cinetv257",
+            storageBucket: "cinetv257.appspot.com",
+            messagingSenderId: "402664770835",
+            appId: "1:402664770835:web:1adaea98f40ca609645ee6"
         };
         
         // Initialiser Firebase
@@ -981,6 +979,11 @@
         const movieId = urlParams.get('id');
         const partId = urlParams.get('part');
         const episodeId = urlParams.get('episode');
+
+        // Variables globales
+        let currentMovieRef;
+        let viewTimer;
+        let viewCounted = false;
 
         // Vérifier si un ID de film est présent
         if (!movieId) {
@@ -1033,7 +1036,7 @@
                         let currentPartTitle = '';
                         let currentEpisodeTitle = '';
 
-                        // Si c'est une série ou un film en plusieurs parties
+                        // Déterminer la référence Firebase correcte pour les statistiques
                         if (movie.type === 'series' && movie.episodes) {
                             const episodes = movie.episodes;
                             const episodeKeys = Object.keys(episodes);
@@ -1042,6 +1045,7 @@
                             if (episodes[defaultEpisodeId]) {
                                 videoUrl = episodes[defaultEpisodeId].videoUrl;
                                 currentEpisodeTitle = episodes[defaultEpisodeId].title;
+                                currentMovieRef = database.ref(`movies/${movieId}/episodes/${defaultEpisodeId}`);
                             }
                         } else if (movie.type === 'multi-part' && movie.parts) {
                             const parts = movie.parts;
@@ -1051,7 +1055,10 @@
                             if (parts[defaultPartId]) {
                                 videoUrl = parts[defaultPartId].videoUrl;
                                 currentPartTitle = parts[defaultPartId].title;
+                                currentMovieRef = database.ref(`movies/${movieId}/parts/${defaultPartId}`);
                             }
+                        } else {
+                            currentMovieRef = database.ref(`movies/${movieId}`);
                         }
 
                         // Mettre à jour l'interface
@@ -1120,7 +1127,10 @@
                         initEventListeners();
                         
                         // Mettre à jour les statistiques
-                        updateMovieStats(movieId, movie.type, episodeId || partId);
+                        updateMovieStats();
+                        
+                        // Démarrer le timer pour compter la vue après 1 minute
+                        startViewTimer();
                         
                         // Charger les épisodes/parties si nécessaire
                         if (movie.type === 'series' && movie.episodes) {
@@ -1142,6 +1152,43 @@
                             window.location.href = 'home.html';
                         }, 5000);
                     }
+                });
+            }
+
+            // Démarrer le timer pour compter une vue après 1 minute
+            function startViewTimer() {
+                viewCounted = false;
+                
+                // Annuler tout timer existant
+                if (viewTimer) {
+                    clearTimeout(viewTimer);
+                }
+                
+                // Démarrer un nouveau timer de 60 secondes
+                viewTimer = setTimeout(() => {
+                    if (!viewCounted) {
+                        countView();
+                        viewCounted = true;
+                    }
+                }, 60000); // 60 secondes = 60000 millisecondes
+            }
+
+            // Compter une vue
+            function countView() {
+                if (!currentMovieRef) return;
+                
+                const viewsRef = currentMovieRef.child('views');
+                
+                viewsRef.transaction(currentData => {
+                    currentData = currentData || { count: 0, users: {} };
+                    
+                    if (!currentData.users || !currentData.users[userId]) {
+                        currentData.count = (currentData.count || 0) + 1;
+                        currentData.users = currentData.users || {};
+                        currentData.users[userId] = true;
+                    }
+                    
+                    return currentData;
                 });
             }
 
@@ -1278,9 +1325,16 @@
                 // Gestion de la recherche
                 const searchModal = document.getElementById('searchModal');
                 const openSearch = document.getElementById('openSearch');
+                const bottomSearch = document.getElementById('bottomSearch');
                 const closeSearch = document.getElementById('closeSearch');
                 
                 openSearch.addEventListener('click', function() {
+                    searchModal.style.display = 'flex';
+                    document.getElementById('searchInput').focus();
+                });
+                
+                bottomSearch.addEventListener('click', function(e) {
+                    e.preventDefault();
                     searchModal.style.display = 'flex';
                     document.getElementById('searchInput').focus();
                 });
@@ -1322,40 +1376,41 @@
                     e.preventDefault();
                     alert('Contactez-nous à: audrypaulin65@gmail.com');
                 });
+                
+                // Gestion de la navigation inférieure
+                document.getElementById('bottomContact').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Contactez-nous à: audrypaulin65@gmail.com');
+                });
+
+                // Gestion du bouton like
+                document.addEventListener('click', function(e) {
+                    if (e.target && e.target.id === 'likeButton') {
+                        handleLike();
+                    }
+                });
+
+                // Gestion du bouton commentaire
+                document.addEventListener('click', function(e) {
+                    if (e.target && e.target.id === 'submitComment') {
+                        submitComment();
+                    }
+                });
             }
 
             // Mettre à jour les stats (vues, likes, commentaires)
-            function updateMovieStats(movieId, type = 'movie', itemId = null) {
-                let statsRef;
+            function updateMovieStats() {
+                if (!currentMovieRef) return;
                 
-                if (type === 'series') {
-                    statsRef = database.ref(`movies/${movieId}/episodes/${itemId || 'EPISODE_01'}`);
-                } else if (type === 'multi-part') {
-                    statsRef = database.ref(`movies/${movieId}/parts/${itemId || 'PART_A'}`);
-                } else {
-                    statsRef = database.ref(`movies/${movieId}`);
-                }
-
-                const viewsRef = statsRef.child('views');
-                const likesRef = statsRef.child('likes');
-                const commentsRef = statsRef.child('comments');
+                const viewsRef = currentMovieRef.child('views');
+                const likesRef = currentMovieRef.child('likes');
+                const commentsRef = currentMovieRef.child('comments');
 
                 // Système de vues
-                viewsRef.transaction(currentData => {
-                    currentData = currentData || { count: 0, devices: {} };
-                    
-                    if (!currentData.devices[userId]) {
-                        currentData.count++;
-                        currentData.devices[userId] = true;
-                    }
-                    
-                    return currentData;
-                });
-
                 viewsRef.on('value', (snapshot) => {
                     const data = snapshot.val() || { count: 0 };
                     const viewsCount = document.getElementById('viewsCount');
-                    if (viewsCount) viewsCount.textContent = data.count;
+                    if (viewsCount) viewsCount.textContent = data.count || 0;
                 });
 
                 // Système de likes
@@ -1364,27 +1419,11 @@
                     const likeCount = document.getElementById('likeCount');
                     const likeButton = document.getElementById('likeButton');
                     
-                    if (likeCount) likeCount.textContent = data.count;
+                    if (likeCount) likeCount.textContent = data.count || 0;
                     if (likeButton) {
-                        likeButton.innerHTML = data.users[userId] 
+                        likeButton.innerHTML = data.users && data.users[userId] 
                             ? '<i class="fas fa-heart" style="color:#6a67ff"></i> J\'aime' 
                             : '<i class="far fa-heart"></i> J\'aime';
-                    }
-                });
-
-                document.addEventListener('click', function(e) {
-                    if (e.target && e.target.id === 'likeButton') {
-                        likesRef.transaction(data => {
-                            data = data || { count: 0, users: {} };
-                            if (data.users[userId]) {
-                                data.count--;
-                                delete data.users[userId];
-                            } else {
-                                data.count++;
-                                data.users[userId] = true;
-                            }
-                            return data;
-                        });
                     }
                 });
 
@@ -1394,21 +1433,49 @@
                     const commentsCount = document.getElementById('commentsCount');
                     if (commentsCount) commentsCount.textContent = count;
                 });
+            }
 
-                document.addEventListener('click', function(e) {
-                    if (e.target && e.target.id === 'submitComment') {
-                        const text = document.getElementById('commentInput').value.trim();
-                        if (text) {
-                            commentsRef.push({
-                                text: text,
-                                userId: userId,
-                                timestamp: Date.now(),
-                                userName: "Anonyme"
-                            });
-                            document.getElementById('commentInput').value = '';
-                        }
+            // Gérer les likes
+            function handleLike() {
+                if (!currentMovieRef) return;
+                
+                const likesRef = currentMovieRef.child('likes');
+                
+                likesRef.transaction(data => {
+                    data = data || { count: 0, users: {} };
+                    
+                    if (data.users && data.users[userId]) {
+                        // User already liked, so unlike
+                        data.count--;
+                        delete data.users[userId];
+                    } else {
+                        // User hasn't liked yet, so like
+                        data.count++;
+                        data.users = data.users || {};
+                        data.users[userId] = true;
                     }
+                    
+                    return data;
                 });
+            }
+
+            // Soumettre un commentaire
+            function submitComment() {
+                if (!currentMovieRef) return;
+                
+                const text = document.getElementById('commentInput').value.trim();
+                if (text) {
+                    const commentsRef = currentMovieRef.child('comments');
+                    
+                    commentsRef.push({
+                        text: text,
+                        userId: userId,
+                        timestamp: Date.now(),
+                        userName: "Anonyme"
+                    });
+                    
+                    document.getElementById('commentInput').value = '';
+                }
             }
 
             // Charger les films similaires (même catégorie)
@@ -1460,37 +1527,46 @@
 
             // Afficher les commentaires
             function displayComments() {
-                const movieRef = database.ref(`movies/${movieId}`);
+                if (!currentMovieRef) return;
                 
-                movieRef.once('value').then((snapshot) => {
-                    const movie = snapshot.val();
-                    let commentsRef;
+                const commentsRef = currentMovieRef.child('comments');
+                const commentsList = document.getElementById('commentsList');
+                
+                if (!commentsList) return;
+                
+                commentsList.innerHTML = '<p style="color: var(--muted); text-align: center;">Chargement des commentaires...</p>';
+                
+                commentsRef.orderByChild('timestamp').on('value', (snapshot) => {
+                    commentsList.innerHTML = '';
                     
-                    if (movie.type === 'series' && episodeId) {
-                        commentsRef = database.ref(`movies/${movieId}/episodes/${episodeId}/comments`);
-                    } else if (movie.type === 'multi-part' && partId) {
-                        commentsRef = database.ref(`movies/${movieId}/parts/${partId}/comments`);
-                    } else {
-                        commentsRef = database.ref(`movies/${movieId}/comments`);
+                    if (!snapshot.exists()) {
+                        commentsList.innerHTML = '<p style="color: var(--muted); text-align: center;">Aucun commentaire pour le moment.</p>';
+                        return;
                     }
-
-                    commentsRef.orderByChild('timestamp').on('value', (snapshot) => {
-                        const commentsList = document.getElementById('commentsList');
-                        if (commentsList) {
-                            commentsList.innerHTML = '';
-                            snapshot.forEach(child => {
-                                const comment = child.val();
-                                commentsList.innerHTML += `
-                                    <div class="comment">
-                                        <div class="comment-header">
-                                            <span class="comment-user">${comment.userName}</span>
-                                            <span class="comment-time">${new Date(comment.timestamp).toLocaleString()}</span>
-                                        </div>
-                                        <div class="comment-text">${comment.text}</div>
-                                    </div>
-                                `;
-                            });
-                        }
+                    
+                    // Convertir les commentaires en tableau pour les trier
+                    const comments = [];
+                    snapshot.forEach(child => {
+                        comments.push({
+                            id: child.key,
+                            ...child.val()
+                        });
+                    });
+                    
+                    // Trier du plus récent au plus ancien
+                    comments.sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    // Afficher les commentaires
+                    comments.forEach(comment => {
+                        commentsList.innerHTML += `
+                            <div class="comment">
+                                <div class="comment-header">
+                                    <span class="comment-user">${comment.userName}</span>
+                                    <span class="comment-time">${new Date(comment.timestamp).toLocaleString('fr-FR')}</span>
+                                </div>
+                                <div class="comment-text">${comment.text}</div>
+                            </div>
+                        `;
                     });
                 });
             }

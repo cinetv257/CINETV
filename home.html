@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>CINETV - Streaming de Films et Séries</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HS250G6FL4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HS250G6FL4');
+  </script>
   <style>
     * {
       margin: 0;
@@ -636,7 +644,7 @@
       width: 40px;
       height: 40px;
       background: rgba(106, 103, 255, 0.15);
-      border-radius: 50%;
+      borderRadius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -937,14 +945,17 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
   <script>
+    // Configuration Firebase mise à jour
     const firebaseConfig = {
-      apiKey: "AIzaSyBwne5XqrXMcK1ogeTqBKvHDj_ONy85mYo",
-      authDomain: "cinetv2025-cbf2e.firebaseapp.com",
-      projectId: "cinetv2025-cbf2e",
-      storageBucket: "cinetv2025-cbf2e.appspot.com",
-      messagingSenderId: "906942974846",
-      appId: "1:906942974846:web:545bd24a090c4f7d4a412f"
+      apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
+      authDomain: "cinetv257.firebaseapp.com",
+      projectId: "cinetv257",
+      storageBucket: "cinetv257.appspot.com",
+      messagingSenderId: "402664770835",
+      appId: "1:402664770835:web:1adaea98f40ca609645ee6"
     };
+    
+    // Initialiser Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
