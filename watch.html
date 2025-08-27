@@ -291,7 +291,7 @@
             transition: var(--transition);
             border: 1px solid rgba(255, 255, 255, 0.08);
             min-width: 130px;
-            flex: 0 0 calc(33.333% - 8px);
+            flex: 0 0 auto;
             scroll-snap-align: start;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
@@ -316,6 +316,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             font-weight: 600;
+            text-align: center;
         }
 
         /* ======= SIMILAR MOVIES ======= */
@@ -1204,19 +1205,17 @@
                     const episode = episodes[key];
                     const isActive = currentEpisodeId === key || (!currentEpisodeId && episodeKeys[0] === key);
                     
-                    episodesList.innerHTML += `
-                        <div class="episode-card ${isActive ? 'active' : ''}" data-episode-id="${key}">
-                            <h3>${episode.title}</h3>
-                        </div>
-                    `;
-                });
-                
-                // Ajouter les écouteurs d'événements
-                document.querySelectorAll('.episode-card').forEach(card => {
-                    card.addEventListener('click', function() {
+                    const episodeCard = document.createElement('div');
+                    episodeCard.className = `episode-card ${isActive ? 'active' : ''}`;
+                    episodeCard.setAttribute('data-episode-id', key);
+                    episodeCard.innerHTML = `<h3>${episode.title}</h3>`;
+                    
+                    episodeCard.addEventListener('click', function() {
                         const episodeId = this.getAttribute('data-episode-id');
                         window.location.href = `watch.html?id=${movieId}&episode=${episodeId}`;
                     });
+                    
+                    episodesList.appendChild(episodeCard);
                 });
             }
 
@@ -1232,19 +1231,17 @@
                     const part = parts[key];
                     const isActive = currentPartId === key || (!currentPartId && partKeys[0] === key);
                     
-                    episodesList.innerHTML += `
-                        <div class="episode-card ${isActive ? 'active' : ''}" data-part-id="${key}">
-                            <h3>${part.title}</h3>
-                        </div>
-                    `;
-                });
-                
-                // Ajouter les écouteurs d'événements
-                document.querySelectorAll('.episode-card').forEach(card => {
-                    card.addEventListener('click', function() {
+                    const partCard = document.createElement('div');
+                    partCard.className = `episode-card ${isActive ? 'active' : ''}`;
+                    partCard.setAttribute('data-part-id', key);
+                    partCard.innerHTML = `<h3>${part.title}</h3>`;
+                    
+                    partCard.addEventListener('click', function() {
                         const partId = this.getAttribute('data-part-id');
                         window.location.href = `watch.html?id=${movieId}&part=${partId}`;
                     });
+                    
+                    episodesList.appendChild(partCard);
                 });
             }
 
