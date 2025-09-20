@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Télécharger CINETV</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    :root {
+      --bg: #0a0a12;
+      --panel: rgba(18, 18, 32, 0.95);
+      --text: #ffffff;
+      --muted: #b2b4d6;
+      --brand: #6a67ff;
+      --brand-light: #8b88ff;
+      --gradient: linear-gradient(135deg, #6a67ff 0%, #4a6cf7 100%);
+    }
+    
+    body {
+      background: var(--bg) url('background.jpg') center/cover no-repeat fixed;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 18, 0.88);
+      backdrop-filter: blur(10px);
+      z-index: -1;
+    }
+    
+    .container {
+      background: var(--panel);
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      animation: fadeIn 0.8s ease both;
+    }
+    
+    .logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      display: block;
+      filter: drop-shadow(0 0 15px rgba(106, 103, 255, 0.5));
+    }
+    
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+    
+    .message {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      background: var(--gradient);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(106, 103, 255, 0.35);
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+    
+    .download-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(106, 103, 255, 0.5);
+    }
+    
+    .instructions {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 20px;
+    }
+    
+    .instructions h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      color: var(--brand);
+      font-size: 1.2rem;
+    }
+    
+    .instructions ol {
+      padding-left: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .instructions li {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    
+    .note {
+      background: rgba(106, 103, 255, 0.1);
+      padding: 12px 15px;
+      border-radius: 8px;
+      border-left: 4px solid var(--brand);
+      font-size: 0.9rem;
+    }
+    
+    .developer {
+      margin-top: 30px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="logo.png" alt="CINETV Logo" class="logo">
+    
+    <h1>Nouvelle Version de CINETV</h1>
+    
+    <div class="message">
+      <p>Telecharija application nshasha ya Cinetv iri kugihe kugira ubandanye gukoresha CINETV ubone na films, series nshasha twabazaniye</p>
+    </div>
+    
+    <a href="https://github.com/cinetv257/CINETV/raw/main/CINETV%20v1.0.0.apk" class="download-btn">
+      <i class="fas fa-download"></i> Télécharger Maintenant
+    </a>
+    
+    <div class="instructions">
+      <h3><i class="fas fa-info-circle"></i> Instructions d'installation</h3>
+      <ol>
+        <li>Téléchargez le fichier APK en cliquant sur le bouton ci-dessus</li>
+        <li>Ouvrez le fichier téléchargé pour commencer l'installation</li>
+        <li>Si nécessaire, autorisez l'installation d'applications depuis des sources inconnues dans les paramètres de sécurité</li>
+        <li><strong>Désinstallez l'ancienne version de CINETV</strong> avant d'installer la nouvelle</li>
+        <li>Suivez les instructions à l'écran pour compléter l'installation</li>
+        <li>Ouvrez la nouvelle application et profitez du contenu!</li>
+      </ol>
+      
+      <div class="note">
+        <strong>Note importante:</strong> Vous devez désinstaller l'ancienne version avant d'installer cette nouvelle version pour éviter tout conflit.
+      </div>
+    </div>
+    
+    <div class="developer">
+      Développé par @audrydushime
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Politique de Confidentialité - CINETV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        :root {
+            --bg: #0a0a12;
+            --panel: rgba(18, 18, 32, 0.95);
+            --panel-2: #1e2038;
+            --text: #ffffff;
+            --muted: #b2b4d6;
+            --primary: #6a67ff;
+            --primary-light: #8b88ff;
+            --primary-dark: #4a49cc;
+            --success: #3dd598;
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, #6a67ff 0%, #4a6cf7 100%);
+        }
+        
+        body {
+            background: var(--bg) url('background.jpg') center/cover no-repeat fixed;
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 74px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 18, 0.88);
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+        
+        /* ======= NAVBAR ======= */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            padding: 0 20px;
+            background: rgba(18, 18, 32, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text);
+            letter-spacing: 0.5px;
+            font-size: 1.35rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo i {
+            font-size: 1.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-btn {
+            padding: 10px 18px;
+            font-size: 0.95rem;
+            background: var(--panel-2);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .back-btn:hover {
+            background: rgba(106, 103, 255, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        /* ======= MAIN CONTENT ======= */
+        .main-container {
+            padding: 88px 6% 20px;
+            min-height: calc(100vh - 74px);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        /* ======= HERO SECTION ======= */
+        .hero-section {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(106, 103, 255, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .hero-title {
+            font-size: 2.8rem;
+            margin-bottom: 16px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        /* ======= PRIVACY CONTENT ======= */
+        .privacy-content {
+            background: var(--panel);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .privacy-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+        
+        .privacy-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-align: center;
+        }
+        
+        .privacy-section {
+            margin-bottom: 30px;
+        }
+        
+        .privacy-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .privacy-section h3 {
+            font-size: 1.3rem;
+            margin: 20px 0 12px;
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .privacy-section p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--muted);
+            margin-bottom: 15px;
+        }
+        
+        .privacy-section ul, .privacy-section ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .privacy-section li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+        
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .info-box {
+            background: rgba(106, 103, 255, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .info-box p {
+            margin-bottom: 0;
+            color: var(--text);
+        }
+        
+        .firebase-info {
+            background: rgba(255, 153, 0, 0.1);
+            border: 1px solid rgba(255, 153, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+        
+        .firebase-info h3 {
+            color: #FFA000;
+            margin-top: 0;
+        }
+        
+        .firebase-info ul {
+            margin-bottom: 0;
+        }
+        
+        /* ======= FOOTER ======= */
+        footer {
+            background: rgba(13, 13, 21, 0.8);
+            padding: 24px 6%;
+            text-align: center;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            background: rgba(106, 103, 255, 0.1);
+        }
+        
+        .copyright {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .designer-credit {
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-top: 8px;
+            font-style: italic;
+            opacity: 0.7;
+        }
+        
+        /* ======= RESPONSIVE ======= */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .privacy-content {
+                padding: 30px 20px;
+            }
+            
+            .privacy-section h2 {
+                font-size: 1.6rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 78px 4% 20px;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .privacy-content {
+                padding: 25px 15px;
+            }
+            
+            .privacy-section h2 {
+                font-size: 1.4rem;
+            }
+            
+            .privacy-section h3 {
+                font-size: 1.2rem;
+            }
+            
+            .footer-links {
+                gap: 16px;
+            }
+            
+            .back-btn {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <a href="home.html" class="logo"><i class="fas fa-shield-alt"></i> CINETV CONFIDENTIALITÉ</a>
+        <div class="navbar-right">
+            <a href="home.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Politique de Confidentialité</h1>
+            <p class="hero-subtitle">Dernière mise à jour: 15 Mars 2025</p>
+        </section>
+        
+        <!-- Privacy Content -->
+        <div class="privacy-content">
+            <div class="privacy-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            
+            <div class="privacy-section">
+                <h2><i class="fas fa-info-circle"></i> Introduction</h2>
+                <p>Chez CINETV, nous prenons la protection de vos données personnelles très au sérieux. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations lorsque vous utilisez notre service.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2><i class="fas fa-database"></i> Stockage des Données avec Firebase</h2>
+                <p>Nous utilisons Firebase, une plateforme de développement d'applications de Google, pour stocker et gérer vos données de manière sécurisée.</p>
+                
+                <div class="firebase-info">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Informations Stockées sur Firebase</h3>
+                    <p>Lorsque vous créez un compte CINETV, nous stockons les informations suivantes sur les serveurs sécurisés de Firebase:</p>
+                    <ul>
+                        <li><span class="highlight">Adresse e-mail</span> - Utilisée pour votre identification et la communication</li>
+                        <li><span class="highlight">Mot de passe chiffré</span> - Stocké de manière sécurisée avec hachage cryptographique</li>
+                        <li><span class="highlight">Nom d'affichage</span> - Si vous choisissez d'en fournir un</li>
+                        <li><span class="highlight">Préférences de compte</span> - Vos paramètres personnalisés</li>
+                        <li><span class="highlight">Historique de visionnage</span> - Pour personnaliser vos recommandations</li>
+                    </ul>
+                </div>
+                
+                <h3><i class="fas fa-shield-alt"></i> Sécurité des Mots de Passe</h3>
+                <p>Vos mots de passe sont <span class="highlight">jamais stockés en texte brut</span>. Ils sont hachés et salés à l'aide d'algorithmes cryptographiques robustes (bcrypt) avant d'être stockés dans la base de données Firebase Auth.</p>
+                
+                <h3><i class="fas fa-server"></i> Localisation des Données</h3>
+                <p>Les serveurs Firebase que nous utilisons sont situés dans des centres de données sécurisés en Europe, conformément au RGPD. Google s'engage à maintenir des normes élevées de sécurité physique et logicielle.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2><i class="fas fa-clipboard-list"></i> Données Collectées</h2>
+                
+                <h3><i class="fas fa-user"></i> Données de Compte</h3>
+                <p>Pour créer et gérer votre compte, nous collectons:</p>
+                <ul>
+                    <li>Adresse e-mail</li>
+                    <li>Mot de passe (haché de manière sécurisée)</li>
+                    <li>Nom d'affichage (optionnel)</li>
+                    <li>Date de création du compte</li>
+                </ul>
+                
+                <h3><i class="fas fa-film"></i> Données d'Utilisation</h3>
+                <p>Pour améliorer notre service, nous collectons:</p>
+                <ul>
+                    <li>Historique de visionnage</li>
+                    <li>Préférences de contenu</li>
+                    <li>Interactions avec la plateforme</li>
+                    <li>Données techniques (type d'appareil, navigateur, etc.)</li>
+                </ul>
+            </div>
+            
+            <div class="privacy-section">
+                <h2><i class="fas fa-cookie"></i> Cookies et Technologies Similaires</h2>
+                <p>Nous utilisons des cookies pour:</p>
+                <ul>
+                    <li>Maintenir votre session de connexion</li>
+                    <li>Mémoriser vos préférences</li>
+                    <li>Analyser l'utilisation de notre service</li>
+                    <li>Personnaliser le contenu</li>
+                </ul>
+            </div>
+            
+            <div class="privacy-section">
+                <h2><i class="fas fa-user-shield"></i> Vos Droits</h2>
+                <p>Conformément au RGPD et autres lois sur la protection des données, vous avez le droit de:</p>
+                <ul>
+                    <li>Accéder à vos données personnelles</li>
+                    <li>Corriger des données inexactes</li>
+                    <li>Supprimer votre compte et vos données</li>
+                    <li>Vous opposer au traitement de vos données</li>
+                    <li>Exporter vos données</li>
+                </ul>
+                
+                <div class="info-box">
+                    <p><i class="fas fa-info-circle"></i> Pour exercer vos droits, contactez-nous à <span class="highlight">audrypaulin65@gmail.com</span></p>
+                </div>
+            </div>
+            
+            <div class="privacy-section">
+                <h2><i class="fas fa-share-alt"></i> Partage des Données</h2>
+                <p>Nous ne vendons ni ne louons vos données personnelles à des tiers. Nous pouvons partager des données avec:</p>
+                <ul>
+                    <li>Fournisseurs de services qui nous aident à exploiter notre plateforme</li>
+                    <li>Autorités légales lorsque requis par la loi</li>
+                    <li>Nouveaux propriétaires en cas de fusion ou acquisition</li>
+                </ul>
+            </div>
+            
+            <div class="privacy-section">
+                <h2><i class="fas fa-calendar-alt"></i> Conservation des Données</h2>
+                <p>Nous conservons vos données aussi longtemps que votre compte est actif. Vous pouvez demander la suppression de votre compte à tout moment, ce qui entraînera la suppression de vos données personnelles de nos systèmes.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2><i class="fas fa-envelope"></i> Contact</h2>
+                <p>Pour toute question concernant cette politique de confidentialité ou vos données personnelles, contactez notre délégué à la protection des données:</p>
+                <p><span class="highlight">Email:</span> audrypaulin65@gmail.com</p>
+                <p><span class="highlight">Adresse:</span> Service Confidentialité CINETV, Gitega, GITEGA, BURUNDI</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2><i class="fas fa-sync-alt"></i> Modifications de cette Politique</h2>
+                <p>Nous pouvons mettre à jour cette politique de confidentialité occasionnellement. Nous vous informerons de tout changement important en publiant la nouvelle politique sur cette page et en vous envoyant une notification si vous êtes inscrit.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="home.html">Accueil</a>
+            <a href="#">À propos</a>
+            <a href="#">Contact</a>
+            <a href="terms.html">Conditions d'utilisation</a>
+        </div>
+        <div class="copyright">&copy; 2025 CINETV. Tous droits réservés.</div>
+        <div class="designer-credit">Conçu par @audrypaulin</div>
+    </footer>
+
+    <script>
+        // Animation pour les sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const privacySections = document.querySelectorAll('.privacy-section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            privacySections.forEach(section => {
+                section.style.opacity = 0;
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

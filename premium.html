@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Premium - CINETV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        :root {
+            --bg: #0a0a12;
+            --panel: rgba(18, 18, 32, 0.95);
+            --panel-2: #1e2038;
+            --text: #ffffff;
+            --muted: #b2b4d6;
+            --gold: #ffd700;
+            --gold-light: #ffdf40;
+            --gold-dark: #d4af37;
+            --platinum: #e5e4e2;
+            --platinum-light: #f5f4f2;
+            --platinum-dark: #c5c4c2;
+            --diamond: #b9f2ff;
+            --diamond-light: #d9f7ff;
+            --diamond-dark: #89e2f2;
+            --transition: all 0.3s ease;
+            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+        }
+        
+        body {
+            background: var(--bg) url('background.jpg') center/cover no-repeat fixed;
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 74px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 18, 0.88);
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+        
+        /* ======= NAVBAR ======= */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            padding: 0 20px;
+            background: rgba(18, 18, 32, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text);
+            letter-spacing: 0.5px;
+            font-size: 1.35rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo i {
+            font-size: 1.5rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .hamburger {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 10px;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .hamburger:hover {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--gold);
+        }
+        
+        /* ======= MAIN CONTENT ======= */
+        .main-container {
+            padding: 88px 6% 20px;
+            min-height: calc(100vh - 74px);
+        }
+        
+        /* ======= HERO SECTION ======= */
+        .hero-section {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        /* ======= PREMIUM INFO ======= */
+        .premium-info {
+            background: var(--panel);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premium-info::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-gold);
+        }
+        
+        .premium-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--gold);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .premium-info h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+        
+        .premium-info p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--muted);
+            margin-bottom: 25px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .highlight {
+            color: var(--gold);
+            font-weight: 600;
+        }
+        
+        /* ======= FEATURES SECTION ======= */
+        .features-section {
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .feature-card {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--gold);
+        }
+        
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--gold);
+        }
+        
+        .feature-description {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+        
+        /* ======= NOTIFICATION SECTION ======= */
+        .notification-section {
+            text-align: center;
+            padding: 50px 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(212, 175, 55, 0.1) 100%);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .notification-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+        
+        .notification-section p {
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        .notification-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid var(--gold);
+        }
+        
+        .notification-icon {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+        
+        .notification-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-gold);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.35);
+            text-decoration: none;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+        }
+        
+        /* ======= FOOTER ======= */
+        footer {
+            background: rgba(13, 13, 21, 0.8);
+            padding: 24px 6%;
+            text-align: center;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .copyright {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .designer-credit {
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-top: 8px;
+            font-style: italic;
+            opacity: 0.7;
+        }
+        
+        /* ======= RESPONSIVE ======= */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .premium-info {
+                padding: 30px 20px;
+            }
+            
+            .premium-info h2 {
+                font-size: 1.8rem;
+            }
+            
+            .notification-section h2 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 78px 4% 20px;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .premium-info {
+                padding: 25px 15px;
+            }
+            
+            .premium-info h2 {
+                font-size: 1.6rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .notification-section h2 {
+                font-size: 1.6rem;
+            }
+            
+            .notification-text {
+                font-size: 1rem;
+            }
+            
+            .footer-links {
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <a href="home.html" class="logo"><i class="fas fa-crown"></i> CINETV PREMIUM</a>
+        <div class="navbar-right">
+            <a href="home.html" class="btn" style="padding: 8px 16px; font-size: 0.9rem; width: auto;">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">L'Avenir du Streaming Premium</h1>
+            <p class="hero-subtitle">Découvrez le futur de l'expérience cinématographique avec CINETV Premium - Bientôt disponible</p>
+        </section>
+        
+        <!-- Premium Info Section -->
+        <section class="premium-info">
+            <i class="fas fa-crown premium-icon"></i>
+            <h2>Programme Premium en Préparation</h2>
+            <p>Nous travaillons actuellement sur notre offre <span class="highlight">CINETV Premium</span> pour vous offrir une expérience de streaming exceptionnelle, avec du contenu exclusif et de qualité supérieure.</p>
+            <p>Notre équipe développe une plateforme sécurisée et innovante qui révolutionnera votre façon de regarder films et séries.</p>
+            <p>Vous serez informé automatiquement par une notification sur la page d'accueil dès que le service sera disponible !</p>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">Avantages Exclusifs</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-film feature-icon"></i>
+                    <h3 class="feature-title">Contenu Exclusif</h3>
+                    <p class="feature-description">Accédez à des films et séries exclusifs non disponibles dans l'offre standard.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-trophy feature-icon"></i>
+                    <h3 class="feature-title">Qualité Ultra HD</h3>
+                    <p class="feature-description">Profitez de tous vos contenus en qualité 4K Ultra HD avec son immersif.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-download feature-icon"></i>
+                    <h3 class="feature-title">Téléchargement Hors Ligne</h3>
+                    <p class="feature-description">Téléchargez vos films et séries préférés pour les regarder sans connexion.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-theater-masks feature-icon"></i>
+                    <h3 class="feature-title">Accès Avant Première</h3>
+                    <p class="feature-description">Soyez parmi les premiers à visionner les nouvelles sorties avant tout le monde.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-user-secret feature-icon"></i>
+                    <h3 class="feature-title">Environnement Sécurisé</h3>
+                    <p class="feature-description">Plateforme sécurisée avec chiffrement de pointe pour protéger votre vie privée.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-users feature-icon"></i>
+                    <h3 class="feature-title">Profils Multiples</h3>
+                    <p class="feature-description">Créez jusqu'à 5 profils différents pour toute la famille avec recommandations personnalisées.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Notification Section -->
+        <section class="notification-section">
+            <h2>Comment être informé ?</h2>
+            <p>Nous vous informerons du lancement de CINETV Premium directement sur la page d'accueil</p>
+            
+            <div class="notification-info">
+                <i class="fas fa-bell notification-icon"></i>
+                <p class="notification-text">Une notification s'affichera automatiquement sur la page d'accueil dès que CINETV Premium sera disponible. Pas besoin de formulaire d'inscription !</p>
+                <a href="home.html" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Retour à l'accueil
+                </a>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="home.html">Accueil</a>
+            <a href="#">À propos</a>
+            <a href="#">Contact</a>
+            <a href="privacy.html">Confidentialité</a>
+            <a href="terms.html">Conditions d'utilisation</a>
+        </div>
+        <div class="copyright">&copy; 2025 CINETV. Tous droits réservés.</div>
+        <div class="designer-credit">Conçu par @audrypaulin</div>
+    </footer>
+
+    <script>
+        // Animation au défilement
+        document.addEventListener('DOMContentLoaded', function() {
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            featureCards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

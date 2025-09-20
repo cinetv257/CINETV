@@ -5,77 +5,813 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>CINETV - Connexion</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        :root {
+            --bg: #0a0a12;
+            --panel: rgba(18, 18, 32, 0.95);
+            --panel-2: #1e2038;
+            --text: #ffffff;
+            --muted: #b2b4d6;
+            --brand: #6a67ff;
+            --brand-light: #8b88ff;
+            --action: #4a6cf7;
+            --success: #3dd598;
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, #6a67ff 0%, #4a6cf7 100%);
+        }
+        
+        body {
+            background: var(--bg) url('background.jpg') center/cover no-repeat fixed;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 18, 0.88);
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            background: rgba(18, 18, 32, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            height: 68px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text);
+            letter-spacing: 0.5px;
+            font-size: 1.35rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo i {
+            font-size: 1.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .auth-container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            background: var(--panel);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+        }
+        
+        .auth-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(106, 103, 255, 0.2);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            border: none;
+            font-size: 1rem;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(106, 103, 255, 0.35);
+        }
+        
+        .btn-primary:hover:not(.loading) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(106, 103, 255, 0.5);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--muted);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 15px;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(106, 103, 255, 0.15);
+            border-color: var(--brand);
+            color: var(--brand);
+            transform: translateY(-2px);
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        
+        .auth-footer a {
+            color: var(--brand);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .form-switch {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--muted);
+        }
+        
+        .form-switch a {
+            color: var(--brand);
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .form-switch a:hover {
+            text-decoration: underline;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .auth-message {
+            padding: 12px 16px;
+            margin: 15px 0;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .error-message {
+            background-color: rgba(233, 69, 96, 0.15);
+            border-color: rgba(233, 69, 96, 0.3);
+            color: #ff6b81;
+        }
+        
+        .success-message {
+            background-color: rgba(61, 213, 152, 0.15);
+            border-color: rgba(61, 213, 152, 0.3);
+            color: #3dd598;
+        }
+        
+        .auth-providers {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .auth-provider-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .auth-provider-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+        
+        .auth-provider-btn.google {
+            background: rgba(66, 133, 244, 0.15);
+            border-color: rgba(66, 133, 244, 0.3);
+        }
+        
+        .auth-provider-btn.google:hover {
+            background: rgba(66, 133, 244, 0.25);
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        footer {
+            background: rgba(13, 13, 21, 0.8);
+            padding: 24px 6%;
+            text-align: center;
+            margin-top: auto;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: var(--muted);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .footer-link:hover {
+            color: var(--brand);
+            background: rgba(106, 103, 255, 0.1);
+        }
+        
+        .copyright {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+        
+        .designer-credit {
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-style: italic;
+            opacity: 0.7;
+        }
+        
+        /* Styles pour la case à cocher et les conditions */
+        .terms-group {
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .terms-checkbox {
+            margin-right: 10px;
+            margin-top: 3px;
+            accent-color: var(--brand);
+        }
+        
+        .terms-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-align: left;
+            line-height: 1.4;
+        }
+        
+        .terms-label a {
+            color: var(--brand);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .terms-label a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Animation de chargement pour les boutons */
+        .btn.loading {
+            pointer-events: none;
+            color: transparent;
+        }
+        
+        .loading-dots {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: white;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        
+        .dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+        
+        .dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { 
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .auth-container {
+                padding: 24px;
+                margin: 30px auto;
+            }
+            
+            .auth-title {
+                font-size: 1.6rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            
+            .auth-title {
+                font-size: 1.4rem;
+            }
+            
+            .form-control {
+                padding: 12px 14px;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+            }
+            
+            .terms-label {
+                font-size: 0.8rem;
+            }
+            
+            .footer-links {
+                gap: 16px;
+            }
+            
+            .footer-link {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
-        <a href="home.html" class="logo">
-            <i class="fa-solid fa-film"></i>
-            CINETV
-        </a>
-        <a href="login.html" class="btn btn-secondary">
-            <i class="fas fa-sign-in-alt"></i> Connexion
-        </a>
+        <a href="home.html" class="logo"><i class="fas fa-play-circle"></i> CINETV</a>
     </nav>
-    <main>
-        <div class="auth-container">
-            <h1 class="auth-title" id="form-title">
-                <i class="fas fa-sign-in-alt"></i> Connexion
-            </h1>
-            <div id="auth-message" class="auth-message hidden"></div>
-            
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="loginEmail">Adresse e-mail</label>
-                    <input type="email" id="loginEmail" name="email" class="form-control" placeholder="exemple@gmail.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Mot de passe</label>
-                    <input type="password" id="loginPassword" name="password" class="form-control" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn btn-primary" id="loginBtn">
-                    <span id="loginBtnText">Se connecter</span>
-                </button>
-            </form>
-
-            <form id="registerForm" class="hidden">
-                <div class="form-group">
-                    <label for="registerEmail">Adresse e-mail</label>
-                    <input type="email" id="registerEmail" name="email" class="form-control" placeholder="exemple@gmail.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerPassword">Mot de passe</label>
-                    <input type="password" id="registerPassword" name="password" class="form-control" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn btn-primary" id="registerBtn">
-                    <span id="registerBtnText">S'inscrire</span>
-                </button>
-            </form>
-
-            <p class="auth-footer">
-                Vous avez oublié votre mot de passe ? <a href="#">Réinitialiser</a>
-            </p>
-            <div class="auth-providers">
-                <button type="button" class="auth-provider-btn google" id="googleLoginBtn">
-                    <i class="fab fa-google"></i> Continuer avec Google
-                </button>
+    
+    <div class="auth-container">
+        <h1 class="auth-title" id="form-title"><i class="fas fa-sign-in-alt"></i> Connexion</h1>
+        
+        <div id="auth-message" class="auth-message hidden"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="login-email">Adresse Email</label>
+                <input type="email" id="login-email" class="form-control" placeholder="Entrez votre email" required>
             </div>
+            
+            <div class="form-group">
+                <label for="login-password">Mot de passe</label>
+                <input type="password" id="login-password" class="form-control" placeholder="Entrez votre mot de passe" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" id="login-button">
+                Se connecter
+            </button>
             
             <div class="form-switch">
-                <p>
-                    Pas encore de compte ? <a id="switch-to-register">S'inscrire</a>
-                </p>
+                Pas de compte ? <a id="switch-to-register">S'inscrire</a>
             </div>
+            
+            <div class="auth-footer">
+                <a href="#" id="forgot-password">Mot de passe oublié ?</a>
+            </div>
+        </form>
+        
+        <form id="registerForm" class="hidden">
+            <div class="form-group">
+                <label for="register-name">Nom complet</label>
+                <input type="text" id="register-name" class="form-control" placeholder="Entrez votre nom complet" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="register-email">Adresse Email</label>
+                <input type="email" id="register-email" class="form-control" placeholder="Entrez votre email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="register-password">Mot de passe</label>
+                <input type="password" id="register-password" class="form-control" placeholder="Créez un mot de passe (min. 6 caractères)" required minlength="6">
+            </div>
+            
+            <div class="form-group">
+                <label for="register-confirm-password">Confirmez le mot de passe</label>
+                <input type="password" id="register-confirm-password" class="form-control" placeholder="Confirmez votre mot de passe" required minlength="6">
+            </div>
+            
+            <div class="terms-group">
+                <input type="checkbox" id="accept-terms" class="terms-checkbox" required>
+                <label for="accept-terms" class="terms-label">
+                    J'accepte les <a href="privacy.html" target="_blank">Conditions Générales d'Utilisation</a> et la <a href="privacy.html" target="_blank">Politique de Confidentialité</a> de CINETV
+                </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" id="register-button">
+                S'inscrire
+            </button>
+            
+            <div class="form-switch">
+                Déjà un compte ? <a id="switch-to-login">Se connecter</a>
+            </div>
+        </form>
+        
+        <div style="text-align: center; margin: 20px 0; color: var(--muted); position: relative;">
+            <span style="background: var(--panel); padding: 0 15px; z-index: 1; position: relative;">OU</span>
+            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(255, 255, 255, 0.1); z-index: 0;"></div>
         </div>
-    </main>
-
+        
+        <div class="auth-providers">
+            <button class="auth-provider-btn google" id="google-signin">
+                <i class="fab fa-google"></i> Continuer avec Google
+            </button>
+        </div>
+    </div>
+    
     <footer>
-        <p>CINETV © 2024. Tous droits réservés.</p>
+        <div class="footer-links">
+            <a href="home.html" class="footer-link">Accueil</a>
+            <a href="#" class="footer-link">À propos</a>
+            <a href="#" class="footer-link">Contact</a>
+            <a href="privacy.html" class="footer-link">Conditions d'utilisation</a>
+            <a href="privacy.html" class="footer-link">Politique de confidentialité</a>
+        </div>
+        <div class="copyright">
+            &copy; 2025 CINETV. Tous droits réservés.
+        </div>
+        <div class="designer-credit">
+            Conçu par @audrypaulin
+        </div>
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
-    <script src="script.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            sendPasswordResetEmail,
+            signInWithPopup,
+            GoogleAuthProvider,
+            updateProfile
+        } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
+            authDomain: "cinetv257.firebaseapp.com",
+            projectId: "cinetv257",
+            storageBucket: "cinetv257.appspot.com",
+            messagingSenderId: "402664770835",
+            appId: "1:402664770835:web:1adaea98f40ca609645ee6",
+            measurementId: "G-194WCGXQSH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Fonction pour afficher l'animation de chargement dans un bouton
+        function setButtonLoading(button, isLoading) {
+            if (isLoading) {
+                button.classList.add('loading');
+                button.innerHTML = `
+                    <div class="loading-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                `;
+            } else {
+                button.classList.remove('loading');
+                if (button.id === 'login-button') {
+                    button.innerHTML = 'Se connecter';
+                } else if (button.id === 'register-button') {
+                    button.innerHTML = 'S\'inscrire';
+                }
+            }
+        }
+
+        // Fonction améliorée pour afficher les messages
+        function showAuthMessage(message, isError = true) {
+            const authMessage = document.getElementById('auth-message');
+            authMessage.textContent = message;
+            authMessage.className = isError ? 'auth-message error-message' : 'auth-message success-message';
+            authMessage.classList.remove('hidden');
+            
+            // Scroll vers le message pour le rendre visible
+            authMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            setTimeout(() => {
+                authMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Fonction pour gérer la connexion réussie
+        function handleSuccessfulLogin() {
+            // Stocker l'état de connexion dans le localStorage
+            localStorage.setItem('cineTvUserLoggedIn', 'true');
+            
+            // Rediriger vers la page d'accueil
+            window.location.href = 'home.html';
+        }
+
+        // Connexion avec email/mot de passe
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const loginButton = document.getElementById('login-button');
+
+            try {
+                setButtonLoading(loginButton, true);
+                showAuthMessage('Tentative de connexion en cours...', false);
+                
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                console.log('Connexion réussie - User:', userCredential.user);
+                
+                showAuthMessage('Connexion réussie ! Redirection vers l\'accueil...', false);
+                
+                // Gérer la connexion réussie
+                handleSuccessfulLogin();
+                
+            } catch (error) {
+                console.error('Erreur de connexion:', error);
+                setButtonLoading(loginButton, false);
+                
+                let errorMessage = "Erreur lors de la connexion";
+                switch(error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage = "Format d'email invalide";
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage = "Compte désactivé";
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = "Aucun compte associé à cet email";
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = "Mot de passe incorrect";
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = "Trop de tentatives. Réessayez plus tard";
+                        break;
+                    case 'auth/network-request-failed':
+                        errorMessage = "Problème de connexion internet";
+                        break;
+                }
+                
+                showAuthMessage(errorMessage);
+            }
+        });
+
+        // Inscription
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const acceptTerms = document.getElementById('accept-terms').checked;
+            const registerButton = document.getElementById('register-button');
+
+            // Validation côté client
+            if (!acceptTerms) {
+                showAuthMessage("Vous devez accepter les conditions d'utilisation");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showAuthMessage("Les mots de passe ne correspondent pas");
+                return;
+            }
+
+            if (password.length < 6) {
+                showAuthMessage("Le mot de passe doit contenir au moins 6 caractères");
+                return;
+            }
+
+            try {
+                setButtonLoading(registerButton, true);
+                showAuthMessage("Création du compte en cours...", false);
+                
+                // Étape 1: Création du compte
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                console.log('Compte créé - User:', userCredential.user);
+                
+                // Étape 2: Mise à jour du nom (optionnelle)
+                try {
+                    await updateProfile(userCredential.user, { displayName: name });
+                    console.log('Nom mis à jour avec succès');
+                    showAuthMessage(`Bienvenue ${name} ! Compte créé avec succès.`, false);
+                } catch (updateError) {
+                    console.warn('Erreur mise à jour profil:', updateError);
+                    showAuthMessage("Compte créé avec succès ! (Le nom n'a pas pu être enregistré)", false);
+                }
+
+                // Stocker l'état de connexion dans le localStorage
+                localStorage.setItem('cineTvUserLoggedIn', 'true');
+                
+                // Rediriger vers la page d'accueil
+                window.location.href = 'home.html';
+                
+            } catch (error) {
+                console.error('Erreur inscription:', error);
+                setButtonLoading(registerButton, false);
+                
+                let errorMessage = "Erreur lors de l'inscription";
+                switch(error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = "Cet email est déjà utilisé";
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = "Format d'email invalide";
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = "Mot de passe trop faible (min. 6 caractères)";
+                        break;
+                    case 'auth/operation-not-allowed':
+                        errorMessage = "Création de compte temporairement désactivée";
+                        break;
+                    case 'auth/network-request-failed':
+                        errorMessage = "Problème de connexion internet";
+                        break;
+                }
+                
+                showAuthMessage(errorMessage);
+            }
+        });
+
+        // Connexion avec Google
+        document.getElementById('google-signin').addEventListener('click', () => {
+            signInWithPopup(auth, googleProvider)
+                .then(() => {
+                    showAuthMessage('Connexion Google réussie ! Redirection vers l\'accueil...', false);
+                    // Stocker l'état de connexion dans le localStorage
+                    localStorage.setItem('cineTvUserLoggedIn', 'true');
+                    // Rediriger vers la page d'accueil
+                    window.location.href = 'home.html';
+                })
+                .catch((error) => {
+                    console.error('Erreur Google SignIn:', error);
+                    showAuthMessage(error.code === 'auth/popup-closed-by-user' 
+                        ? 'Connexion Google annulée' 
+                        : 'Erreur lors de la connexion avec Google');
+                });
+        });
+
+        // Mot de passe oublié
+        document.getElementById('forgot-password').addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value || prompt('Entrez votre email:');
+            if (email) {
+                sendPasswordResetEmail(auth, email)
+                    .then(() => {
+                        showAuthMessage('Email de réinitialisation envoyé', false);
+                    })
+                    .catch((error) => {
+                        console.error('Erreur reset password:', error);
+                        showAuthMessage("Erreur lors de l'envoi de l'email de réinitialisation");
+                    });
+            }
+        });
+
+        // Basculer entre les formulaires
+        document.getElementById('switch-to-register').addEventListener('click', () => {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('form-title').innerHTML = '<i class="fas fa-user-plus"></i> Inscription';
+            document.getElementById('auth-message').classList.add('hidden');
+        });
+
+        document.getElementById('switch-to-login').addEventListener('click', () => {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('form-title').innerHTML = '<i class="fas fa-sign-in-alt"></i> Connexion';
+            document.getElementById('auth-message').classList.add('hidden');
+        });
+
+        // Vérifier si l'utilisateur est déjà connecté
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                console.log('Utilisateur déjà connecté:', user.email);
+                // Stocker l'état de connexion dans le localStorage
+                localStorage.setItem('cineTvUserLoggedIn', 'true');
+                // Redirection automatique si déjà connecté
+                window.location.href = 'home.html';
+            }
+        });
+
+        // Vérifier le localStorage au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('cineTvUserLoggedIn') === 'true';
+            if (isLoggedIn) {
+                window.location.href = 'home.html';
+            }
+        });
+    </script>
 </body>
 </html>
