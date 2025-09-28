@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin CINETV - Gestion Complète</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    :root {
+      --bg: #0a0a12;
+      --panel: rgba(18, 18, 32, 0.95);
+      --panel-2: #1e2038;
+      --text: #ffffff;
+      --muted: #b2b4d6;
+      --brand: #6a67ff;
+      --brand-light: #8b88ff;
+      --action: #4a6cf7;
+      --success: #3dd598;
+      --error: #ff6b6b;
+      --warning: #ffd166;
+      --transition: all 0.3s ease;
+      --gradient: linear-gradient(135deg, #6a67ff 0%, #4a6cf7 100%);
+    }
+    
+    body {
+      background: var(--bg) center/cover no-repeat fixed;
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 20px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 18, 0.88);
+      backdrop-filter: blur(10px);
+      z-index: -1;
+    }
+    
+    /* ======= NAVBAR ======= */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+      padding: 0 20px;
+      background: rgba(18, 18, 32, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--text);
+      letter-spacing: 0.5px;
+      font-size: 1.35rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .logo i {
+      font-size: 1.5rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    
+    .btn-primary {
+      background: var(--gradient);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(106, 103, 255, 0.35);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(106, 103, 255, 0.5);
+    }
+
+    .btn-danger {
+      background: var(--error);
+      color: #fff;
+    }
+    
+    .btn-danger:hover {
+      background: #e04545;
+      transform: translateY(-3px);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+    
+    .btn-success:hover {
+      background: #2db583;
+      transform: translateY(-3px);
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: #333;
+    }
+    
+    .btn-warning:hover {
+      background: #f2c14e;
+      transform: translateY(-3px);
+    }
+
+    .btn-info {
+      background: var(--action);
+      color: #fff;
+    }
+    
+    .btn-info:hover {
+      background: #3a5df5;
+      transform: translateY(-3px);
+    }
+    
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+    
+    /* ======= CONTENT ======= */
+    .container {
+      max-width: 1200px;
+      margin: 80px auto 0;
+      padding: 20px;
+    }
+    
+    .card {
+      background: var(--panel-2);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: var(--text);
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(106, 103, 255, 0.2);
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .message {
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .error {
+      background: rgba(255, 107, 107, 0.1);
+      color: var(--error);
+      border: 1px solid var(--error);
+    }
+    
+    .success {
+      background: rgba(61, 213, 152, 0.1);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+    
+    .warning {
+      background: rgba(255, 209, 102, 0.1);
+      color: var(--warning);
+      border: 1px solid var(--warning);
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .movies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    
+    .movie-card {
+      background: rgba(30, 32, 56, 0.7);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    .movie-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border-color: rgba(106, 103, 255, 0.3);
+    }
+    
+    .movie-poster {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+    
+    .movie-info {
+      padding: 12px;
+    }
+    
+    .movie-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--brand-light);
+      font-size: 0.95rem;
+    }
+    
+    .movie-details {
+      color: #aaa;
+      font-size: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 5px;
+    }
+    
+    .movie-detail {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+    }
+    
+    .movie-id {
+      color: #777;
+      font-size: 0.75rem;
+      margin-top: 5px;
+    }
+    
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .required::after {
+      content: " *";
+      color: var(--error);
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: var(--panel);
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--brand);
+    }
+    
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    
+    .toggle-form-btn {
+      margin-bottom: 15px;
+    }
+    
+    /* Styles pour les parties et épisodes */
+    .parts-container, .episodes-container {
+      margin-top: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    
+    .part-item, .episode-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    
+    .part-item input, .episode-item input {
+      flex: 1;
+    }
+    
+    .video-content {
+      margin-top: 15px;
+    }
+    
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      background: var(--success);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .toast.error {
+      background: var(--error);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      
+      .movies-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      
+      .movie-poster {
+        height: 100px;
+      }
+      
+      .movie-info {
+        padding: 10px;
+      }
+      
+      .movie-title {
+        font-size: 0.9rem;
+      }
+      
+      .movie-details {
+        font-size: 0.75rem;
+        gap: 4px;
+      }
+      
+      .movie-detail {
+        padding: 2px 6px;
+        font-size: 0.7rem;
+      }
+      
+      .actions {
+        padding: 8px 10px;
+      }
+      
+      .btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+      
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .part-item, .episode-item {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .movies-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .movie-poster {
+        height: 90px;
+      }
+      
+      .movie-title {
+        font-size: 0.85rem;
+      }
+      
+      .movie-detail {
+        font-size: 0.65rem;
+      }
+      
+      .stat-value {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navbar -->
+  <nav class="navbar">
+    <a href="#" class="logo"><i class="fas fa-film"></i><span>Admin CINETV</span></a>
+    <div class="navbar-right">
+      <button id="logoutBtn" class="btn btn-primary hidden"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Section de connexion -->
+    <div id="loginSection" class="card">
+      <h2><i class="fas fa-lock"></i> Connexion administrateur</h2>
+      <div id="loginMessage" class="message hidden"></div>
+      
+      <div class="form-group">
+        <label for="email"><i class="fas fa-envelope"></i> Email</label>
+        <input type="email" id="email" placeholder="Votre email admin">
+      </div>
+      
+      <div class="form-group">
+        <label for="password"><i class="fas fa-key"></i> Mot de passe</label>
+        <input type="password" id="password" placeholder="Votre mot de passe">
+      </div>
+      
+      <button id="loginBtn" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Se connecter</button>
+    </div>
+
+    <!-- Panel admin (caché par défaut) -->
+    <div id="adminPanel" class="hidden">
+      <div class="card">
+        <h2><i class="fas fa-chart-bar"></i> Vue d'ensemble</h2>
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-value" id="moviesCount">0</div>
+            <div class="stat-label">Total Films</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="viewsCount">0</div>
+            <div class="stat-label">Total Vues</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="likesCount">0</div>
+            <div class="stat-label">Total Likes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="seriesCount">0</div>
+            <div class="stat-label">Séries</div>
+          </div>
+        </div>
+      </div>
+      
+      <button id="toggleFormBtn" class="btn btn-info toggle-form-btn">
+        <i class="fas fa-plus"></i> Afficher le formulaire d'ajout
+      </button>
+      
+      <div id="movieFormSection" class="card hidden">
+        <h2><i class="fas fa-edit"></i> Ajouter ou modifier un film</h2>
+        <div id="formMessage" class="message hidden"></div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="movieId" class="required">ID du film (unique, sans espaces)</label>
+            <input type="text" id="movieId" placeholder="Ex: mission_impossible">
+          </div>
+          
+          <div class="form-group">
+            <label for="title" class="required">Titre du film</label>
+            <input type="text" id="title" placeholder="Titre complet du film">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category" class="required">Catégorie</label>
+            <input type="text" id="category" placeholder="Action, Comédie, Drame...">
+          </div>
+          
+          <div class="form-group">
+            <label for="type" class="required">Type de contenu</label>
+            <select id="type">
+              <option value="movie">Film</option>
+              <option value="multi-part">Multipart</option>
+              <option value="series">Série</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="badge">Badge</label>
+            <input type="text" id="badge" placeholder="Ex: V.F, V.A">
+          </div>
+          
+          <div class="form-group">
+            <label for="year">Année</label>
+            <input type="number" id="year" placeholder="Ex: 2023" min="1900" max="2030">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="interpreter">Interprète</label>
+          <input type="text" id="interpreter" placeholder="Nom de l'interprète">
+        </div>
+        
+        <div class="form-group">
+          <label for="imageUrl" class="required">URL de l'affiche</label>
+          <input type="text" id="imageUrl" placeholder="https://exemple.com/poster.jpg">
+        </div>
+        
+        <!-- Contenu vidéo selon le type -->
+        <div class="video-content" id="videoContent">
+          <!-- Le contenu sera généré dynamiquement selon le type -->
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" rows="3" placeholder="Résumé du film..."></textarea>
+        </div>
+        
+        <div class="form-actions">
+          <button id="saveMovieBtn" class="btn btn-success"><i class="fas fa-save"></i> Sauvegarder</button>
+          <button id="deleteMovieBtn" class="btn btn-danger"><i class="fas fa-trash"></i> Supprimer</button>
+          <button id="clearFormBtn" class="btn btn-warning"><i class="fas fa-plus"></i> Nouveau</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h2><i class="fas fa-list"></i> Liste des films (<span id="moviesCountBadge">0</span>)</h2>
+        <div class="form-group">
+          <input type="text" id="searchMovie" placeholder="Rechercher un film par titre, ID, catégorie...">
+        </div>
+        <div id="moviesList" class="movies-grid">
+          <!-- La liste des films sera ajoutée ici -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast de notification -->
+  <div id="toast" class="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage"></span>
+  </div>
+
+  <script>
+    // Configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
+      authDomain: "cinetv257.firebaseapp.com",
+      databaseURL: "https://cinetv257-default-rtdb.firebaseio.com",
+      projectId: "cinetv257",
+      storageBucket: "cinetv257.appspot.com",
+      messagingSenderId: "402664770835",
+      appId: "1:402664770835:web:1adaea98f40ca609645ee6"
+    };
+
+    // Initialiser Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // Références aux éléments DOM
+    const loginSection = document.getElementById('loginSection');
+    const adminPanel = document.getElementById('adminPanel');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginMessage = document.getElementById('loginMessage');
+    const formMessage = document.getElementById('formMessage');
+    const saveMovieBtn = document.getElementById('saveMovieBtn');
+    const deleteMovieBtn = document.getElementById('deleteMovieBtn');
+    const clearFormBtn = document.getElementById('clearFormBtn');
+    const toggleFormBtn = document.getElementById('toggleFormBtn');
+    const movieFormSection = document.getElementById('movieFormSection');
+    const movieIdInput = document.getElementById('movieId');
+    const titleInput = document.getElementById('title');
+    const categoryInput = document.getElementById('category');
+    const typeInput = document.getElementById('type');
+    const badgeInput = document.getElementById('badge');
+    const yearInput = document.getElementById('year');
+    const interpreterInput = document.getElementById('interpreter');
+    const imageUrlInput = document.getElementById('imageUrl');
+    const videoContent = document.getElementById('videoContent');
+    const descriptionInput = document.getElementById('description');
+    const moviesList = document.getElementById('moviesList');
+    const searchInput = document.getElementById('searchMovie');
+    const moviesCountEl = document.getElementById('moviesCount');
+    const viewsCountEl = document.getElementById('viewsCount');
+    const likesCountEl = document.getElementById('likesCount');
+    const seriesCountEl = document.getElementById('seriesCount');
+    const moviesCountBadge = document.getElementById('moviesCountBadge');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+
+    // État du formulaire (affiché ou masqué)
+    let isFormVisible = false;
+    let partsCount = 1;
+    let episodesCount = 1;
+    let currentMovieId = null;
+
+    // Écouteurs d'événements
+    loginBtn.addEventListener('click', loginAdmin);
+    logoutBtn.addEventListener('click', logoutAdmin);
+    saveMovieBtn.addEventListener('click', saveMovie);
+    deleteMovieBtn.addEventListener('click', deleteMovie);
+    clearFormBtn.addEventListener('click', clearForm);
+    toggleFormBtn.addEventListener('click', toggleForm);
+    searchInput.addEventListener('input', searchMovies);
+    typeInput.addEventListener('change', updateVideoContent);
+
+    // Afficher une notification toast
+    function showToast(message, isError = false) {
+      toastMessage.textContent = message;
+      toast.className = isError ? 'toast error' : 'toast';
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Basculer l'affichage du formulaire
+    function toggleForm() {
+      isFormVisible = !isFormVisible;
+      
+      if (isFormVisible) {
+        movieFormSection.classList.remove('hidden');
+        toggleFormBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Masquer le formulaire';
+      } else {
+        movieFormSection.classList.add('hidden');
+        toggleFormBtn.innerHTML = '<i class="fas fa-plus"></i> Afficher le formulaire d\'ajout';
+      }
+    }
+
+    // Mettre à jour le contenu vidéo selon le type sélectionné
+    function updateVideoContent() {
+      const type = typeInput.value;
+      videoContent.innerHTML = '';
+      
+      if (type === 'movie') {
+        videoContent.innerHTML = `
+          <div class="form-group">
+            <label for="videoUrl" class="required">URL de la vidéo</label>
+            <input type="text" id="videoUrl" placeholder="https://exemple.com/video.mp4">
+          </div>
+        `;
+      } else if (type === 'multi-part') {
+        videoContent.innerHTML = `
+          <div class="form-group">
+            <label>Parties du film</label>
+            <div class="parts-container" id="partsContainer">
+              <div class="part-item">
+                <input type="text" class="part-title" placeholder="Titre de la partie (ex: Partie 1)" value="Partie 1">
+                <input type="text" class="part-url" placeholder="URL de la vidéo" required>
+              </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-info" id="addPartBtn" style="margin-top: 10px;">
+              <i class="fas fa-plus"></i> Ajouter une partie
+            </button>
+          </div>
+        `;
+        
+        document.getElementById('addPartBtn').addEventListener('click', addPart);
+        partsCount = 1;
+      } else if (type === 'series') {
+        videoContent.innerHTML = `
+          <div class="form-group">
+            <label>Épisodes de la série</label>
+            <div class="episodes-container" id="episodesContainer">
+              <div class="episode-item">
+                <input type="text" class="episode-title" placeholder="Titre de l'épisode (ex: Épisode 1)" value="Épisode 1">
+                <input type="text" class="episode-url" placeholder="URL de la vidéo" required>
+              </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-info" id="addEpisodeBtn" style="margin-top: 10px;">
+              <i class="fas fa-plus"></i> Ajouter un épisode
+            </button>
+          </div>
+        `;
+        
+        document.getElementById('addEpisodeBtn').addEventListener('click', addEpisode);
+        episodesCount = 1;
+      }
+    }
+
+    // Ajouter une partie pour les films multipart
+    function addPart() {
+      partsCount++;
+      const partsContainer = document.getElementById('partsContainer');
+      const partItem = document.createElement('div');
+      partItem.className = 'part-item';
+      partItem.innerHTML = `
+        <input type="text" class="part-title" placeholder="Titre de la partie (ex: Partie ${partsCount})" value="Partie ${partsCount}">
+        <input type="text" class="part-url" placeholder="URL de la vidéo" required>
+        <button type="button" class="btn btn-sm btn-danger remove-part"><i class="fas fa-times"></i></button>
+      `;
+      partsContainer.appendChild(partItem);
+      
+      partItem.querySelector('.remove-part').addEventListener('click', function() {
+        partItem.remove();
+      });
+    }
+
+    // Ajouter un épisode pour les séries
+    function addEpisode() {
+      episodesCount++;
+      const episodesContainer = document.getElementById('episodesContainer');
+      const episodeItem = document.createElement('div');
+      episodeItem.className = 'episode-item';
+      episodeItem.innerHTML = `
+        <input type="text" class="episode-title" placeholder="Titre de l'épisode (ex: Épisode ${episodesCount})" value="Épisode ${episodesCount}">
+        <input type="text" class="episode-url" placeholder="URL de la vidéo" required>
+        <button type="button" class="btn btn-sm btn-danger remove-episode"><i class="fas fa-times"></i></button>
+      `;
+      episodesContainer.appendChild(episodeItem);
+      
+      episodeItem.querySelector('.remove-episode').addEventListener('click', function() {
+        episodeItem.remove();
+      });
+    }
+
+    // Vérifier si l'utilisateur est admin
+    async function isAdmin(uid) {
+      try {
+        const snapshot = await db.ref('admins').child(uid).once('value');
+        return snapshot.exists() && snapshot.val() === true;
+      } catch (error) {
+        console.error("Erreur de vérification admin:", error);
+        showMessage(loginMessage, "Erreur de vérification des privilèges", "error");
+        return false;
+      }
+    }
+
+    // Connexion admin
+    async function loginAdmin() {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+      
+      if (!email || !password) {
+        showMessage(loginMessage, "Veuillez remplir tous les champs", "error");
+        return;
+      }
+      
+      try {
+        showMessage(loginMessage, "Connexion en cours...", "warning");
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        // Vérifier si l'utilisateur est admin
+        const admin = await isAdmin(user.uid);
+        
+        if (admin) {
+          showMessage(loginMessage, "Connexion réussie! Chargement...", "success");
+          setTimeout(() => {
+            loginSection.classList.add('hidden');
+            adminPanel.classList.remove('hidden');
+            logoutBtn.classList.remove('hidden');
+            loadMovies();
+          }, 1000);
+        } else {
+          showMessage(loginMessage, "Accès refusé: Vous n'êtes pas administrateur", "error");
+          await auth.signOut();
+        }
+      } catch (error) {
+        console.error("Erreur de connexion:", error);
+        showMessage(loginMessage, "Erreur: " + error.message, "error");
+      }
+    }
+
+    // Déconnexion
+    function logoutAdmin() {
+      auth.signOut();
+      adminPanel.classList.add('hidden');
+      logoutBtn.classList.add('hidden');
+      loginSection.classList.remove('hidden');
+      clearForm();
+    }
+
+    // Afficher un message
+    function showMessage(element, text, type) {
+      element.textContent = text;
+      element.classList.remove('hidden', 'error', 'success', 'warning');
+      element.classList.add(type);
+      setTimeout(() => {
+        element.classList.add('hidden');
+      }, 5000);
+    }
+
+    // Charger les films
+    function loadMovies() {
+      db.ref('movies').on('value', (snapshot) => {
+        const movies = snapshot.val();
+        displayMovies(movies);
+        calculateStats(movies);
+      });
+    }
+
+    // Afficher les films dans la liste
+    function displayMovies(movies) {
+      moviesList.innerHTML = '';
+      
+      if (!movies) {
+        moviesList.innerHTML = '<p>Aucun film dans la base de données</p>';
+        moviesCountBadge.textContent = '0';
+        return;
+      }
+      
+      const moviesArray = Object.entries(movies);
+      moviesCountBadge.textContent = moviesArray.length;
+      
+      moviesArray.forEach(([id, movie]) => {
+        moviesList.appendChild(createMovieCard(id, movie));
+      });
+    }
+
+    // Créer une carte de film
+    function createMovieCard(id, movie) {
+      const card = document.createElement('div');
+      card.className = 'movie-card';
+      
+      // Déterminer le type de contenu
+      let contentType = "Film";
+      if (movie.type === "series") contentType = "Série";
+      if (movie.type === "multi-part") contentType = "Multipart";
+      
+      // Compter les vues
+      let viewsCount = 0;
+      if (movie.views && movie.views.count) {
+        viewsCount = movie.views.count;
+      } else if (movie.views && typeof movie.views === 'number') {
+        viewsCount = movie.views;
+      }
+      
+      // Compter les likes
+      let likesCount = 0;
+      if (movie.likes && movie.likes.count) {
+        likesCount = movie.likes.count;
+      } else if (movie.likes && typeof movie.likes === 'number') {
+        likesCount = movie.likes;
+      }
+      
+      // Vérifier si c'est une série avec des épisodes
+      let episodesCount = 0;
+      if (movie.episodes) {
+        episodesCount = Object.keys(movie.episodes).length;
+      }
+      
+      // Vérifier si c'est un multipart avec des parties
+      let partsCount = 0;
+      if (movie.parts) {
+        partsCount = Object.keys(movie.parts).length;
+      }
+      
+      card.innerHTML = `
+        <img src="${movie.imageUrl || 'https://via.placeholder.com/300x150?text=No+Image'}" 
+             alt="${movie.title}" class="movie-poster" 
+             onerror="this.src='https://via.placeholder.com/300x150?text=Image+Error'">
+        <div class="movie-info">
+          <div class="movie-title">${movie.title || 'Sans titre'}</div>
+          <div class="movie-details">
+            <span class="movie-detail">${contentType}</span>
+            ${movie.badge ? `<span class="movie-detail">${movie.badge}</span>` : ''}
+            ${movie.year ? `<span class="movie-detail">${movie.year}</span>` : ''}
+            <span class="movie-detail"><i class="fas fa-eye"></i> ${viewsCount}</span>
+            <span class="movie-detail"><i class="fas fa-heart"></i> ${likesCount}</span>
+            ${episodesCount > 0 ? `<span class="movie-detail"><i class="fas fa-list"></i> ${episodesCount} ép.</span>` : ''}
+            ${partsCount > 0 ? `<span class="movie-detail"><i class="fas fa-list"></i> ${partsCount} part.</span>` : ''}
+          </div>
+          <div class="movie-id">ID: ${id}</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="editMovie('${id}')"><i class="fas fa-edit"></i> Modifier</button>
+        </div>
+      `;
+      return card;
+    }
+
+    // Calculer les statistiques
+    function calculateStats(movies) {
+      if (!movies) {
+        moviesCountEl.textContent = '0';
+        viewsCountEl.textContent = '0';
+        likesCountEl.textContent = '0';
+        seriesCountEl.textContent = '0';
+        return;
+      }
+      
+      let totalViews = 0;
+      let totalLikes = 0;
+      let movieCount = 0;
+      let seriesCount = 0;
+      
+      Object.values(movies).forEach(movie => {
+        movieCount++;
+        
+        // Compter les vues
+        if (movie.views && movie.views.count) {
+          totalViews += movie.views.count;
+        } else if (movie.views && typeof movie.views === 'number') {
+          totalViews += movie.views;
+        }
+        
+        // Compter les likes
+        if (movie.likes && movie.likes.count) {
+          totalLikes += movie.likes.count;
+        } else if (movie.likes && typeof movie.likes === 'number') {
+          totalLikes += movie.likes;
+        }
+        
+        // Compter les séries
+        if (movie.type === 'series') {
+          seriesCount++;
+        }
+      });
+      
+      moviesCountEl.textContent = movieCount;
+      viewsCountEl.textContent = totalViews.toLocaleString();
+      likesCountEl.textContent = totalLikes.toLocaleString();
+      seriesCountEl.textContent = seriesCount;
+    }
+
+    // Recherche de films
+    function searchMovies() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const movieCards = moviesList.querySelectorAll('.movie-card');
+      
+      movieCards.forEach(card => {
+        const title = card.querySelector('.movie-title').textContent.toLowerCase();
+        const id = card.querySelector('.movie-id').textContent.toLowerCase();
+        const details = card.querySelector('.movie-details').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || id.includes(searchTerm) || details.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Modifier un film existant
+    function editMovie(id) {
+      currentMovieId = id;
+      
+      // Afficher le formulaire s'il est masqué
+      if (!isFormVisible) {
+        toggleForm();
+      }
+      
+      db.ref('movies').child(id).once('value', (snapshot) => {
+        const movie = snapshot.val();
+        if (movie) {
+          movieIdInput.value = id;
+          titleInput.value = movie.title || '';
+          categoryInput.value = movie.category ? movie.category.join(', ') : '';
+          typeInput.value = movie.type || 'movie';
+          badgeInput.value = movie.badge || '';
+          yearInput.value = movie.year || '';
+          interpreterInput.value = movie.interpreter || '';
+          imageUrlInput.value = movie.imageUrl || '';
+          descriptionInput.value = movie.description || '';
+          
+          // Mettre à jour le contenu vidéo selon le type
+          updateVideoContent();
+          
+          // Remplir le contenu vidéo selon le type
+          setTimeout(() => {
+            if (movie.type === 'movie' && movie.videoUrl) {
+              document.getElementById('videoUrl').value = movie.videoUrl;
+            } else if (movie.type === 'multi-part' && movie.parts) {
+              const partsContainer = document.getElementById('partsContainer');
+              partsContainer.innerHTML = '';
+              partsCount = 0;
+              
+              Object.entries(movie.parts).forEach(([partKey, part]) => {
+                partsCount++;
+                const partItem = document.createElement('div');
+                partItem.className = 'part-item';
+                partItem.innerHTML = `
+                  <input type="text" class="part-title" placeholder="Titre de la partie" value="${part.title || 'Partie ' + partsCount}">
+                  <input type="text" class="part-url" placeholder="URL de la vidéo" value="${part.videoUrl || ''}" required>
+                  <button type="button" class="btn btn-sm btn-danger remove-part"><i class="fas fa-times"></i></button>
+                `;
+                partsContainer.appendChild(partItem);
+                
+                partItem.querySelector('.remove-part').addEventListener('click', function() {
+                  partItem.remove();
+                });
+              });
+            } else if (movie.type === 'series' && movie.episodes) {
+              const episodesContainer = document.getElementById('episodesContainer');
+              episodesContainer.innerHTML = '';
+              episodesCount = 0;
+              
+              Object.entries(movie.episodes).forEach(([episodeKey, episode]) => {
+                episodesCount++;
+                const episodeItem = document.createElement('div');
+                episodeItem.className = 'episode-item';
+                episodeItem.innerHTML = `
+                  <input type="text" class="episode-title" placeholder="Titre de l'épisode" value="${episode.title || 'Épisode ' + episodesCount}">
+                  <input type="text" class="episode-url" placeholder="URL de la vidéo" value="${episode.videoUrl || ''}" required>
+                  <button type="button" class="btn btn-sm btn-danger remove-episode"><i class="fas fa-times"></i></button>
+                `;
+                episodesContainer.appendChild(episodeItem);
+                
+                episodeItem.querySelector('.remove-episode').addEventListener('click', function() {
+                  episodeItem.remove();
+                });
+              });
+            }
+          }, 100);
+          
+          // Scroll to form
+          movieFormSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+
+    // Sauvegarder un film
+    async function saveMovie() {
+      const id = movieIdInput.value.trim();
+      const title = titleInput.value.trim();
+      const category = categoryInput.value.split(',').map(c => c.trim()).filter(c => c);
+      const imageUrl = imageUrlInput.value.trim();
+      const type = typeInput.value;
+
+      if (!id || !title || category.length === 0 || !imageUrl) {
+        showMessage(formMessage, "Les champs marqués d'un * sont obligatoires", "error");
+        return;
+      }
+
+      try {
+        const movieData = {
+          title: title,
+          category: category,
+          type: type,
+          badge: badgeInput.value.trim(),
+          year: yearInput.value ? parseInt(yearInput.value) : null,
+          interpreter: interpreterInput.value.trim(),
+          imageUrl: imageUrl,
+          description: descriptionInput.value.trim(),
+          updated: Date.now()
+        };
+        
+        // Gérer le contenu vidéo selon le type
+        if (type === 'movie') {
+          const videoUrl = document.getElementById('videoUrl').value.trim();
+          if (!videoUrl) {
+            showMessage(formMessage, "L'URL de la vidéo est obligatoire pour les films", "error");
+            return;
+          }
+          movieData.videoUrl = videoUrl;
+        } else if (type === 'multi-part') {
+          const parts = {};
+          const partItems = document.querySelectorAll('.part-item');
+          
+          if (partItems.length === 0) {
+            showMessage(formMessage, "Ajoutez au moins une partie pour les films multipart", "error");
+            return;
+          }
+          
+          partItems.forEach((item, index) => {
+            const title = item.querySelector('.part-title').value.trim() || `Partie ${index + 1}`;
+            const url = item.querySelector('.part-url').value.trim();
+            
+            if (!url) {
+              showMessage(formMessage, `L'URL de la partie ${index + 1} est obligatoire`, "error");
+              return;
+            }
+            
+            parts[`PART_${index + 1}`] = {
+              title: title,
+              videoUrl: url
+            };
+          });
+          
+          movieData.parts = parts;
+        } else if (type === 'series') {
+          const episodes = {};
+          const episodeItems = document.querySelectorAll('.episode-item');
+          
+          if (episodeItems.length === 0) {
+            showMessage(formMessage, "Ajoutez au moins un épisode pour les séries", "error");
+            return;
+          }
+          
+          episodeItems.forEach((item, index) => {
+            const title = item.querySelector('.episode-title').value.trim() || `Épisode ${index + 1}`;
+            const url = item.querySelector('.episode-url').value.trim();
+            
+            if (!url) {
+              showMessage(formMessage, `L'URL de l'épisode ${index + 1} est obligatoire`, "error");
+              return;
+            }
+            
+            episodes[`EPISODE_${index + 1}`] = {
+              title: title,
+              videoUrl: url
+            };
+          });
+          
+          movieData.episodes = episodes;
+        }
+        
+        // Conserver les données existantes (likes, views, etc.)
+        const existingMovie = await db.ref('movies').child(id).once('value');
+        if (existingMovie.exists()) {
+          const existingData = existingMovie.val();
+          if (existingData.likes) movieData.likes = existingData.likes;
+          if (existingData.views) movieData.views = existingData.views;
+          
+          // Conserver les épisodes/parties si on change de type
+          if (existingData.type === 'series' && type !== 'series' && existingData.episodes) {
+            // Ne rien faire, on supprime les épisodes
+          }
+          
+          if (existingData.type === 'multi-part' && type !== 'multi-part' && existingData.parts) {
+            // Ne rien faire, on supprime les parties
+          }
+        } else {
+          // Nouveau film - initialiser les compteurs
+          movieData.likes = { count: 0 };
+          movieData.views = { count: 0 };
+        }
+        
+        // Nettoyer les données (enlever les propriétés vides)
+        Object.keys(movieData).forEach(key => {
+          if (movieData[key] === null || movieData[key] === '' || 
+              (Array.isArray(movieData[key]) && movieData[key].length === 0) ||
+              movieData[key] === undefined) {
+            delete movieData[key];
+          }
+        });
+        
+        await db.ref('movies').child(id).set(movieData);
+        
+        // Afficher le message de confirmation
+        if (currentMovieId === id) {
+          showToast("Film modifié avec succès!");
+        } else {
+          showToast("Nouveau film ajouté avec succès!");
+        }
+        
+        clearForm();
+      } catch (error) {
+        console.error("Erreur de sauvegarde:", error);
+        showMessage(formMessage, "Erreur: " + error.message, "error");
+        showToast("Erreur lors de la sauvegarde", true);
+      }
+    }
+
+    // Supprimer un film
+    async function deleteMovie() {
+      const id = movieIdInput.value.trim();
+      
+      if (!id) {
+        showMessage(formMessage, "Veuillez spécifier l'ID du film à supprimer", "error");
+        return;
+      }
+
+      if (!confirm(`Êtes-vous sûr de vouloir supprimer le film "${titleInput.value}" (ID: ${id})? Cette action est irréversible.`)) {
+        return;
+      }
+
+      try {
+        await db.ref('movies').child(id).remove();
+        showMessage(formMessage, "Film supprimé avec succès", "success");
+        showToast("Film supprimé avec succès!");
+        clearForm();
+      } catch (error) {
+        console.error("Erreur de suppression:", error);
+        showMessage(formMessage, "Erreur: " + error.message, "error");
+        showToast("Erreur lors de la suppression", true);
+      }
+    }
+
+    // Effacer le formulaire
+    function clearForm() {
+      movieIdInput.value = '';
+      titleInput.value = '';
+      categoryInput.value = '';
+      typeInput.value = 'movie';
+      badgeInput.value = '';
+      yearInput.value = '';
+      interpreterInput.value = '';
+      imageUrlInput.value = '';
+      descriptionInput.value = '';
+      formMessage.classList.add('hidden');
+      currentMovieId = null;
+      
+      // Mettre à jour le contenu vidéo
+      updateVideoContent();
+    }
+
+    // Écouter les changements d'état d'authentification
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const admin = await isAdmin(user.uid);
+        if (admin) {
+          loginSection.classList.add('hidden');
+          adminPanel.classList.remove('hidden');
+          logoutBtn.classList.remove('hidden');
+          loadMovies();
+          
+          // Initialiser le contenu vidéo
+          updateVideoContent();
+        } else {
+          showMessage(loginMessage, "Accès refusé: Vous n'êtes pas administrateur", "error");
+          await auth.signOut();
+        }
+      } else {
+        loginSection.classList.remove('hidden');
+        adminPanel.classList.add('hidden');
+        logoutBtn.classList.add('hidden');
+      }
+    });
+
+    // Exposer editMovie globalement pour les boutons
+    window.editMovie = editMovie;
+  </script>
+</body>
+</html>
