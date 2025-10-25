@@ -260,7 +260,7 @@
     }
     
     .drawer-open .drawer {
-      transform: translateX(0);
+      transform: translateX(-0);
     }
     
     .drawer-open .drawer-overlay {
@@ -1143,7 +1143,7 @@
     a.setAttribute('data-movie-key', key);
     a.setAttribute('data-destination', WATCH_URL_PREFIX + key);
 
-    // Écouteur de clic pour chaque carte
+    // Écouteur de clic pour chaque carte (Redirection Smartlink sur chaque cover)
     a.addEventListener('click', function(e) {
       e.preventDefault();
       const destination = this.getAttribute('data-destination');
@@ -1230,7 +1230,7 @@
       sliderIndicator.appendChild(dot);
     });
 
-    // Gestion du clic sur les boutons "Regarder" du slider
+    // Gestion du clic sur les boutons "Regarder" du slider (Redirection Smartlink)
     document.querySelectorAll('.slider-watch-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -1380,22 +1380,18 @@
     }
   }
 
-  // Fonction pour afficher le contenu principal et masquer le CTA
-  function showContent() {
-    document.getElementById('ctaContainer').style.display = 'none';
-    document.getElementById('contentWrapper').classList.add('show');
-    localStorage.setItem(VISITED_KEY, 'true');
-  }
+  // **La fonction showContent est supprimée ou simplifiée, car la logique de localStorage est déplacée**
 
-  // Initialisation - MODIFIÉ pour gérer la Smartlink
+
+  // Initialisation - LOGIQUE MISE À JOUR pour le localStorage
   document.addEventListener('DOMContentLoaded', async () => {
     const loader = document.getElementById('loader');
     
-    // Gérer la redirection après le retour de la Smartlink Adsterra
+    // 1. Gérer la redirection après le retour de la Smartlink Adsterra
     const destination = sessionStorage.getItem('adsterra_destination');
     if (destination) {
         sessionStorage.removeItem('adsterra_destination');
-        // Rediriger vers la destination réelle après le retour de la Smartlink
+        // Rediriger vers la destination réelle (la page va recharger)
         window.location.href = destination;
         return; // Arrêter l'exécution pour la redirection
     }
@@ -1433,7 +1429,7 @@
     document.getElementById('drawerClose').onclick = () => root.classList.remove('drawer-open');
     document.getElementById('drawerOverlay').onclick = () => root.classList.remove('drawer-open');
 
-    // Vérification de la première visite
+    // 2. Vérification de l'état de la visite
     const hasVisited = localStorage.getItem(VISITED_KEY);
     
     if (!hasVisited) {
@@ -1442,13 +1438,15 @@
         
         // Attacher l'événement au bouton "Play Movies Now"
         document.getElementById('playMoviesNowBtn').addEventListener('click', () => {
-            // Définir la Smartlink comme destination temporaire
+            // *** FIX CLÉ ICI : Enregistrer la visite immédiatement AVANT la première redirection ***
+            localStorage.setItem(VISITED_KEY, 'true'); 
+            
+            // Définir la Smartlink comme destination temporaire (la page actuelle)
             sessionStorage.setItem('adsterra_destination', window.location.href);
             window.location.href = ADSTERRA_SMARTLINK;
-            // Après le retour, le bloc ci-dessus (sessionStorage.getItem('adsterra_destination')) prendra le relais
         });
 
-        // Cacher le loader après un court délai
+        // Cacher le loader
         loader.style.opacity = '0';
         setTimeout(() => {
           loader.style.display = 'none';
@@ -1456,6 +1454,8 @@
 
     } else {
         // Visite ultérieure : Charger les données normalement et afficher le contenu
+        document.getElementById('ctaContainer').style.display = 'none';
+        
         try {
             const entries = await loadMovies();
             if (entries.length > 0) {
@@ -1468,7 +1468,8 @@
         } catch (error) {
             console.error("Échec du chargement des données:", error);
         } finally {
-            showContent(); // Afficher le contenu une fois les données chargées
+            // Afficher le contenu une fois les données chargées
+            document.getElementById('contentWrapper').classList.add('show');
             loader.style.opacity = '0';
             setTimeout(() => {
                 loader.style.display = 'none';
