@@ -6,7 +6,6 @@
   <title>CINETV - Streaming de Films et Séries</title>
   <link rel="icon" href="logo.png" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-DRSJ4J6W6P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -261,7 +260,7 @@
     }
     
     .drawer-open .drawer {
-      transform: translateX(0);
+      transform: translateX(-0);
     }
     
     .drawer-open .drawer-overlay {
@@ -464,7 +463,8 @@
       transform: translateZ(0);
       scroll-snap-align: start;
       transition: var(--transition);
-      flex: 0 0 calc(33.333% - 8px);
+      /* Fix 3 colonnes sur mobile */
+      flex: 0 0 calc(33.333% - 8px); 
       min-width: calc(33.333% - 8px);
       text-decoration: none;
       color: inherit;
@@ -478,7 +478,7 @@
         min-width: calc(33.333% - 8px);
       }
     }
-
+    /* Même pour les écrans plus grands, nous maintenons la proportion de 3 par ligne pour les petits appareils, mais passons à plus si l'espace le permet */
     @media (min-width: 640px) {
       .card {
         flex: 0 0 calc(25% - 9px);
@@ -926,150 +926,191 @@
         padding-bottom: max(10px, env(safe-area-inset-bottom));
       }
     }
+
+    /* Styles pour le bouton CTA au premier chargement */
+    #ctaContainer {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 10, 18, 0.95);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        z-index: 150; /* Au-dessus de tout sauf le loader */
+        padding: 40px;
+    }
+
+    #ctaContainer p {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        color: var(--muted);
+        max-width: 400px;
+        line-height: 1.5;
+    }
+    /* Masquer le contenu principal par défaut */
+    #contentWrapper {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    #contentWrapper.show {
+        display: block;
+        opacity: 1;
+    }
+
   </style>
 </head>
 <body>
-  <!-- Loading animation -->
   <div class="loader-container" id="loader">
     <div class="cinetv-loader">
       <img src="logo.png" class="loader-logo" alt="CINETV">
     </div>
   </div>
 
-  <!-- Top Navbar -->
-  <nav class="navbar">
-    <a href="home.html" class="logo"><img src="logo.png" class="logo-img" alt="CINETV"><span>CINETV</span></a>
-    <div class="navbar-right">
-      <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
-    </div>
-  </nav>
-
-  <!-- Drawer -->
-  <div class="drawer-overlay" id="drawerOverlay"></div>
-  <aside class="drawer" id="drawer">
-    <div class="drawer-header">
-      <div class="drawer-title"><img src="logo.png" class="drawer-logo" alt="CINETV"> CINETV</div>
-      <button class="hamburger" id="drawerClose"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="drawer-body">
-      <div class="drawer-section-title">Catégories</div>
-      <ul class="cat-list" id="drawerCats"></ul>
-      <div class="all-categories" id="allCategories"></div>
-      <div class="see-more" id="seeMoreCats">Voir plus de catégories</div>
-      
-      <div class="drawer-section-title">Options</div>
-      <ul class="cat-list">
-        <li><a href="#" id="openSearch" class="option-search"><i class="fas fa-search"></i> Recherche</a></li>
-        <li><a href="premium.html" class="option-premium"><i class="fas fa-crown"></i> Premium</a></li>
-        <li><a href="#" id="openAbout"><i class="fas fa-info-circle"></i> À propos</a></li>
-        <li><a href="#" id="openContact" class="option-contact"><i class="fas fa-envelope"></i> Contact</a></li>
-        <li><a href="privacy.html" class="option-privacy"><i class="fas fa-shield-alt"></i> Confidentialité</a></li>
-      </ul>
-    </div>
-  </aside>
-
-  <!-- Hero Slider -->
-  <div class="hero-slider" id="heroSlider">
-    <div class="slider-container" id="sliderContainer"></div>
-    <div class="slider-indicator" id="sliderIndicator"></div>
+  <div id="ctaContainer" style="display: none;">
+      <h1 style="color: var(--brand); margin-bottom: 20px; font-size: 2rem;">Accédez à CINETV</h1>
+      <p>
+          Pour continuer et accéder gratuitement à tous les films et séries, veuillez cliquer sur le bouton ci-dessous.
+          (Ceci nous aide à maintenir la plateforme gratuite.)
+      </p>
+      <button class="btn btn-primary" id="playMoviesNowBtn" style="padding: 18px 40px; font-size: 1.1rem;">
+          <i class="fas fa-play"></i> PLAY MOVIES NOW
+      </button>
   </div>
 
-  <!-- SECTIONS -->
-  <section class="section" id="nouveautes">
-    <h2><i class="fas fa-star"></i> Nouveautés (2025)</h2>
-    <div class="scroll-container">
-      <div class="scroll-content" id="nouveautesContent"></div>
-      <div class="scroll-indicator" id="nouveautesIndicator"></div>
-    </div>
-  </section>
-
-  <div id="sections"></div>
-
-  <!-- Search Modal -->
-  <div class="modal" id="searchModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title"><i class="fas fa-search"></i> Rechercher</h3>
-        <button class="close" id="closeSearch">&times;</button>
+  <div id="contentWrapper">
+    <nav class="navbar">
+      <a href="home.html" class="logo"><img src="logo.png" class="logo-img" alt="CINETV"><span>CINETV</span></a>
+      <div class="navbar-right">
+        <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
       </div>
-      <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un film, série...">
+    </nav>
+
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+      <div class="drawer-header">
+        <div class="drawer-title"><img src="logo.png" class="drawer-logo" alt="CINETV"> CINETV</div>
+        <button class="hamburger" id="drawerClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-section-title">Catégories</div>
+        <ul class="cat-list" id="drawerCats"></ul>
+        <div class="all-categories" id="allCategories"></div>
+        <div class="see-more" id="seeMoreCats">Voir plus de catégories</div>
+        
+        <div class="drawer-section-title">Options</div>
+        <ul class="cat-list">
+          <li><a href="#" id="openSearch" class="option-search"><i class="fas fa-search"></i> Recherche</a></li>
+          <li><a href="premium.html" class="option-premium"><i class="fas fa-crown"></i> Premium</a></li>
+          <li><a href="#" id="openAbout"><i class="fas fa-info-circle"></i> À propos</a></li>
+          <li><a href="#" id="openContact" class="option-contact"><i class="fas fa-envelope"></i> Contact</a></li>
+          <li><a href="privacy.html" class="option-privacy"><i class="fas fa-shield-alt"></i> Confidentialité</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="hero-slider" id="heroSlider">
+      <div class="slider-container" id="sliderContainer"></div>
+      <div class="slider-indicator" id="sliderIndicator"></div>
+    </div>
+
+    <section class="section" id="nouveautes">
+      <h2><i class="fas fa-star"></i> Nouveautés (2025)</h2>
       <div class="scroll-container">
-        <div class="scroll-content" id="searchResults"></div>
+        <div class="scroll-content" id="nouveautesContent"></div>
+        <div class="scroll-indicator" id="nouveautesIndicator"></div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Contact Modal -->
-  <div class="modal" id="contactModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title"><i class="fas fa-envelope"></i> Contactez-nous</h3>
-        <button class="close" id="closeContact">&times;</button>
-      </div>
-      <div class="contact-info">
-        <div class="contact-item">
-          <i class="fas fa-envelope"></i>
-          <a href="mailto:audrypaulin65@gmail.com">audrypaulin65@gmail.com</a>
+    <div id="sections"></div>
+
+    <div class="modal" id="searchModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title"><i class="fas fa-search"></i> Rechercher</h3>
+          <button class="close" id="closeSearch">&times;</button>
         </div>
-        <div class="contact-item">
-          <i class="fas fa-phone"></i>
-          <a href="tel:+25776389163">+257 76 38 91 63</a>
-        </div>
-        <div class="contact-item">
-          <i class="fab fa-whatsapp"></i>
-          <a href="https://wa.me/25762666571">+257 62 66 65 71 (WhatsApp)</a>
+        <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un film, série...">
+        <div class="scroll-container">
+          <div class="scroll-content" id="searchResults"></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- About Modal -->
-  <div class="modal" id="aboutModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title"><i class="fas fa-info-circle"></i> À propos de CINETV</h3>
-        <button class="close" id="closeAbout">&times;</button>
-      </div>
-      <div class="about-info">
-        <p>
-          CINETV est la plateforme de streaming ultime pour les amateurs de films et séries. 
-          Nous offrons une vaste collection de contenus allant des dernières sorties aux classiques intemporels.
-        </p>
-        <p>
-          Notre mission est de fournir une expérience de visionnage exceptionnelle avec une qualité HD, 
-          des recommandations personnalisées et un catalogue en constante expansion.
-        </p>
-        <p>
-          Abonnez-vous à notre offre Premium pour profiter de contenus exclusifs, 
-          d'une lecture sans publicité et de fonctionnalités avancées.
-        </p>
+    <div class="modal" id="contactModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title"><i class="fas fa-envelope"></i> Contactez-nous</h3>
+          <button class="close" id="closeContact">&times;</button>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:audrypaulin65@gmail.com">audrypaulin65@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <a href="tel:+25776389163">+257 76 38 91 63</a>
+          </div>
+          <div class="contact-item">
+            <i class="fab fa-whatsapp"></i>
+            <a href="https://wa.me/25762666571">+257 62 66 65 71 (WhatsApp)</a>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Bottom Nav -->
-  <div class="bottom-navbar">
-    <a href="home.html" class="nav-item active"><i class="fas fa-home"></i><span>Accueil</span></a>
-    <a href="movies.html" class="nav-item"><i class="fas fa-film"></i><span>Films</span></a>
-    <a href="tvshow.html" class="nav-item"><i class="fas fa-tv"></i><span>Séries</span></a>
-    <a href="#" class="nav-item" id="bottomSearch"><i class="fas fa-search"></i><span>Recherche</span></a>
-    <a href="premium.html" class="nav-item" style="color:#ffd166"><i class="fas fa-crown"></i><span>Premium</span></a>
-  </div>
-
-  <footer>
-    <div class="footer-links">
-      <a href="#" id="footerAbout">À propos</a>
-      <a href="premium.html">Premium</a>
-      <a href="privacy.html">Confidentialité</a>
-      <a href="#" id="footerContact">Contact</a>
+    <div class="modal" id="aboutModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title"><i class="fas fa-info-circle"></i> À propos de CINETV</h3>
+          <button class="close" id="closeAbout">&times;</button>
+        </div>
+        <div class="about-info">
+          <p>
+            CINETV est la plateforme de streaming ultime pour les amateurs de films et séries. 
+            Nous offrons une vaste collection de contenus allant des dernières sorties aux classiques intemporels.
+          </p>
+          <p>
+            Notre mission est de fournir une expérience de visionnage exceptionnelle avec une qualité HD, 
+            des recommandations personnalisées et un catalogue en constante expansion.
+          </p>
+          <p>
+            Abonnez-vous à notre offre Premium pour profiter de contenus exclusifs, 
+            d'une lecture sans publicité et de fonctionnalités avancées.
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="copyright">&copy; 2025 CINETV. Tous droits réservés.</div>
-    <div class="designer-credit">Conçu par @audrypaulin</div>
-  </footer>
 
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <div class="bottom-navbar">
+      <a href="home.html" class="nav-item active"><i class="fas fa-home"></i><span>Accueil</span></a>
+      <a href="movies.html" class="nav-item"><i class="fas fa-film"></i><span>Films</span></a>
+      <a href="tvshow.html" class="nav-item"><i class="fas fa-tv"></i><span>Séries</span></a>
+      <a href="#" class="nav-item" id="bottomSearch"><i class="fas fa-search"></i><span>Recherche</span></a>
+      <a href="premium.html" class="nav-item" style="color:#ffd166"><i class="fas fa-crown"></i><span>Premium</span></a>
+    </div>
+
+    <footer>
+      <div class="footer-links">
+        <a href="#" id="footerAbout">À propos</a>
+        <a href="premium.html">Premium</a>
+        <a href="privacy.html">Confidentialité</a>
+        <a href="#" id="footerContact">Contact</a>
+      </div>
+      <div class="copyright">&copy; 2025 CINETV. Tous droits réservés.</div>
+      <div class="designer-credit">Conçu par @audrypaulin</div>
+    </footer>
+  </div> <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
 <script>
+  // URL Smartlink Adsterra
+  const ADSTERRA_SMARTLINK = "https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
+  const VISITED_KEY = 'cinetv_visited';
+  const WATCH_URL_PREFIX = 'watch.html?id=';
+
   // Configuration Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
@@ -1087,11 +1128,27 @@
   // Générer un slug pour les URLs
   const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-  // Création de la carte (film/série)
+  // Redirection Smartlink
+  function redirectSmartlink(destinationUrl) {
+    // Stocker la destination réelle dans sessionStorage avant la redirection
+    sessionStorage.setItem('adsterra_destination', destinationUrl);
+    window.location.href = ADSTERRA_SMARTLINK;
+  }
+
+  // Création de la carte (film/série) - MODIFIÉ pour gérer le clic
   function makeCard(key, m) {
     const a = document.createElement('a');
-    a.href = `watch.html?id=${key}`;
+    // a.href = `watch.html?id=${key}`; // Désactivé, la redirection est gérée par l'écouteur
     a.className = 'card';
+    a.setAttribute('data-movie-key', key);
+    a.setAttribute('data-destination', WATCH_URL_PREFIX + key);
+
+    // Écouteur de clic pour chaque carte (Redirection Smartlink sur chaque cover)
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      const destination = this.getAttribute('data-destination');
+      redirectSmartlink(destination);
+    });
 
     const badgeHtml = m.badge ? `<div class="badge">${m.badge}</div>` : '';
     const interpreterHtml = m.interpreter ? `<span class="interpreter"><i class="fas fa-microphone"></i> ${m.interpreter}</span>` : '';
@@ -1111,7 +1168,7 @@
     return a;
   }
 
-  // Créer les indicateurs de défilement
+  // Créer les indicateurs de défilement (pas de changement)
   function createScrollIndicator(containerId, itemsCount) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -1139,7 +1196,7 @@
     }
   }
 
-  // Gestion du slider héro
+  // Gestion du slider héro - MODIFIÉ pour le bouton "Regarder"
   function renderHeroSlider(entries) {
     const sliderContainer = document.getElementById('sliderContainer');
     const sliderIndicator = document.getElementById('sliderIndicator');
@@ -1161,7 +1218,7 @@
             ${movie.badge ? `<span><i class="fas fa-tag"></i> ${movie.badge}</span>` : ''}
             ${movie.category && movie.category.length ? `<span><i class="fas fa-tag"></i> ${movie.category.join(' • ')}</span>` : ''}
           </div>
-          <a class="btn btn-primary" href="watch.html?id=${key}"><i class="fas fa-play"></i> Regarder</a>
+          <a class="btn btn-primary slider-watch-btn" href="#" data-destination="${WATCH_URL_PREFIX + key}"><i class="fas fa-play"></i> Regarder</a>
         </div>
       `;
       sliderContainer.appendChild(slide);
@@ -1172,6 +1229,16 @@
       dot.addEventListener('click', () => goToSlide(index));
       sliderIndicator.appendChild(dot);
     });
+
+    // Gestion du clic sur les boutons "Regarder" du slider (Redirection Smartlink)
+    document.querySelectorAll('.slider-watch-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const destination = this.getAttribute('data-destination');
+            redirectSmartlink(destination);
+        });
+    });
+
 
     let currentSlide = 0;
     const totalSlides = featuredMovies.length;
@@ -1192,7 +1259,7 @@
     });
   }
 
-  // Rendre nouveautés (2025)
+  // Rendre nouveautés (2025) (pas de changement dans la logique de rendu)
   function renderNouveautes(entries) {
     const wrap = document.getElementById('nouveautesContent');
     wrap.innerHTML = '';
@@ -1201,7 +1268,7 @@
     createScrollIndicator('nouveautesIndicator', nouveautes.length);
   }
 
-  // Rendre les catégories
+  // Rendre les catégories (pas de changement dans la logique de rendu)
   function renderCategories(entries) {
     const cats = new Set();
     entries.forEach(([, m]) => m.category && m.category.forEach(c => cats.add(c)));
@@ -1261,7 +1328,7 @@
     });
   }
 
-  // Modals
+  // Modals (pas de changement)
   function openModal(id) {
     document.getElementById(id).style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -1271,7 +1338,7 @@
     document.body.style.overflow = 'auto';
   }
 
-  // Recherche
+  // Recherche (pas de changement)
   function openSearch() { openModal('searchModal'); document.getElementById('searchInput').focus(); }
   function closeSearch() {
     closeModal('searchModal');
@@ -1279,13 +1346,13 @@
     document.getElementById('searchInput').value = '';
   }
 
-  // Contact & À propos
+  // Contact & À propos (pas de changement)
   function openContact() { openModal('contactModal'); }
   function openAbout() { openModal('aboutModal'); }
   function closeContact() { closeModal('contactModal'); }
   function closeAbout() { closeModal('aboutModal'); }
 
-  // Charger depuis localStorage ou Firebase
+  // Charger depuis localStorage ou Firebase (pas de changement)
   async function loadMovies() {
     const cache = localStorage.getItem('cinetv_movies');
     const cacheTime = localStorage.getItem('cinetv_cache_time');
@@ -1313,9 +1380,23 @@
     }
   }
 
-  // Initialisation
+  // **La fonction showContent est supprimée ou simplifiée, car la logique de localStorage est déplacée**
+
+
+  // Initialisation - LOGIQUE MISE À JOUR pour le localStorage
   document.addEventListener('DOMContentLoaded', async () => {
-    // Gérer les événements
+    const loader = document.getElementById('loader');
+    
+    // 1. Gérer la redirection après le retour de la Smartlink Adsterra
+    const destination = sessionStorage.getItem('adsterra_destination');
+    if (destination) {
+        sessionStorage.removeItem('adsterra_destination');
+        // Rediriger vers la destination réelle (la page va recharger)
+        window.location.href = destination;
+        return; // Arrêter l'exécution pour la redirection
+    }
+
+    // Gérer les événements des Modals et du Drawer (pas de changement)
     document.getElementById('openSearch').onclick = openSearch;
     document.getElementById('bottomSearch').onclick = openSearch;
     document.getElementById('closeSearch').onclick = closeSearch;
@@ -1328,7 +1409,7 @@
     document.getElementById('footerAbout').onclick = openAbout;
     document.getElementById('closeAbout').onclick = closeAbout;
 
-    // Recherche
+    // Recherche (pas de changement)
     document.getElementById('searchInput').addEventListener('input', function () {
       const q = this.value.toLowerCase();
       const resWrap = document.getElementById('searchResults');
@@ -1342,30 +1423,58 @@
       results.forEach(([k, m]) => resWrap.appendChild(makeCard(k, m)));
     });
 
-    // Drawer
+    // Drawer (pas de changement)
     const root = document.documentElement;
     document.getElementById('hamburgerBtn').onclick = () => root.classList.add('drawer-open');
     document.getElementById('drawerClose').onclick = () => root.classList.remove('drawer-open');
     document.getElementById('drawerOverlay').onclick = () => root.classList.remove('drawer-open');
 
-    // Charger les données
-    try {
-      const entries = await loadMovies();
-      if (entries.length > 0) {
-        renderHeroSlider(entries);
-        renderNouveautes(entries);
-        renderCategories(entries);
-      } else {
-        console.warn("Aucune donnée disponible.");
-      }
-    } catch (error) {
-      console.error("Échec du chargement des données:", error);
-    } finally {
-      // Cacher le loader
-      document.getElementById('loader').style.opacity = '0';
-      setTimeout(() => {
-        document.getElementById('loader').style.display = 'none';
-      }, 300);
+    // 2. Vérification de l'état de la visite
+    const hasVisited = localStorage.getItem(VISITED_KEY);
+    
+    if (!hasVisited) {
+        // Première visite : afficher le bouton CTA
+        document.getElementById('ctaContainer').style.display = 'flex';
+        
+        // Attacher l'événement au bouton "Play Movies Now"
+        document.getElementById('playMoviesNowBtn').addEventListener('click', () => {
+            // *** FIX CLÉ ICI : Enregistrer la visite immédiatement AVANT la première redirection ***
+            localStorage.setItem(VISITED_KEY, 'true'); 
+            
+            // Définir la Smartlink comme destination temporaire (la page actuelle)
+            sessionStorage.setItem('adsterra_destination', window.location.href);
+            window.location.href = ADSTERRA_SMARTLINK;
+        });
+
+        // Cacher le loader
+        loader.style.opacity = '0';
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 300);
+
+    } else {
+        // Visite ultérieure : Charger les données normalement et afficher le contenu
+        document.getElementById('ctaContainer').style.display = 'none';
+        
+        try {
+            const entries = await loadMovies();
+            if (entries.length > 0) {
+              renderHeroSlider(entries);
+              renderNouveautes(entries);
+              renderCategories(entries);
+            } else {
+              console.warn("Aucune donnée disponible.");
+            }
+        } catch (error) {
+            console.error("Échec du chargement des données:", error);
+        } finally {
+            // Afficher le contenu une fois les données chargées
+            document.getElementById('contentWrapper').classList.add('show');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 300);
+        }
     }
   });
 </script>
