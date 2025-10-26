@@ -959,6 +959,31 @@
         display: block;
         opacity: 1;
     }
+    
+    /* Nouvelle section pour la publicité */
+    .ad-banner-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px auto;
+        padding: 10px;
+        background: rgba(18, 18, 32, 0.5);
+        border-radius: 12px;
+        max-width: 90%;
+        border: 1px dashed rgba(106, 103, 255, 0.3);
+    }
+    
+    .ad-banner-container > div {
+        /* Permet au code Adsterra de s'afficher */
+        display: block;
+        text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+        .ad-banner-container {
+            max-width: 320px; /* Limiter la largeur sur mobile pour les bannières 320x50 */
+        }
+    }
 
   </style>
 </head>
@@ -1023,7 +1048,12 @@
         <div class="scroll-indicator" id="nouveautesIndicator"></div>
       </div>
     </section>
-
+    
+    <div class="ad-banner-container">
+        <div>
+            <p style="color:var(--muted); font-size:0.9rem;">Espace publicitaire 728x90 / 320x50</p>
+            </div>
+    </div>
     <div id="sections"></div>
 
     <div class="modal" id="searchModal">
@@ -1128,26 +1158,25 @@
   // Générer un slug pour les URLs
   const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-  // Redirection Smartlink
-  function redirectSmartlink(destinationUrl) {
-    // Stocker la destination réelle dans sessionStorage avant la redirection
-    sessionStorage.setItem('adsterra_destination', destinationUrl);
-    window.location.href = ADSTERRA_SMARTLINK;
-  }
+  // La fonction redirectSmartlink n'est plus utilisée dans la nouvelle logique
 
-  // Création de la carte (film/série) - MODIFIÉ pour gérer le clic
+  // Création de la carte (film/série) - MIS À JOUR
   function makeCard(key, m) {
     const a = document.createElement('a');
-    // a.href = `watch.html?id=${key}`; // Désactivé, la redirection est gérée par l'écouteur
     a.className = 'card';
     a.setAttribute('data-movie-key', key);
     a.setAttribute('data-destination', WATCH_URL_PREFIX + key);
 
-    // Écouteur de clic pour chaque carte (Redirection Smartlink sur chaque cover)
+    // Écouteur de clic pour chaque carte : Ouvre Adsterra dans un nouvel onglet, puis redirige la page actuelle
     a.addEventListener('click', function(e) {
       e.preventDefault();
       const destination = this.getAttribute('data-destination');
-      redirectSmartlink(destination);
+      
+      // 1. Ouvre Adsterra dans un nouvel onglet/fenêtre (Pop-under)
+      window.open(ADSTERRA_SMARTLINK, '_blank');
+      
+      // 2. Redirige la page actuelle vers le contenu
+      window.location.href = destination;
     });
 
     const badgeHtml = m.badge ? `<div class="badge">${m.badge}</div>` : '';
@@ -1196,7 +1225,7 @@
     }
   }
 
-  // Gestion du slider héro - MODIFIÉ pour le bouton "Regarder"
+  // Gestion du slider héro - MIS À JOUR
   function renderHeroSlider(entries) {
     const sliderContainer = document.getElementById('sliderContainer');
     const sliderIndicator = document.getElementById('sliderIndicator');
@@ -1230,12 +1259,17 @@
       sliderIndicator.appendChild(dot);
     });
 
-    // Gestion du clic sur les boutons "Regarder" du slider (Redirection Smartlink)
+    // Gestion du clic sur les boutons "Regarder" du slider (MIS À JOUR)
     document.querySelectorAll('.slider-watch-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const destination = this.getAttribute('data-destination');
-            redirectSmartlink(destination);
+            
+            // 1. Ouvre Adsterra dans un nouvel onglet/fenêtre
+            window.open(ADSTERRA_SMARTLINK, '_blank');
+            
+            // 2. Redirige la page actuelle vers le contenu
+            window.location.href = destination;
         });
     });
 
@@ -1380,21 +1414,13 @@
     }
   }
 
-  // **La fonction showContent est supprimée ou simplifiée, car la logique de localStorage est déplacée**
-
-
-  // Initialisation - LOGIQUE MISE À JOUR pour le localStorage
+  // Initialisation - LOGIQUE MISE À JOUR
   document.addEventListener('DOMContentLoaded', async () => {
     const loader = document.getElementById('loader');
     
-    // 1. Gérer la redirection après le retour de la Smartlink Adsterra
-    const destination = sessionStorage.getItem('adsterra_destination');
-    if (destination) {
-        sessionStorage.removeItem('adsterra_destination');
-        // Rediriger vers la destination réelle (la page va recharger)
-        window.location.href = destination;
-        return; // Arrêter l'exécution pour la redirection
-    }
+    // 1. SUPPRIMER LA LOGIQUE sessiongStorage INUTILE
+    // Nous n'avons plus besoin de vérifier sessionStorage('adsterra_destination')
+    // car nous ne redirigeons plus la page actuelle vers la Smartlink.
 
     // Gérer les événements des Modals et du Drawer (pas de changement)
     document.getElementById('openSearch').onclick = openSearch;
@@ -1436,14 +1462,16 @@
         // Première visite : afficher le bouton CTA
         document.getElementById('ctaContainer').style.display = 'flex';
         
-        // Attacher l'événement au bouton "Play Movies Now"
+        // Attacher l'événement au bouton "Play Movies Now" - LOGIQUE MODIFIÉE POUR NOUVEL ONGLET
         document.getElementById('playMoviesNowBtn').addEventListener('click', () => {
-            // *** FIX CLÉ ICI : Enregistrer la visite immédiatement AVANT la première redirection ***
+            // 1. Enregistrer la visite immédiatement
             localStorage.setItem(VISITED_KEY, 'true'); 
             
-            // Définir la Smartlink comme destination temporaire (la page actuelle)
-            sessionStorage.setItem('adsterra_destination', window.location.href);
-            window.location.href = ADSTERRA_SMARTLINK;
+            // 2. Ouvre la Smartlink dans un nouvel onglet (monétisation)
+            window.open(ADSTERRA_SMARTLINK, '_blank');
+            
+            // 3. Recharge la page actuelle pour afficher le contenu sans le CTA
+            window.location.reload();
         });
 
         // Cacher le loader
