@@ -1572,5 +1572,30 @@
             loadMovieData();
         }
     </script>
+<script>
+    // URL à ouvrir
+    const targetUrl = "https://effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
+    
+    // Temps en millisecondes
+    // 30 minutes = 30 * 60 * 1000 = 1,800,000 ms
+    const delay30Min = 1800000; 
+    // 60 minutes = 60 * 60 * 1000 = 3,600,000 ms
+
+    // La première ouverture après 30 minutes
+    setTimeout(() => {
+        // Ouvre l'URL dans un nouvel onglet/fenêtre
+        window.open(targetUrl, '_blank');
+        console.log("Ouverture de l'URL après 30 minutes.");
+        
+        // La seconde ouverture après 30 minutes supplémentaires (soit 60 minutes au total)
+        // L'idéal est de planifier la seconde ouverture juste après la première pour s'assurer
+        // que les 30 minutes supplémentaires sont calculées à partir de ce moment.
+        setTimeout(() => {
+            window.open(targetUrl, '_blank');
+            console.log("Ouverture de l'URL après 60 minutes (30 minutes après la première).");
+        }, delay30Min); 
+        
+    }, delay30Min);
+</script>
 </body>
 </html>
