@@ -1576,23 +1576,30 @@
     // URL à ouvrir
     const targetUrl = "https://effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
     
-    // Temps en millisecondes
-    // 1 minute = 1 * 60 * 1000 = 60,000 ms
-    const delay1Min = 60000; 
+    // Délais en millisecondes
+    const delayFirstOpen = 10 * 60 * 1000;  // 10 minutes = 600,000 ms
+    const repeatInterval = 15 * 60 * 1000;   // 15 minutes = 900,000 ms
 
-    // La première ouverture après 1 minute
-    setTimeout(() => {
-        // Ouvre l'URL dans un nouvel onglet/fenêtre
+    // Fonction pour ouvrir l'URL
+    function openAdUrl() {
         window.open(targetUrl, '_blank');
-        console.log("Ouverture de l'URL après 1 minute.");
+        console.log("Nouvelle ouverture de l'URL d'annonce.");
+    }
+
+    // 1. Planifier la PREMIÈRE ouverture après 10 minutes
+    setTimeout(() => {
+        openAdUrl(); // Exécute la première ouverture
+        console.log("Première ouverture après 10 minutes.");
+
+        // 2. Planifier la RÉPÉTITION de l'ouverture toutes les 15 minutes
+        // Le setInterval commence immédiatement après la fin du premier délai de 10 minutes
+        const intervalId = setInterval(openAdUrl, repeatInterval);
         
-        // La seconde ouverture après 1 minute supplémentaire (soit 2 minutes au total)
-        setTimeout(() => {
-            window.open(targetUrl, '_blank');
-            console.log("Ouverture de l'URL après 2 minutes (1 minute après la première).");
-        }, delay1Min); 
-        
-    }, delay1Min);
+        // Optionnel : Conserver l'ID de l'intervalle dans le cas où vous voudriez
+        // l'arrêter plus tard (par exemple, si vous ajoutiez un bouton "Stop Ads")
+        // console.log("Répétition planifiée toutes les 15 minutes. Interval ID:", intervalId);
+
+    }, delayFirstOpen);
 </script>
 </body>
 </html>
