@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DRSJ4J6W6P"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-DRSJ4J6W6P');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Regarder Contenu | CINETV</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="home.html" class="logo">
+            <img src="logo.png" alt="CINETV Logo">
+            CINETV
+        </a>
+        
+        <nav class="nav-links">
+            <a href="home.html">Accueil</a>
+            <a href="movies.html">Films</a>
+            <a href="tvshow.html">Séries TV</a>
+        </nav>
+
+        <div class="nav-actions">
+            <i class="fas fa-search" id="topSearch"></i>
+            <i class="fas fa-sign-in-alt" id="auth-action-btn" title="Connexion"></i>
+            <i class="fas fa-bars" id="openDrawer"></i>
+        </div>
+    </header>
+
+    <main>
+        <div id="contentWrapper">
+            
+            <section class="video-player-container">
+                <iframe 
+                    id="videoPlayer" 
+                    class="video-player" 
+                    src="" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+                </section>
+
+            <section class="details-section container">
+                <h1 class="movie-title-details" id="contentTitle">Chargement...</h1>
+                
+                <div class="movie-meta" id="contentMeta">
+                    <span></span>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="favoriteBtn" class="btn btn-outline" title="Ajouter aux Favoris">
+                        <i class="far fa-heart"></i> <span id="favoriteText">J'aime</span>
+                    </button>
+                    <button id="myListBtn" class="btn btn-outline" title="Ajouter à Ma Liste">
+                        <i class="fas fa-list-ul"></i> <span id="myListText">Ma Liste</span>
+                    </button>
+                    <button id="downloadBtn" class="btn btn-primary" title="Télécharger le fichier">
+                        <i class="fas fa-download"></i> Télécharger
+                    </button>
+                    <button id="shareBtn" class="btn btn-outline" title="Partager">
+                        <i class="fas fa-share-alt"></i> Partager
+                    </button>
+                </div>
+                
+                <p class="description-text" id="contentDescription">Chargement de la description...</p>
+            </section>
+
+            <section class="episode-selector container" id="episodeSelectorContainer" style="display: none;">
+                <h3>Sélection des Épisodes / Parties</h3>
+                <div class="episode-list" id="episodeList">
+                    </div>
+            </section>
+
+            <section class="comments-section">
+                <h3>Commentaires</h3>
+                
+                <div class="comment-input" id="commentInputSection">
+                    <input type="text" id="commentText" placeholder="Écrivez un commentaire..." required>
+                    <button id="postCommentBtn" class="btn btn-primary">Envoyer</button>
+                </div>
+
+                <div class="comment-list" id="commentList">
+                    </div>
+            </section>
+
+        </div>
+        
+        <div id="loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 101; display: none;">
+            <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--brand);"></i>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="movies.html" class="nav-item">
+            <i class="fas fa-film"></i>
+            <span>Films</span>
+        </a>
+        <a href="tvshow.html" class="nav-item">
+            <i class="fas fa-tv"></i>
+            <span>Séries</span>
+        </a>
+        <a href="#" class="nav-item" id="bottomSearch">
+            <i class="fas fa-search"></i>
+            <span>Recherche</span>
+        </a>
+        <a href="login.html" class="nav-item" id="bottomAuthAction">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <div id="searchModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--panel); z-index:110; align-items:flex-start; justify-content:center; padding: 20px;">
+        <div style="width:100%; max-width:800px;">
+            <div style="display:flex; gap:10px; margin-bottom: 20px;">
+                <input type="search" id="searchInput" placeholder="Rechercher des films ou séries..." style="flex-grow:1; padding:10px; border-radius:8px; border:none; background:var(--panel-2); color:var(--text);">
+                <button id="closeSearch" class="btn btn-outline" style="padding: 10px 15px;">Fermer</button>
+            </div>
+            <div id="searchResults" style="display:flex; flex-wrap:wrap; gap: 15px;">
+                </div>
+        </div>
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script src="firebase-config.js"></script>
+
+    <script src="app-common.js"></script>
+
+    <script src="watch.js"></script>
+</body>
+</html>
