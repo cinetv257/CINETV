@@ -333,56 +333,6 @@
             color: black;
         }
 
-        /* ======= DOWNLOAD SECTION ======= */
-        .download-section {
-            background: var(--panel);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            margin: 20px 0;
-        }
-        
-        .download-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: var(--brand);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .download-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .download-option {
-            background: var(--panel-2);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            text-align: center;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        
-        .download-option:hover {
-            border-color: var(--brand);
-            transform: translateY(-2px);
-        }
-        
-        .download-quality {
-            font-weight: 700;
-            color: var(--brand);
-            margin-bottom: 5px;
-        }
-        
-        .download-size {
-            font-size: 0.85rem;
-            color: var(--muted);
-        }
-
         /* ======= EPISODES/PARTS SECTION ======= */
         .episodes-container {
             margin: 36px 0;
@@ -930,6 +880,123 @@
             background: rgba(106, 103, 255, 0.15);
         }
 
+        /* ======= AUTH MODAL STYLES ======= */
+        .auth-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1200;
+            backdrop-filter: blur(6px);
+        }
+        
+        .auth-modal .modal-content {
+            max-width: 380px;
+            padding: 20px;
+        }
+        
+        .auth-modal .modal-header {
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+        }
+        
+        .auth-modal .modal-title {
+            font-size: 1.2rem;
+            margin-bottom: 0;
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .form-group {
+            position: relative;
+        }
+        
+        .form-group i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        
+        .auth-input {
+            width: 100%;
+            padding: 12px 14px 12px 40px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .auth-input:focus {
+            outline: none;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(106, 103, 255, 0.2);
+        }
+        
+        .auth-btn-large {
+            width: 100%;
+            padding: 12px;
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+        
+        .auth-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+        
+        .auth-links a {
+            color: var(--brand);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .auth-divider {
+            text-align: center;
+            margin: 15px 0;
+            color: var(--muted);
+            font-size: 0.8rem;
+            position: relative;
+        }
+        
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .auth-divider::before {
+            left: 0;
+        }
+        
+        .auth-divider::after {
+            right: 0;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+
         /* ======= RESPONSIVE ======= */
         @media (max-width: 768px) {
             .movie-title {
@@ -947,10 +1014,6 @@
             
             .action-buttons {
                 flex-wrap: wrap;
-            }
-            
-            .download-options {
-                grid-template-columns: 1fr;
             }
         }
         
@@ -1002,18 +1065,6 @@
             .episode-card h3 {
                 font-size: 0.9rem;
             }
-        }
-
-        /* Auth Modal Styles */
-        .auth-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1200;
-            backdrop-filter: blur(6px);
         }
     </style>
 </head>
@@ -1132,8 +1183,8 @@
     </div>
 
     <!-- Auth Modal -->
-    <div class="auth-modal" id="authModal" style="display: none;">
-        <div class="modal-content" style="max-width: 450px;">
+    <div class="auth-modal" id="authModal">
+        <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title" id="authModalTitle">
                     <i class="fas fa-sign-in-alt"></i> Connexion
@@ -1144,55 +1195,60 @@
             <div id="authMessage" class="auth-message hidden"></div>
             
             <form id="loginForm" class="auth-form">
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <input type="email" id="loginEmail" class="search-input" placeholder="Adresse email" required>
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="loginEmail" class="auth-input" placeholder="Adresse email" required>
                 </div>
                 
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <input type="password" id="loginPassword" class="search-input" placeholder="Mot de passe" required>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPassword" class="auth-input" placeholder="Mot de passe" required>
                 </div>
                 
-                <button type="submit" class="btn btn-primary" id="loginButton" style="width: 100%; margin-bottom: 15px;">
+                <button type="submit" class="btn btn-primary auth-btn-large" id="loginButton">
                     <i class="fas fa-sign-in-alt"></i> Se connecter
                 </button>
                 
-                <div style="text-align: center; color: var(--muted); font-size: 0.9rem;">
-                    <a href="#" id="forgotPassword" style="color: var(--brand); text-decoration: none;">Mot de passe oublié ?</a>
-                    <span> | </span>
-                    <a href="#" id="switchToRegister" style="color: var(--brand); text-decoration: none;">Créer un compte</a>
+                <div class="auth-links">
+                    <a href="#" id="forgotPassword">Mot de passe oublié ?</a>
+                    <a href="#" id="switchToRegister">Créer un compte</a>
                 </div>
             </form>
             
             <form id="registerForm" class="auth-form hidden">
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <input type="text" id="registerName" class="search-input" placeholder="Nom complet" required>
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="registerName" class="auth-input" placeholder="Nom complet" required>
                 </div>
                 
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <input type="email" id="registerEmail" class="search-input" placeholder="Adresse email" required>
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="registerEmail" class="auth-input" placeholder="Adresse email" required>
                 </div>
                 
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <input type="password" id="registerPassword" class="search-input" placeholder="Mot de passe (min. 6 caractères)" required minlength="6">
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="registerPassword" class="auth-input" placeholder="Mot de passe (min. 6 caractères)" required minlength="6">
                 </div>
                 
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <input type="password" id="registerConfirmPassword" class="search-input" placeholder="Confirmer le mot de passe" required minlength="6">
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="registerConfirmPassword" class="auth-input" placeholder="Confirmer le mot de passe" required minlength="6">
                 </div>
                 
-                <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
                     <input type="checkbox" id="acceptTerms" style="margin-top: 3px;" required>
-                    <label for="acceptTerms" style="font-size: 0.85rem; color: var(--muted); line-height: 1.4;">
+                    <label for="acceptTerms" style="font-size: 0.8rem; color: var(--muted); line-height: 1.4;">
                         J'accepte les <a href="privacy.html" style="color: var(--brand);">conditions d'utilisation</a>
                     </label>
                 </div>
                 
-                <button type="submit" class="btn btn-primary" id="registerButton" style="width: 100%; margin-bottom: 15px;">
+                <button type="submit" class="btn btn-primary auth-btn-large" id="registerButton">
                     <i class="fas fa-user-plus"></i> Créer mon compte
                 </button>
                 
-                <div style="text-align: center; color: var(--muted); font-size: 0.9rem;">
-                    <a href="#" id="switchToLogin" style="color: var(--brand); text-decoration: none;">Déjà un compte ? Se connecter</a>
+                <div class="auth-links" style="justify-content: center;">
+                    <a href="#" id="switchToLogin">Déjà un compte ? Se connecter</a>
                 </div>
             </form>
         </div>
@@ -1314,12 +1370,14 @@
                             }
                             
                         case 'download':
-                            await userDataManager.addDownload(movieId, {
-                                ...movieData,
-                                downloadedAt: Date.now(),
-                                downloadUrl: movieData.videoUrl || ''
-                            });
-                            return true;
+                            // Télécharger directement l'URL de la vidéo
+                            if (movieData.videoUrl) {
+                                window.open(movieData.videoUrl, '_blank');
+                                return true;
+                            } else {
+                                alert("URL de téléchargement non disponible");
+                                return false;
+                            }
                     }
                 } catch (error) {
                     console.error('Erreur action utilisateur:', error);
@@ -1412,25 +1470,6 @@
                                     </button>
                                 </div>
                             </section>
-                            
-                            <!-- Download Section -->
-                            <div class="download-section">
-                                <h3 class="download-title"><i class="fas fa-download"></i> Options de téléchargement</h3>
-                                <div class="download-options">
-                                    <div class="download-option" data-quality="720p">
-                                        <div class="download-quality">720p HD</div>
-                                        <div class="download-size">~500MB</div>
-                                    </div>
-                                    <div class="download-option" data-quality="480p">
-                                        <div class="download-quality">480p SD</div>
-                                        <div class="download-size">~250MB</div>
-                                    </div>
-                                    <div class="download-option" data-quality="360p">
-                                        <div class="download-quality">360p</div>
-                                        <div class="download-size">~150MB</div>
-                                    </div>
-                                </div>
-                            </div>
                             
                             ${(movie.type === 'series' && movie.episodes) || (movie.type === 'multi-part' && movie.parts) ? `
                             <section class="episodes-container">
@@ -1768,19 +1807,7 @@
                 });
 
                 document.getElementById('downloadButton')?.addEventListener('click', async function() {
-                    const result = await handleUserAction('download', movieId, currentMovieData);
-                    if (result) {
-                        alert('Téléchargement ajouté à votre liste !');
-                    }
-                });
-
-                // Gestion des options de téléchargement
-                document.querySelectorAll('.download-option').forEach(option => {
-                    option.addEventListener('click', function() {
-                        const quality = this.getAttribute('data-quality');
-                        alert(`Téléchargement ${quality} démarré !`);
-                        // Implémentation réelle du téléchargement ici
-                    });
+                    await handleUserAction('download', movieId, currentMovieData);
                 });
 
                 // Gestion du bouton commentaire
@@ -1792,6 +1819,21 @@
                 document.getElementById('closeAuthModal')?.addEventListener('click', function() {
                     document.getElementById('authModal').style.display = 'none';
                     document.body.style.overflow = 'auto';
+                });
+
+                // Basculer entre connexion et inscription
+                document.getElementById('switchToRegister')?.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('loginForm').classList.add('hidden');
+                    document.getElementById('registerForm').classList.remove('hidden');
+                    document.getElementById('authModalTitle').innerHTML = '<i class="fas fa-user-plus"></i> Créer un compte';
+                });
+
+                document.getElementById('switchToLogin')?.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('registerForm').classList.add('hidden');
+                    document.getElementById('loginForm').classList.remove('hidden');
+                    document.getElementById('authModalTitle').innerHTML = '<i class="fas fa-sign-in-alt"></i> Connexion';
                 });
             }
 
