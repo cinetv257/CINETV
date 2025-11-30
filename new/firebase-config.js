@@ -14,13 +14,14 @@ const publicFirebaseConfig = {
 
 // Configuration pour l'AUTHENTIFICATION et données UTILISATEUR
 const authFirebaseConfig = {
-    apiKey: "AIzaSyAnExampleAuthKey12345",
-    authDomain: "cinetv-auth-system.firebaseapp.com",
-    databaseURL: "https://cinetv-auth-system-default-rtdb.firebaseio.com",
-    projectId: "cinetv-auth-system",
-    storageBucket: "cinetv-auth-system.appspot.com",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abcd1234exampleappid"
+    
+    apiKey: "AIzaSyC9tJnthnxnNyTvurKGw4Z6ujXlbkEJ0pE",
+    authDomain: "ciinetvbase.firebaseapp.com",
+    projectId: "ciinetvbase",
+    storageBucket: "ciinetvbase.firebasestorage.app",
+    messagingSenderId: "227737440438",
+    appId: "1:227737440438:web:89f7622c92be8287185617",
+    measurementId: "G-VWZ4P2DHPR"
 };
 
 // Vérifier si Firebase est déjà initialisé
@@ -407,6 +408,9 @@ if (typeof module !== 'undefined' && module.exports) {
         publicAuth,
         authAuth,
         authManager,
+        UserDataManager
+    };
+},
         UserDataManager
     };
 }
