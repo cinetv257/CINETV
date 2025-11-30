@@ -31,12 +31,16 @@
       --brand-light: #8b88ff;
       --action: #4a6cf7;
       --success: #3dd598;
+      --danger: #ff6b6b;
+      --warning: #ffd166;
       --transition: all 0.3s ease;
       --title-color: #6a67ff;
       --interpreter-color: #88d3ff;
       --year-color: #ff88b1;
       --gradient: linear-gradient(135deg, #6a67ff 0%, #4a6cf7 100%);
       --badge-color: #ff6b6b;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.4);
     }
     
     body {
@@ -65,7 +69,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      z-index: 100;
+      z-index: 1000;
       padding: 0 20px;
       background: rgba(18, 18, 32, 0.85);
       backdrop-filter: blur(12px);
@@ -96,6 +100,55 @@
       display: flex;
       align-items: center;
       gap: 12px;
+    }
+    
+    .auth-btn {
+      background: rgba(106, 103, 255, 0.1);
+      border: 1px solid rgba(106, 103, 255, 0.3);
+      color: var(--brand);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .auth-btn:hover {
+      background: rgba(106, 103, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .user-menu {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: rgba(106, 103, 255, 0.1);
+      border: 1px solid rgba(106, 103, 255, 0.3);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .user-menu:hover {
+      background: rgba(106, 103, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
     }
     
     .hamburger {
@@ -220,7 +273,7 @@
       color: var(--action);
     }
     .cat-list a.option-premium {
-      color: #ffd166;
+      color: var(--warning);
     }
     .cat-list a.option-contact {
       color: var(--success);
@@ -463,12 +516,11 @@
       transform: translateZ(0);
       scroll-snap-align: start;
       transition: var(--transition);
-      /* Fix 3 colonnes sur mobile */
-      flex: 0 0 calc(33.333% - 8px); 
+      flex: 0 0 calc(33.333% - 8px);
       min-width: calc(33.333% - 8px);
       text-decoration: none;
       color: inherit;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: var(--shadow);
       border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
@@ -478,7 +530,7 @@
         min-width: calc(33.333% - 8px);
       }
     }
-    /* Même pour les écrans plus grands, nous maintenons la proportion de 3 par ligne pour les petits appareils, mais passons à plus si l'espace le permet */
+
     @media (min-width: 640px) {
       .card {
         flex: 0 0 calc(25% - 9px);
@@ -495,7 +547,7 @@
 
     .card:hover {
       transform: scale(1.05) translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow-hover);
       border-color: rgba(106, 103, 255, 0.3);
     }
     
@@ -504,6 +556,51 @@
       aspect-ratio: 2/3;
       object-fit: cover;
       display: block;
+    }
+    
+    .card-actions {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: flex;
+      gap: 5px;
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .card:hover .card-actions {
+      opacity: 1;
+    }
+    
+    .card-action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .card-action-btn:hover {
+      background: var(--brand);
+      transform: scale(1.1);
+    }
+    
+    .card-action-btn.favorite.active {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .card-action-btn.mylist.active {
+      background: var(--warning);
+      color: black;
     }
     
     .info {
@@ -552,7 +649,7 @@
     .badge {
       position: absolute;
       top: 8px;
-      right: 8px;
+      left: 8px;
       background: var(--badge-color);
       color: white;
       padding: 3px 6px;
@@ -937,7 +1034,7 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        z-index: 150; /* Au-dessus de tout sauf le loader */
+        z-index: 150;
         padding: 40px;
     }
 
@@ -948,6 +1045,7 @@
         max-width: 400px;
         line-height: 1.5;
     }
+
     /* Masquer le contenu principal par défaut */
     #contentWrapper {
         display: none;
@@ -974,15 +1072,49 @@
     }
     
     .ad-banner-container > div {
-        /* Permet au code Adsterra de s'afficher */
         display: block;
         text-align: center;
     }
     
     @media (max-width: 768px) {
         .ad-banner-container {
-            max-width: 320px; /* Limiter la largeur sur mobile pour les bannières 320x50 */
+            max-width: 320px;
         }
+    }
+
+    /* Auth Modal Styles */
+    .auth-form {
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .auth-form.hidden {
+        display: none;
+    }
+    
+    .auth-message {
+        padding: 12px 16px;
+        margin: 10px 0;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: center;
+        border: 1px solid transparent;
+    }
+    
+    .auth-message.success {
+        background: rgba(61, 213, 152, 0.15);
+        border-color: rgba(61, 213, 152, 0.3);
+        color: #3dd598;
+    }
+    
+    .auth-message.error {
+        background: rgba(255, 107, 107, 0.15);
+        border-color: rgba(255, 107, 107, 0.3);
+        color: #ff6b6b;
+    }
+    
+    .auth-message.hidden {
+        display: none;
     }
 
   </style>
@@ -1009,6 +1141,15 @@
     <nav class="navbar">
       <a href="home.html" class="logo"><img src="logo.png" class="logo-img" alt="CINETV"><span>CINETV</span></a>
       <div class="navbar-right">
+        <button class="auth-btn" id="authButton" style="display: none;">
+          <i class="fas fa-user"></i> Connexion
+        </button>
+        <div class="user-menu" id="userMenu" style="display: none;">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <span class="user-name">Profil</span>
+        </div>
         <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
       </div>
     </nav>
@@ -1052,18 +1193,89 @@
     <div class="ad-banner-container">
         <div>
             <div style="margin: 30px auto; max-width: 728px; text-align: center;">
-    <a href="https://facebook.com/audrypaulin.dushime.7" target="_blank" style="display: block;">
-        <img 
-            src="IMAGES/banner.gif" 
-            alt="Publicité CINETV - Audry Paulin" 
-            style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);"
-        >
-    </a>
-</div>
+                <a href="https://facebook.com/audrypaulin.dushime.7" target="_blank" style="display: block;">
+                    <img 
+                        src="IMAGES/banner.gif" 
+                        alt="Publicité CINETV - Audry Paulin" 
+                        style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);"
+                    >
+                </a>
             </div>
+        </div>
     </div>
+    
     <div id="sections"></div>
 
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal" style="display: none;">
+      <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+          <h3 class="modal-title" id="authModalTitle">
+            <i class="fas fa-sign-in-alt"></i> Connexion
+          </h3>
+          <button class="close" id="closeAuthModal">&times;</button>
+        </div>
+        
+        <div id="authMessage" class="auth-message hidden"></div>
+        
+        <!-- Login Form -->
+        <form id="loginForm" class="auth-form">
+          <div class="form-group" style="margin-bottom: 15px;">
+            <input type="email" id="loginEmail" class="search-input" placeholder="Adresse email" required>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <input type="password" id="loginPassword" class="search-input" placeholder="Mot de passe" required>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" id="loginButton" style="width: 100%; margin-bottom: 15px;">
+            <i class="fas fa-sign-in-alt"></i> Se connecter
+          </button>
+          
+          <div style="text-align: center; color: var(--muted); font-size: 0.9rem;">
+            <a href="#" id="forgotPassword" style="color: var(--brand); text-decoration: none;">Mot de passe oublié ?</a>
+            <span> | </span>
+            <a href="#" id="switchToRegister" style="color: var(--brand); text-decoration: none;">Créer un compte</a>
+          </div>
+        </form>
+        
+        <!-- Register Form -->
+        <form id="registerForm" class="auth-form hidden">
+          <div class="form-group" style="margin-bottom: 15px;">
+            <input type="text" id="registerName" class="search-input" placeholder="Nom complet" required>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 15px;">
+            <input type="email" id="registerEmail" class="search-input" placeholder="Adresse email" required>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 15px;">
+            <input type="password" id="registerPassword" class="search-input" placeholder="Mot de passe (min. 6 caractères)" required minlength="6">
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <input type="password" id="registerConfirmPassword" class="search-input" placeholder="Confirmer le mot de passe" required minlength="6">
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px;">
+            <input type="checkbox" id="acceptTerms" style="margin-top: 3px;" required>
+            <label for="acceptTerms" style="font-size: 0.85rem; color: var(--muted); line-height: 1.4;">
+              J'accepte les <a href="privacy.html" style="color: var(--brand);">conditions d'utilisation</a>
+            </label>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" id="registerButton" style="width: 100%; margin-bottom: 15px;">
+            <i class="fas fa-user-plus"></i> Créer mon compte
+          </button>
+          
+          <div style="text-align: center; color: var(--muted); font-size: 0.9rem;">
+            <a href="#" id="switchToLogin" style="color: var(--brand); text-decoration: none;">Déjà un compte ? Se connecter</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Search Modal -->
     <div class="modal" id="searchModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -1077,6 +1289,7 @@
       </div>
     </div>
 
+    <!-- Contact Modal -->
     <div class="modal" id="contactModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -1100,6 +1313,7 @@
       </div>
     </div>
 
+    <!-- About Modal -->
     <div class="modal" id="aboutModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -1141,378 +1355,497 @@
       <div class="copyright">&copy; 2025 CINETV. Tous droits réservés.</div>
       <div class="designer-credit">Conçu par @audrypaulin</div>
     </footer>
-  </div> <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-<script>
-  // URL Smartlink Adsterra
-  const ADSTERRA_SMARTLINK = "https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
-  const VISITED_KEY = 'cinetv_visited';
-  const WATCH_URL_PREFIX = 'watch.html?id=';
+  </div>
 
-  // Configuration Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
-    authDomain: "cinetv257.firebaseapp.com",
-    projectId: "cinetv257",
-    storageBucket: "cinetv257.appspot.com",
-    messagingSenderId: "402664770835",
-    appId: "1:402664770835:web:1adaea98f40ca609645ee6"
-  };
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
 
-  // Initialiser Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+  <!-- Configuration Firebase -->
+  <script src="firebase-config.js"></script>
+  <script src="auth.js"></script>
 
-  // Générer un slug pour les URLs
-  const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  <script>
+    // URL Smartlink Adsterra
+    const ADSTERRA_SMARTLINK = "https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
+    const VISITED_KEY = 'cinetv_visited';
+    const WATCH_URL_PREFIX = 'watch.html?id=';
 
-  // La fonction redirectSmartlink n'est plus utilisée dans la nouvelle logique
+    // Générer un slug pour les URLs
+    const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-  // Création de la carte (film/série) - MIS À JOUR
-  function makeCard(key, m) {
-    const a = document.createElement('a');
-    a.className = 'card';
-    a.setAttribute('data-movie-key', key);
-    a.setAttribute('data-destination', WATCH_URL_PREFIX + key);
-
-    // Écouteur de clic pour chaque carte : Ouvre Adsterra dans un nouvel onglet, puis redirige la page actuelle
-    a.addEventListener('click', function(e) {
-      e.preventDefault();
-      const destination = this.getAttribute('data-destination');
-      
-      // 1. Ouvre Adsterra dans un nouvel onglet/fenêtre (Pop-under)
-      window.open(ADSTERRA_SMARTLINK, '_blank');
-      
-      // 2. Redirige la page actuelle vers le contenu
-      window.location.href = destination;
-    });
-
-    const badgeHtml = m.badge ? `<div class="badge">${m.badge}</div>` : '';
-    const interpreterHtml = m.interpreter ? `<span class="interpreter"><i class="fas fa-microphone"></i> ${m.interpreter}</span>` : '';
-    const yearHtml = m.year ? `<span class="year"><i class="fas fa-calendar-alt"></i> ${m.year}</span>` : '';
-
-    a.innerHTML = `
-      <img class="poster" src="${m.imageUrl || ''}" alt="${m.title || ''}" loading="lazy">
-      ${badgeHtml}
-      <div class="info">
-        <div class="title">${m.title || ''}</div>
-        <div class="meta">
-          ${interpreterHtml}
-          ${yearHtml}
-        </div>
-      </div>
-    `;
-    return a;
-  }
-
-  // Créer les indicateurs de défilement (pas de changement)
-  function createScrollIndicator(containerId, itemsCount) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    container.innerHTML = '';
-    const dotsCount = Math.min(5, Math.max(3, Math.ceil(itemsCount / 5)));
-
-    for (let i = 0; i < dotsCount; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'scroll-dot';
-      if (i === 0) dot.classList.add('active');
-      container.appendChild(dot);
-    }
-
-    const scrollContent = container.previousElementSibling;
-    if (scrollContent) {
-      scrollContent.addEventListener('scroll', () => {
-        const scrollPos = scrollContent.scrollLeft;
-        const maxScroll = scrollContent.scrollWidth - scrollContent.clientWidth;
-        const activeIndex = Math.round((scrollPos / maxScroll) * (dotsCount - 1));
-        container.querySelectorAll('.scroll-dot').forEach((dot, index) => {
-          dot.classList.toggle('active', index === activeIndex);
-        });
-      });
-    }
-  }
-
-  // Gestion du slider héro - MIS À JOUR
-  function renderHeroSlider(entries) {
-    const sliderContainer = document.getElementById('sliderContainer');
-    const sliderIndicator = document.getElementById('sliderIndicator');
-    const featuredMovies = entries.slice(0, 5);
-
-    sliderContainer.innerHTML = '';
-    sliderIndicator.innerHTML = '';
-
-    featuredMovies.forEach(([key, movie], index) => {
-      const slide = document.createElement('div');
-      slide.className = 'slide';
-      slide.style.backgroundImage = `url('${movie.imageUrl}')`;
-      slide.innerHTML = `
-        <div class="slide-content">
-          <h1>${movie.title || ''}</h1>
-          <div class="slide-meta">
-            ${movie.year ? `<span><i class="fas fa-calendar-alt"></i> ${movie.year}</span>` : ''}
-            ${movie.interpreter ? `<span><i class="fas fa-microphone"></i> ${movie.interpreter}</span>` : ''}
-            ${movie.badge ? `<span><i class="fas fa-tag"></i> ${movie.badge}</span>` : ''}
-            ${movie.category && movie.category.length ? `<span><i class="fas fa-tag"></i> ${movie.category.join(' • ')}</span>` : ''}
-          </div>
-          <a class="btn btn-primary slider-watch-btn" href="#" data-destination="${WATCH_URL_PREFIX + key}"><i class="fas fa-play"></i> Regarder</a>
-        </div>
-      `;
-      sliderContainer.appendChild(slide);
-
-      const dot = document.createElement('div');
-      dot.className = 'slider-dot';
-      if (index === 0) dot.classList.add('active');
-      dot.addEventListener('click', () => goToSlide(index));
-      sliderIndicator.appendChild(dot);
-    });
-
-    // Gestion du clic sur les boutons "Regarder" du slider (MIS À JOUR)
-    document.querySelectorAll('.slider-watch-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const destination = this.getAttribute('data-destination');
-            
-            // 1. Ouvre Adsterra dans un nouvel onglet/fenêtre
-            window.open(ADSTERRA_SMARTLINK, '_blank');
-            
-            // 2. Redirige la page actuelle vers le contenu
-            window.location.href = destination;
-        });
-    });
-
-
-    let currentSlide = 0;
-    const totalSlides = featuredMovies.length;
-
-    function goToSlide(index) {
-      currentSlide = (index + totalSlides) % totalSlides;
-      sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
-      document.querySelectorAll('.slider-dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentSlide);
-      });
-    }
-
-    let slideInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
-
-    sliderContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
-    sliderContainer.addEventListener('mouseleave', () => {
-      slideInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
-    });
-  }
-
-  // Rendre nouveautés (2025) (pas de changement dans la logique de rendu)
-  function renderNouveautes(entries) {
-    const wrap = document.getElementById('nouveautesContent');
-    wrap.innerHTML = '';
-    const nouveautes = entries.filter(([, m]) => +m.year === 2025);
-    nouveautes.forEach(([k, m]) => wrap.appendChild(makeCard(k, m)));
-    createScrollIndicator('nouveautesIndicator', nouveautes.length);
-  }
-
-  // Rendre les catégories (pas de changement dans la logique de rendu)
-  function renderCategories(entries) {
-    const cats = new Set();
-    entries.forEach(([, m]) => m.category && m.category.forEach(c => cats.add(c)));
-
-    const drawerCats = document.getElementById('drawerCats');
-    drawerCats.innerHTML = '';
-    const allCategories = document.getElementById('allCategories');
-    allCategories.innerHTML = '';
-    const sec = document.getElementById('sections');
-    sec.innerHTML = '';
-
-    const sortedCats = Array.from(cats).sort();
-    const visibleCats = sortedCats.slice(0, 3);
-    const hiddenCats = sortedCats.slice(3);
-
-    visibleCats.forEach(c => {
-      const li = document.createElement('li');
-      li.innerHTML = `<a href="#cat-${slug(c)}"><i class='fas fa-tag'></i> ${c}</a>`;
-      drawerCats.appendChild(li);
-    });
-
-    hiddenCats.forEach(c => {
+    // Création de la carte (film/série) avec actions
+    function makeCard(key, m) {
       const a = document.createElement('a');
-      a.href = `#cat-${slug(c)}`;
-      a.className = 'cat-list-item';
-      a.innerHTML = `<i class="fas fa-tag"></i> ${c}`;
-      allCategories.appendChild(a);
-    });
+      a.className = 'card';
+      a.setAttribute('data-movie-key', key);
+      a.setAttribute('data-destination', WATCH_URL_PREFIX + key);
 
-    const seeMoreBtn = document.getElementById('seeMoreCats');
-    if (hiddenCats.length > 0) {
-      seeMoreBtn.style.display = 'block';
-      seeMoreBtn.onclick = () => {
-        allCategories.classList.toggle('show');
-        seeMoreBtn.textContent = allCategories.classList.contains('show') ? 'Voir moins' : 'Voir plus';
-      };
-    } else {
-      seeMoreBtn.style.display = 'none';
-    }
+      // Écouteur de clic pour chaque carte
+      a.addEventListener('click', function(e) {
+        if (!e.target.closest('.card-action-btn')) {
+          e.preventDefault();
+          const destination = this.getAttribute('data-destination');
+          
+          // 1. Ouvre Adsterra dans un nouvel onglet/fenêtre
+          window.open(ADSTERRA_SMARTLINK, '_blank');
+          
+          // 2. Redirige la page actuelle vers le contenu
+          window.location.href = destination;
+        }
+      });
 
-    sortedCats.forEach(c => {
-      const section = document.createElement('section');
-      section.className = 'section';
-      section.id = `cat-${slug(c)}`;
-      section.innerHTML = `
-        <h2><i class="fas fa-tag"></i> ${c}</h2>
-        <div class="scroll-container">
-          <div class="scroll-content" id="cat-${slug(c)}-content"></div>
-          <div class="scroll-indicator" id="cat-${slug(c)}-indicator"></div>
+      const badgeHtml = m.badge ? `<div class="badge">${m.badge}</div>` : '';
+      const interpreterHtml = m.interpreter ? `<span class="interpreter"><i class="fas fa-microphone"></i> ${m.interpreter}</span>` : '';
+      const yearHtml = m.year ? `<span class="year"><i class="fas fa-calendar-alt"></i> ${m.year}</span>` : '';
+
+      a.innerHTML = `
+        <img class="poster" src="${m.imageUrl || ''}" alt="${m.title || ''}" loading="lazy">
+        ${badgeHtml}
+        <div class="card-actions">
+          <button class="card-action-btn favorite" data-movie-id="${key}" title="Ajouter aux favoris">
+            <i class="far fa-heart"></i>
+          </button>
+          <button class="card-action-btn mylist" data-movie-id="${key}" title="Ajouter à ma liste">
+            <i class="far fa-bookmark"></i>
+          </button>
+        </div>
+        <div class="info">
+          <div class="title">${m.title || ''}</div>
+          <div class="meta">
+            ${interpreterHtml}
+            ${yearHtml}
+          </div>
         </div>
       `;
-      const grid = section.querySelector(`#cat-${slug(c)}-content`);
-      const catEntries = entries.filter(([, m]) => m.category && m.category.includes(c));
-      catEntries.forEach(([k, m]) => grid.appendChild(makeCard(k, m)));
-      createScrollIndicator(`cat-${slug(c)}-indicator`, catEntries.length);
-      sec.appendChild(section);
-    });
-  }
+      
+      // Initialiser les boutons d'action
+      setTimeout(() => {
+        initCardActions(a, key, m);
+      }, 100);
 
-  // Modals (pas de changement)
-  function openModal(id) {
-    document.getElementById(id).style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-  function closeModal(id) {
-    document.getElementById(id).style.display = 'none';
-    document.body.style.overflow = 'auto';
-  }
-
-  // Recherche (pas de changement)
-  function openSearch() { openModal('searchModal'); document.getElementById('searchInput').focus(); }
-  function closeSearch() {
-    closeModal('searchModal');
-    document.getElementById('searchResults').innerHTML = '';
-    document.getElementById('searchInput').value = '';
-  }
-
-  // Contact & À propos (pas de changement)
-  function openContact() { openModal('contactModal'); }
-  function openAbout() { openModal('aboutModal'); }
-  function closeContact() { closeModal('contactModal'); }
-  function closeAbout() { closeModal('aboutModal'); }
-
-  // Charger depuis localStorage ou Firebase (pas de changement)
-  async function loadMovies() {
-    const cache = localStorage.getItem('cinetv_movies');
-    const cacheTime = localStorage.getItem('cinetv_cache_time');
-    const now = Date.now();
-    const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
-
-    if (cache && cacheTime && now - parseInt(cacheTime) < CACHE_DURATION) {
-      console.log('Données chargées depuis le cache local');
-      return JSON.parse(cache);
+      return a;
     }
 
-    console.log('Chargement depuis Firebase...');
-    try {
-      const snapshot = await db.ref('movies').once('value');
-      const data = snapshot.val() || {};
-      const entries = Object.entries(data);
-      // Sauvegarder dans localStorage
-      localStorage.setItem('cinetv_movies', JSON.stringify(entries));
-      localStorage.setItem('cinetv_cache_time', now.toString());
-      return entries;
-    } catch (error) {
-      console.error("Erreur de chargement Firebase:", error);
-      // En cas d'erreur, utiliser le cache même s'il est expiré
-      return cache ? JSON.parse(cache) : [];
-    }
-  }
+    // Initialiser les actions des cartes
+    function initCardActions(cardElement, movieId, movieData) {
+      const favoriteBtn = cardElement.querySelector('.favorite');
+      const myListBtn = cardElement.querySelector('.mylist');
 
-  // Initialisation - LOGIQUE MISE À JOUR
-  document.addEventListener('DOMContentLoaded', async () => {
-    const loader = document.getElementById('loader');
-    
-    // 1. SUPPRIMER LA LOGIQUE sessiongStorage INUTILE
-    // Nous n'avons plus besoin de vérifier sessionStorage('adsterra_destination')
-    // car nous ne redirigeons plus la page actuelle vers la Smartlink.
-
-    // Gérer les événements des Modals et du Drawer (pas de changement)
-    document.getElementById('openSearch').onclick = openSearch;
-    document.getElementById('bottomSearch').onclick = openSearch;
-    document.getElementById('closeSearch').onclick = closeSearch;
-
-    document.getElementById('openContact').onclick = openContact;
-    document.getElementById('footerContact').onclick = openContact;
-    document.getElementById('closeContact').onclick = closeContact;
-
-    document.getElementById('openAbout').onclick = openAbout;
-    document.getElementById('footerAbout').onclick = openAbout;
-    document.getElementById('closeAbout').onclick = closeAbout;
-
-    // Recherche (pas de changement)
-    document.getElementById('searchInput').addEventListener('input', function () {
-      const q = this.value.toLowerCase();
-      const resWrap = document.getElementById('searchResults');
-      resWrap.innerHTML = '';
-      if (!q) return;
-
-      const cached = localStorage.getItem('cinetv_movies');
-      const entries = cached ? JSON.parse(cached) : [];
-
-      const results = entries.filter(([, m]) => m.title && m.title.toLowerCase().includes(q));
-      results.forEach(([k, m]) => resWrap.appendChild(makeCard(k, m)));
-    });
-
-    // Drawer (pas de changement)
-    const root = document.documentElement;
-    document.getElementById('hamburgerBtn').onclick = () => root.classList.add('drawer-open');
-    document.getElementById('drawerClose').onclick = () => root.classList.remove('drawer-open');
-    document.getElementById('drawerOverlay').onclick = () => root.classList.remove('drawer-open');
-
-    // 2. Vérification de l'état de la visite
-    const hasVisited = localStorage.getItem(VISITED_KEY);
-    
-    if (!hasVisited) {
-        // Première visite : afficher le bouton CTA
-        document.getElementById('ctaContainer').style.display = 'flex';
+      // Vérifier l'état actuel si l'utilisateur est connecté
+      if (authManager && authManager.isLoggedIn()) {
+        const userDataManager = authManager.getUserDataManager();
         
-        // Attacher l'événement au bouton "Play Movies Now" - LOGIQUE MODIFIÉE POUR NOUVEL ONGLET
-        document.getElementById('playMoviesNowBtn').addEventListener('click', () => {
-            // 1. Enregistrer la visite immédiatement
-            localStorage.setItem(VISITED_KEY, 'true'); 
-            
-            // 2. Ouvre la Smartlink dans un nouvel onglet (monétisation)
-            window.open(ADSTERRA_SMARTLINK, '_blank');
-            
-            // 3. Recharge la page actuelle pour afficher le contenu sans le CTA
-            window.location.reload();
+        // Vérifier les favoris
+        userDataManager.isInFavorites(movieId).then(isFavorite => {
+          if (isFavorite) {
+            favoriteBtn.innerHTML = '<i class="fas fa-heart"></i>';
+            favoriteBtn.classList.add('active');
+          }
         });
 
-        // Cacher le loader
-        loader.style.opacity = '0';
-        setTimeout(() => {
-          loader.style.display = 'none';
-        }, 300);
+        // Vérifier ma liste
+        userDataManager.isInMyList(movieId).then(isInList => {
+          if (isInList) {
+            myListBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
+            myListBtn.classList.add('active');
+          }
+        });
+      }
 
-    } else {
-        // Visite ultérieure : Charger les données normalement et afficher le contenu
-        document.getElementById('ctaContainer').style.display = 'none';
-        
-        try {
-            const entries = await loadMovies();
-            if (entries.length > 0) {
-              renderHeroSlider(entries);
-              renderNouveautes(entries);
-              renderCategories(entries);
-            } else {
-              console.warn("Aucune donnée disponible.");
-            }
-        } catch (error) {
-            console.error("Échec du chargement des données:", error);
-        } finally {
-            // Afficher le contenu une fois les données chargées
-            document.getElementById('contentWrapper').classList.add('show');
-            loader.style.opacity = '0';
-            setTimeout(() => {
-                loader.style.display = 'none';
-            }, 300);
+      // Gestionnaire pour les favoris
+      favoriteBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!authManager || !authManager.isLoggedIn()) {
+          showAuthModal();
+          return;
         }
+
+        const userDataManager = authManager.getUserDataManager();
+        const isFavorite = favoriteBtn.classList.contains('active');
+
+        if (isFavorite) {
+          // Retirer des favoris
+          await userDataManager.removeFromFavorites(movieId);
+          favoriteBtn.innerHTML = '<i class="far fa-heart"></i>';
+          favoriteBtn.classList.remove('active');
+        } else {
+          // Ajouter aux favoris
+          await userDataManager.addToFavorites(movieId, movieData);
+          favoriteBtn.innerHTML = '<i class="fas fa-heart"></i>';
+          favoriteBtn.classList.add('active');
+        }
+      });
+
+      // Gestionnaire pour ma liste
+      myListBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!authManager || !authManager.isLoggedIn()) {
+          showAuthModal();
+          return;
+        }
+
+        const userDataManager = authManager.getUserDataManager();
+        const isInList = myListBtn.classList.contains('active');
+
+        if (isInList) {
+          // Retirer de ma liste
+          await userDataManager.removeFromMyList(movieId);
+          myListBtn.innerHTML = '<i class="far fa-bookmark"></i>';
+          myListBtn.classList.remove('active');
+        } else {
+          // Ajouter à ma liste
+          await userDataManager.addToMyList(movieId, movieData);
+          myListBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
+          myListBtn.classList.add('active');
+        }
+      });
     }
-  });
-</script>
+
+    // Afficher la modale d'authentification
+    function showAuthModal() {
+      const authModal = document.getElementById('authModal');
+      if (authModal) {
+        authModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // Créer les indicateurs de défilement
+    function createScrollIndicator(containerId, itemsCount) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      container.innerHTML = '';
+      const dotsCount = Math.min(5, Math.max(3, Math.ceil(itemsCount / 5)));
+
+      for (let i = 0; i < dotsCount; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'scroll-dot';
+        if (i === 0) dot.classList.add('active');
+        container.appendChild(dot);
+      }
+
+      const scrollContent = container.previousElementSibling;
+      if (scrollContent) {
+        scrollContent.addEventListener('scroll', () => {
+          const scrollPos = scrollContent.scrollLeft;
+          const maxScroll = scrollContent.scrollWidth - scrollContent.clientWidth;
+          const activeIndex = Math.round((scrollPos / maxScroll) * (dotsCount - 1));
+          container.querySelectorAll('.scroll-dot').forEach((dot, index) => {
+            dot.classList.toggle('active', index === activeIndex);
+          });
+        });
+      }
+    }
+
+    // Gestion du slider héro
+    function renderHeroSlider(entries) {
+      const sliderContainer = document.getElementById('sliderContainer');
+      const sliderIndicator = document.getElementById('sliderIndicator');
+      const featuredMovies = entries.slice(0, 5);
+
+      sliderContainer.innerHTML = '';
+      sliderIndicator.innerHTML = '';
+
+      featuredMovies.forEach(([key, movie], index) => {
+        const slide = document.createElement('div');
+        slide.className = 'slide';
+        slide.style.backgroundImage = `url('${movie.imageUrl}')`;
+        slide.innerHTML = `
+          <div class="slide-content">
+            <h1>${movie.title || ''}</h1>
+            <div class="slide-meta">
+              ${movie.year ? `<span><i class="fas fa-calendar-alt"></i> ${movie.year}</span>` : ''}
+              ${movie.interpreter ? `<span><i class="fas fa-microphone"></i> ${movie.interpreter}</span>` : ''}
+              ${movie.badge ? `<span><i class="fas fa-tag"></i> ${movie.badge}</span>` : ''}
+              ${movie.category && movie.category.length ? `<span><i class="fas fa-tag"></i> ${movie.category.join(' • ')}</span>` : ''}
+            </div>
+            <a class="btn btn-primary slider-watch-btn" href="#" data-destination="${WATCH_URL_PREFIX + key}"><i class="fas fa-play"></i> Regarder</a>
+          </div>
+        `;
+        sliderContainer.appendChild(slide);
+
+        const dot = document.createElement('div');
+        dot.className = 'slider-dot';
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(index));
+        sliderIndicator.appendChild(dot);
+      });
+
+      // Gestion du clic sur les boutons "Regarder" du slider
+      document.querySelectorAll('.slider-watch-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const destination = this.getAttribute('data-destination');
+          
+          // 1. Ouvre Adsterra dans un nouvel onglet/fenêtre
+          window.open(ADSTERRA_SMARTLINK, '_blank');
+          
+          // 2. Redirige la page actuelle vers le contenu
+          window.location.href = destination;
+        });
+      });
+
+      let currentSlide = 0;
+      const totalSlides = featuredMovies.length;
+
+      function goToSlide(index) {
+        currentSlide = (index + totalSlides) % totalSlides;
+        sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+        document.querySelectorAll('.slider-dot').forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+
+      let slideInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
+
+      sliderContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
+      sliderContainer.addEventListener('mouseleave', () => {
+        slideInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
+      });
+    }
+
+    // Rendre nouveautés (2025)
+    function renderNouveautes(entries) {
+      const wrap = document.getElementById('nouveautesContent');
+      wrap.innerHTML = '';
+      const nouveautes = entries.filter(([, m]) => +m.year === 2025);
+      nouveautes.forEach(([k, m]) => wrap.appendChild(makeCard(k, m)));
+      createScrollIndicator('nouveautesIndicator', nouveautes.length);
+    }
+
+    // Rendre les catégories
+    function renderCategories(entries) {
+      const cats = new Set();
+      entries.forEach(([, m]) => m.category && m.category.forEach(c => cats.add(c)));
+
+      const drawerCats = document.getElementById('drawerCats');
+      drawerCats.innerHTML = '';
+      const allCategories = document.getElementById('allCategories');
+      allCategories.innerHTML = '';
+      const sec = document.getElementById('sections');
+      sec.innerHTML = '';
+
+      const sortedCats = Array.from(cats).sort();
+      const visibleCats = sortedCats.slice(0, 3);
+      const hiddenCats = sortedCats.slice(3);
+
+      visibleCats.forEach(c => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="#cat-${slug(c)}"><i class='fas fa-tag'></i> ${c}</a>`;
+        drawerCats.appendChild(li);
+      });
+
+      hiddenCats.forEach(c => {
+        const a = document.createElement('a');
+        a.href = `#cat-${slug(c)}`;
+        a.className = 'cat-list-item';
+        a.innerHTML = `<i class="fas fa-tag"></i> ${c}`;
+        allCategories.appendChild(a);
+      });
+
+      const seeMoreBtn = document.getElementById('seeMoreCats');
+      if (hiddenCats.length > 0) {
+        seeMoreBtn.style.display = 'block';
+        seeMoreBtn.onclick = () => {
+          allCategories.classList.toggle('show');
+          seeMoreBtn.textContent = allCategories.classList.contains('show') ? 'Voir moins' : 'Voir plus';
+        };
+      } else {
+        seeMoreBtn.style.display = 'none';
+      }
+
+      sortedCats.forEach(c => {
+        const section = document.createElement('section');
+        section.className = 'section';
+        section.id = `cat-${slug(c)}`;
+        section.innerHTML = `
+          <h2><i class="fas fa-tag"></i> ${c}</h2>
+          <div class="scroll-container">
+            <div class="scroll-content" id="cat-${slug(c)}-content"></div>
+            <div class="scroll-indicator" id="cat-${slug(c)}-indicator"></div>
+          </div>
+        `;
+        const grid = section.querySelector(`#cat-${slug(c)}-content`);
+        const catEntries = entries.filter(([, m]) => m.category && m.category.includes(c));
+        catEntries.forEach(([k, m]) => grid.appendChild(makeCard(k, m)));
+        createScrollIndicator(`cat-${slug(c)}-indicator`, catEntries.length);
+        sec.appendChild(section);
+      });
+    }
+
+    // Modals
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Recherche
+    function openSearch() { 
+      openModal('searchModal'); 
+      document.getElementById('searchInput').focus(); 
+    }
+    
+    function closeSearch() {
+      closeModal('searchModal');
+      document.getElementById('searchResults').innerHTML = '';
+      document.getElementById('searchInput').value = '';
+    }
+
+    // Contact & À propos
+    function openContact() { openModal('contactModal'); }
+    function openAbout() { openModal('aboutModal'); }
+    function closeContact() { closeModal('contactModal'); }
+    function closeAbout() { closeModal('aboutModal'); }
+
+    // Charger depuis localStorage ou Firebase
+    async function loadMovies() {
+      const cache = localStorage.getItem('cinetv_movies');
+      const cacheTime = localStorage.getItem('cinetv_cache_time');
+      const now = Date.now();
+      const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
+
+      if (cache && cacheTime && now - parseInt(cacheTime) < CACHE_DURATION) {
+        console.log('Données chargées depuis le cache local');
+        return JSON.parse(cache);
+      }
+
+      console.log('Chargement depuis Firebase...');
+      try {
+        const snapshot = await publicDb.ref('movies').once('value');
+        const data = snapshot.val() || {};
+        const entries = Object.entries(data);
+        // Sauvegarder dans localStorage
+        localStorage.setItem('cinetv_movies', JSON.stringify(entries));
+        localStorage.setItem('cinetv_cache_time', now.toString());
+        return entries;
+      } catch (error) {
+        console.error("Erreur de chargement Firebase:", error);
+        // En cas d'erreur, utiliser le cache même s'il est expiré
+        return cache ? JSON.parse(cache) : [];
+      }
+    }
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', async () => {
+      const loader = document.getElementById('loader');
+      
+      // Gérer les événements des Modals et du Drawer
+      document.getElementById('openSearch').onclick = openSearch;
+      document.getElementById('bottomSearch').onclick = openSearch;
+      document.getElementById('closeSearch').onclick = closeSearch;
+
+      document.getElementById('openContact').onclick = openContact;
+      document.getElementById('footerContact').onclick = openContact;
+      document.getElementById('closeContact').onclick = closeContact;
+
+      document.getElementById('openAbout').onclick = openAbout;
+      document.getElementById('footerAbout').onclick = openAbout;
+      document.getElementById('closeAbout').onclick = closeAbout;
+
+      // Recherche
+      document.getElementById('searchInput').addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        const resWrap = document.getElementById('searchResults');
+        resWrap.innerHTML = '';
+        if (!q) return;
+
+        const cached = localStorage.getItem('cinetv_movies');
+        const entries = cached ? JSON.parse(cached) : [];
+
+        const results = entries.filter(([, m]) => m.title && m.title.toLowerCase().includes(q));
+        results.forEach(([k, m]) => resWrap.appendChild(makeCard(k, m)));
+      });
+
+      // Drawer
+      const root = document.documentElement;
+      document.getElementById('hamburgerBtn').onclick = () => root.classList.add('drawer-open');
+      document.getElementById('drawerClose').onclick = () => root.classList.remove('drawer-open');
+      document.getElementById('drawerOverlay').onclick = () => root.classList.remove('drawer-open');
+
+      // Vérification de l'état de la visite
+      const hasVisited = localStorage.getItem(VISITED_KEY);
+      
+      if (!hasVisited) {
+          // Première visite : afficher le bouton CTA
+          document.getElementById('ctaContainer').style.display = 'flex';
+          
+          // Attacher l'événement au bouton "Play Movies Now"
+          document.getElementById('playMoviesNowBtn').addEventListener('click', () => {
+              // 1. Enregistrer la visite immédiatement
+              localStorage.setItem(VISITED_KEY, 'true'); 
+              
+              // 2. Ouvre la Smartlink dans un nouvel onglet
+              window.open(ADSTERRA_SMARTLINK, '_blank');
+              
+              // 3. Recharge la page actuelle pour afficher le contenu sans le CTA
+              window.location.reload();
+          });
+
+          // Cacher le loader
+          loader.style.opacity = '0';
+          setTimeout(() => {
+            loader.style.display = 'none';
+          }, 300);
+
+      } else {
+          // Visite ultérieure : Charger les données normalement et afficher le contenu
+          document.getElementById('ctaContainer').style.display = 'none';
+          
+          try {
+              const entries = await loadMovies();
+              if (entries.length > 0) {
+                renderHeroSlider(entries);
+                renderNouveautes(entries);
+                renderCategories(entries);
+              } else {
+                console.warn("Aucune donnée disponible.");
+              }
+          } catch (error) {
+              console.error("Échec du chargement des données:", error);
+          } finally {
+              // Afficher le contenu une fois les données chargées
+              document.getElementById('contentWrapper').classList.add('show');
+              loader.style.opacity = '0';
+              setTimeout(() => {
+                  loader.style.display = 'none';
+              }, 300);
+          }
+      }
+    });
+
+    // Script Adsterra automatique
+    setTimeout(() => {
+      const targetUrl = "https://effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
+      const delayFirstOpen = 10 * 60 * 1000;  // 10 minutes
+      const repeatInterval = 15 * 60 * 1000;   // 15 minutes
+
+      function openAdUrl() {
+        window.open(targetUrl, '_blank');
+        console.log("Nouvelle ouverture de l'URL d'annonce.");
+      }
+
+      // Planifier la PREMIÈRE ouverture après 10 minutes
+      setTimeout(() => {
+        openAdUrl();
+        console.log("Première ouverture après 10 minutes.");
+
+        // Planifier la RÉPÉTITION de l'ouverture toutes les 15 minutes
+        setInterval(openAdUrl, repeatInterval);
+        
+      }, delayFirstOpen);
+    }, 1000);
+  </script>
 </body>
 </html>

@@ -197,6 +197,7 @@
             display: flex;
             gap: 14px;
             margin: 24px 0;
+            justify-content: space-between;
         }
         
         .btn {
@@ -233,6 +234,50 @@
             background: rgba(106, 103, 255, 0.15);
             border-color: var(--brand);
             transform: translateY(-2px);
+        }
+
+        /* Nouveau style pour les boutons icônes */
+        .icon-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .icon-btn:hover {
+            background: rgba(106, 103, 255, 0.15);
+            border-color: var(--brand);
+            transform: translateY(-2px);
+        }
+        
+        .icon-btn.active {
+            background: rgba(106, 103, 255, 0.2);
+            border-color: var(--brand);
+            color: var(--brand);
+        }
+        
+        .download-btn {
+            background: rgba(61, 213, 152, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+        
+        .download-btn:hover {
+            background: rgba(61, 213, 152, 0.3);
         }
 
         /* ======= EPISODES/PARTS SECTION ======= */
@@ -985,6 +1030,7 @@
         let currentMovieRef;
         let viewTimer;
         let viewCounted = false;
+        let currentVideoUrl = '';
 
         // Vérifier si un ID de film est présent
         if (!movieId) {
@@ -1062,6 +1108,9 @@
                             currentMovieRef = database.ref(`movies/${movieId}`);
                         }
 
+                        // Sauvegarder l'URL de la vidéo pour le téléchargement
+                        currentVideoUrl = videoUrl;
+
                         // Mettre à jour l'interface
                         document.getElementById('mainContent').innerHTML = `
                             <section class="player-section">
@@ -1091,15 +1140,20 @@
                                 </div>
                                 
                                 <div class="action-buttons">
-                                    <button class="btn btn-secondary" id="likeButton">
-                                        <i class="far fa-heart"></i> J'aime
-                                    </button>
-                                    <button class="btn btn-secondary" id="commentsButton">
-                                        <i class="far fa-comment"></i> Commenter
-                                    </button>
-                                    <button class="btn btn-secondary" id="shareButton">
-                                        <i class="fas fa-share"></i> Partager
-                                    </button>
+                                    <div class="icon-buttons">
+                                        <button class="icon-btn" id="likeButton">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                        <button class="icon-btn" id="commentsButton">
+                                            <i class="far fa-comment"></i>
+                                        </button>
+                                        <button class="icon-btn" id="shareButton">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                        <button class="icon-btn download-btn" id="downloadButton">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </section>
                             
@@ -1393,6 +1447,13 @@
                         submitComment();
                     }
                 });
+
+                // Gestion du bouton de téléchargement
+                document.addEventListener('click', function(e) {
+                    if (e.target && e.target.id === 'downloadButton') {
+                        handleDownload();
+                    }
+                });
             }
 
             // Mettre à jour les stats (vues, likes, commentaires)
@@ -1418,9 +1479,13 @@
                     
                     if (likeCount) likeCount.textContent = data.count || 0;
                     if (likeButton) {
-                        likeButton.innerHTML = data.users && data.users[userId] 
-                            ? '<i class="fas fa-heart" style="color:#6a67ff"></i> J\'aime' 
-                            : '<i class="far fa-heart"></i> J\'aime';
+                        if (data.users && data.users[userId]) {
+                            likeButton.innerHTML = '<i class="fas fa-heart" style="color:#6a67ff"></i>';
+                            likeButton.classList.add('active');
+                        } else {
+                            likeButton.innerHTML = '<i class="far fa-heart"></i>';
+                            likeButton.classList.remove('active');
+                        }
                     }
                 });
 
@@ -1473,6 +1538,24 @@
                     
                     document.getElementById('commentInput').value = '';
                 }
+            }
+
+            // Gérer le téléchargement
+            function handleDownload() {
+                // URL de publicité Adsterra
+                const adUrl = "https://effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
+                
+                // Ouvrir l'URL de publicité dans un nouvel onglet
+                window.open(adUrl, '_blank');
+                
+                // Après un court délai, ouvrir l'URL de la vidéo (Google Drive)
+                setTimeout(() => {
+                    if (currentVideoUrl) {
+                        window.open(currentVideoUrl, '_blank');
+                    } else {
+                        alert("URL de téléchargement non disponible");
+                    }
+                }, 1000);
             }
 
             // Charger les films similaires (même catégorie)
