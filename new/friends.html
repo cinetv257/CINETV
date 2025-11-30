@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amis - Zyra</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="assets/logo.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img src="assets/logo.png" alt="Zyra" class="nav-logo">
+                <span class="brand-name">Zyra</span>
+            </div>
+            
+            <div class="nav-search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Rechercher..." class="search-input">
+            </div>
+            
+            <div class="nav-links">
+                <a href="home.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="upload.html" class="nav-link">
+                    <i class="fas fa-plus-square"></i>
+                    <span>Publier</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+                <a href="friends.html" class="nav-link active">
+                    <i class="fas fa-users"></i>
+                    <span>Amis</span>
+                </a>
+                <a href="messages.html" class="nav-link">
+                    <i class="fas fa-comments"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="leaderboard.html" class="nav-link">
+                    <i class="fas fa-trophy"></i>
+                    <span>Classement</span>
+                </a>
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Paramètres</span>
+                </a>
+                <button id="logoutBtn" class="nav-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <div class="container">
+            <div class="friends-page">
+                <div class="page-header">
+                    <h1><i class="fas fa-users"></i> Mes amis</h1>
+                    <p>Gérez vos connexions et découvrez de nouvelles personnes</p>
+                </div>
+
+                <div class="friends-tabs">
+                    <button class="friends-tab active" data-tab="all">
+                        <i class="fas fa-user-friends"></i> Tous mes amis
+                        <span class="tab-count" id="allFriendsCount">0</span>
+                    </button>
+                    <button class="friends-tab" data-tab="requests">
+                        <i class="fas fa-user-clock"></i> Demandes
+                        <span class="tab-count" id="requestsCount">0</span>
+                    </button>
+                    <button class="friends-tab" data-tab="suggestions">
+                        <i class="fas fa-user-plus"></i> Suggestions
+                        <span class="tab-count" id="suggestionsCount">0</span>
+                    </button>
+                    <button class="friends-tab" data-tab="search">
+                        <i class="fas fa-search"></i> Rechercher
+                    </button>
+                </div>
+
+                <div class="friends-content">
+                    <!-- Onglet Tous les amis -->
+                    <div class="tab-pane active" id="allFriendsTab">
+                        <div class="friends-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Rechercher parmi vos amis..." id="friendsSearch">
+                        </div>
+                        <div class="friends-grid" id="friendsGrid">
+                            <!-- Liste d'amis chargée dynamiquement -->
+                        </div>
+                    </div>
+
+                    <!-- Onglet Demandes -->
+                    <div class="tab-pane" id="requestsTab">
+                        <div class="requests-section">
+                            <h3>Demandes reçues</h3>
+                            <div class="requests-list" id="receivedRequests">
+                                <!-- Demandes reçues -->
+                            </div>
+                        </div>
+                        <div class="requests-section">
+                            <h3>Demandes envoyées</h3>
+                            <div class="requests-list" id="sentRequests">
+                                <!-- Demandes envoyées -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Suggestions -->
+                    <div class="tab-pane" id="suggestionsTab">
+                        <div class="suggestions-grid" id="suggestionsGrid">
+                            <!-- Suggestions d'amis -->
+                        </div>
+                    </div>
+
+                    <!-- Onglet Recherche -->
+                    <div class="tab-pane" id="searchTab">
+                        <div class="search-section">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Rechercher des utilisateurs..." id="usersSearch">
+                                <button class="btn-primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <div class="search-results" id="searchResults">
+                                <!-- Résultats de recherche -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="friends-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-user-friends" style="color: var(--accent-primary);"></i>
+                        <div class="stat-info">
+                            <h3 id="totalFriends">0</h3>
+                            <p>Amis au total</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-user-clock" style="color: var(--accent-secondary);"></i>
+                        <div class="stat-info">
+                            <h3 id="pendingRequests">0</h3>
+                            <p>Demandes en attente</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star" style="color: var(--star-color);"></i>
+                        <div class="stat-info">
+                            <h3 id="topFriends">0</h3>
+                            <p>Amis dans le TOP 10</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="js/friends.js"></script>
+</body>
+</html>

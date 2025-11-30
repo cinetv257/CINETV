@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classement - Zyra</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="assets/logo.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img src="assets/logo.png" alt="Zyra" class="nav-logo">
+                <span class="brand-name">Zyra</span>
+            </div>
+            
+            <div class="nav-search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Rechercher..." class="search-input">
+            </div>
+            
+            <div class="nav-links">
+                <a href="home.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="upload.html" class="nav-link">
+                    <i class="fas fa-plus-square"></i>
+                    <span>Publier</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+                <a href="friends.html" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Amis</span>
+                </a>
+                <a href="messages.html" class="nav-link">
+                    <i class="fas fa-comments"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="leaderboard.html" class="nav-link active">
+                    <i class="fas fa-trophy"></i>
+                    <span>Classement</span>
+                </a>
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Paramètres</span>
+                </a>
+                <button id="logoutBtn" class="nav-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <div class="container">
+            <div class="leaderboard-page">
+                <div class="page-header">
+                    <h1><i class="fas fa-trophy"></i> Classement Hebdomadaire</h1>
+                    <p>Découvrez les utilisateurs les plus actifs cette semaine</p>
+                </div>
+
+                <!-- En-tête du classement -->
+                <div class="leaderboard-header">
+                    <div class="time-selector">
+                        <button class="time-btn active" data-period="weekly">
+                            <i class="fas fa-calendar-week"></i> Hebdomadaire
+                        </button>
+                        <button class="time-btn" data-period="monthly">
+                            <i class="fas fa-calendar-alt"></i> Mensuel
+                        </button>
+                        <button class="time-btn" data-period="alltime">
+                            <i class="fas fa-infinity"></i> Tous le temps
+                        </button>
+                    </div>
+
+                    <div class="leaderboard-info">
+                        <div class="info-card">
+                            <i class="fas fa-sync-alt"></i>
+                            <div class="info-content">
+                                <h4>Réinitialisation</h4>
+                                <p>Tous les dimanches à minuit</p>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <i class="fas fa-star" style="color: var(--star-color);"></i>
+                            <div class="info-content">
+                                <h4>Vos points</h4>
+                                <p id="userTotalPoints">0 points cette semaine</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top 3 -->
+                <div class="top-three">
+                    <!-- 2ème place -->
+                    <div class="podium-item second">
+                        <div class="podium-rank">2</div>
+                        <div class="podium-avatar">
+                            <img src="assets/default-avatar.png" alt="Avatar">
+                        </div>
+                        <div class="podium-info">
+                            <h4>Utilisateur #2</h4>
+                            <p class="points">245 points</p>
+                        </div>
+                    </div>
+
+                    <!-- 1ère place -->
+                    <div class="podium-item first">
+                        <div class="podium-crown">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="podium-rank">1</div>
+                        <div class="podium-avatar">
+                            <img src="assets/default-avatar.png" alt="Avatar">
+                            <div class="star-badge">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="podium-info">
+                            <h4>Star of the Week</h4>
+                            <p class="points">320 points</p>
+                        </div>
+                    </div>
+
+                    <!-- 3ème place -->
+                    <div class="podium-item third">
+                        <div class="podium-rank">3</div>
+                        <div class="podium-avatar">
+                            <img src="assets/default-avatar.png" alt="Avatar">
+                        </div>
+                        <div class="podium-info">
+                            <h4>Utilisateur #3</h4>
+                            <p class="points">198 points</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Liste du classement -->
+                <div class="leaderboard-list">
+                    <div class="list-header">
+                        <span>Position</span>
+                        <span>Utilisateur</span>
+                        <span>Points</span>
+                        <span>Actions</span>
+                    </div>
+
+                    <div class="leaderboard-entries" id="leaderboardEntries">
+                        <!-- Classement chargé dynamiquement -->
+                        <div class="loading-leaderboard">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Chargement du classement...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section des récompenses -->
+                <div class="rewards-section">
+                    <h2><i class="fas fa-gift"></i> Récompenses de la semaine</h2>
+                    <div class="rewards-grid">
+                        <div class="reward-card">
+                            <div class="reward-icon first">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3>1ère place</h3>
+                            <ul>
+                                <li>Badge "Star of the Week"</li>
+                                <li>Profil mis en avant</li>
+                                <li>500 points bonus</li>
+                            </ul>
+                        </div>
+
+                        <div class="reward-card">
+                            <div class="reward-icon second">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <h3>2ème place</h3>
+                            <ul>
+                                <li>Badge "Top Performer"</li>
+                                <li>300 points bonus</li>
+                            </ul>
+                        </div>
+
+                        <div class="reward-card">
+                            <div class="reward-icon third">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <h3>3ème place</h3>
+                            <ul>
+                                <li>Badge "Rising Star"</li>
+                                <li>150 points bonus</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comment gagner des points -->
+                <div class="points-guide">
+                    <h2><i class="fas fa-question-circle"></i> Comment gagner des points ?</h2>
+                    <div class="points-grid">
+                        <div class="point-item">
+                            <div class="point-icon">
+                                <i class="fas fa-plus-square"></i>
+                            </div>
+                            <div class="point-info">
+                                <h4>Publier du contenu</h4>
+                                <p>+5 points par publication</p>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div class="point-info">
+                                <h4>Commenter</h4>
+                                <p>+2 points par commentaire</p>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="point-info">
+                                <h4>Liker</h4>
+                                <p>+1 point par like</p>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="point-info">
+                                <h4>Ajouter des amis</h4>
+                                <p>+3 points par nouvel ami</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="js/leaderboard.js"></script>
+</body>
+</html>

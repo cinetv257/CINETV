@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Zyra</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="assets/logo.png">
+</head>
+<body class="chat-page">
+    <!-- Header du chat -->
+    <header class="chat-header">
+        <div class="chat-header-content">
+            <a href="messages.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            
+            <div class="chat-partner-info">
+                <img src="assets/default-avatar.png" alt="Avatar" class="user-avatar-small">
+                <div class="partner-details">
+                    <h3 id="chatPartnerName">Nom de l'utilisateur</h3>
+                    <span class="online-status" id="chatOnlineStatus">En ligne</span>
+                </div>
+            </div>
+
+            <div class="chat-actions">
+                <button class="btn-icon" title="Appel vocal">
+                    <i class="fas fa-phone"></i>
+                </button>
+                <button class="btn-icon" title="Appel vidéo">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="btn-icon" title="Plus d'options">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Zone des messages -->
+    <main class="chat-main">
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages chargés dynamiquement -->
+            <div class="message-date">
+                <span>Aujourd'hui</span>
+            </div>
+            
+            <!-- Exemple de message reçu -->
+            <div class="message received">
+                <img src="assets/default-avatar.png" alt="Avatar" class="message-avatar">
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <p>Salut ! Comment ça va ?</p>
+                        <span class="message-time">14:30</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exemple de message envoyé -->
+            <div class="message sent">
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <p>Ça va bien, merci ! Et toi ?</p>
+                        <span class="message-time">14:32</span>
+                    </div>
+                </div>
+                <img src="assets/default-avatar.png" alt="Avatar" class="message-avatar">
+            </div>
+        </div>
+    </main>
+
+    <!-- Zone de saisie -->
+    <footer class="chat-footer">
+        <div class="message-input-container">
+            <div class="input-actions">
+                <button class="btn-icon" title="Ajouter une image">
+                    <i class="fas fa-image"></i>
+                </button>
+                <button class="btn-icon" title="Ajouter un emoji">
+                    <i class="fas fa-smile"></i>
+                </button>
+                <button class="btn-icon" title="Ajouter un fichier">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+            </div>
+
+            <div class="message-input-wrapper">
+                <textarea 
+                    id="chatMessageInput" 
+                    placeholder="Tapez votre message..." 
+                    rows="1"
+                ></textarea>
+            </div>
+
+            <button class="btn-primary send-btn" id="chatSendBtn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+
+        <div class="typing-indicator hidden" id="typingIndicator">
+            <i class="fas fa-pencil-alt"></i>
+            <span id="typingUser">Utilisateur</span> est en train d'écrire...
+        </div>
+    </footer>
+
+    <script type="module" src="js/chat.js"></script>
+</body>
+</html>
