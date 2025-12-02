@@ -9,245 +9,129 @@
     <link rel="icon" href="assets/logo.png">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <img src="assets/logo.png" alt="Zyra" class="nav-logo">
-                <span class="brand-name">Zyra</span>
+    <header class="top-header" id="topHeader">
+        <div class="header-container">
+            <div class="brand-section">
+                <a href="home.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <span class="brand-name">Paramètres</span>
             </div>
-            
-            <div class="nav-search">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Rechercher..." class="search-input">
-            </div>
-            
-            <div class="nav-links">
-                <a href="home.html" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    <span>Accueil</span>
-                </a>
-                <a href="upload.html" class="nav-link">
-                    <i class="fas fa-plus-square"></i>
-                    <span>Publier</span>
-                </a>
-                <a href="profile.html" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <span>Profil</span>
-                </a>
-                <a href="friends.html" class="nav-link">
-                    <i class="fas fa-users"></i>
-                    <span>Amis</span>
-                </a>
-                <a href="messages.html" class="nav-link">
-                    <i class="fas fa-comments"></i>
-                    <span>Messages</span>
-                </a>
-                <a href="leaderboard.html" class="nav-link">
-                    <i class="fas fa-trophy"></i>
-                    <span>Classement</span>
-                </a>
-                <a href="settings.html" class="nav-link active">
-                    <i class="fas fa-cog"></i>
-                    <span>Paramètres</span>
-                </a>
-                <button id="logoutBtn" class="nav-logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
+            <div class="desktop-nav-icons">
+                <button class="nav-icon" title="Se déconnecter" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Contenu principal -->
     <main class="main-content">
         <div class="container">
-            <div class="settings-page">
-                <div class="page-header">
-                    <h1><i class="fas fa-cog"></i> Paramètres</h1>
-                    <p>Gérez votre compte et vos préférences</p>
-                </div>
+            <div class="settings-layout">
+                <nav class="settings-nav" id="settingsNav">
+                    <a href="#general" class="nav-link active"><i class="fas fa-user-cog"></i> Général</a>
+                    <a href="#account" class="nav-link"><i class="fas fa-key"></i> Compte</a>
+                    <a href="#privacy" class="nav-link"><i class="fas fa-shield-alt"></i> Confidentialité</a>
+                    <a href="#danger-zone" class="nav-link danger-link"><i class="fas fa-exclamation-triangle"></i> Zone de Danger</a>
+                </nav>
 
-                <div class="settings-container">
-                    <!-- Menu latéral -->
-                    <aside class="settings-sidebar">
-                        <nav class="settings-nav">
-                            <a href="#profile" class="nav-item active" data-section="profile">
-                                <i class="fas fa-user"></i> Profil
-                            </a>
-                            <a href="#account" class="nav-item" data-section="account">
-                                <i class="fas fa-lock"></i> Compte
-                            </a>
-                            <a href="#privacy" class="nav-item" data-section="privacy">
-                                <i class="fas fa-shield-alt"></i> Confidentialité
-                            </a>
-                            <a href="#notifications" class="nav-item" data-section="notifications">
-                                <i class="fas fa-bell"></i> Notifications
-                            </a>
-                            <a href="#appearance" class="nav-item" data-section="appearance">
-                                <i class="fas fa-palette"></i> Apparence
-                            </a>
-                            <a href="#progression" class="nav-item" data-section="progression">
-                                <i class="fas fa-chart-line"></i> Progression
-                            </a>
-                        </nav>
-                    </aside>
+                <div class="settings-content-wrapper">
+                    <div id="settingsMessage" class="message hidden"></div>
 
-                    <!-- Contenu des paramètres -->
-                    <div class="settings-content">
-                        <!-- Section Profil -->
-                        <section class="settings-section active" id="profileSection">
-                            <h2><i class="fas fa-user"></i> Modifier le profil</h2>
-                            
-                            <form id="profileForm" class="settings-form">
-                                <div class="form-group">
-                                    <label for="settingsDisplayName">Nom d'affichage</label>
-                                    <input type="text" id="settingsDisplayName" name="displayName">
+                    <div class="settings-content" id="settingsContent">
+                        
+                        <section class="settings-section active" id="general">
+                            <h2><i class="fas fa-user-cog"></i> Général</h2>
+                            <form id="profileUpdateForm">
+                                <div class="form-group avatar-upload-group">
+                                    <img src="assets/default-avatar.png" alt="Avatar actuel" id="profilePicPreview" class="profile-avatar-large">
+                                    <label for="profilePicInput" class="btn-secondary">
+                                        <i class="fas fa-camera"></i> Changer la photo
+                                    </label>
+                                    <input type="file" id="profilePicInput" accept="image/*" class="hidden">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="settingsBio">Bio</label>
-                                    <textarea id="settingsBio" name="bio" rows="4" placeholder="Parlez un peu de vous..."></textarea>
+                                    <label for="displayName"><i class="fas fa-user"></i> Nom d'utilisateur</label>
+                                    <input type="text" id="displayName" placeholder="Votre nom d'affichage" required>
                                 </div>
-
                                 <div class="form-group">
-                                    <label>Photo de profil</label>
-                                    <div class="avatar-upload">
-                                        <img id="settingsAvatar" src="assets/default-avatar.png" alt="Avatar">
-                                        <div class="upload-actions">
-                                            <button type="button" class="btn-secondary" id="changeAvatarBtn">
-                                                <i class="fas fa-camera"></i> Changer
-                                            </button>
-                                            <input type="file" id="avatarUpload" accept="image/*" hidden>
-                                        </div>
-                                    </div>
+                                    <label for="bio"><i class="fas fa-info-circle"></i> Biographie</label>
+                                    <textarea id="bio" placeholder="Parlez de vous en quelques mots..." rows="3"></textarea>
                                 </div>
-
-                                <div class="form-actions">
-                                    <button type="submit" class="btn-primary">
-                                        <i class="fas fa-save"></i> Enregistrer les modifications
-                                    </button>
-                                </div>
-                            </form>
-                        </section>
-
-                        <!-- Section Compte -->
-                        <section class="settings-section" id="accountSection">
-                            <h2><i class="fas fa-lock"></i> Sécurité du compte</h2>
-                            
-                            <form id="accountForm" class="settings-form">
-                                <div class="form-group">
-                                    <label for="currentEmail">Email actuel</label>
-                                    <input type="email" id="currentEmail" disabled>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="newEmail">Nouvel email</label>
-                                    <input type="email" id="newEmail" name="newEmail">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="currentPassword">Mot de passe actuel</label>
-                                    <input type="password" id="currentPassword" name="currentPassword">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="newPassword">Nouveau mot de passe</label>
-                                    <input type="password" id="newPassword" name="newPassword" minlength="6">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="confirmNewPassword">Confirmer le nouveau mot de passe</label>
-                                    <input type="password" id="confirmNewPassword" name="confirmNewPassword">
-                                </div>
-
-                                <div class="form-actions">
-                                    <button type="submit" class="btn-primary">
-                                        <i class="fas fa-save"></i> Mettre à jour le compte
-                                    </button>
-                                </div>
-                            </form>
-
-                            <div class="danger-zone">
-                                <h3><i class="fas fa-exclamation-triangle"></i> Zone de danger</h3>
-                                <p>Ces actions sont irréversibles. Soyez certain de ce que vous faites.</p>
-                                <button class="btn-danger" id="deleteAccountBtn">
-                                    <i class="fas fa-trash"></i> Supprimer le compte
+                                
+                                <button type="submit" class="btn-primary" id="saveProfileBtn">
+                                    <i class="fas fa-save"></i> Enregistrer les modifications
                                 </button>
-                            </div>
+                            </form>
                         </section>
 
-                        <!-- Section Confidentialité -->
-                        <section class="settings-section" id="privacySection">
-                            <h2><i class="fas fa-shield-alt"></i> Confidentialité</h2>
+                        <section class="settings-section hidden" id="account">
+                            <h2><i class="fas fa-key"></i> Compte & Sécurité</h2>
                             
-                            <div class="privacy-settings">
-                                <div class="privacy-item">
-                                    <div class="privacy-info">
-                                        <h4>Profil public</h4>
-                                        <p>Autoriser tout le monde à voir votre profil</p>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" id="publicProfile" checked>
-                                        <span class="slider"></span>
-                                    </label>
+                            <form id="emailUpdateForm" class="settings-form">
+                                <h3>Changer d'Email</h3>
+                                <div class="form-group">
+                                    <label for="newEmail"><i class="fas fa-envelope"></i> Nouvel Email</label>
+                                    <input type="email" id="newEmail" placeholder="nouvel.email@example.com" required>
                                 </div>
-
-                                <div class="privacy-item">
-                                    <div class="privacy-info">
-                                        <h4>Messages des non-amis</h4>
-                                        <p>Accepter les messages des personnes que vous ne suivez pas</p>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" id="messagesFromNonFriends">
-                                        <span class="slider"></span>
-                                    </label>
+                                <div class="form-group">
+                                    <label for="currentPasswordEmail"><i class="fas fa-lock"></i> Mot de passe actuel</label>
+                                    <input type="password" id="currentPasswordEmail" required>
                                 </div>
-
-                                <div class="privacy-item">
-                                    <div class="privacy-info">
-                                        <h4>Publications visibles</h4>
-                                        <p>Qui peut voir vos publications</p>
-                                    </div>
-                                    <select id="postVisibility">
-                                        <option value="public">Public</option>
-                                        <option value="friends">Amis uniquement</option>
-                                        <option value="private">Privé</option>
-                                    </select>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> Changer d'email
+                                </button>
+                            </form>
+                            
+                            <form id="passwordUpdateForm" class="settings-form">
+                                <h3>Changer de Mot de passe</h3>
+                                <div class="form-group">
+                                    <label for="currentPassword"><i class="fas fa-lock"></i> Mot de passe actuel</label>
+                                    <input type="password" id="currentPassword" required>
                                 </div>
-
-                                <div class="privacy-item">
-                                    <div class="privacy-info">
-                                        <h4>Statut en ligne</h4>
-                                        <p>Afficher quand vous êtes en ligne</p>
-                                    </div>
-                                    <label class="switch">
-                                        <input type="checkbox" id="showOnlineStatus" checked>
-                                        <span class="slider"></span>
-                                    </label>
+                                <div class="form-group">
+                                    <label for="newPassword"><i class="fas fa-lock"></i> Nouveau mot de passe</label>
+                                    <input type="password" id="newPassword" required minlength="6">
                                 </div>
-                            </div>
+                                <div class="form-group">
+                                    <label for="confirmNewPassword"><i class="fas fa-lock"></i> Confirmer nouveau mot de passe</label>
+                                    <input type="password" id="confirmNewPassword" required minlength="6">
+                                </div>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> Changer le mot de passe
+                                </button>
+                            </form>
+                        </section>
 
-                            <div class="form-actions">
-                                <button class="btn-primary" id="savePrivacySettings">
+                        <section class="settings-section hidden" id="privacy">
+                            <h2><i class="fas fa-shield-alt"></i> Confidentialité</h2>
+                            <form id="privacySettingsForm">
+                                <div class="form-group switch-group">
+                                    <label>Profil Public</label>
+                                    <input type="checkbox" id="publicProfileToggle" class="switch-input">
+                                    <label for="publicProfileToggle" class="switch-label"></label>
+                                </div>
+                                <p class="help-text">Si désactivé, seules vos amis pourront voir vos publications.</p>
+                                
+                                <div class="form-group switch-group">
+                                    <label>Recevoir des demandes d'amis</label>
+                                    <input type="checkbox" id="allowFriendRequests" class="switch-input" checked>
+                                    <label for="allowFriendRequests" class="switch-label"></label>
+                                </div>
+                                <p class="help-text">Contrôlez qui peut vous envoyer des demandes d'amis.</p>
+
+                                <button type="submit" class="btn-primary" id="savePrivacySettings">
                                     <i class="fas fa-save"></i> Enregistrer les paramètres
                                 </button>
+                            </form>
+                        </section>
+
+                        <section class="settings-section danger-zone hidden" id="danger-zone">
+                            <h2><i class="fas fa-exclamation-triangle"></i> Zone de Danger</h2>
+                            <div class="danger-card">
+                                <h3>Supprimer le Compte</h3>
+                                <p>Cette action est irréversible et supprimera toutes vos données (publications, amis, messages) de la plateforme.</p>
+                                <button class="btn-danger" id="deleteAccountBtn">
+                                    <i class="fas fa-trash-alt"></i> Supprimer mon compte
+                                </button>
                             </div>
-                        </section>
-
-                        <!-- Autres sections... -->
-                        <section class="settings-section" id="notificationsSection">
-                            <h2><i class="fas fa-bell"></i> Notifications</h2>
-                            <p>Section des notifications à implémenter...</p>
-                        </section>
-
-                        <section class="settings-section" id="appearanceSection">
-                            <h2><i class="fas fa-palette"></i> Apparence</h2>
-                            <p>Section d'apparence à implémenter...</p>
-                        </section>
-
-                        <section class="settings-section" id="progressionSection">
-                            <h2><i class="fas fa-chart-line"></i> Progression</h2>
-                            <p>Section de progression à implémenter...</p>
                         </section>
                     </div>
                 </div>
@@ -255,6 +139,29 @@
         </div>
     </main>
 
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+        <a href="home.html" class="nav-link" title="Accueil">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="friends.html" class="nav-link" title="Amis">
+            <i class="fas fa-user-friends"></i>
+            <span>Amis</span>
+        </a>
+        <a href="upload.html" class="nav-link is-center" title="Publier">
+            <i class="fas fa-plus-circle"></i>
+        </a>
+        <a href="messages.html" class="nav-link" title="Messages">
+            <i class="fas fa-envelope"></i>
+            <span>Messages</span>
+        </a>
+        <a href="profile.html" class="nav-link" title="Profil">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <script type="module" src="js/firebase.js"></script>
     <script type="module" src="js/settings.js"></script>
 </body>
 </html>

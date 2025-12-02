@@ -9,105 +9,39 @@
     <link rel="icon" href="assets/logo.png">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <img src="assets/logo.png" alt="Zyra" class="nav-logo">
-                <span class="brand-name">Zyra</span>
+    <header class="top-header" id="topHeader">
+        <div class="header-container">
+            <div class="brand-section">
+                <a href="home.html">
+                    <img src="assets/logo.png" alt="Zyra" class="logo">
+                    <span class="brand-name">Zyra</span>
+                </a>
             </div>
-            
-            <div class="nav-search">
+            <div class="search-bar" id="desktopSearch">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Rechercher..." class="search-input">
+                <input type="text" placeholder="Rechercher...">
             </div>
-            
-            <div class="nav-links">
-                <a href="home.html" class="nav-link active">
-                    <i class="fas fa-home"></i>
-                    <span>Accueil</span>
-                </a>
-                <a href="upload.html" class="nav-link">
-                    <i class="fas fa-plus-square"></i>
-                    <span>Publier</span>
-                </a>
-                <a href="profile.html" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <span>Profil</span>
-                </a>
-                <a href="friends.html" class="nav-link">
-                    <i class="fas fa-users"></i>
-                    <span>Amis</span>
-                </a>
-                <a href="messages.html" class="nav-link">
-                    <i class="fas fa-comments"></i>
-                    <span>Messages</span>
-                </a>
-                <a href="leaderboard.html" class="nav-link">
-                    <i class="fas fa-trophy"></i>
-                    <span>Classement</span>
-                </a>
-                <a href="settings.html" class="nav-link">
-                    <i class="fas fa-cog"></i>
-                    <span>Paramètres</span>
-                </a>
-                <button id="logoutBtn" class="nav-logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
+            <div class="desktop-nav-icons">
+                <a href="messages.html" class="nav-icon" title="Messages"><i class="fas fa-envelope"></i></a>
+                <a href="settings.html" class="nav-icon" title="Paramètres"><i class="fas fa-cog"></i></a>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Contenu principal -->
     <main class="main-content">
-        <div class="container">
+        <div class="container-fluid">
             <div class="content-grid">
-                <!-- Colonne gauche - Suggestions -->
-                <aside class="sidebar-left">
-                    <div class="user-card">
-                        <div class="user-avatar">
-                            <img id="userAvatar" src="assets/default-avatar.png" alt="Avatar">
+                
+                <section class="posts-feed">
+                    
+                    <div class="stories-bar" id="storiesBar">
+                        <div class="story-card add-story">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Ma Story</span>
                         </div>
-                        <div class="user-info">
-                            <h3 id="userDisplayName">Utilisateur</h3>
-                            <p class="user-points">
-                                <i class="fas fa-star" style="color: var(--star-color);"></i>
-                                <span id="userPoints">0</span> points
-                            </p>
                         </div>
-                    </div>
-
-                    <div class="sidebar-section">
-                        <h3>Suggestions d'amis</h3>
-                        <div class="suggestions-list" id="suggestionsList">
-                            <!-- Suggestions chargées dynamiquement -->
-                        </div>
-                    </div>
-                </aside>
-
-                <!-- Colonne centrale - Fil d'actualité -->
-                <section class="feed">
-                    <div class="create-post-card">
-                        <div class="post-input">
-                            <img id="currentUserAvatar" src="assets/default-avatar.png" alt="Votre avatar" class="user-avatar-small">
-                            <input type="text" placeholder="Quoi de neuf ?" class="post-text-input">
-                        </div>
-                        <div class="post-actions">
-                            <button class="post-action-btn">
-                                <i class="fas fa-image"></i> Photo
-                            </button>
-                            <button class="post-action-btn">
-                                <i class="fas fa-video"></i> Vidéo
-                            </button>
-                            <button class="post-action-btn">
-                                <i class="fas fa-map-marker-alt"></i> Localisation
-                            </button>
-                            <button class="btn-primary btn-post">Publier</button>
-                        </div>
-                    </div>
 
                     <div class="posts-container" id="postsContainer">
-                        <!-- Posts chargés dynamiquement -->
                         <div class="loading-posts">
                             <i class="fas fa-spinner fa-spin"></i>
                             <p>Chargement des publications...</p>
@@ -115,29 +49,51 @@
                     </div>
                 </section>
 
-                <!-- Colonne droite - Classement rapide -->
                 <aside class="sidebar-right">
                     <div class="sidebar-section">
                         <h3><i class="fas fa-trophy"></i> Top Hebdo</h3>
                         <div class="leaderboard-preview" id="leaderboardPreview">
-                            <!-- Classement chargé dynamiquement -->
-                        </div>
+                            </div>
                         <a href="leaderboard.html" class="btn-secondary">
                             Voir le classement complet
                         </a>
                     </div>
 
                     <div class="sidebar-section">
-                        <h3><i class="fas fa-bell"></i> Notifications</h3>
-                        <div class="notifications-list" id="notificationsList">
-                            <!-- Notifications chargées dynamiquement -->
-                        </div>
+                        <h3><i class="fas fa-user-plus"></i> Suggestions d'amis</h3>
+                        <div class="suggestions-list" id="suggestionsList">
+                            </div>
                     </div>
-                </aside>
+                    
+                    </aside>
             </div>
         </div>
     </main>
 
-    <script type="module" src="js/home.js"></script>
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+        <a href="home.html" class="nav-link active" title="Accueil">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="friends.html" class="nav-link" title="Amis">
+            <i class="fas fa-user-friends"></i>
+            <span>Amis</span>
+        </a>
+        <a href="upload.html" class="nav-link is-center" title="Publier">
+            <i class="fas fa-plus-circle"></i>
+        </a>
+        <a href="messages.html" class="nav-link" title="Messages">
+            <i class="fas fa-envelope"></i>
+            <span>Messages</span>
+        </a>
+        <a href="profile.html" class="nav-link" title="Profil">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/progression.js"></script>
+    <script type="module" src="js/Home.js"></script>
 </body>
 </html>
