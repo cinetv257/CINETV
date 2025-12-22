@@ -11,359 +11,149 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="css/animations.css">
     
     <!-- Firebase SDK -->
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/main.js"></script>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                <i class="fas fa-comment-dots logo-icon"></i>
-                <span class="shimmer-text">Zyra Chat</span>
-            </a>
-            <div class="nav-links">
-                <a href="index.html" class="nav-link active">
-                    <i class="fas fa-sign-in-alt"></i> Connexion
-                </a>
-                <a href="register.html" class="nav-link">
-                    <i class="fas fa-user-plus"></i> Inscription
-                </a>
-                <a href="#features" class="nav-link">
-                    <i class="fas fa-star"></i> Fonctionnalités
-                </a>
-                <a href="#about" class="nav-link">
-                    <i class="fas fa-info-circle"></i> À propos
-                </a>
+    <!-- Conteneur principal -->
+    <div class="auth-container">
+        <!-- Carte de connexion -->
+        <div class="auth-card">
+            <!-- En-tête -->
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Zyra Chat</span>
+                </div>
+                <p class="auth-subtitle">Connectez-vous à votre compte</p>
             </div>
-            <button class="mobile-menu-btn" id="mobile-menu-btn">
-                <i class="fas fa-bars"></i>
-            </button>
+            
+            <!-- Corps du formulaire -->
+            <div class="auth-body">
+                <form id="login-form">
+                    <!-- Champ Email -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i> Adresse Email
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="email" 
+                                   id="email" 
+                                   class="form-control" 
+                                   placeholder="votre@email.com"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <!-- Champ Mot de passe -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock"></i> Mot de passe
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-key"></i>
+                            <input type="password" 
+                                   id="password" 
+                                   class="form-control" 
+                                   placeholder="Votre mot de passe"
+                                   required>
+                            <button type="button" class="btn-icon password-toggle" id="password-toggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Options -->
+                    <div class="form-group form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember-me">
+                            <span class="checkbox-custom"></span>
+                            <span>Se souvenir de moi</span>
+                        </label>
+                        <a href="#forgot-password" class="forgot-password" id="forgot-password-link">
+                            Mot de passe oublié ?
+                        </a>
+                    </div>
+                    
+                    <!-- Message d'erreur -->
+                    <div id="error-message" class="error-message" style="display: none;"></div>
+                    
+                    <!-- Bouton de connexion -->
+                    <button type="submit" class="btn btn-primary btn-large w-100">
+                        <i class="fas fa-sign-in-alt"></i> Se connecter
+                        <div class="loading-dots" style="display: none;">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </button>
+                    
+                    <!-- Séparateur -->
+                    <div class="auth-divider">
+                        <span>ou</span>
+                    </div>
+                    
+                    <!-- Bouton d'inscription -->
+                    <a href="register.html" class="btn btn-secondary w-100">
+                        <i class="fas fa-user-plus"></i> Créer un compte
+                    </a>
+                </form>
+            </div>
+            
+            <!-- Pied de page -->
+            <div class="auth-footer">
+                <p>En vous connectant, vous acceptez nos 
+                    <a href="#terms">Conditions d'utilisation</a> 
+                    et notre 
+                    <a href="#privacy">Politique de confidentialité</a>
+                </p>
+            </div>
         </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobile-menu">
-        <div class="mobile-nav-links">
-            <a href="index.html" class="mobile-nav-link active">
-                <i class="fas fa-sign-in-alt"></i> Connexion
-            </a>
-            <a href="register.html" class="mobile-nav-link">
-                <i class="fas fa-user-plus"></i> Inscription
-            </a>
-            <a href="#features" class="mobile-nav-link">
-                <i class="fas fa-star"></i> Fonctionnalités
-            </a>
-            <a href="#about" class="mobile-nav-link">
-                <i class="fas fa-info-circle"></i> À propos
-            </a>
+        
+        <!-- Informations de l'application -->
+        <div class="app-info">
+            <h1 class="app-title">
+                <i class="fas fa-comment-dots"></i>
+                Zyra Chat
+            </h1>
+            <p class="app-description">
+                L'application de messagerie moderne et sécurisée. 
+                Discutez en temps réel, partagez des images et des stories avec vos amis.
+            </p>
+            
+            <div class="app-features">
+                <div class="feature">
+                    <i class="fas fa-bolt feature-icon"></i>
+                    <div>
+                        <h3>Messages en temps réel</h3>
+                        <p>Conversations instantanées avec Firebase</p>
+                    </div>
+                </div>
+                
+                <div class="feature">
+                    <i class="fas fa-image feature-icon"></i>
+                    <div>
+                        <h3>Partage d'images</h3>
+                        <p>Envoyez des photos via ImgBB</p>
+                    </div>
+                </div>
+                
+                <div class="feature">
+                    <i class="fas fa-history feature-icon"></i>
+                    <div>
+                        <h3>Stories éphémères</h3>
+                        <p>Partagez vos moments pendant 24h</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text page-enter">
-                    <h1 class="hero-title">
-                        Connectez-vous à 
-                        <span class="shimmer-text">Zyra Chat</span>
-                    </h1>
-                    <p class="hero-subtitle">
-                        L'application de messagerie la plus sécurisée et moderne. 
-                        Échangez des messages, des images et des stories en temps réel.
-                    </p>
-                    <div class="hero-stats">
-                        <div class="stat">
-                            <i class="fas fa-users"></i>
-                            <span>10,000+ utilisateurs</span>
-                        </div>
-                        <div class="stat">
-                            <i class="fas fa-comments"></i>
-                            <span>1M+ messages/jour</span>
-                        </div>
-                        <div class="stat">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>Sécurité maximale</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Login Card -->
-                <div class="auth-card card-enter">
-                    <div class="auth-header">
-                        <div class="auth-logo">
-                            <i class="fas fa-comment-dots"></i>
-                            <span>Zyra Chat</span>
-                        </div>
-                        <p class="auth-subtitle">Connectez-vous à votre compte</p>
-                    </div>
-                    
-                    <div class="auth-body">
-                        <form id="login-form">
-                            <div class="form-group">
-                                <label for="email" class="form-label">
-                                    <i class="fas fa-envelope"></i> Adresse Email
-                                </label>
-                                <div class="input-with-icon">
-                                    <i class="fas fa-user"></i>
-                                    <input type="email" 
-                                           id="email" 
-                                           class="form-control" 
-                                           placeholder="votre@email.com"
-                                           required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="password" class="form-label">
-                                    <i class="fas fa-lock"></i> Mot de passe
-                                </label>
-                                <div class="input-with-icon">
-                                    <i class="fas fa-key"></i>
-                                    <input type="password" 
-                                           id="password" 
-                                           class="form-control" 
-                                           placeholder="Votre mot de passe"
-                                           required>
-                                    <button type="button" class="btn-icon password-toggle" id="password-toggle">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="remember-me">
-                                    <span class="checkbox-custom"></span>
-                                    <span>Se souvenir de moi</span>
-                                </label>
-                                <a href="#forgot-password" class="forgot-password" id="forgot-password-link">
-                                    Mot de passe oublié ?
-                                </a>
-                            </div>
-                            
-                            <div id="error-message" class="error-message" style="display: none;"></div>
-                            
-                            <button type="submit" class="btn btn-primary btn-large w-100">
-                                <i class="fas fa-sign-in-alt"></i> Se connecter
-                                <div class="loading-dots" style="display: none;">
-                                    <span></span><span></span><span></span>
-                                </div>
-                            </button>
-                            
-                            <div class="auth-divider">
-                                <span>ou</span>
-                            </div>
-                            
-                            <button type="button" class="btn btn-secondary w-100" id="google-login">
-                                <i class="fab fa-google"></i> Continuer avec Google
-                            </button>
-                            
-                            <button type="button" class="btn btn-secondary w-100 mt-2" id="github-login">
-                                <i class="fab fa-github"></i> Continuer avec GitHub
-                            </button>
-                        </form>
-                    </div>
-                    
-                    <div class="auth-footer">
-                        <p>Nouveau sur Zyra Chat ? 
-                            <a href="register.html" class="register-link">Créer un compte</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Pourquoi choisir Zyra Chat ?</h2>
-                <p>Découvrez les fonctionnalités qui font de Zyra Chat le meilleur choix</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>Messages en temps réel</h3>
-                    <p>Envoyez et recevez des messages instantanément avec notre technologie Firebase Realtime Database.</p>
-                </div>
-                
-                <div class="feature-card card">
-                    <div class="feature-icon">
-                        <i class="fas fa-image"></i>
-                    </div>
-                    <h3>Partage d'images</h3>
-                    <p>Envoyez des photos et images via ImgBB avec une qualité optimale et un stockage sécurisé.</p>
-                </div>
-                
-                <div class="feature-card card">
-                    <div class="feature-icon">
-                        <i class="fas fa-history"></i>
-                    </div>
-                    <h3>Stories éphémères</h3>
-                    <p>Partagez vos moments avec des stories qui disparaissent après 24 heures.</p>
-                </div>
-                
-                <div class="feature-card card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Sécurité maximale</h3>
-                    <p>Authentification Firebase sécurisée et chiffrement des données pour votre tranquillité d'esprit.</p>
-                </div>
-                
-                <div class="feature-card card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Design responsive</h3>
-                    <p>Interface adaptée à tous les écrans, du mobile au desktop, pour une expérience optimale.</p>
-                </div>
-                
-                <div class="feature-card card">
-                    <div class="feature-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3>Interface moderne</h3>
-                    <p>Design élégant avec thème sombre/clair et animations fluides pour un plaisir visuel.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Ce que disent nos utilisateurs</h2>
-                <p>Découvrez les expériences de notre communauté</p>
-            </div>
-            
-            <div class="testimonials-slider">
-                <div class="testimonial-card card">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>Zyra Chat a révolutionné ma façon de communiquer. La vitesse des messages est incroyable !</p>
-                        <i class="fas fa-quote-right"></i>
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="https://ui-avatars.com/api/?name=Alex+Martin&background=8a2be2&color=fff" alt="Alex Martin" class="author-avatar">
-                        <div>
-                            <h4>Alex Martin</h4>
-                            <span>Développeur Full-Stack</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial-card card">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>Les stories sont géniales ! J'adore partager mes journées avec mes amis de manière éphémère.</p>
-                        <i class="fas fa-quote-right"></i>
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=00d4ff&color=fff" alt="Sarah Chen" class="author-avatar">
-                        <div>
-                            <h4>Sarah Chen</h4>
-                            <span>Designer UI/UX</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial-card card">
-                    <div class="testimonial-content">
-                        <i class="fas fa-quote-left"></i>
-                        <p>La sécurité est impeccable. Je me sens en confiance pour partager des informations sensibles.</p>
-                        <i class="fas fa-quote-right"></i>
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="https://ui-avatars.com/api/?name=Marcus+Dubois&background=ff6b8b&color=fff" alt="Marcus Dubois" class="author-avatar">
-                        <div>
-                            <h4>Marcus Dubois</h4>
-                            <span>Entrepreneur</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about-section">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>À propos de Zyra Chat</h2>
-                    <p>Zyra Chat est une application de messagerie moderne développée avec les technologies web les plus récentes. Notre mission est de fournir une plateforme de communication sécurisée, rapide et élégante.</p>
-                    <p>Nous utilisons Firebase pour garantir une expérience en temps réel, ImgBB pour un partage d'images optimal, et des pratiques de développement modernes pour une performance exceptionnelle.</p>
-                    
-                    <div class="tech-stack">
-                        <h3>Notre stack technique</h3>
-                        <div class="tech-icons">
-                            <div class="tech-icon" title="HTML5">
-                                <i class="fab fa-html5"></i>
-                                <span>HTML5</span>
-                            </div>
-                            <div class="tech-icon" title="CSS3">
-                                <i class="fab fa-css3-alt"></i>
-                                <span>CSS3</span>
-                            </div>
-                            <div class="tech-icon" title="JavaScript">
-                                <i class="fab fa-js"></i>
-                                <span>JavaScript</span>
-                            </div>
-                            <div class="tech-icon" title="Firebase">
-                                <i class="fas fa-fire"></i>
-                                <span>Firebase</span>
-                            </div>
-                            <div class="tech-icon" title="ImgBB">
-                                <i class="fas fa-image"></i>
-                                <span>ImgBB</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="about-stats card">
-                    <h3>Nos chiffres</h3>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number" data-count="10000">0</div>
-                            <div class="stat-label">Utilisateurs actifs</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" data-count="500000">0</div>
-                            <div class="stat-label">Messages/jour</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" data-count="99">0</div>
-                            <div class="stat-label">% Satisfaction</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" data-count="24">0</div>
-                            <div class="stat-label">/7 Support</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Forgot Password Modal -->
+    <!-- Modal mot de passe oublié -->
     <div class="modal" id="forgot-password-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -396,71 +186,9 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-logo">
-                <a href="index.html" class="logo">
-                    <i class="fas fa-comment-dots logo-icon"></i>
-                    <span>Zyra Chat</span>
-                </a>
-                <p class="footer-description">
-                    L'application de messagerie moderne et sécurisée
-                </p>
-            </div>
-            
-            <div class="footer-links">
-                <a href="#privacy" class="footer-link">Confidentialité</a>
-                <a href="#terms" class="footer-link">Conditions</a>
-                <a href="#contact" class="footer-link">Contact</a>
-                <a href="#help" class="footer-link">Aide</a>
-            </div>
-            
-            <div class="social-links">
-                <a href="#" class="social-link" title="Twitter">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="#" class="social-link" title="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="#" class="social-link" title="Discord">
-                    <i class="fab fa-discord"></i>
-                </a>
-                <a href="#" class="social-link" title="LinkedIn">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p class="copyright">
-                &copy; 2024 Zyra Chat. Tous droits réservés.
-            </p>
-        </div>
-    </footer>
-
-    <!-- Floating Shapes -->
-    <div class="floating-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
-    </div>
-
-    <!-- Particles -->
-    <div class="particles" id="particles"></div>
-
-    <!-- JavaScript spécifique à la page -->
+    <!-- Scripts JavaScript -->
     <script>
-        // Gestionnaire mobile menu
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenu.classList.toggle('show');
-            this.innerHTML = mobileMenu.classList.contains('show') 
-                ? '<i class="fas fa-times"></i>' 
-                : '<i class="fas fa-bars"></i>';
-        });
-
-        // Toggle mot de passe
+        // Toggle afficher/masquer mot de passe
         document.getElementById('password-toggle').addEventListener('click', function() {
             const passwordInput = document.getElementById('password');
             const icon = this.querySelector('i');
@@ -476,7 +204,7 @@
             }
         });
 
-        // Modal mot de passe oublié
+        // Gestion du modal mot de passe oublié
         document.getElementById('forgot-password-link').addEventListener('click', function(e) {
             e.preventDefault();
             document.getElementById('forgot-password-modal').style.display = 'block';
@@ -498,80 +226,57 @@
             }
         });
 
-        // Animation des statistiques
-        function animateCounter(element) {
-            const target = parseInt(element.getAttribute('data-count'));
-            const suffix = element.textContent.includes('%') ? '%' : '';
-            let current = 0;
-            const increment = target / 50;
+        // Soumission du formulaire de connexion
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const loadingDots = submitBtn.querySelector('.loading-dots');
+            const errorMessage = document.getElementById('error-message');
+            
+            // Afficher l'indicateur de chargement
+            submitBtn.disabled = true;
+            loadingDots.style.display = 'flex';
+            
+            // Récupérer les valeurs du formulaire
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                // Appeler la fonction de connexion depuis auth.js
+                const { loginUser } = await import('./js/auth.js');
+                const result = await loginUser(email, password);
+                
+                if (result.success) {
+                    // Redirection vers le dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    // Afficher l'erreur
+                    errorMessage.textContent = result.error;
+                    errorMessage.style.display = 'block';
+                    submitBtn.disabled = false;
+                    loadingDots.style.display = 'none';
                 }
-                element.textContent = Math.floor(current) + suffix;
-            }, 30);
-        }
-
-        // Observer pour les animations au scroll
-        const observerOptions = {
-            threshold: 0.3,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                    
-                    // Animer les compteurs
-                    if (entry.target.classList.contains('stat-number')) {
-                        animateCounter(entry.target);
-                    }
-                }
-            });
-        }, observerOptions);
-
-        // Observer les éléments à animer
-        document.querySelectorAll('.animate-on-scroll, .stat-number').forEach(el => {
-            observer.observe(el);
+            } catch (error) {
+                console.error("Erreur de connexion:", error);
+                errorMessage.textContent = "Une erreur est survenue lors de la connexion";
+                errorMessage.style.display = 'block';
+                submitBtn.disabled = false;
+                loadingDots.style.display = 'none';
+            }
         });
 
-        // Générer des particules
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
+        // Soumission du formulaire mot de passe oublié
+        document.getElementById('forgot-password-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                // Position aléatoire
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                
-                // Taille aléatoire
-                const size = Math.random() * 3 + 1;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                
-                // Délai d'animation aléatoire
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                
-                // Durée d'animation aléatoire
-                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-                
-                // Opacité aléatoire
-                particle.style.opacity = Math.random() * 0.5 + 0.1;
-                
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        // Démarrer les particules au chargement
-        document.addEventListener('DOMContentLoaded', createParticles);
+            const email = document.getElementById('reset-email').value;
+            
+            // Ici, on ajouterait la logique Firebase pour réinitialiser le mot de passe
+            // Pour l'instant, on simule
+            alert(`Un lien de réinitialisation a été envoyé à ${email} (simulation)`);
+            document.getElementById('forgot-password-modal').style.display = 'none';
+        });
 
         // Effet ripple sur les boutons
         document.addEventListener('click', function(e) {
@@ -595,144 +300,135 @@
                 }, 600);
             }
         });
-
-        // Simulation de connexion pour la démo
-        document.getElementById('login-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const loadingDots = submitBtn.querySelector('.loading-dots');
-            const errorMessage = document.getElementById('error-message');
-            
-            // Afficher l'indicateur de chargement
-            submitBtn.disabled = true;
-            loadingDots.style.display = 'flex';
-            
-            // Simuler un délai de connexion
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // Dans un cas réel, on appellerait Firebase Auth ici
-            // Pour la démo, on simule une connexion réussie
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (email && password) {
-                // Redirection vers le dashboard (dans la vraie app, ce serait géré par Firebase)
-                window.location.href = 'dashboard.html';
-            } else {
-                errorMessage.textContent = "Veuillez remplir tous les champs";
-                errorMessage.style.display = 'block';
-                submitBtn.disabled = false;
-                loadingDots.style.display = 'none';
-            }
-        });
-
-        // Connexion Google (simulation)
-        document.getElementById('google-login').addEventListener('click', function() {
-            const btn = this;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fab fa-google"></i> Connexion...';
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                alert("Dans une application réelle, cela déclencherait l'authentification Google via Firebase.");
-            }, 1000);
-        });
-
-        // Connexion GitHub (simulation)
-        document.getElementById('github-login').addEventListener('click', function() {
-            const btn = this;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fab fa-github"></i> Connexion...';
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                alert("Dans une application réelle, cela déclencherait l'authentification GitHub via Firebase.");
-            }, 1000);
-        });
     </script>
 
-    <!-- Style supplémentaire pour la page d'accueil -->
+    <!-- Styles spécifiques à la page de connexion -->
     <style>
-        /* Hero Section */
-        .hero-section {
-            padding: 100px 0 80px;
+        /* Conteneur d'authentification */
+        .auth-container {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-primary);
             position: relative;
             overflow: hidden;
         }
 
-        .hero-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--space-xxl);
-            align-items: center;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            margin-bottom: var(--space-md);
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradient-shift 3s ease infinite;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-xl);
-            max-width: 500px;
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: var(--space-xl);
-            margin-top: var(--space-xl);
-        }
-
-        .stat {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            color: var(--text-secondary);
-        }
-
-        .stat i {
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-
-        /* Auth Card spécifique */
+        /* Carte d'authentification */
         .auth-card {
-            max-width: 450px;
-            margin-left: auto;
+            width: 450px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
         }
 
+        /* En-tête */
         .auth-header {
-            text-align: center;
             padding: var(--space-xl);
+            background: var(--primary-gradient);
+            text-align: center;
         }
 
         .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            color: white;
             font-size: 1.8rem;
+            font-weight: 600;
             margin-bottom: var(--space-sm);
         }
 
+        .auth-logo i {
+            font-size: 2rem;
+        }
+
         .auth-subtitle {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             font-size: 0.95rem;
+            margin: 0;
         }
 
+        /* Corps */
         .auth-body {
+            flex: 1;
             padding: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
+        /* Options du formulaire */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .forgot-password {
+            font-size: 0.9rem;
+            color: var(--primary-light);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .forgot-password:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        /* Message d'erreur */
+        .error-message {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+            padding: var(--space-md);
+            border-radius: var(--border-radius);
+            margin-bottom: var(--space-md);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* Bouton de chargement */
+        .loading-dots {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin-left: var(--space-sm);
+        }
+
+        .loading-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: white;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dots span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Séparateur */
         .auth-divider {
             display: flex;
             align-items: center;
@@ -753,367 +449,271 @@
             font-size: 0.9rem;
         }
 
-        .forgot-password {
-            float: right;
-            font-size: 0.9rem;
+        /* Pied de page */
+        .auth-footer {
+            padding: var(--space-lg);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .auth-footer a {
             color: var(--primary-light);
+            text-decoration: none;
         }
 
-        .error-message {
-            background: rgba(255, 71, 87, 0.1);
-            border: 1px solid var(--danger-color);
-            color: var(--danger-color);
-            padding: var(--space-md);
-            border-radius: var(--border-radius);
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Informations de l'application */
+        .app-info {
+            flex: 1;
+            padding: var(--space-xxl);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(138, 43, 226, 0.05) 0%,
+                rgba(0, 212, 255, 0.05) 100%);
+            z-index: 1;
+        }
+
+        .app-title {
+            font-size: 3.5rem;
             margin-bottom: var(--space-md);
-            font-size: 0.9rem;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
         }
 
-        /* Features */
-        .features-section {
-            padding: 80px 0;
-            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(26, 26, 46, 0.5) 100%);
+        .app-title i {
+            color: var(--primary-color);
+            font-size: 3rem;
         }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: var(--space-xxl);
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: var(--space-sm);
-        }
-
-        .section-header p {
+        .app-description {
+            font-size: 1.2rem;
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            margin-bottom: var(--space-xl);
             max-width: 600px;
-            margin: 0 auto;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        /* Fonctionnalités */
+        .app-features {
+            display: flex;
+            flex-direction: column;
             gap: var(--space-lg);
+            position: relative;
+            z-index: 2;
         }
 
-        .feature-card {
-            text-align: center;
-            padding: var(--space-xl);
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            padding: var(--space-lg);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
             transition: all var(--transition-normal);
+            backdrop-filter: blur(10px);
         }
 
-        .feature-card:hover {
-            transform: translateY(-10px);
+        .feature:hover {
+            transform: translateX(10px);
+            border-color: var(--primary-color);
+            background: rgba(138, 43, 226, 0.1);
         }
 
         .feature-icon {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto var(--space-lg);
-            background: var(--primary-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: white;
-        }
-
-        .feature-card h3 {
-            margin-bottom: var(--space-md);
-            font-size: 1.3rem;
-        }
-
-        /* Testimonials */
-        .testimonials-section {
-            padding: 80px 0;
-        }
-
-        .testimonials-slider {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-lg);
-        }
-
-        .testimonial-card {
-            padding: var(--space-xl);
-        }
-
-        .testimonial-content {
-            position: relative;
-            margin-bottom: var(--space-lg);
-        }
-
-        .testimonial-content i:first-child {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            margin-bottom: var(--space-md);
-            display: block;
-        }
-
-        .testimonial-content i:last-child {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            float: right;
-            margin-top: var(--space-md);
-        }
-
-        .testimonial-content p {
-            font-style: italic;
-            color: var(--text-secondary);
-            line-height: 1.8;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-        }
-
-        .author-avatar {
             width: 50px;
             height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .testimonial-author h4 {
-            margin: 0;
-            font-size: 1.1rem;
-        }
-
-        .testimonial-author span {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* About */
-        .about-section {
-            padding: 80px 0;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--space-xxl);
-            align-items: start;
-        }
-
-        .about-text h2 {
-            margin-bottom: var(--space-lg);
-        }
-
-        .about-text p {
-            margin-bottom: var(--space-lg);
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-
-        .tech-stack {
-            margin-top: var(--space-xl);
-        }
-
-        .tech-stack h3 {
-            margin-bottom: var(--space-lg);
-        }
-
-        .tech-icons {
-            display: flex;
-            gap: var(--space-lg);
-            flex-wrap: wrap;
-        }
-
-        .tech-icon {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-        .tech-icon i {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-        }
-
-        .tech-icon span {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .about-stats {
-            padding: var(--space-xl);
-        }
-
-        .about-stats h3 {
-            text-align: center;
-            margin-bottom: var(--space-xl);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-xl);
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: var(--space-sm);
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Footer amélioré */
-        .footer {
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--space-xl) var(--space-lg);
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: var(--space-xl);
-            align-items: start;
-        }
-
-        .footer-logo .logo {
-            font-size: 1.8rem;
-            margin-bottom: var(--space-md);
-            display: inline-block;
-        }
-
-        .footer-description {
-            color: var(--text-secondary);
-            max-width: 300px;
-        }
-
-        .footer-links {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-sm);
-        }
-
-        .social-links {
-            display: flex;
-            gap: var(--space-md);
-        }
-
-        .social-link {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--bg-card);
+            background: var(--primary-gradient);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-secondary);
-            transition: all var(--transition-normal);
-        }
-
-        .social-link:hover {
-            background: var(--primary-color);
+            font-size: 1.5rem;
             color: white;
-            transform: translateY(-3px);
+            flex-shrink: 0;
         }
 
-        .footer-bottom {
-            text-align: center;
-            padding: var(--space-lg);
-            border-top: 1px solid var(--border-color);
+        .feature h3 {
+            margin: 0 0 var(--space-xs) 0;
+            font-size: 1.2rem;
         }
 
-        /* Responsive pour la page d'accueil */
-        @media (max-width: 1024px) {
-            .hero-content,
-            .features-grid,
-            .testimonials-slider,
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: var(--space-xl);
+        .feature p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Effets visuels */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.1;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary-color);
+            top: 20%;
+            left: 60%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--secondary-color);
+            bottom: 30%;
+            left: 70%;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
             }
+            50% {
+                transform: translate(30px, -30px);
+            }
+        }
 
-            .hero-stats {
-                justify-content: center;
-                flex-wrap: wrap;
+        /* Effet ripple */
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .auth-container {
+                flex-direction: column;
             }
 
             .auth-card {
-                margin: 0 auto;
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
             }
 
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: var(--space-lg);
+            .app-info {
+                padding: var(--space-xl);
             }
 
-            .footer-links {
-                align-items: center;
+            .app-title {
+                font-size: 2.5rem;
             }
 
-            .social-links {
-                justify-content: center;
+            .app-description {
+                font-size: 1.1rem;
             }
         }
 
         @media (max-width: 768px) {
-            .hero-section {
-                padding: 80px 0 60px;
+            .auth-header,
+            .auth-body {
+                padding: var(--space-lg);
             }
 
-            .hero-title {
-                font-size: 2.5rem;
+            .app-info {
+                padding: var(--space-lg);
             }
 
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .section-header h2 {
+            .app-title {
                 font-size: 2rem;
+            }
+
+            .feature {
+                padding: var(--space-md);
+                gap: var(--space-md);
+            }
+
+            .feature-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
             }
         }
 
         @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-stats {
+            .form-options {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: var(--space-sm);
+            }
+
+            .app-title {
+                font-size: 1.8rem;
+            }
+
+            .app-description {
+                font-size: 1rem;
+            }
+
+            .feature {
+                flex-direction: column;
+                text-align: center;
                 gap: var(--space-md);
             }
 
-            .stat-number {
-                font-size: 2rem;
-            }
-
-            .feature-card {
-                padding: var(--space-lg);
+            .shape-1,
+            .shape-2 {
+                display: none;
             }
         }
     </style>
+
+    <!-- Formes flottantes -->
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </div>
 </body>
 </html>
