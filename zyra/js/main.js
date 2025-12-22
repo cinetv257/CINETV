@@ -1,59 +1,102 @@
 // Point d'entrée principal de l'application
 
-import { initAuth } from './auth.js';
+import { initAuth, isUserLoggedIn, getCurrentUser, waitForAuth } from './auth.js';
 
-// Initialiser l'authentification
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialiser Firebase Auth
-    initAuth();
+// Initialiser l'application
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('Initialisation de l\'application...');
     
-    // Vérifier la page actuelle et initialiser les modules correspondants
-    const currentPage = window.location.pathname.split('/').pop();
+    // Initialiser l'authentification
+    await initAuth((isLoggedIn, user) => {
+        console.log('Callback auth:', isLoggedIn ? 'Connecté' : 'Déconnecté', user?.email);
+        
+        // Vérifier la page actuelle et initialiser les modules correspondants
+        const currentPage = window.location.pathname.split('/').pop();
+        
+        switch (currentPage) {
+            case 'index.html':
+            case '':
+                if (isLoggedIn) {
+                    console.log('Redirection vers dashboard depuis login');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 500);
+                } else {
+                    initLoginPage();
+                }
+                break;
+                
+            case 'register.html':
+                if (isLoggedIn) {
+                    console.log('Redirection vers dashboard depuis register');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 500);
+                } else {
+                    initRegisterPage();
+                }
+                break;
+                
+            case 'dashboard.html':
+                if (!isLoggedIn) {
+                    console.log('Redirection vers index depuis dashboard');
+                    // La redirection se fait déjà dans initAuth
+                } else {
+                    // Attendre un peu que tout soit prêt
+                    setTimeout(() => {
+                        initDashboardPage(user);
+                    }, 100);
+                }
+                break;
+                
+            case 'chat.html':
+                if (!isLoggedIn) {
+                    console.log('Redirection vers index depuis chat');
+                } else {
+                    setTimeout(() => {
+                        initChatPage(user);
+                    }, 100);
+                }
+                break;
+                
+            case 'story.html':
+                if (!isLoggedIn) {
+                    console.log('Redirection vers index depuis story');
+                } else {
+                    setTimeout(() => {
+                        initStoryPage(user);
+                    }, 100);
+                }
+                break;
+                
+            case 'profile.html':
+                if (!isLoggedIn) {
+                    console.log('Redirection vers index depuis profile');
+                } else {
+                    setTimeout(() => {
+                        initProfilePage(user);
+                    }, 100);
+                }
+                break;
+        }
+    });
     
-    switch (currentPage) {
-        case 'index.html':
-        case '':
-            // Initialiser la page de login
-            initLoginPage();
-            break;
-            
-        case 'register.html':
-            // Initialiser la page d'inscription
-            initRegisterPage();
-            break;
-            
-        case 'dashboard.html':
-            // Initialiser le dashboard
-            import('./dashboard.js').then(module => {
-                module.initDashboard();
-            });
-            break;
-            
-        case 'chat.html':
-            // Initialiser le chat
-            import('./chat.js').then(module => {
-                module.initChat();
-            });
-            break;
-            
-        case 'story.html':
-            // Initialiser les stories
-            import('./story.js').then(module => {
-                module.initStories();
-            });
-            break;
-            
-        case 'profile.html':
-            // Initialiser le profil
-            import('./profile.js').then(module => {
-                module.initProfile();
-            });
-            break;
-    }
+    // Vérification supplémentaire après 2 secondes
+    setTimeout(() => {
+        const currentPage = window.location.pathname.split('/').pop();
+        const protectedPages = ['dashboard.html', 'chat.html', 'story.html', 'profile.html'];
+        
+        if (protectedPages.includes(currentPage) && !isUserLoggedIn()) {
+            console.log('Vérification tardive: non connecté, redirection');
+            window.location.href = 'index.html';
+        }
+    }, 2000);
 });
 
 // Initialiser la page de login
 function initLoginPage() {
+    console.log('Initialisation page login');
+    
     const loginForm = document.getElementById('login-form');
     const errorMessage = document.getElementById('error-message');
     
@@ -75,12 +118,20 @@ function initLoginPage() {
                 const result = await loginUser(email, password);
                 
                 if (result.success) {
-                    // Redirection vers le dashboard se fera automatiquement via initAuth
-                    showError(""); // Effacer les erreurs
+                    // Désactiver le bouton pendant la redirection
+                    const submitBtn = loginForm.querySelector('button[type="submit"]');
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+                    
+                    // Redirection vers le dashboard
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
                 } else {
                     showError(result.error);
                 }
             } catch (error) {
+                console.error("Erreur de connexion:", error);
                 showError("Une erreur est survenue lors de la connexion");
             }
         });
@@ -106,6 +157,8 @@ function initLoginPage() {
 
 // Initialiser la page d'inscription
 function initRegisterPage() {
+    console.log('Initialisation page register');
+    
     const registerForm = document.getElementById('register-form');
     const errorMessage = document.getElementById('error-message');
     const profileImageInput = document.getElementById('profile-image');
@@ -153,44 +206,31 @@ function initRegisterPage() {
             }
             
             try {
-                // Upload de l'image vers ImgBB si fournie
-                let profileImageUrl = null;
-                
-                if (profileImageFile) {
-                    const { IMGBB_API_KEY } = await import('./firebase-config.js');
-                    
-                    const formData = new FormData();
-                    formData.append('key', IMGBB_API_KEY);
-                    formData.append('image', profileImageFile);
-                    
-                    const response = await fetch('https://api.imgbb.com/1/upload', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        profileImageUrl = result.data.url;
-                    } else {
-                        showError("Erreur lors de l'upload de l'image de profil");
-                        return;
-                    }
-                }
+                // Désactiver le bouton
+                const submitBtn = registerForm.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inscription...';
                 
                 // Inscription de l'utilisateur
                 const { registerUser } = await import('./auth.js');
-                const result = await registerUser(email, password, name, profileImageUrl);
+                const result = await registerUser(email, password, name, profileImageFile);
                 
                 if (result.success) {
-                    // Redirection vers le dashboard se fera automatiquement via initAuth
-                    showError(""); // Effacer les erreurs
+                    // Redirection vers le dashboard
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
                 } else {
                     showError(result.error);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> S\'inscrire';
                 }
             } catch (error) {
                 console.error("Erreur d'inscription:", error);
                 showError("Une erreur est survenue lors de l'inscription");
+                const submitBtn = registerForm.querySelector('button[type="submit"]');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> S\'inscrire';
             }
         });
     }
@@ -210,6 +250,54 @@ function initRegisterPage() {
             errorMessage.textContent = message;
             errorMessage.style.display = message ? 'block' : 'none';
         }
+    }
+}
+
+// Initialiser la page dashboard
+async function initDashboardPage(user) {
+    console.log('Initialisation page dashboard pour:', user.email);
+    
+    try {
+        const { initDashboard } = await import('./dashboard.js');
+        await initDashboard();
+    } catch (error) {
+        console.error('Erreur d\'initialisation du dashboard:', error);
+    }
+}
+
+// Initialiser la page chat
+async function initChatPage(user) {
+    console.log('Initialisation page chat pour:', user.email);
+    
+    try {
+        const { initChat } = await import('./chat.js');
+        await initChat();
+    } catch (error) {
+        console.error('Erreur d\'initialisation du chat:', error);
+    }
+}
+
+// Initialiser la page story
+async function initStoryPage(user) {
+    console.log('Initialisation page story pour:', user.email);
+    
+    try {
+        const { initStories } = await import('./story.js');
+        await initStories();
+    } catch (error) {
+        console.error('Erreur d\'initialisation des stories:', error);
+    }
+}
+
+// Initialiser la page profile
+async function initProfilePage(user) {
+    console.log('Initialisation page profile pour:', user.email);
+    
+    try {
+        const { initProfile } = await import('./profile.js');
+        await initProfile();
+    } catch (error) {
+        console.error('Erreur d\'initialisation du profil:', error);
     }
 }
 
