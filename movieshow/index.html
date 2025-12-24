@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieShow | Tangira</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+</head>
+<body>
+    <!-- Page Splash avec Animation de Chargement -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="splash-content">
+            <!-- Animation de chargement -->
+            <div class="loader-container">
+                <div class="loader">
+                    <div class="loader-circle"></div>
+                    <div class="loader-circle"></div>
+                    <div class="loader-circle"></div>
+                </div>
+            </div>
+            
+            <!-- Logo MovieShow -->
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                <h1 class="logo-text">MovieShow</h1>
+                <p class="tagline">Ibiro bya filimi n'amashusho</p>
+            </div>
+            
+            <!-- Barre de progression -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <span class="progress-text" id="progressText">0%</span>
+            </div>
+            
+            <!-- Message pendant le chargement -->
+            <div class="loading-message">
+                <p id="loadingMessage">Dukora imitunganyirize y'urubuga...</p>
+            </div>
+        </div>
+        
+        <!-- Avertissement sur les publicités -->
+        <div class="ad-warning">
+            <i class="fas fa-info-circle"></i>
+            <p>Muri gahunda ya buri wese, uzabona amatangazo mukwezi</p>
+        </div>
+    </div>
+    
+    <!-- Page de Sélection Gratuit/Payant (cachée au début) -->
+    <div id="selectionScreen" class="selection-screen hidden">
+        <div class="selection-content">
+            <!-- Logo -->
+            <div class="selection-logo">
+                <div class="logo-icon-large">
+                    <i class="fas fa-film"></i>
+                </div>
+                <h1 class="logo-text-large">MovieShow</h1>
+            </div>
+            
+            <!-- Message de bienvenue -->
+            <div class="welcome-message">
+                <h2>Murakaza neza kuri MovieShow!</h2>
+                <p>Hitamo uburyo ushaka gukoresha urubuga:</p>
+            </div>
+            
+            <!-- Options de sélection -->
+            <div class="selection-options">
+                <!-- Option Gratuite -->
+                <div class="option-card free-option">
+                    <div class="option-header">
+                        <div class="option-icon">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <h3 class="option-title">Gahunda ya Buri wese</h3>
+                        <div class="option-badge">Yabonetse</div>
+                    </div>
+                    
+                    <div class="option-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> <span>Soma amashusho menshi</span></li>
+                            <li><i class="fas fa-check"></i> <span>Soma filimi n'amashusho</span></li>
+                            <li><i class="fas fa-check"></i> <span>Shakisha no guhitamo</span></li>
+                            <li><i class="fas fa-check"></i> <span>Urufunguzo rwose rw'ibirango</span></li>
+                            <li><i class="fas fa-times"></i> <span>Nta gukuramo (Download)</span></li>
+                            <li><i class="fas fa-times"></i> <span>Amatangazo ari kumwe</span></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="option-action">
+                        <button id="freeBtn" class="btn-select free-btn">
+                            <span class="btn-text">Komeza nka Buri wese</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <p class="option-note">
+                            <i class="fas fa-info-circle"></i>
+                            Mugihe ukoresha gahunda ya buri wese, uzabona amatangazo.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Option Payante -->
+                <div class="option-card premium-option">
+                    <div class="option-header">
+                        <div class="option-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3 class="option-title">Gahunda y'Icyizere</h3>
+                        <div class="option-badge premium">Byihuse</div>
+                    </div>
+                    
+                    <div class="option-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> <span>Kureba amashusho adafite amatangazo</span></li>
+                            <li><i class="fas fa-check"></i> <span>Gukuramo filimi n'amashusho</span></li>
+                            <li><i class="fas fa-check"></i> <span>Ibirango byihariye</span></li>
+                            <li><i class="fas fa-check"></i> <span>Kubona mbere y'abandi</span></li>
+                            <li><i class="fas fa-check"></i> <span>Uburyo bwo kureba hatari interineti</span></li>
+                            <li><i class="fas fa-check"></i> <span>Inkunga y'itsinda rya WhatsApp</span></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="option-action">
+                        <button id="premiumBtn" class="btn-select premium-btn">
+                            <span class="btn-text">Hitamo Icyizere</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <p class="option-note">
+                            <i class="fas fa-info-circle"></i>
+                            Ibiyugu bya $4.99 / ukwezi, byanjirwa mu gihe udashaka gukomeza.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Informations additionnelles -->
+            <div class="additional-info">
+                <div class="info-box">
+                    <i class="fas fa-sync-alt"></i>
+                    <p>Ushobora guhindura hagati y'ibi buryo ibihe aribyo aribyo</p>
+                </div>
+                <div class="info-box">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>Amakuru yawe arinzwe neza kandi ntayigerwaho n'undi</p>
+                </div>
+                <div class="info-box">
+                    <i class="fas fa-question-circle"></i>
+                    <p>Ufite ikibazo? <a href="#" id="helpLink">Twandikire</a></p>
+                </div>
+            </div>
+            
+            <!-- Langue et autres options -->
+            <div class="footer-options">
+                <div class="language-selector">
+                    <i class="fas fa-globe"></i>
+                    <select id="languageSelect">
+                        <option value="rw" selected>Kinyarwanda</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="https://wa.me/25776389163" target="_blank" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                    <a href="mailto:movieshow@gmail.com" class="social-link"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-content">
+            <i class="fas fa-info-circle"></i>
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="allconfig.js"></script>
+    <script>
+        // Script spécifique à index.html
+        document.addEventListener('DOMContentLoaded', function() {
+            // Éléments DOM
+            const splashScreen = document.getElementById('splashScreen');
+            const selectionScreen = document.getElementById('selectionScreen');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const loadingMessage = document.getElementById('loadingMessage');
+            const freeBtn = document.getElementById('freeBtn');
+            const premiumBtn = document.getElementById('premiumBtn');
+            const languageSelect = document.getElementById('languageSelect');
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            // Messages de chargement
+            const loadingMessages = [
+                "Dukora imitunganyirize y'urubuga...",
+                "Twarangiye gufata amashusho...",
+                "Dukusanya filimi n'amashusho...",
+                "Twarangiye gukora ibikorwa bya mbere...",
+                "Urubuga rwiteguye!",
+                "Urakuze! Twiteguye..."
+            ];
+            
+            // Simulation du chargement
+            let progress = 0;
+            let messageIndex = 0;
+            
+            function updateProgress() {
+                if (progress < 100) {
+                    progress += Math.random() * 15;
+                    if (progress > 100) progress = 100;
+                    
+                    // Mettre à jour la barre de progression
+                    progressBar.style.width = progress + '%';
+                    progressText.textContent = Math.floor(progress) + '%';
+                    
+                    // Changer le message de chargement
+                    if (progress > (messageIndex + 1) * 15 && messageIndex < loadingMessages.length - 1) {
+                        messageIndex++;
+                        loadingMessage.textContent = loadingMessages[messageIndex];
+                    }
+                    
+                    // Continuer la progression
+                    setTimeout(updateProgress, 200);
+                } else {
+                    // Chargement terminé, afficher l'écran de sélection
+                    setTimeout(function() {
+                        splashScreen.classList.add('hidden');
+                        selectionScreen.classList.remove('hidden');
+                        showToast('Murakaza neza! Hitamo uburyo ushaka gukoresha MovieShow.');
+                    }, 500);
+                }
+            }
+            
+            // Démarrer le chargement
+            setTimeout(updateProgress, 800);
+            
+            // Gestionnaire pour le bouton Gratuit
+            freeBtn.addEventListener('click', function() {
+                showToast('Ugihanze gahunda ya Buri wese. Dukuyobora muri page nyobozi...');
+                
+                // Enregistrer le choix dans localStorage
+                localStorage.setItem('movieShowPlan', 'free');
+                localStorage.setItem('movieShowLanguage', languageSelect.value);
+                
+                // Ouvrir la page d'accueil gratuit après un délai
+                setTimeout(function() {
+                    // Ouvrir la publicité dans un nouvel onglet
+                    window.open('https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881', '_blank');
+                    
+                    // Rediriger vers la page d'accueil
+                    window.location.href = 'home-free.html';
+                }, 1500);
+            });
+            
+            // Gestionnaire pour le bouton Payant
+            premiumBtn.addEventListener('click', function() {
+                showToast('Ugihanze gahunda y\'Icyizere. Turi kugura serivisi...');
+                
+                // Enregistrer le choix
+                localStorage.setItem('movieShowPlan', 'premium');
+                localStorage.setItem('movieShowLanguage', languageSelect.value);
+                
+                // Ici, normalement on redirigerait vers une page de paiement
+                // Pour le moment, on montre un message
+                setTimeout(function() {
+                    showToast('Serivisi y\'Icyizere izaza vuba! Turi mu mihingo yo gutanga aya mahirwe. Kuva ubu, korera nk\'Uwaka.');
+                    
+                    // Après 3 secondes, rediriger vers la version gratuite
+                    setTimeout(function() {
+                        localStorage.setItem('movieShowPlan', 'free');
+                        window.open('https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881', '_blank');
+                        window.location.href = 'home-free.html';
+                    }, 3000);
+                }, 1000);
+            });
+            
+            // Gestionnaire pour le changement de langue
+            languageSelect.addEventListener('change', function() {
+                const lang = this.value;
+                if (lang === 'en') {
+                    // Changer vers l'anglais
+                    document.querySelector('.tagline').textContent = 'Your movie and show hub';
+                    document.querySelector('.welcome-message h2').textContent = 'Welcome to MovieShow!';
+                    document.querySelector('.welcome-message p').textContent = 'Choose how you want to use the platform:';
+                    document.querySelector('.free-option .option-title').textContent = 'Free Plan';
+                    document.querySelector('.premium-option .option-title').textContent = 'Premium Plan';
+                    document.querySelector('.free-option .btn-text').textContent = 'Continue as Free User';
+                    document.querySelector('.premium-option .btn-text').textContent = 'Choose Premium';
+                    document.querySelector('.free-option .option-note').innerHTML = '<i class="fas fa-info-circle"></i> When using the free plan, you will see advertisements.';
+                    document.querySelector('.premium-option .option-note').innerHTML = '<i class="fas fa-info-circle"></i> Only $4.99 / month, cancel anytime.';
+                    
+                    // Mettre à jour les fonctionnalités
+                    const freeFeatures = document.querySelectorAll('.free-option .option-features li span');
+                    freeFeatures[0].textContent = 'Watch many shows';
+                    freeFeatures[1].textContent = 'Watch movies and series';
+                    freeFeatures[2].textContent = 'Search and select';
+                    freeFeatures[3].textContent = 'All categories unlocked';
+                    freeFeatures[4].textContent = 'No downloads';
+                    freeFeatures[5].textContent = 'With advertisements';
+                    
+                    const premiumFeatures = document.querySelectorAll('.premium-option .option-features li span');
+                    premiumFeatures[0].textContent = 'Watch shows without ads';
+                    premiumFeatures[1].textContent = 'Download movies and series';
+                    premiumFeatures[2].textContent = 'Exclusive content';
+                    premiumFeatures[3].textContent = 'Early access';
+                    premiumFeatures[4].textContent = 'Offline viewing mode';
+                    premiumFeatures[5].textContent = 'WhatsApp group support';
+                    
+                    // Mettre à jour les informations additionnelles
+                    const infoBoxes = document.querySelectorAll('.info-box p');
+                    infoBoxes[0].textContent = 'You can switch between these modes anytime';
+                    infoBoxes[1].textContent = 'Your data is securely stored and not shared';
+                    infoBoxes[2].innerHTML = 'Have a question? <a href="#" id="helpLink">Contact us</a>';
+                    
+                    // Mettre à jour les badges
+                    document.querySelector('.free-option .option-badge').textContent = 'Available';
+                    document.querySelector('.premium-option .option-badge').textContent = 'Soon';
+                    
+                    // Mettre à jour l'avertissement publicitaire
+                    document.querySelector('.ad-warning p').textContent = 'In the free plan, you will see advertisements monthly';
+                } else {
+                    // Changer vers le Kinyarwanda
+                    location.reload(); // Recharger pour revenir au Kinyarwanda par défaut
+                }
+            });
+            
+            // Fonction pour afficher les notifications toast
+            function showToast(message) {
+                toastMessage.textContent = message;
+                toast.classList.remove('hidden');
+                toast.classList.add('show');
+                
+                setTimeout(function() {
+                    toast.classList.remove('show');
+                    setTimeout(function() {
+                        toast.classList.add('hidden');
+                    }, 300);
+                }, 3000);
+            }
+            
+            // Gestionnaire pour le lien d'aide
+            document.getElementById('helpLink')?.addEventListener('click', function(e) {
+                e.preventDefault();
+                showToast('Twandikire kuri movieshow@gmail.com cyangwa uhage ku  +257 76 389 163');
+            });
+            
+            // Vérifier s'il y a déjà un choix enregistré
+            const savedPlan = localStorage.getItem('movieShowPlan');
+            const savedLang = localStorage.getItem('movieShowLanguage');
+            
+            if (savedLang === 'en') {
+                languageSelect.value = 'en';
+                languageSelect.dispatchEvent(new Event('change'));
+            }
+            
+            if (savedPlan) {
+                // Si l'utilisateur a déjà fait un choix, on pourrait le rediriger directement
+                // Mais pour ce projet, on laisse le choix à chaque fois
+                console.log('Plan déjà choisi:', savedPlan);
+            }
+        });
+    </script>
+</body>
+</html>
