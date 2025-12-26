@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieShow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(rgba(10, 25, 41, 0.9), rgba(13, 27, 42, 0.95)), url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: white;
+        }
+        
+        /* Top Navigation */
+        .top-nav {
+            width: 100%;
+            background-color: rgba(10, 25, 41, 0.95);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(32, 201, 151, 0.2);
+        }
+        
+        .logo-img {
+            height: 35px;
+            width: auto;
+            filter: drop-shadow(0 0 5px rgba(32, 201, 151, 0.5));
+        }
+        
+        /* Main Navigation Bar - FIXED */
+        .main-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(10, 25, 41, 0.98);
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            border-top: 1px solid rgba(32, 201, 151, 0.2);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #a0aec0;
+            text-decoration: none;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 18%;
+            min-width: 60px;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            color: #20c997;
+            background-color: rgba(32, 201, 151, 0.1);
+        }
+        
+        .nav-icon {
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+        
+        .nav-text {
+            font-size: 0.65rem;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        /* Menu Hamburger */
+        .menu-content {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            right: 5px;
+            background-color: rgba(26, 32, 44, 0.98);
+            min-width: 180px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(32, 201, 151, 0.3);
+            z-index: 1001;
+        }
+        
+        .menu-content.show {
+            display: block;
+            animation: slideUp 0.2s ease-out;
+        }
+        
+        .menu-item {
+            padding: 10px 15px;
+            color: #cbd5e0;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+        }
+        
+        .menu-item:hover {
+            background-color: rgba(32, 201, 151, 0.1);
+            color: #20c997;
+        }
+        
+        .menu-item i {
+            margin-right: 8px;
+            width: 16px;
+            font-size: 0.9rem;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 15px;
+            padding-bottom: 75px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin: 20px 0 12px 0;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            color: #20c997;
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+        
+        /* Featured Movies */
+        .featured-container {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 10px 5px;
+            margin-bottom: 25px;
+        }
+        
+        .featured-container::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .featured-container::-webkit-scrollbar-track {
+            background: #2d3748;
+        }
+        
+        .featured-container::-webkit-scrollbar-thumb {
+            background: #20c997;
+        }
+        
+        .featured-movie {
+            flex: 0 0 180px;
+            background: rgba(26, 32, 44, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .featured-poster {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            background-color: #1a202c;
+        }
+        
+        .featured-info {
+            padding: 10px;
+        }
+        
+        .featured-title {
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Movies Grid - 3 Colonnes */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .movie-card {
+            background: rgba(26, 32, 44, 0.8);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .movie-poster {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            background-color: #1a202c;
+        }
+        
+        .movie-info {
+            padding: 8px;
+        }
+        
+        .movie-title {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .movie-meta {
+            font-size: 0.7rem;
+            color: #a0aec0;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .badge-container {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 5px;
+        }
+        
+        .badge {
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .badge.new {
+            background-color: #20c997;
+            color: #0a1929;
+        }
+        
+        .badge.french {
+            background-color: #3182ce;
+            color: white;
+        }
+        
+        .badge.english {
+            background-color: #e53e3e;
+            color: white;
+        }
+        
+        /* Categories */
+        .categories-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 10px 5px;
+            margin-bottom: 20px;
+        }
+        
+        .category-item {
+            flex: 0 0 auto;
+            padding: 6px 12px;
+            background-color: rgba(32, 201, 151, 0.1);
+            border: 1px solid rgba(32, 201, 151, 0.3);
+            border-radius: 20px;
+            color: #20c997;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-item:hover {
+            background-color: rgba(32, 201, 151, 0.2);
+        }
+        
+        /* Plan Indicator */
+        .plan-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(32, 201, 151, 0.15);
+            color: #20c997;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            z-index: 1001;
+            border: 1px solid rgba(32, 201, 151, 0.3);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .plan-indicator i {
+            margin-right: 5px;
+            font-size: 0.8rem;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 30px 15px;
+            color: #a0aec0;
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state i {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: white;
+        }
+        
+        .empty-state p {
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .refresh-btn {
+            background: rgba(32, 201, 151, 0.2);
+            color: #20c997;
+            border: 1px solid rgba(32, 201, 151, 0.3);
+            padding: 6px 15px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .refresh-btn:hover {
+            background-color: rgba(32, 201, 151, 0.3);
+        }
+        
+        /* Loading */
+        .loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            text-align: center;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(32, 201, 151, 0.3);
+            border-top: 3px solid #20c997;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px auto;
+        }
+        
+        /* Animations */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .movies-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            
+            .movie-poster {
+                height: 120px;
+            }
+            
+            .featured-movie {
+                flex: 0 0 150px;
+            }
+            
+            .featured-poster {
+                height: 100px;
+            }
+            
+            .nav-text {
+                font-size: 0.6rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .movies-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+            }
+            
+            .movie-poster {
+                height: 100px;
+            }
+            
+            .movie-title {
+                font-size: 0.75rem;
+            }
+            
+            .featured-movie {
+                flex: 0 0 130px;
+            }
+            
+            .main-content {
+                padding: 12px;
+                padding-bottom: 70px;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+                margin: 15px 0 10px 0;
+            }
+            
+            .category-item {
+                font-size: 0.7rem;
+                padding: 5px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <img src="logo.png" alt="MovieShow" class="logo-img">
+    </nav>
+    
+    <!-- Plan Indicator -->
+    <div class="plan-indicator" id="planIndicator" onclick="changePlan()">
+        <i class="fas fa-user"></i>
+        <span id="planText">Free</span>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Categories -->
+        <div class="categories-container">
+            <div class="category-item" onclick="filterByCategory('action')">Action</div>
+            <div class="category-item" onclick="filterByCategory('horror')">Horror</div>
+            <div class="category-item" onclick="filterByCategory('comedy')">Comedy</div>
+            <div class="category-item" onclick="filterByCategory('drama')">Drama</div>
+            <div class="category-item" onclick="filterByCategory('sci-fi')">Sci-Fi</div>
+            <div class="category-item" onclick="filterByCategory('romance')">Romance</div>
+        </div>
+        
+        <!-- Featured Movies -->
+        <h2 class="section-title">
+            <i class="fas fa-star"></i> Featured
+        </h2>
+        <div class="featured-container" id="featuredMovies">
+            <div class="empty-state" style="min-width: 180px;">
+                <i class="fas fa-film"></i>
+                <h3>No Movies</h3>
+                <p>Add content to Firebase</p>
+            </div>
+        </div>
+        
+        <!-- All Movies -->
+        <h2 class="section-title">
+            <i class="fas fa-film"></i> Movies
+        </h2>
+        <div class="movies-grid" id="moviesGrid">
+            <div class="empty-state">
+                <i class="fas fa-video"></i>
+                <h3>No Movies</h3>
+                <p>Content will appear here</p>
+                <button class="refresh-btn" onclick="loadMovies()">Refresh</button>
+            </div>
+        </div>
+        
+        <!-- TV Shows -->
+        <h2 class="section-title">
+            <i class="fas fa-tv"></i> TV Shows
+        </h2>
+        <div class="movies-grid" id="tvShowsGrid">
+            <div class="empty-state">
+                <i class="fas fa-tv"></i>
+                <h3>No TV Shows</h3>
+                <p>Content will appear here</p>
+                <button class="refresh-btn" onclick="loadTVShows()">Refresh</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Navigation - FIXED -->
+    <nav class="main-nav">
+        <a href="home.html" class="nav-item active">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-text">Home</span>
+        </a>
+        
+        <a href="movies.html" class="nav-item">
+            <i class="fas fa-film nav-icon"></i>
+            <span class="nav-text">Movies</span>
+        </a>
+        
+        <a href="tvshows.html" class="nav-item">
+            <i class="fas fa-tv nav-icon"></i>
+            <span class="nav-text">TV Shows</span>
+        </a>
+        
+        <div class="nav-item" id="searchBtn" onclick="focusSearch()">
+            <i class="fas fa-search nav-icon"></i>
+            <span class="nav-text">Search</span>
+        </div>
+        
+        <div class="nav-item hamburger-menu" id="hamburgerMenu">
+            <i class="fas fa-bars nav-icon"></i>
+            <span class="nav-text">Menu</span>
+            
+            <!-- Menu Content -->
+            <div class="menu-content" id="menuContent">
+                <div class="menu-item" onclick="navigateTo('movies.html?category=action')">
+                    <i class="fas fa-bolt"></i> Action
+                </div>
+                <div class="menu-item" onclick="navigateTo('movies.html?category=horror')">
+                    <i class="fas fa-ghost"></i> Horror
+                </div>
+                <div class="menu-item" onclick="navigateToCategory('comedy')">
+                    <i class="fas fa-laugh"></i> Comedy
+                </div>
+                <div class="menu-item" onclick="navigateToCategory('drama')">
+                    <i class="fas fa-theater-masks"></i> Drama
+                </div>
+                <div class="menu-item" onclick="showPrivacy()">
+                    <i class="fas fa-shield-alt"></i> Privacy
+                </div>
+                <div class="menu-item" onclick="showHelp()">
+                    <i class="fas fa-question-circle"></i> Help
+                </div>
+                <div class="menu-item" onclick="changeLanguage()">
+                    <i class="fas fa-globe"></i> Language
+                </div>
+                <div class="menu-item" onclick="upgradeToPremium()">
+                    <i class="fas fa-crown"></i> Upgrade
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+        <p style="font-size: 0.9rem;">Loading...</p>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaSYX1axaZrfQG2GB68LpqDYfYiVZamwE",
+            authDomain: "movieshow-80226.firebaseapp.com",
+            projectId: "movieshow-80226",
+            storageBucket: "movieshow-80226.firebasestorage.app",
+            messagingSenderId: "461492912130",
+            appId: "1:461492912130:web:e715d40156e57916a1a71b",
+            measurementId: "G-SGQZD7TYR0"
+        };
+        
+        // Global Variables
+        let moviesData = [];
+        let tvShowsData = [];
+        let currentPlan = 'free';
+        let adTimer = null;
+        
+        // Initialize App
+        async function initializeApp() {
+            showLoading(true);
+            
+            // Check user plan
+            currentPlan = localStorage.getItem('movieshow_plan') || 'free';
+            updatePlanIndicator();
+            
+            // Initialize Firebase
+            await initializeFirebase();
+            
+            // Load data
+            await loadMoviesFromFirebase();
+            await loadTVShowsFromFirebase();
+            
+            // Render data
+            renderFeaturedMovies();
+            renderMoviesGrid();
+            renderTVShowsGrid();
+            
+            // Start ad timer for free users
+            startAdTimer();
+            
+            // Initialize event listeners
+            initializeEventListeners();
+            
+            showLoading(false);
+            
+            // Show ad after 10 seconds for free users
+            if (currentPlan === 'free') {
+                setTimeout(openAd, 10000);
+            }
+        }
+        
+        // Initialize Firebase
+        async function initializeFirebase() {
+            console.log("Firebase initialized");
+            // TODO: Actual Firebase initialization
+            return true;
+        }
+        
+        // Load movies from Firebase
+        async function loadMoviesFromFirebase() {
+            try {
+                // TODO: Replace with actual Firebase call
+                moviesData = [];
+                console.log("Loaded movies: 0");
+            } catch (error) {
+                console.error("Error loading movies:", error);
+                moviesData = [];
+            }
+            return moviesData;
+        }
+        
+        // Load TV shows from Firebase
+        async function loadTVShowsFromFirebase() {
+            try {
+                // TODO: Replace with actual Firebase call
+                tvShowsData = [];
+                console.log("Loaded TV shows: 0");
+            } catch (error) {
+                console.error("Error loading TV shows:", error);
+                tvShowsData = [];
+            }
+            return tvShowsData;
+        }
+        
+        // Refresh functions
+        async function loadMovies() {
+            showLoading(true);
+            await loadMoviesFromFirebase();
+            renderMoviesGrid();
+            showLoading(false);
+        }
+        
+        async function loadTVShows() {
+            showLoading(true);
+            await loadTVShowsFromFirebase();
+            renderTVShowsGrid();
+            showLoading(false);
+        }
+        
+        // Render featured movies
+        function renderFeaturedMovies() {
+            const container = document.getElementById('featuredMovies');
+            
+            if (moviesData.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="min-width: 180px;">
+                        <i class="fas fa-film"></i>
+                        <h3>No Movies</h3>
+                        <p>Add content to Firebase</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const featuredMovies = moviesData.slice(0, 5);
+            container.innerHTML = featuredMovies.map(movie => `
+                <div class="featured-movie" onclick="openMovie('${movie.id}')">
+                    <img src="${movie.coverUrl || 'https://via.placeholder.com/180x120/1a202c/20c997?text=Movie'}" 
+                         alt="${movie.title}" 
+                         class="featured-poster">
+                    <div class="featured-info">
+                        <h3 class="featured-title">${movie.title}</h3>
+                        <div class="badge-container">
+                            <span class="badge ${movie.badge || 'new'}">${(movie.badge || 'new').toUpperCase()}</span>
+                        </div>
+                        <div style="color: #a0aec0; font-size: 0.7rem;">${movie.genre || 'Action'}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Render movies grid (ALWAYS 3 COLUMNS)
+        function renderMoviesGrid() {
+            const container = document.getElementById('moviesGrid');
+            
+            if (moviesData.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-video"></i>
+                        <h3>No Movies</h3>
+                        <p>Content will appear here</p>
+                        <button class="refresh-btn" onclick="loadMovies()">Refresh</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = moviesData.map(movie => `
+                <div class="movie-card" onclick="openMovie('${movie.id}')">
+                    <img src="${movie.coverUrl || 'https://via.placeholder.com/200x140/1a202c/20c997?text=Movie'}" 
+                         alt="${movie.title}" 
+                         class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <div class="movie-meta">
+                            <span>${movie.genre || 'Action'}</span>
+                            <span>${movie.date || '2023'}</span>
+                        </div>
+                        <div class="badge-container">
+                            <span class="badge ${movie.badge || 'new'}">${(movie.badge || 'new').toUpperCase()}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Render TV shows grid (ALWAYS 3 COLUMNS)
+        function renderTVShowsGrid() {
+            const container = document.getElementById('tvShowsGrid');
+            
+            if (tvShowsData.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-tv"></i>
+                        <h3>No TV Shows</h3>
+                        <p>Content will appear here</p>
+                        <button class="refresh-btn" onclick="loadTVShows()">Refresh</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = tvShowsData.map(show => `
+                <div class="movie-card" onclick="openTVShow('${show.id}')">
+                    <img src="${show.coverUrl || 'https://via.placeholder.com/200x140/1a202c/20c997?text=TV+Show'}" 
+                         alt="${show.title}" 
+                         class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">${show.title}</h3>
+                        <div class="movie-meta">
+                            <span>${show.genre || 'Drama'}</span>
+                            <span>${show.date || '2023'}</span>
+                        </div>
+                        <div class="badge-container">
+                            <span class="badge ${show.badge || 'english'}">${(show.badge || 'english').toUpperCase()}</span>
+                            <span class="badge" style="background-color: #805ad5;">TV</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Update plan indicator
+        function updatePlanIndicator() {
+            const planText = document.getElementById('planText');
+            if (currentPlan === 'premium') {
+                planText.textContent = 'Premium';
+                planText.style.color = '#ffd700';
+            } else {
+                planText.textContent = 'Free';
+                planText.style.color = '#20c997';
+            }
+        }
+        
+        // Open ad
+        function openAd() {
+            if (currentPlan === 'free') {
+                window.open('https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881', '_blank');
+            }
+        }
+        
+        // Start ad timer
+        function startAdTimer() {
+            if (currentPlan === 'free') {
+                if (adTimer) clearInterval(adTimer);
+                adTimer = setInterval(openAd, 120000); // 2 minutes
+            }
+        }
+        
+        // Open movie
+        function openMovie(movieId) {
+            showLoading(true);
+            if (currentPlan === 'free') openAd();
+            setTimeout(() => {
+                window.location.href = `watch.html?type=movie&id=${movieId}`;
+            }, 300);
+        }
+        
+        // Open TV show
+        function openTVShow(showId) {
+            showLoading(true);
+            if (currentPlan === 'free') openAd();
+            setTimeout(() => {
+                window.location.href = `watch.html?type=tvshow&id=${showId}`;
+            }, 300);
+        }
+        
+        // Change plan
+        function changePlan() {
+            if (currentPlan === 'free') {
+                showLoading(true);
+                setTimeout(() => {
+                    window.location.href = "upgrade.html";
+                }, 300);
+            } else {
+                if (confirm("Switch to Free Plan?\n\nYou will see ads.")) {
+                    currentPlan = 'free';
+                    localStorage.setItem('movieshow_plan', 'free');
+                    updatePlanIndicator();
+                    startAdTimer();
+                    openAd();
+                }
+            }
+        }
+        
+        // Upgrade to premium
+        function upgradeToPremium() {
+            showLoading(true);
+            setTimeout(() => {
+                window.location.href = "upgrade.html";
+            }, 300);
+        }
+        
+        // Filter by category
+        function filterByCategory(category) {
+            showLoading(true);
+            if (currentPlan === 'free') openAd();
+            setTimeout(() => {
+                window.location.href = `movies.html?category=${category}`;
+            }, 300);
+        }
+        
+        // Navigate to page
+        function navigateTo(url) {
+            showLoading(true);
+            if (currentPlan === 'free') openAd();
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+        
+        // Navigate to category
+        function navigateToCategory(category) {
+            navigateTo(`movies.html?category=${category}`);
+        }
+        
+        // Show privacy
+        function showPrivacy() {
+            alert("Privacy Policy - We respect your privacy.");
+            const menuContent = document.getElementById('menuContent');
+            menuContent.classList.remove('show');
+        }
+        
+        // Show help
+        function showHelp() {
+            alert("Help & Support\n\nContact: movieshow@gmail.com\nWhatsApp: +25776389163");
+            const menuContent = document.getElementById('menuContent');
+            menuContent.classList.remove('show');
+        }
+        
+        // Change language
+        function changeLanguage() {
+            alert("Language options:\nEnglish (current)\nKirundi/Kinyarwanda (coming soon)");
+            const menuContent = document.getElementById('menuContent');
+            menuContent.classList.remove('show');
+        }
+        
+        // Focus search
+        function focusSearch() {
+            alert("Search feature coming soon");
+        }
+        
+        // Show/hide loading
+        function showLoading(show) {
+            const spinner = document.getElementById('loadingSpinner');
+            spinner.style.display = show ? 'block' : 'none';
+        }
+        
+        // Initialize event listeners
+        function initializeEventListeners() {
+            // Hamburger menu
+            const hamburgerMenu = document.getElementById('hamburgerMenu');
+            const menuContent = document.getElementById('menuContent');
+            
+            hamburgerMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuContent.classList.toggle('show');
+            });
+            
+            // Close menu when clicking elsewhere
+            document.addEventListener('click', function() {
+                menuContent.classList.remove('show');
+            });
+            
+            // Prevent menu close when clicking inside
+            menuContent.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Navigation active state
+            const navItems = document.querySelectorAll('.nav-item[href]');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeApp);
+        
+        // Google Analytics
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SGQZD7TYR0');
+    </script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SGQZD7TYR0"></script>
+</body>
+</html>
