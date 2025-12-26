@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieShow - Choose Plan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(rgba(10, 25, 41, 0.85), rgba(13, 27, 42, 0.9)), url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            backdrop-filter: blur(10px);
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Barre de navigation supérieure */
+        .top-nav {
+            width: 100%;
+            background-color: rgba(10, 25, 41, 0.95);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-img {
+            height: 45px;
+            width: auto;
+            filter: drop-shadow(0 0 5px rgba(32, 201, 151, 0.7));
+        }
+        
+        /* Contenu principal */
+        .selection-container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #20c997;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(32, 201, 151, 0.3);
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #a0aec0;
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 600px;
+        }
+        
+        /* Conteneur des plans */
+        .plans-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            width: 100%;
+            margin-bottom: 50px;
+        }
+        
+        /* Carte de plan */
+        .plan-card {
+            background: rgba(26, 32, 44, 0.85);
+            border-radius: 15px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .plan-card.free {
+            border-color: #20c997;
+        }
+        
+        .plan-card.premium {
+            border-color: #ffd700;
+        }
+        
+        .plan-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .free-badge {
+            background-color: #20c997;
+            color: #0a1929;
+        }
+        
+        .premium-badge {
+            background-color: #ffd700;
+            color: #0a1929;
+        }
+        
+        .plan-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .free-icon {
+            color: #20c997;
+        }
+        
+        .premium-icon {
+            color: #ffd700;
+        }
+        
+        .plan-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .plan-price {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #20c997;
+        }
+        
+        .premium-price {
+            color: #ffd700;
+        }
+        
+        .plan-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .plan-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .plan-features li i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .feature-included {
+            color: #20c997;
+        }
+        
+        .feature-excluded {
+            color: #e53e3e;
+        }
+        
+        .feature-limited {
+            color: #d69e2e;
+        }
+        
+        .select-button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .select-free {
+            background: linear-gradient(135deg, #20c997, #38b2ac);
+            color: white;
+        }
+        
+        .select-free:hover {
+            background: linear-gradient(135deg, #1cb489, #319795);
+            transform: scale(1.02);
+        }
+        
+        .select-premium {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #0a1929;
+        }
+        
+        .select-premium:hover {
+            background: linear-gradient(135deg, #e6c300, #ffea00);
+            transform: scale(1.02);
+        }
+        
+        /* Section information publicités */
+        .ad-info {
+            background: rgba(32, 201, 151, 0.1);
+            border: 1px solid rgba(32, 201, 151, 0.3);
+            border-radius: 10px;
+            padding: 25px;
+            max-width: 800px;
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .ad-info h3 {
+            color: #20c997;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .ad-info h3 i {
+            margin-right: 10px;
+        }
+        
+        .ad-info p {
+            color: #cbd5e0;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        /* Footer */
+        .footer {
+            width: 100%;
+            background-color: rgba(10, 25, 41, 0.95);
+            padding: 30px;
+            text-align: center;
+            margin-top: auto;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            color: #20c997;
+        }
+        
+        .contact-item i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .copyright {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .plans-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .plan-card {
+                max-width: 100%;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .top-nav {
+                padding: 12px 20px;
+            }
+            
+            .logo-img {
+                height: 35px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .selection-container {
+                padding: 20px 15px;
+            }
+            
+            .plan-card {
+                padding: 30px 20px;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        
+        /* Animation pour l'apparition */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .plan-card {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .plan-card.free {
+            animation-delay: 0.2s;
+        }
+        
+        .plan-card.premium {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barre de navigation supérieure -->
+    <nav class="top-nav">
+        <div class="logo-container">
+            <img src="logo.png" alt="MovieShow" class="logo-img">
+        </div>
+    </nav>
+    
+    <!-- Contenu principal -->
+    <div class="selection-container">
+        <h1 class="page-title">Choose Your Plan</h1>
+        <p class="page-subtitle">Select the plan that best fits your viewing preferences and enjoy unlimited entertainment</p>
+        
+        <div class="plans-container">
+            <!-- Plan Gratuit -->
+            <div class="plan-card free">
+                <div class="plan-badge free-badge">Free</div>
+                <i class="fas fa-ticket-alt plan-icon free-icon"></i>
+                <h2 class="plan-title">Free Plan</h2>
+                <div class="plan-price">$0.00/month</div>
+                
+                <ul class="plan-features">
+                    <li><i class="fas fa-check feature-included"></i> Access to movies & TV shows</li>
+                    <li><i class="fas fa-check feature-included"></i> Basic video quality (720p)</li>
+                    <li><i class="fas fa-check feature-included"></i> Limited content library</li>
+                    <li><i class="fas fa-ad feature-limited"></i> Ad-supported experience</li>
+                    <li><i class="fas fa-times feature-excluded"></i> No download option</li>
+                    <li><i class="fas fa-times feature-excluded"></i> No priority streaming</li>
+                </ul>
+                
+                <button class="select-button select-free" onclick="selectPlan('free')">
+                    Select Free Plan
+                </button>
+            </div>
+            
+            <!-- Plan Premium -->
+            <div class="plan-card premium">
+                <div class="plan-badge premium-badge">Premium</div>
+                <i class="fas fa-crown plan-icon premium-icon"></i>
+                <h2 class="plan-title">Premium Plan</h2>
+                <div class="plan-price premium-price">$9.99/month</div>
+                
+                <ul class="plan-features">
+                    <li><i class="fas fa-check feature-included"></i> Full access to all content</li>
+                    <li><i class="fas fa-check feature-included"></i> HD & 4K video quality</li>
+                    <li><i class="fas fa-check feature-included"></i> Unlimited streaming</li>
+                    <li><i class="fas fa-check feature-included"></i> No advertisements</li>
+                    <li><i class="fas fa-check feature-included"></i> Download for offline viewing</li>
+                    <li><i class="fas fa-check feature-included"></i> Priority streaming</li>
+                </ul>
+                
+                <button class="select-button select-premium" onclick="selectPlan('premium')">
+                    Select Premium Plan
+                </button>
+            </div>
+        </div>
+        
+        <!-- Information sur les publicités -->
+        <div class="ad-info">
+            <h3><i class="fas fa-info-circle"></i> About Advertisements</h3>
+            <p>Free plan users will experience advertisements while using the service. These ads help us keep MovieShow free for millions of users worldwide.</p>
+            <p>Advertisements may appear as pop-up windows in new tabs and will not interrupt your viewing experience. You can switch to the Premium plan anytime to enjoy an ad-free experience.</p>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="contact-info">
+            <a href="https://wa.me/25776389163" class="contact-item" target="_blank">
+                <i class="fab fa-whatsapp"></i> WhatsApp Chat
+            </a>
+            <a href="https://facebook.com" class="contact-item" target="_blank">
+                <i class="fab fa-facebook"></i> Facebook Page
+            </a>
+            <a href="mailto:movieshow@gmail.com" class="contact-item">
+                <i class="fas fa-envelope"></i> movieshow@gmail.com
+            </a>
+        </div>
+        <p class="copyright">© 2024 MovieShow. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaSYX1axaZrfQG2GB68LpqDYfYiVZamwE",
+            authDomain: "movieshow-80226.firebaseapp.com",
+            projectId: "movieshow-80226",
+            storageBucket: "movieshow-80226.firebasestorage.app",
+            messagingSenderId: "461492912130",
+            appId: "1:461492912130:web:e715d40156e57916a1a71b",
+            measurementId: "G-SGQZD7TYR0"
+        };
+        
+        // Initialiser Firebase (simulé)
+        function initializeFirebase() {
+            console.log("Firebase initialized in selection page");
+            // Dans une vraie implémentation, on initialiserait Firebase
+        }
+        
+        // Gestionnaire de sélection de plan
+        function selectPlan(planType) {
+            // Ouvrir un onglet publicitaire pour les utilisateurs gratuits
+            if (planType === 'free') {
+                window.open('https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881', '_blank');
+            }
+            
+            // Sauvegarder le choix dans le localStorage
+            localStorage.setItem('movieshow_plan', planType);
+            localStorage.setItem('movieshow_plan_selected', 'true');
+            
+            // Afficher un message de confirmation
+            let message = planType === 'free' 
+                ? "Free plan selected! You will see occasional advertisements." 
+                : "Premium plan selected! Redirecting to payment...";
+            
+            alert(message);
+            
+            // Simuler un délai pour la redirection
+            setTimeout(() => {
+                // Rediriger vers la page d'accueil
+                window.location.href = "home.html";
+            }, planType === 'free' ? 1000 : 2000);
+        }
+        
+        // Vérifier si un plan a déjà été sélectionné
+        function checkExistingPlan() {
+            const planSelected = localStorage.getItem('movieshow_plan_selected');
+            if (planSelected === 'true') {
+                // Si un plan est déjà sélectionné, rediriger vers la page d'accueil
+                window.location.href = "home.html";
+            }
+        }
+        
+        // Initialiser les événements de clic
+        function initializeEventListeners() {
+            // Ajouter des effets visuels sur les boutons
+            const buttons = document.querySelectorAll('.select-button');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        }
+        
+        // Initialiser au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFirebase();
+            checkExistingPlan();
+            initializeEventListeners();
+            
+            // Animation des cartes
+            const cards = document.querySelectorAll('.plan-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${0.2 + (index * 0.2)}s`;
+            });
+        });
+        
+        // Initialiser Google Analytics
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SGQZD7TYR0');
+    </script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SGQZD7TYR0"></script>
+</body>
+</html>
