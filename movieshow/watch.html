@@ -27,12 +27,15 @@
             --panel: #111111;
             --panel-2: #222222;
             --text: #ffffff;
-            --muted: #aaaaaa;
-            --brand: #ff3333;
-            --brand-light: #ff6666;
-            --brand-dark: #cc0000;
-            --action: #ff3333;
-            --gradient: linear-gradient(135deg, #ff3333 0%, #cc0000 100%);
+            --text-secondary: #f0f0f0;
+            --muted: #cccccc;
+            --brand: #03C771;
+            --brand-light: #34d187;
+            --brand-dark: #02a55c;
+            --action: #03C771;
+            --gradient: linear-gradient(135deg, #03C771 0%, #02a55c 100%);
+            --white-element: #ffffff;
+            --premium-color: #ffd700;
         }
         
         body {
@@ -62,6 +65,7 @@
             width: 160px;
             height: 160px;
             object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(3, 199, 113, 0.5));
         }
 
         /* ======= MAIN CONTENT ======= */
@@ -82,6 +86,7 @@
             overflow: hidden;
             position: relative;
             border: 1px solid #333333;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
         
         .video-player {
@@ -103,7 +108,7 @@
         .movie-title {
             font-size: 1.2rem;
             margin: 15px 0 8px;
-            color: var(--text);
+            color: var(--white-element);
             font-weight: 700;
             line-height: 1.2;
         }
@@ -124,6 +129,7 @@
             background: rgba(255, 255, 255, 0.05);
             padding: 4px 8px;
             border-radius: 12px;
+            color: var(--white-element);
         }
         
         .movie-meta i {
@@ -158,6 +164,7 @@
             cursor: pointer;
             border: none;
             color: white;
+            position: relative;
         }
         
         .btn-primary {
@@ -172,12 +179,61 @@
         .btn-secondary {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--white-element);
         }
         
         .btn-secondary:hover {
-            background: rgba(255, 51, 51, 0.15);
+            background: rgba(3, 199, 113, 0.15);
             border-color: var(--brand);
             transform: translateY(-2px);
+        }
+
+        /* Download Button Styled */
+        .btn-download-disabled {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #555;
+            color: #999;
+            cursor: not-allowed;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-download-disabled::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: #ff3333;
+            transform: rotate(-45deg);
+            z-index: 1;
+        }
+
+        .btn-download-disabled i {
+            color: #999;
+        }
+
+        .download-premium-info {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: var(--premium-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid var(--premium-color);
+            z-index: 10;
+        }
+
+        .btn-download-disabled:hover .download-premium-info {
+            opacity: 1;
         }
 
         /* ======= EPISODES/PARTS SECTION ======= */
@@ -239,20 +295,20 @@
         }
         
         .episode-card:hover {
-            background: rgba(255, 51, 51, 0.15);
+            background: rgba(3, 199, 113, 0.15);
             transform: translateY(-2px);
             border-color: var(--brand);
         }
         
         .episode-card.active {
             border-color: var(--brand);
-            background: rgba(255, 51, 51, 0.2);
+            background: rgba(3, 199, 113, 0.2);
         }
         
         .episode-card h3 {
             font-size: 0.85rem;
             margin-bottom: 4px;
-            color: var(--text);
+            color: var(--white-element);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -286,6 +342,7 @@
         .movie-card:hover {
             transform: scale(1.03);
             border-color: var(--brand);
+            box-shadow: 0 5px 15px rgba(3, 199, 113, 0.2);
         }
         
         .movie-card img {
@@ -304,7 +361,7 @@
             right: 0;
             padding: 8px;
             background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
-            color: white;
+            color: var(--white-element);
             font-size: 0.8rem;
             white-space: nowrap;
             overflow: hidden;
@@ -335,6 +392,7 @@
             overflow: auto;
             animation: modalFadeIn 0.3s ease;
             border: 1px solid #333333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
         @keyframes modalFadeIn {
@@ -360,7 +418,7 @@
         .modal-title {
             font-size: 1.1rem;
             font-weight: 700;
-            color: var(--brand);
+            color: var(--white-element);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -370,7 +428,7 @@
         .close {
             font-size: 1.3rem;
             cursor: pointer;
-            color: var(--text);
+            color: var(--white-element);
             transition: all 0.3s ease;
             background: none;
             border: none;
@@ -384,7 +442,7 @@
         
         .close:hover {
             color: var(--brand);
-            background: rgba(255, 51, 51, 0.1);
+            background: rgba(3, 199, 113, 0.1);
         }
         
         /* Share Modal */
@@ -482,9 +540,14 @@
             border-radius: 6px;
             border: 1px solid #333333;
             background: #222222;
-            color: white;
+            color: var(--white-element);
             margin-bottom: 15px;
             font-size: 0.9rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--brand);
         }
         
         /* ======= FOOTER ======= */
@@ -501,6 +564,7 @@
             height: 20px;
             margin: 0 auto 12px;
             display: block;
+            filter: drop-shadow(0 0 8px rgba(3, 199, 113, 0.5));
         }
 
         .footer-social {
@@ -518,30 +582,33 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--brand);
+            color: var(--white-element);
             font-size: 1rem;
             transition: all 0.3s ease;
             text-decoration: none;
+            border: 1px solid #333333;
         }
 
         .social-link:hover {
             background: var(--brand);
-            color: white;
+            color: var(--white-element);
             transform: translateY(-2px);
         }
 
         .footer-bio {
             max-width: 500px;
             margin: 12px auto;
-            color: var(--muted);
+            color: var(--white-element);
             line-height: 1.5;
             font-size: 0.8rem;
+            opacity: 0.9;
         }
 
         .copyright {
-            color: var(--muted);
+            color: var(--white-element);
             font-size: 0.75rem;
             margin-top: 15px;
+            opacity: 0.8;
         }
 
         .designer-credit {
@@ -605,12 +672,13 @@
             display: inline-block;
             margin-top: 12px;
             padding: 8px 16px;
-            background: rgba(255, 51, 51, 0.1);
+            background: rgba(3, 199, 113, 0.1);
             border-radius: 8px;
+            color: var(--white-element);
         }
         
         .error-message a:hover {
-            background: rgba(255, 51, 51, 0.2);
+            background: rgba(3, 199, 113, 0.2);
             text-decoration: none;
         }
 
@@ -651,7 +719,7 @@
         }
         
         .nav-item {
-            color: var(--muted);
+            color: var(--white-element);
             text-decoration: none;
             font-size: 0.7rem;
             display: flex;
@@ -674,12 +742,12 @@
         
         .nav-item:hover {
             color: var(--brand);
-            background: rgba(255, 51, 51, 0.1);
+            background: rgba(3, 199, 113, 0.1);
         }
         
         .nav-item.active {
             color: var(--brand);
-            background: rgba(255, 51, 51, 0.1);
+            background: rgba(3, 199, 113, 0.1);
         }
 
         .nav-menu {
@@ -714,7 +782,7 @@
             align-items: center;
             gap: 8px;
             padding: 10px;
-            color: var(--text);
+            color: var(--white-element);
             text-decoration: none;
             border-radius: 6px;
             transition: all 0.3s ease;
@@ -722,12 +790,27 @@
         }
 
         .dropdown-item:hover {
-            background: rgba(255, 51, 51, 0.1);
+            background: rgba(3, 199, 113, 0.1);
             color: var(--brand);
         }
 
         .premium-item {
-            color: #ffd700 !important;
+            color: var(--premium-color) !important;
+        }
+
+        /* ======= PREMIUM BADGE ======= */
+        .premium-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: bold;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
         /* ======= RESPONSIVE ======= */
@@ -818,7 +901,7 @@
         <img src="logo.png" class="footer-logo" alt="MovieShow">
         
         <div class="footer-social">
-            <a href="https://facebook.com" class="social-link" target="_blank">
+            <a href="https://facebook.com/audrypaulin.dushime.7" class="social-link" target="_blank">
                 <i class="fab fa-facebook-f"></i>
             </a>
             <a href="https://wa.me/25776389163" class="social-link" target="_blank">
@@ -896,7 +979,7 @@
                     <div class="share-icon download-bg">
                         <i class="fas fa-download"></i>
                     </div>
-                    <span>Download</span>
+                    <span>Premium Only</span>
                 </a>
             </div>
         </div>
@@ -919,13 +1002,13 @@
                 <h3 class="modal-title"><i class="fas fa-question-circle"></i> Help Center</h3>
                 <button class="close" id="closeHelp">&times;</button>
             </div>
-            <div style="color: var(--text); line-height: 1.5; font-size: 0.9rem;">
-                <h4 style="color: var(--brand); margin: 12px 0 8px; font-size: 1rem;">Frequently Asked Questions</h4>
-                <p><strong>Q: How to watch movies?</strong><br>A: Click on any movie card and follow the instructions.</p>
+            <div style="color: var(--text-secondary); line-height: 1.5; font-size: 0.9rem;">
+                <h4 style="color: var(--white-element); margin: 12px 0 8px; font-size: 1rem;">Frequently Asked Questions</h4>
+                <p><strong style="color: var(--white-element);">Q: How to watch movies?</strong><br>A: Click on any movie card and follow the instructions.</p>
                 <br>
-                <p><strong>Q: Is it free?</strong><br>A: Yes, basic streaming is free with ads. Upgrade to Premium for ad-free experience.</p>
+                <p><strong style="color: var(--white-element);">Q: Is it free?</strong><br>A: Yes, basic streaming is free with ads. Upgrade to Premium for ad-free experience.</p>
                 <br>
-                <p><strong>Q: How to contact support?</strong><br>A: Use the Support option in the menu.</p>
+                <p><strong style="color: var(--white-element);">Q: How to contact support?</strong><br>A: Use the Support option in the menu.</p>
             </div>
         </div>
     </div>
@@ -937,12 +1020,12 @@
                 <h3 class="modal-title"><i class="fas fa-headset"></i> Support</h3>
                 <button class="close" id="closeSupport">&times;</button>
             </div>
-            <div style="color: var(--text); line-height: 1.5; font-size: 0.9rem;">
+            <div style="color: var(--text-secondary); line-height: 1.5; font-size: 0.9rem;">
                 <p>Need help? Contact our support team:</p>
                 <br>
-                <p><strong>Email:</strong> support@movieshow.com</p>
-                <p><strong>Phone:</strong> +257 76 38 91 63</p>
-                <p><strong>WhatsApp:</strong> +257 62 66 65 71</p>
+                <p><strong style="color: var(--white-element);">Email:</strong> support@movieshow.com</p>
+                <p><strong style="color: var(--white-element);">Phone:</strong> +257 76 38 91 63</p>
+                <p><strong style="color: var(--white-element);">WhatsApp:</strong> +257 62 66 65 71</p>
                 <br>
                 <p>We're available 24/7 to assist you with any issues.</p>
             </div>
@@ -1002,7 +1085,9 @@
                 const a = document.createElement('a');
                 a.href = `watch.html?id=${key}`;
                 a.className = 'movie-card';
+                const premiumBadge = m.premium ? '<div class="premium-badge">PREMIUM</div>' : '';
                 a.innerHTML = `
+                    ${premiumBadge}
                     <img src="${m.imageUrl || ''}" alt="${m.title || ''}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
                     <div class="movie-card-title">${m.title || ''}</div>
                 `;
@@ -1050,7 +1135,7 @@
                                     </div>
                                 </div>
                                 
-                                <h1 class="movie-title">${movie.title}${currentEpisodeTitle ? ' - ' + currentEpisodeTitle : ''}${currentPartTitle ? ' - ' + currentPartTitle : ''}</h1>
+                                <h1 class="movie-title white-text">${movie.title}${currentEpisodeTitle ? ' - ' + currentEpisodeTitle : ''}${currentPartTitle ? ' - ' + currentPartTitle : ''}</h1>
                                 
                                 <div class="movie-meta">
                                     ${movie.interpreter ? `
@@ -1066,6 +1151,10 @@
                                 <div class="action-buttons">
                                     <button class="btn btn-secondary" id="shareButton">
                                         <i class="fas fa-share"></i> Share
+                                    </button>
+                                    <button class="btn btn-download-disabled" id="downloadButton">
+                                        <i class="fas fa-download"></i> Download
+                                        <span class="download-premium-info">Only in Premium</span>
                                     </button>
                                 </div>
                             </section>
@@ -1226,8 +1315,17 @@
 
                 if (shareDownload) shareDownload.addEventListener('click', function(e) {
                     e.preventDefault();
-                    alert('Download feature is currently unavailable');
+                    alert('Download feature is available only for Premium users. Upgrade now!');
                 });
+
+                // Download button event listener
+                const downloadButton = document.getElementById('downloadButton');
+                if (downloadButton) {
+                    downloadButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        alert('Download feature is available only for Premium users. Please upgrade to Premium to download movies.');
+                    });
+                }
 
                 // Search modal management
                 const searchModal = document.getElementById('searchModal');
@@ -1355,28 +1453,39 @@
         }
     </script>
 <script>
-    // URL to open
-    const targetUrl = "https://effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
+    // Ad system configuration
+    const ADSTERRA_SMARTLINK = "https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
     
     // Delays in milliseconds
     const delayFirstOpen = 10 * 60 * 1000;  // 10 minutes = 600,000 ms
     const repeatInterval = 15 * 60 * 1000;   // 15 minutes = 900,000 ms
 
-    // Function to open URL
+    // Function to open ad URL
     function openAdUrl() {
-        window.open(targetUrl, '_blank');
+        window.open(ADSTERRA_SMARTLINK, '_blank');
         console.log("Opening ad URL.");
     }
 
-    // 1. Schedule FIRST opening after 10 minutes
-    setTimeout(() => {
-        openAdUrl(); // Execute first opening
-        console.log("First opening after 10 minutes.");
+    // Function to check if user is premium (placeholder)
+    function isPremiumUser() {
+        // This should check local storage or server for premium status
+        return localStorage.getItem('movieshow_premium') === 'true';
+    }
 
-        // 2. Schedule REPEAT opening every 15 minutes
-        setInterval(openAdUrl, repeatInterval);
-        
-    }, delayFirstOpen);
+    // Only run ad system for non-premium users
+    if (!isPremiumUser()) {
+        // 1. Schedule FIRST opening after 10 minutes
+        setTimeout(() => {
+            openAdUrl(); // Execute first opening
+            console.log("First ad opening after 10 minutes.");
+
+            // 2. Schedule REPEAT opening every 15 minutes
+            setInterval(openAdUrl, repeatInterval);
+            
+        }, delayFirstOpen);
+    } else {
+        console.log("Premium user detected - ads disabled.");
+    }
 </script>
 </body>
 </html>
