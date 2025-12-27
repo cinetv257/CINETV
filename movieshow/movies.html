@@ -26,13 +26,16 @@
       --panel: #111111;
       --panel-2: #222222;
       --text: #ffffff;
-      --muted: #aaaaaa;
-      --brand: #ff3333;
-      --brand-light: #ff6666;
-      --brand-dark: #cc0000;
-      --action: #ff3333;
+      --text-secondary: #f0f0f0;
+      --muted: #cccccc;
+      --brand: #03C771;
+      --brand-light: #34d187;
+      --brand-dark: #02a55c;
+      --action: #03C771;
       --transition: all 0.3s ease;
-      --gradient: linear-gradient(135deg, #ff3333 0%, #cc0000 100%);
+      --gradient: linear-gradient(135deg, #03C771 0%, #02a55c 100%);
+      --white-element: #ffffff;
+      --premium-color: #ffd700;
     }
     
     body {
@@ -65,10 +68,10 @@
     }
     
     .logo-img {
-      width: 45px;
-      height: 45px;
+      width: 160px;
+      height: 160px;
       object-fit: contain;
-      filter: drop-shadow(0 0 10px rgba(255, 51, 51, 0.7));
+      filter: drop-shadow(0 0 10px rgba(3, 199, 113, 0.7));
     }
     
     /* ======= MAIN CONTENT ======= */
@@ -110,7 +113,7 @@
       border-radius: 8px;
       border: 1px solid #333333;
       background: #222222;
-      color: white;
+      color: var(--white-element);
       font-size: 0.9rem;
       transition: var(--transition);
     }
@@ -118,13 +121,13 @@
     .search-input:focus {
       outline: none;
       border-color: var(--brand);
-      box-shadow: 0 0 0 2px rgba(255, 51, 51, 0.2);
+      box-shadow: 0 0 0 2px rgba(3, 199, 113, 0.2);
     }
 
     .search-btn {
       padding: 12px 20px;
       background: var(--gradient);
-      color: white;
+      color: var(--white-element);
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -143,7 +146,7 @@
     .apply-filters-btn {
       padding: 12px 20px;
       background: #222222;
-      color: var(--text);
+      color: var(--white-element);
       border: 1px solid #444;
       border-radius: 8px;
       cursor: pointer;
@@ -158,7 +161,7 @@
     }
 
     .apply-filters-btn:hover {
-      background: rgba(255, 51, 51, 0.1);
+      background: rgba(3, 199, 113, 0.1);
       border-color: var(--brand);
       color: var(--brand);
     }
@@ -178,11 +181,15 @@
 
     .filter-label {
       font-size: 0.85rem;
-      color: var(--muted);
+      color: var(--white-element);
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 6px;
+    }
+
+    .filter-label i {
+      color: var(--brand);
     }
 
     .filter-select {
@@ -190,7 +197,7 @@
       border-radius: 8px;
       border: 1px solid #333333;
       background: #222222;
-      color: white;
+      color: var(--white-element);
       font-size: 0.85rem;
       cursor: pointer;
       transition: var(--transition);
@@ -203,7 +210,7 @@
 
     .filter-option {
       background: #222222;
-      color: white;
+      color: var(--white-element);
     }
 
     .active-filters {
@@ -212,9 +219,9 @@
       gap: 10px;
       margin-top: 15px;
       padding: 10px;
-      background: rgba(255, 51, 51, 0.05);
+      background: rgba(3, 199, 113, 0.05);
       border-radius: 8px;
-      border: 1px solid rgba(255, 51, 51, 0.2);
+      border: 1px solid rgba(3, 199, 113, 0.2);
       min-height: 50px;
       align-items: center;
     }
@@ -230,7 +237,7 @@
       align-items: center;
       gap: 6px;
       padding: 6px 12px;
-      background: rgba(255, 51, 51, 0.1);
+      background: rgba(3, 199, 113, 0.1);
       border-radius: 20px;
       font-size: 0.8rem;
       color: var(--brand);
@@ -240,10 +247,11 @@
       cursor: pointer;
       font-size: 0.9rem;
       transition: var(--transition);
+      color: var(--white-element);
     }
 
-    .filter-chip i:hover {
-      color: white;
+    .filter-chip i.fa-times:hover {
+      color: var(--brand);
       transform: scale(1.1);
     }
 
@@ -272,7 +280,7 @@
     .results-info {
       margin-top: 15px;
       padding: 10px;
-      background: rgba(255, 51, 51, 0.05);
+      background: rgba(3, 199, 113, 0.05);
       border-radius: 8px;
       text-align: center;
       font-size: 0.9rem;
@@ -352,7 +360,7 @@
     .movie-card:hover {
       transform: scale(1.03);
       border-color: var(--brand);
-      box-shadow: 0 5px 15px rgba(255, 51, 51, 0.1);
+      box-shadow: 0 5px 15px rgba(3, 199, 113, 0.2);
     }
     
     .movie-poster {
@@ -371,7 +379,7 @@
       right: 0;
       padding: 10px;
       background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
-      color: white;
+      color: var(--white-element);
       z-index: 2;
     }
     
@@ -382,6 +390,7 @@
       text-overflow: ellipsis;
       font-weight: 600;
       margin-bottom: 4px;
+      color: var(--white-element);
     }
     
     .movie-card-meta {
@@ -396,12 +405,28 @@
       top: 8px;
       right: 8px;
       background: var(--brand);
-      color: white;
+      color: var(--white-element);
       padding: 3px 8px;
       border-radius: 5px;
       font-size: 0.65rem;
       font-weight: bold;
       z-index: 2;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* Premium badge */
+    .premium-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+      color: #000;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.6rem;
+      font-weight: bold;
+      z-index: 2;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
     /* Animation for cards */
@@ -485,7 +510,7 @@
       border-radius: 6px;
       border: 1px solid #333333;
       background: #222222;
-      color: var(--text);
+      color: var(--white-element);
       cursor: pointer;
       font-size: 0.9rem;
       font-weight: 600;
@@ -503,7 +528,7 @@
     .page-btn.active {
       background: var(--gradient);
       border-color: var(--brand);
-      color: white;
+      color: var(--white-element);
     }
 
     .page-btn.disabled {
@@ -525,7 +550,7 @@
     }
     
     .nav-item {
-      color: var(--muted);
+      color: var(--white-element);
       text-decoration: none;
       font-size: 0.7rem;
       display: flex;
@@ -548,12 +573,63 @@
     
     .nav-item:hover {
       color: var(--brand);
-      background: rgba(255, 51, 51, 0.1);
+      background: rgba(3, 199, 113, 0.1);
     }
     
     .nav-item.active {
       color: var(--brand);
-      background: rgba(255, 51, 51, 0.1);
+      background: rgba(3, 199, 113, 0.1);
+    }
+
+    /* Dropdown Menu */
+    .nav-menu {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      background: #111111;
+      border-radius: 8px;
+      padding: 8px;
+      min-width: 160px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      border: 1px solid #333333;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      margin-bottom: 8px;
+      z-index: 101;
+    }
+
+    .nav-menu:hover .dropdown-menu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      color: var(--white-element);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: var(--transition);
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(3, 199, 113, 0.1);
+      color: var(--brand);
+    }
+
+    .premium-item {
+      color: var(--premium-color) !important;
     }
 
     /* ======= FOOTER ======= */
@@ -566,11 +642,11 @@
     }
 
     .footer-logo {
-      width: 50px;
-      height: 50px;
+      width: 110px;
+      height: 20px;
       margin: 0 auto 15px;
       display: block;
-      filter: drop-shadow(0 0 8px rgba(255, 51, 51, 0.5));
+      filter: drop-shadow(0 0 8px rgba(3, 199, 113, 0.5));
     }
 
     .footer-social {
@@ -588,30 +664,33 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--brand);
+      color: var(--white-element);
       font-size: 1.1rem;
       transition: var(--transition);
       text-decoration: none;
+      border: 1px solid #333333;
     }
 
     .social-link:hover {
       background: var(--brand);
-      color: white;
+      color: var(--white-element);
       transform: translateY(-2px);
     }
 
     .footer-bio {
       max-width: 500px;
       margin: 15px auto;
-      color: var(--muted);
+      color: var(--white-element);
       line-height: 1.5;
       font-size: 0.8rem;
+      opacity: 0.9;
     }
 
     .copyright {
-      color: var(--muted);
+      color: var(--white-element);
       font-size: 0.75rem;
       margin-top: 15px;
+      opacity: 0.8;
     }
 
     .designer-credit {
@@ -619,6 +698,26 @@
       font-size: 0.7rem;
       margin-top: 8px;
       font-style: italic;
+    }
+
+    /* ======= ADS CONTAINER ======= */
+    .ad-container {
+      margin: 20px auto;
+      padding: 0;
+      background: transparent;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 728px;
+      overflow: hidden;
+      border: 1px solid #333333;
+    }
+
+    .ad-banner {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto;
     }
   </style>
 </head>
@@ -632,9 +731,16 @@
   
   <!-- Main Content -->
   <div class="main-container">
+    <!-- Ad Banner -->
+    <div class="ad-container">
+      <a href="https://facebook.com/audrypaulin.dushime.7" target="_blank">
+        <img src="banner.gif" alt="MovieShow Banner Ad" class="ad-banner">
+      </a>
+    </div>
+
     <!-- Search & Filter Section -->
     <section class="search-section">
-      <h1 class="search-title"><i class="fas fa-search"></i> Advanced Movie Search</h1>
+      <h1 class="search-title"><i class="fas fa-search white-text"></i> Advanced Movie Search</h1>
       
       <div class="search-container">
         <div class="search-input-group">
@@ -657,17 +763,9 @@
           </div>
           
           <div class="filter-group">
-            <label class="filter-label"><i class="fas fa-tags"></i> Genre</label>
-            <select class="filter-select" id="genreFilter">
-              <option value="">All Genres</option>
-              <!-- Will be populated by JavaScript -->
-            </select>
-          </div>
-          
-          <div class="filter-group">
-            <label class="filter-label"><i class="fas fa-language"></i> Language</label>
-            <select class="filter-select" id="languageFilter">
-              <option value="">All Languages</option>
+            <label class="filter-label"><i class="fas fa-tags"></i> Category</label>
+            <select class="filter-select" id="categoryFilter">
+              <option value="">All Categories</option>
               <!-- Will be populated by JavaScript -->
             </select>
           </div>
@@ -677,6 +775,17 @@
             <select class="filter-select" id="interpreterFilter">
               <option value="">All Interpreters</option>
               <!-- Will be populated by JavaScript -->
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label"><i class="fas fa-star"></i> Sort By</label>
+            <select class="filter-select" id="sortFilter">
+              <option value="title_asc">Title (A-Z)</option>
+              <option value="title_desc">Title (Z-A)</option>
+              <option value="year_desc">Year (Newest)</option>
+              <option value="year_asc">Year (Oldest)</option>
+              <option value="latest">Latest Added</option>
             </select>
           </div>
         </div>
@@ -703,6 +812,13 @@
         </div>
       </div>
     </section>
+
+    <!-- Ad Banner -->
+    <div class="ad-container">
+      <a href="https://facebook.com/audrypaulin.dushime.7" target="_blank">
+        <img src="banner.gif" alt="MovieShow Banner Ad" class="ad-banner">
+      </a>
+    </section>
     
     <!-- Movies Grid -->
     <div class="loading-dots" id="loadingSpinner">
@@ -722,6 +838,13 @@
     <!-- Pagination -->
     <div class="pagination" id="pagination" style="display: none;">
       <!-- Pagination buttons will be added here -->
+    </div>
+
+    <!-- Ad Banner -->
+    <div class="ad-container">
+      <a href="https://facebook.com/audrypaulin.dushime.7" target="_blank">
+        <img src="banner.gif" alt="MovieShow Banner Ad" class="ad-banner">
+      </a>
     </div>
   </div>
   
@@ -757,14 +880,14 @@
 
   <!-- Bottom Nav -->
   <div class="bottom-navbar">
-    <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="home.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
     <a href="movies.html" class="nav-item active"><i class="fas fa-film"></i><span>Movies</span></a>
     <a href="tvshow.html" class="nav-item"><i class="fas fa-tv"></i><span>Series</span></a>
     <a href="#" class="nav-item" id="bottomSearch"><i class="fas fa-search"></i><span>Search</span></a>
     
     <div class="nav-item nav-menu">
       <i class="fas fa-bars"></i><span>Menu</span>
-      <div class="dropdown-menu" style="display: none;">
+      <div class="dropdown-menu">
         <a href="#" class="dropdown-item" id="menuCategories"><i class="fas fa-tags"></i> Categories</a>
         <a href="#" class="dropdown-item" id="menuHelp"><i class="fas fa-question-circle"></i> Help</a>
         <a href="privacy.html" class="dropdown-item"><i class="fas fa-shield-alt"></i> Privacy</a>
@@ -797,7 +920,7 @@
     const ADSTERRA_SMARTLINK = "https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
     const WATCH_URL_PREFIX = 'watch.html?id=';
     const CURRENT_YEAR = new Date().getFullYear();
-    const MAX_FUTURE_YEAR = 2026; // Support jusqu'à 2026
+    const MAX_FUTURE_YEAR = 2026;
     
     // Global variables
     let allMovies = [];
@@ -805,22 +928,20 @@
     let filters = {
       search: '',
       year: '',
-      genre: '',
-      language: '',
-      interpreter: ''
+      category: '',
+      interpreter: '',
+      sort: 'title_asc'
     };
     let currentPage = 1;
     const moviesPerPage = 16;
     let availableFilters = {
       years: new Set(),
-      genres: new Set(),
-      languages: new Set(),
+      categories: new Set(),
       interpreters: new Set()
     };
     let searchTimeout = null;
-    let realtimeSearchActive = true;
 
-    // Create movie card element
+    // Create movie card element with Font Awesome icons
     function createMovieCard(movie, key) {
       const card = document.createElement('div');
       card.className = 'movie-card';
@@ -828,14 +949,16 @@
       card.setAttribute('data-destination', WATCH_URL_PREFIX + key);
 
       const badgeHtml = movie.badge ? `<div class="badge">${movie.badge}</div>` : '';
-      const yearHtml = movie.year ? `<span>${movie.year}</span>` : '';
-      const interpreterHtml = movie.interpreter ? `<span>${movie.interpreter.substring(0, 15)}${movie.interpreter.length > 15 ? '...' : ''}</span>` : '';
+      const premiumBadge = movie.premium ? `<div class="premium-badge">PREMIUM</div>` : '';
+      const yearHtml = movie.year ? `<span><i class="fas fa-calendar-alt"></i> ${movie.year}</span>` : '';
+      const interpreterHtml = movie.interpreter ? `<span><i class="fas fa-microphone"></i> ${movie.interpreter.substring(0, 10)}${movie.interpreter.length > 10 ? '...' : ''}</span>` : '';
 
       card.innerHTML = `
         <img class="movie-poster" src="${movie.imageUrl || ''}" alt="${movie.title || ''}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
         ${badgeHtml}
+        ${premiumBadge}
         <div class="movie-card-info">
-          <div class="movie-card-title">${movie.title ? movie.title.substring(0, 20) + (movie.title.length > 20 ? '...' : '') : ''}</div>
+          <div class="movie-card-title white-text">${movie.title ? movie.title.substring(0, 20) + (movie.title.length > 20 ? '...' : '') : ''}</div>
           <div class="movie-card-meta">
             ${yearHtml}
             ${interpreterHtml}
@@ -868,8 +991,10 @@
         const snapshot = await db.ref('movies').once('value');
         const movies = snapshot.val() || {};
         
-        // Convert to array
-        allMovies = Object.entries(movies);
+        // Convert to array and filter only movies (not series)
+        allMovies = Object.entries(movies).filter(([_, movie]) => {
+          return !movie.type || movie.type === 'movie' || movie.type === 'multi-part';
+        });
         
         // Extract filter options
         extractFilterOptions(allMovies);
@@ -888,40 +1013,34 @@
       }
     }
 
-    // Extract filter options from movies
+    // Extract filter options from movies - CORRECTED
     function extractFilterOptions(movies) {
       availableFilters.years.clear();
-      availableFilters.genres.clear();
-      availableFilters.languages.clear();
+      availableFilters.categories.clear();
       availableFilters.interpreters.clear();
       
       movies.forEach(([_, movie]) => {
-        // Extract year (ajouter jusqu'à 2026)
+        // Extract year
         if (movie.year) {
           availableFilters.years.add(movie.year.toString());
         }
         
-        // Extract genres (could be array or string)
+        // Extract categories (could be array or string) - CORRECTED
         if (movie.category) {
           if (Array.isArray(movie.category)) {
-            movie.category.forEach(genre => availableFilters.genres.add(genre));
-          } else {
-            availableFilters.genres.add(movie.category);
-          }
-        }
-        
-        // Extract language
-        if (movie.language) {
-          if (Array.isArray(movie.language)) {
-            movie.language.forEach(lang => availableFilters.languages.add(lang));
-          } else {
-            availableFilters.languages.add(movie.language);
+            movie.category.forEach(cat => {
+              if (cat && cat.trim() !== '') {
+                availableFilters.categories.add(cat.trim());
+              }
+            });
+          } else if (typeof movie.category === 'string' && movie.category.trim() !== '') {
+            availableFilters.categories.add(movie.category.trim());
           }
         }
         
         // Extract interpreter
-        if (movie.interpreter) {
-          availableFilters.interpreters.add(movie.interpreter);
+        if (movie.interpreter && movie.interpreter.trim() !== '') {
+          availableFilters.interpreters.add(movie.interpreter.trim());
         }
       });
       
@@ -932,22 +1051,20 @@
       
       // Sort options
       availableFilters.years = new Set([...availableFilters.years].sort((a, b) => b - a));
-      availableFilters.genres = new Set([...availableFilters.genres].sort());
-      availableFilters.languages = new Set([...availableFilters.languages].sort());
+      availableFilters.categories = new Set([...availableFilters.categories].sort());
       availableFilters.interpreters = new Set([...availableFilters.interpreters].sort());
     }
 
     // Populate filter dropdowns
     function populateFilterDropdowns() {
       const yearFilter = document.getElementById('yearFilter');
-      const genreFilter = document.getElementById('genreFilter');
-      const languageFilter = document.getElementById('languageFilter');
+      const categoryFilter = document.getElementById('categoryFilter');
       const interpreterFilter = document.getElementById('interpreterFilter');
+      const sortFilter = document.getElementById('sortFilter');
       
       // Clear existing options
       yearFilter.innerHTML = '<option value="">All Years</option>';
-      genreFilter.innerHTML = '<option value="">All Genres</option>';
-      languageFilter.innerHTML = '<option value="">All Languages</option>';
+      categoryFilter.innerHTML = '<option value="">All Categories</option>';
       interpreterFilter.innerHTML = '<option value="">All Interpreters</option>';
       
       // Populate years (including future years)
@@ -958,20 +1075,12 @@
         yearFilter.appendChild(option);
       });
       
-      // Populate genres
-      availableFilters.genres.forEach(genre => {
+      // Populate categories
+      availableFilters.categories.forEach(category => {
         const option = document.createElement('option');
-        option.value = genre;
-        option.textContent = genre;
-        genreFilter.appendChild(option);
-      });
-      
-      // Populate languages
-      availableFilters.languages.forEach(language => {
-        const option = document.createElement('option');
-        option.value = language;
-        option.textContent = language;
-        languageFilter.appendChild(option);
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
       });
       
       // Populate interpreters
@@ -981,57 +1090,58 @@
         option.textContent = interpreter;
         interpreterFilter.appendChild(option);
       });
+      
+      // Set current sort
+      sortFilter.value = filters.sort;
     }
 
-    // Apply filters with real-time search
+    // Apply filters with real-time search - CORRECTED
     function applyFilters() {
-      filteredMovies = allMovies.filter(([_, movie]) => {
-        // Search filter (titre, interprète ET description)
-        if (filters.search) {
-          const searchTerm = filters.search.toLowerCase();
+      let tempFiltered = [...allMovies];
+      
+      // Search filter (titre, interprète ET description)
+      if (filters.search) {
+        const searchTerm = filters.search.toLowerCase().trim();
+        tempFiltered = tempFiltered.filter(([_, movie]) => {
           const titleMatch = movie.title && movie.title.toLowerCase().includes(searchTerm);
           const interpreterMatch = movie.interpreter && movie.interpreter.toLowerCase().includes(searchTerm);
           const descriptionMatch = movie.description && movie.description.toLowerCase().includes(searchTerm);
           
-          if (!titleMatch && !interpreterMatch && !descriptionMatch) return false;
-        }
-        
-        // Year filter
-        if (filters.year) {
-          if (movie.year !== filters.year) {
-            return false;
-          }
-        }
-        
-        // Genre filter
-        if (filters.genre) {
+          return titleMatch || interpreterMatch || descriptionMatch;
+        });
+      }
+      
+      // Year filter
+      if (filters.year) {
+        tempFiltered = tempFiltered.filter(([_, movie]) => {
+          return movie.year && movie.year.toString() === filters.year;
+        });
+      }
+      
+      // Category filter - CORRECTED
+      if (filters.category) {
+        tempFiltered = tempFiltered.filter(([_, movie]) => {
           if (!movie.category) return false;
           
           if (Array.isArray(movie.category)) {
-            if (!movie.category.includes(filters.genre)) return false;
+            return movie.category.some(cat => cat && cat.trim() === filters.category);
           } else {
-            if (movie.category !== filters.genre) return false;
+            return movie.category && movie.category.trim() === filters.category;
           }
-        }
-        
-        // Language filter
-        if (filters.language) {
-          if (!movie.language) return false;
-          
-          if (Array.isArray(movie.language)) {
-            if (!movie.language.includes(filters.language)) return false;
-          } else {
-            if (movie.language !== filters.language) return false;
-          }
-        }
-        
-        // Interpreter filter
-        if (filters.interpreter && movie.interpreter !== filters.interpreter) {
-          return false;
-        }
-        
-        return true;
-      });
+        });
+      }
+      
+      // Interpreter filter
+      if (filters.interpreter) {
+        tempFiltered = tempFiltered.filter(([_, movie]) => {
+          return movie.interpreter && movie.interpreter.trim() === filters.interpreter;
+        });
+      }
+      
+      // Apply sorting
+      tempFiltered = sortMovies(tempFiltered, filters.sort);
+      
+      filteredMovies = tempFiltered;
       
       // Update active filters display
       updateActiveFilters();
@@ -1046,6 +1156,30 @@
       setupPagination();
     }
 
+    // Sort movies function - CORRECTED
+    function sortMovies(movies, sortType) {
+      return [...movies].sort((a, b) => {
+        const movieA = a[1];
+        const movieB = b[1];
+        
+        switch(sortType) {
+          case 'title_asc':
+            return (movieA.title || '').localeCompare(movieB.title || '');
+          case 'title_desc':
+            return (movieB.title || '').localeCompare(movieA.title || '');
+          case 'year_desc':
+            return (parseInt(movieB.year) || 0) - (parseInt(movieA.year) || 0);
+          case 'year_asc':
+            return (parseInt(movieA.year) || 0) - (parseInt(movieB.year) || 0);
+          case 'latest':
+            // Assuming timestamp or default to title for now
+            return (movieB.timestamp || 0) - (movieA.timestamp || 0);
+          default:
+            return 0;
+        }
+      });
+    }
+
     // Real-time search function
     function performRealtimeSearch() {
       if (searchTimeout) {
@@ -1056,7 +1190,7 @@
         filters.search = document.getElementById('searchInput').value.trim();
         currentPage = 1;
         applyFilters();
-      }, 300); // Délai de 300ms pour éviter les recherches trop fréquentes
+      }, 300);
     }
 
     // Update active filters display
@@ -1072,7 +1206,7 @@
       let hasActiveFilters = false;
       
       Object.entries(filters).forEach(([key, value]) => {
-        if (value && key !== 'search') {
+        if (value && key !== 'search' && key !== 'sort') {
           hasActiveFilters = true;
           const filterChip = document.createElement('div');
           filterChip.className = 'filter-chip';
@@ -1084,13 +1218,9 @@
               label = `Year: ${value}`; 
               icon = 'calendar-alt';
               break;
-            case 'genre': 
-              label = `Genre: ${value}`; 
+            case 'category': 
+              label = `Category: ${value}`; 
               icon = 'tags';
-              break;
-            case 'language': 
-              label = `Language: ${value}`; 
-              icon = 'language';
               break;
             case 'interpreter': 
               label = `Interpreter: ${value}`; 
@@ -1108,6 +1238,28 @@
         }
       });
       
+      // Add sort filter chip
+      if (filters.sort !== 'title_asc') {
+        hasActiveFilters = true;
+        const sortChip = document.createElement('div');
+        sortChip.className = 'filter-chip';
+        
+        let sortLabel = '';
+        switch(filters.sort) {
+          case 'title_desc': sortLabel = 'Title (Z-A)'; break;
+          case 'year_desc': sortLabel = 'Year (Newest)'; break;
+          case 'year_asc': sortLabel = 'Year (Oldest)'; break;
+          case 'latest': sortLabel = 'Latest Added'; break;
+        }
+        
+        sortChip.innerHTML = `
+          <i class="fas fa-sort-amount-down"></i>
+          <span>Sort: ${sortLabel}</span>
+          <i class="fas fa-times" data-filter="sort"></i>
+        `;
+        activeFiltersContainer.appendChild(sortChip);
+      }
+      
       // Show/hide "no filters" message
       if (noFiltersMessage) {
         noFiltersMessage.style.display = hasActiveFilters ? 'none' : 'block';
@@ -1124,8 +1276,17 @@
 
     // Remove a specific filter
     function removeFilter(filterName) {
-      filters[filterName] = '';
-      document.getElementById(filterName + 'Filter').value = '';
+      if (filterName === 'sort') {
+        filters.sort = 'title_asc';
+        document.getElementById('sortFilter').value = 'title_asc';
+      } else {
+        filters[filterName] = '';
+        if (filterName === 'category') {
+          document.getElementById('categoryFilter').value = '';
+        } else {
+          document.getElementById(filterName + 'Filter').value = '';
+        }
+      }
       applyFilters();
     }
 
@@ -1134,26 +1295,27 @@
       filters = {
         search: '',
         year: '',
-        genre: '',
-        language: '',
-        interpreter: ''
+        category: '',
+        interpreter: '',
+        sort: 'title_asc'
       };
       
       document.getElementById('searchInput').value = '';
       document.getElementById('yearFilter').value = '';
-      document.getElementById('genreFilter').value = '';
-      document.getElementById('languageFilter').value = '';
+      document.getElementById('categoryFilter').value = '';
       document.getElementById('interpreterFilter').value = '';
+      document.getElementById('sortFilter').value = 'title_asc';
       
+      currentPage = 1;
       applyFilters();
     }
 
     // Apply selected filters (button click)
     function applySelectedFilters() {
       filters.year = document.getElementById('yearFilter').value;
-      filters.genre = document.getElementById('genreFilter').value;
-      filters.language = document.getElementById('languageFilter').value;
+      filters.category = document.getElementById('categoryFilter').value;
       filters.interpreter = document.getElementById('interpreterFilter').value;
+      filters.sort = document.getElementById('sortFilter').value;
       
       currentPage = 1;
       applyFilters();
@@ -1326,9 +1488,7 @@
       // Real-time search input
       const searchInput = document.getElementById('searchInput');
       searchInput.addEventListener('input', () => {
-        if (realtimeSearchActive) {
-          performRealtimeSearch();
-        }
+        performRealtimeSearch();
       });
       
       // Search button event
@@ -1352,6 +1512,12 @@
       
       // Clear filters button
       document.getElementById('clearFilters').addEventListener('click', clearAllFilters);
+      
+      // Sort filter change
+      document.getElementById('sortFilter').addEventListener('change', function() {
+        filters.sort = this.value;
+        applyFilters();
+      });
       
       // Bottom nav search
       document.getElementById('bottomSearch').addEventListener('click', (e) => {
@@ -1378,7 +1544,7 @@
       // Menu item clicks
       document.getElementById('menuCategories').addEventListener('click', (e) => {
         e.preventDefault();
-        window.location.href = 'index.html#categoriesSection';
+        window.location.href = 'home.html#categoriesSection';
       });
       
       document.getElementById('menuHelp').addEventListener('click', (e) => {
@@ -1391,6 +1557,42 @@
         alert('Support Contact:\n\nEmail: support@movieshow.com\nPhone: +257 76 38 91 63\nWhatsApp: +257 62 66 65 71\n\nWe\'re available 24/7!');
       });
     });
+  </script>
+
+  <!-- Ads System -->
+  <script>
+    // Ad system configuration
+    const ADSTERRA_SMARTLINK = "https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
+    
+    // Delays in milliseconds
+    const delayFirstOpen = 10 * 60 * 1000;  // 10 minutes = 600,000 ms
+    const repeatInterval = 15 * 60 * 1000;   // 15 minutes = 900,000 ms
+
+    // Function to open ad URL
+    function openAdUrl() {
+      window.open(ADSTERRA_SMARTLINK, '_blank');
+      console.log("Opening ad URL.");
+    }
+
+    // Function to check if user is premium
+    function isPremiumUser() {
+      return localStorage.getItem('movieshow_premium') === 'true';
+    }
+
+    // Only run ad system for non-premium users
+    if (!isPremiumUser()) {
+      // 1. Schedule FIRST opening after 10 minutes
+      setTimeout(() => {
+        openAdUrl(); // Execute first opening
+        console.log("First ad opening after 10 minutes.");
+
+        // 2. Schedule REPEAT opening every 15 minutes
+        setInterval(openAdUrl, repeatInterval);
+        
+      }, delayFirstOpen);
+    } else {
+      console.log("Premium user detected - ads disabled.");
+    }
   </script>
 </body>
 </html>
