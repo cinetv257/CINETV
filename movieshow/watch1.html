@@ -31,7 +31,7 @@
             --brand: #ff3333;
             --brand-light: #ff6666;
             --brand-dark: #cc0000;
-            --transition: all 0.3s ease;
+            --action: #ff3333;
             --gradient: linear-gradient(135deg, #ff3333 0%, #cc0000 100%);
         }
         
@@ -63,28 +63,10 @@
             height: 32px;
             object-fit: contain;
         }
-        
-        .search-icon {
-            position: absolute;
-            right: 15px;
-            background: transparent;
-            border: none;
-            color: var(--muted);
-            font-size: 1.1rem;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: var(--transition);
-        }
-        
-        .search-icon:hover {
-            color: var(--brand);
-            background: rgba(255, 51, 51, 0.1);
-        }
 
         /* ======= MAIN CONTENT ======= */
         .main-container {
-            padding: 60px 4% 20px;
+            padding: 60px 4% 15px;
             min-height: calc(100vh - 70px);
         }
 
@@ -98,6 +80,7 @@
             background: #000;
             border-radius: 8px;
             overflow: hidden;
+            position: relative;
             border: 1px solid #333333;
         }
         
@@ -121,7 +104,7 @@
             font-size: 1.2rem;
             margin: 15px 0 8px;
             color: var(--text);
-            font-weight: 600;
+            font-weight: 700;
             line-height: 1.2;
         }
         
@@ -131,28 +114,27 @@
             gap: 10px;
             margin-bottom: 12px;
             color: var(--muted);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
         
         .movie-meta span {
             display: flex;
             align-items: center;
-            gap: 4px;
-            background: #222222;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.05);
             padding: 4px 8px;
             border-radius: 12px;
         }
         
         .movie-meta i {
             color: var(--brand);
-            font-size: 0.8rem;
         }
         
         .movie-description {
             line-height: 1.5;
             margin-bottom: 15px;
             color: var(--muted);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         /* ======= ACTION BUTTONS ======= */
@@ -160,6 +142,7 @@
             display: flex;
             gap: 10px;
             margin: 15px 0;
+            flex-wrap: wrap;
         }
         
         .btn {
@@ -167,11 +150,11 @@
             align-items: center;
             gap: 6px;
             padding: 8px 14px;
-            border-radius: 6px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.8rem;
-            transition: var(--transition);
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
             cursor: pointer;
             border: none;
             color: white;
@@ -183,21 +166,23 @@
         
         .btn-primary:hover {
             opacity: 0.9;
+            transform: translateY(-2px);
         }
         
         .btn-secondary {
-            background: #222222;
-            border: 1px solid #333333;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .btn-secondary:hover {
-            background: rgba(255, 51, 51, 0.1);
+            background: rgba(255, 51, 51, 0.15);
             border-color: var(--brand);
+            transform: translateY(-2px);
         }
 
         /* ======= EPISODES/PARTS SECTION ======= */
         .episodes-container {
-            margin: 20px 0;
+            margin: 25px 0;
             width: 100%;
         }
         
@@ -206,16 +191,31 @@
             margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             color: var(--brand);
-            font-weight: 600;
+            font-weight: 700;
         }
         
         .episodes-list-container {
             width: 100%;
             overflow-x: auto;
             padding-bottom: 8px;
-            scrollbar-width: none;
+            scrollbar-width: thin;
+            scrollbar-color: var(--brand) rgba(255, 255, 255, 0.1);
+        }
+        
+        .episodes-list-container::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .episodes-list-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+        }
+        
+        .episodes-list-container::-webkit-scrollbar-thumb {
+            background: var(--brand);
+            border-radius: 10px;
         }
         
         .episodes-list {
@@ -231,7 +231,7 @@
             border-radius: 8px;
             padding: 10px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             border: 1px solid #333333;
             min-width: 100px;
             flex: 0 0 auto;
@@ -239,7 +239,8 @@
         }
         
         .episode-card:hover {
-            background: rgba(255, 51, 51, 0.1);
+            background: rgba(255, 51, 51, 0.15);
+            transform: translateY(-2px);
             border-color: var(--brand);
         }
         
@@ -249,24 +250,25 @@
         }
         
         .episode-card h3 {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
             color: var(--text);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            font-weight: 500;
+            font-weight: 600;
             text-align: center;
         }
 
         /* ======= SIMILAR MOVIES ======= */
         .similar-movies {
             width: 100%;
-            margin-top: 20px;
+            margin-top: 25px;
         }
         
         .movies-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
         
@@ -276,7 +278,7 @@
             border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             aspect-ratio: 2/3;
             border: 1px solid #333333;
         }
@@ -292,6 +294,7 @@
             object-fit: cover;
             display: block;
             position: relative;
+            z-index: 0;
         }
         
         .movie-card-title {
@@ -302,11 +305,12 @@
             padding: 8px;
             background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
             color: white;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            font-weight: 500;
+            z-index: 2;
+            font-weight: 600;
         }
 
         /* ======= MODALS ======= */
@@ -354,16 +358,20 @@
         }
         
         .modal-title {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: 700;
             color: var(--brand);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
         }
         
         .close {
             font-size: 1.3rem;
             cursor: pointer;
             color: var(--text);
-            transition: var(--transition);
+            transition: all 0.3s ease;
             background: none;
             border: none;
             width: 30px;
@@ -381,10 +389,9 @@
         
         /* Share Modal */
         .share-options {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            flex-wrap: wrap;
             margin-top: 20px;
         }
         
@@ -393,7 +400,7 @@
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             color: white;
             text-decoration: none;
         }
@@ -409,7 +416,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 8px;
         }
         
@@ -427,6 +434,23 @@
         
         .link-bg {
             background: #555;
+        }
+
+        .download-bg {
+            background: var(--brand);
+            opacity: 0.5;
+            position: relative;
+        }
+
+        .download-bg::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: white;
+            transform: rotate(-45deg);
         }
 
         /* Search Modal */
@@ -449,7 +473,6 @@
             width: 100%;
             max-height: 80vh;
             overflow: auto;
-            animation: modalFadeIn 0.3s ease;
             border: 1px solid #333333;
         }
         
@@ -463,20 +486,20 @@
             margin-bottom: 15px;
             font-size: 0.9rem;
         }
-
+        
         /* ======= FOOTER ======= */
         footer {
             background: #000000;
-            padding: 25px 4%;
+            padding: 20px 4%;
             text-align: center;
-            margin-top: 30px;
+            margin-top: 25px;
             border-top: 1px solid #333333;
         }
 
         .footer-logo {
             width: 40px;
             height: 40px;
-            margin: 0 auto 15px;
+            margin: 0 auto 12px;
             display: block;
         }
 
@@ -497,7 +520,7 @@
             justify-content: center;
             color: var(--brand);
             font-size: 1rem;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             text-decoration: none;
         }
 
@@ -509,7 +532,7 @@
 
         .footer-bio {
             max-width: 500px;
-            margin: 15px auto;
+            margin: 12px auto;
             color: var(--muted);
             line-height: 1.5;
             font-size: 0.8rem;
@@ -570,27 +593,28 @@
             color: var(--brand);
             font-size: 1rem;
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            border: 1px solid #333333;
             margin: 15px 0;
         }
         
         .error-message a {
-            color: var(--brand);
+            color: var(--action);
             text-decoration: none;
             font-weight: 600;
             display: inline-block;
             margin-top: 12px;
             padding: 8px 16px;
             background: rgba(255, 51, 51, 0.1);
-            border-radius: 6px;
+            border-radius: 8px;
         }
         
         .error-message a:hover {
             background: rgba(255, 51, 51, 0.2);
+            text-decoration: none;
         }
 
-        /* Animation for cards when they appear */
+        /* Animation for cards */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -612,9 +636,6 @@
         .movie-card:nth-child(3) { animation-delay: 0.2s; }
         .movie-card:nth-child(4) { animation-delay: 0.25s; }
         .movie-card:nth-child(5) { animation-delay: 0.3s; }
-        .movie-card:nth-child(6) { animation-delay: 0.35s; }
-        .movie-card:nth-child(7) { animation-delay: 0.4s; }
-        .movie-card:nth-child(8) { animation-delay: 0.45s; }
 
         /* ======= BOTTOM NAV ======= */
         .bottom-navbar {
@@ -637,7 +658,7 @@
             flex-direction: column;
             align-items: center;
             gap: 4px;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             padding: 6px 10px;
             border-radius: 8px;
             font-weight: 500;
@@ -648,7 +669,7 @@
         
         .nav-item i {
             font-size: 1rem;
-            transition: var(--transition);
+            transition: all 0.3s ease;
         }
         
         .nav-item:hover {
@@ -696,7 +717,7 @@
             color: var(--text);
             text-decoration: none;
             border-radius: 6px;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             font-size: 0.85rem;
         }
 
@@ -710,17 +731,36 @@
         }
 
         /* ======= RESPONSIVE ======= */
+        @media (max-width: 768px) {
+            .movie-title {
+                font-size: 1.1rem;
+            }
+            
+            .movies-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .episode-card {
+                min-width: 90px;
+                padding: 8px;
+            }
+            
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+        }
+        
         @media (max-width: 480px) {
             .main-container {
                 padding: 55px 4% 15px;
             }
             
             .movie-title {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
             
             .movie-meta {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
                 gap: 8px;
             }
             
@@ -733,21 +773,25 @@
             }
             
             .btn {
-                padding: 7px 12px;
-                font-size: 0.75rem;
+                padding: 6px 12px;
+                font-size: 0.8rem;
             }
             
             .movies-container {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
             
             .episode-card {
-                min-width: 90px;
-                padding: 8px;
+                min-width: 80px;
+                padding: 6px;
             }
             
             .episode-card h3 {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .share-options {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -758,9 +802,6 @@
         <div class="logo-container">
             <img src="logo.png" class="logo-img" alt="MovieShow">
         </div>
-        <button class="search-icon" id="openSearch">
-            <i class="fas fa-search"></i>
-        </button>
     </nav>
     
     <!-- Main Content -->
@@ -849,7 +890,13 @@
                     <div class="share-icon link-bg">
                         <i class="fas fa-link"></i>
                     </div>
-                    <span>Copy link</span>
+                    <span>Copy Link</span>
+                </a>
+                <a href="#" class="share-option" id="shareDownload">
+                    <div class="share-icon download-bg">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <span>Download</span>
                 </a>
             </div>
         </div>
@@ -865,12 +912,49 @@
         </div>
     </div>
 
+    <!-- Help Modal -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-question-circle"></i> Help Center</h3>
+                <button class="close" id="closeHelp">&times;</button>
+            </div>
+            <div style="color: var(--text); line-height: 1.5; font-size: 0.9rem;">
+                <h4 style="color: var(--brand); margin: 12px 0 8px; font-size: 1rem;">Frequently Asked Questions</h4>
+                <p><strong>Q: How to watch movies?</strong><br>A: Click on any movie card and follow the instructions.</p>
+                <br>
+                <p><strong>Q: Is it free?</strong><br>A: Yes, basic streaming is free with ads. Upgrade to Premium for ad-free experience.</p>
+                <br>
+                <p><strong>Q: How to contact support?</strong><br>A: Use the Support option in the menu.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Modal -->
+    <div class="modal" id="supportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-headset"></i> Support</h3>
+                <button class="close" id="closeSupport">&times;</button>
+            </div>
+            <div style="color: var(--text); line-height: 1.5; font-size: 0.9rem;">
+                <p>Need help? Contact our support team:</p>
+                <br>
+                <p><strong>Email:</strong> support@movieshow.com</p>
+                <p><strong>Phone:</strong> +257 76 38 91 63</p>
+                <p><strong>WhatsApp:</strong> +257 62 66 65 71</p>
+                <br>
+                <p>We're available 24/7 to assist you with any issues.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
     
     <script>
-        // Configuration Firebase
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
             authDomain: "cinetv257.firebaseapp.com",
@@ -890,37 +974,37 @@
         const partId = urlParams.get('part');
         const episodeId = urlParams.get('episode');
 
-        // Variables
-        let currentMovieRef;
-
-        // Check if movie ID exists
+        // Check if movie ID is present
         if (!movieId) {
+            // Show error message and redirect after 5 seconds
             const mainContent = document.getElementById('mainContent');
             mainContent.innerHTML = `
                 <div class="error-message">
-                    <p>No movie selected. You will be redirected to the home page...</p>
+                    <p>No movie selected. You will be redirected to the homepage...</p>
                     <p><a href="home.html">Click here to return to home</a></p>
                 </div>
             `;
             
+            // Redirect after 5 seconds
             setTimeout(() => {
                 window.location.href = 'home.html';
             }, 5000);
         } else {
+            // Show loading spinner
             document.getElementById('loadingSpinner').style.display = 'flex';
             
             // Firebase references
             const movieRef = database.ref(`movies/${movieId}`);
             const moviesRef = database.ref('movies');
 
-            // Create movie card
+            // Function to create movie card
             function makeCard(key, m) {
                 const a = document.createElement('a');
                 a.href = `watch.html?id=${key}`;
                 a.className = 'movie-card';
                 a.innerHTML = `
                     <img src="${m.imageUrl || ''}" alt="${m.title || ''}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
-                    <div class="movie-card-title">${m.title ? m.title.substring(0, 20) + (m.title.length > 20 ? '...' : '') : ''}</div>
+                    <div class="movie-card-title">${m.title || ''}</div>
                 `;
                 return a;
             }
@@ -932,11 +1016,11 @@
                     document.getElementById('loadingSpinner').style.display = 'none';
                     
                     if (movie) {
+                        // Determine video URL to display
                         let videoUrl = movie.videoUrl;
                         let currentPartTitle = '';
                         let currentEpisodeTitle = '';
 
-                        // Determine correct Firebase reference
                         if (movie.type === 'series' && movie.episodes) {
                             const episodes = movie.episodes;
                             const episodeKeys = Object.keys(episodes);
@@ -945,7 +1029,6 @@
                             if (episodes[defaultEpisodeId]) {
                                 videoUrl = episodes[defaultEpisodeId].videoUrl;
                                 currentEpisodeTitle = episodes[defaultEpisodeId].title;
-                                currentMovieRef = database.ref(`movies/${movieId}/episodes/${defaultEpisodeId}`);
                             }
                         } else if (movie.type === 'multi-part' && movie.parts) {
                             const parts = movie.parts;
@@ -955,10 +1038,7 @@
                             if (parts[defaultPartId]) {
                                 videoUrl = parts[defaultPartId].videoUrl;
                                 currentPartTitle = parts[defaultPartId].title;
-                                currentMovieRef = database.ref(`movies/${movieId}/parts/${defaultPartId}`);
                             }
-                        } else {
-                            currentMovieRef = database.ref(`movies/${movieId}`);
                         }
 
                         // Update interface
@@ -978,7 +1058,7 @@
                                     ` : ''}
                                     <span><i class="fas fa-calendar-alt"></i> ${movie.year || 'N/A'}</span>
                                     ${movie.duration ? `<span><i class="fas fa-clock"></i> ${movie.duration}</span>` : ''}
-                                    ${movie.category ? `<span><i class="fas fa-tag"></i> ${movie.category[0]}</span>` : ''}
+                                    ${movie.category ? `<span><i class="fas fa-tag"></i> ${movie.category.join(', ')}</span>` : ''}
                                 </div>
                                 
                                 ${movie.description ? `<div class="movie-description">${movie.description}</div>` : ''}
@@ -1011,7 +1091,7 @@
                             </section>
                         `;
 
-                        // Initialize event listeners
+                        // Initialize event listeners after loading content
                         initEventListeners();
                         
                         // Load episodes/parts if necessary
@@ -1026,7 +1106,7 @@
                     } else {
                         document.getElementById('mainContent').innerHTML = `
                             <div class="error-message">
-                                <p>Movie not found. You will be redirected to the home page...</p>
+                                <p>Movie not found. You will be redirected to the homepage...</p>
                                 <p><a href="home.html">Click here to return to home</a></p>
                             </div>
                         `;
@@ -1037,7 +1117,7 @@
                 });
             }
 
-            // Load episodes
+            // Load series episodes
             function loadEpisodes(episodes, currentEpisodeId) {
                 const episodesList = document.getElementById('episodesList');
                 if (!episodesList) return;
@@ -1063,7 +1143,7 @@
                 });
             }
 
-            // Load parts
+            // Load movie parts
             function loadParts(parts, currentPartId) {
                 const episodesList = document.getElementById('episodesList');
                 if (!episodesList) return;
@@ -1091,7 +1171,7 @@
 
             // Initialize event listeners
             function initEventListeners() {
-                // Share modal
+                // Share modal management
                 const shareModal = document.getElementById('shareModal');
                 const shareButton = document.getElementById('shareButton');
                 const closeShare = document.getElementById('closeShare');
@@ -1114,6 +1194,7 @@
                 const shareTwitter = document.getElementById('shareTwitter');
                 const shareWhatsapp = document.getElementById('shareWhatsapp');
                 const shareLink = document.getElementById('shareLink');
+                const shareDownload = document.getElementById('shareDownload');
                 
                 if (shareFacebook) shareFacebook.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1143,16 +1224,15 @@
                     });
                 });
 
-                // Search modal
+                if (shareDownload) shareDownload.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Download feature is currently unavailable');
+                });
+
+                // Search modal management
                 const searchModal = document.getElementById('searchModal');
-                const openSearch = document.getElementById('openSearch');
                 const bottomSearch = document.getElementById('bottomSearch');
                 const closeSearch = document.getElementById('closeSearch');
-                
-                openSearch.addEventListener('click', function() {
-                    searchModal.style.display = 'flex';
-                    document.getElementById('searchInput').focus();
-                });
                 
                 bottomSearch.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1187,7 +1267,7 @@
                     });
                 });
 
-                // Menu dropdown items
+                // Menu event listeners
                 document.getElementById('menuCategories').addEventListener('click', function(e) {
                     e.preventDefault();
                     window.location.href = 'home.html#categoriesSection';
@@ -1195,16 +1275,37 @@
                 
                 document.getElementById('menuHelp').addEventListener('click', function(e) {
                     e.preventDefault();
-                    alert('Help Center\n\nQ: How to watch movies?\nA: Click on any movie card.\n\nQ: Is it free?\nA: Yes, with ads. Upgrade to Premium for ad-free experience.');
+                    const helpModal = document.getElementById('helpModal');
+                    helpModal.style.display = 'flex';
+                });
+                
+                document.getElementById('closeHelp').addEventListener('click', function() {
+                    const helpModal = document.getElementById('helpModal');
+                    helpModal.style.display = 'none';
                 });
                 
                 document.getElementById('menuSupport').addEventListener('click', function(e) {
                     e.preventDefault();
-                    alert('Support Contact:\nEmail: support@movieshow.com\nPhone: +257 76 38 91 63\nWhatsApp: +257 62 66 65 71');
+                    const supportModal = document.getElementById('supportModal');
+                    supportModal.style.display = 'flex';
+                });
+                
+                document.getElementById('closeSupport').addEventListener('click', function() {
+                    const supportModal = document.getElementById('supportModal');
+                    supportModal.style.display = 'none';
+                });
+
+                // Close modals on overlay click
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.addEventListener('click', function(e) {
+                        if (e.target === this) {
+                            this.style.display = 'none';
+                        }
+                    });
                 });
             }
 
-            // Load similar movies
+            // Load similar movies (same category)
             function loadSimilarMovies(currentMovieId, categories) {
                 if (!categories || categories.length === 0) {
                     document.getElementById('similarMoviesSpinner').style.display = 'none';
@@ -1222,6 +1323,7 @@
                     if (similarMoviesContainer) {
                         similarMoviesContainer.innerHTML = '';
                         
+                        // Filter similar movies (same category, exclude current movie)
                         const similarMovies = [];
                         for (const [id, movie] of Object.entries(movies)) {
                             if (id !== currentMovieId && movie.category && movie.category.some(cat => categories.includes(cat))) {
@@ -1229,8 +1331,10 @@
                             }
                         }
                         
-                        const topSimilar = similarMovies.slice(0, 8);
+                        // Sort by popularity and limit to 6
+                        const topSimilar = similarMovies.slice(0, 6);
                         
+                        // Display similar movies
                         if (topSimilar.length > 0) {
                             topSimilar.forEach(movie => {
                                 similarMoviesContainer.appendChild(makeCard(movie.id, movie));
@@ -1251,22 +1355,22 @@
         }
     </script>
 <script>
-    // Ad URL
+    // URL to open
     const targetUrl = "https://effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
     
-    // Time intervals in milliseconds
-    const delayFirstOpen = 10 * 60 * 1000;  // 10 minutes
-    const repeatInterval = 15 * 60 * 1000;   // 15 minutes
+    // Delays in milliseconds
+    const delayFirstOpen = 10 * 60 * 1000;  // 10 minutes = 600,000 ms
+    const repeatInterval = 15 * 60 * 1000;   // 15 minutes = 900,000 ms
 
     // Function to open URL
     function openAdUrl() {
         window.open(targetUrl, '_blank');
-        console.log("Ad URL opened.");
+        console.log("Opening ad URL.");
     }
 
     // 1. Schedule FIRST opening after 10 minutes
     setTimeout(() => {
-        openAdUrl();
+        openAdUrl(); // Execute first opening
         console.log("First opening after 10 minutes.");
 
         // 2. Schedule REPEAT opening every 15 minutes
