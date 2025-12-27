@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Movies - MovieShow</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DRSJ4J6W6P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DRSJ4J6W6P');
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    :root {
+      --bg: #000000;
+      --panel: #111111;
+      --panel-2: #222222;
+      --text: #ffffff;
+      --muted: #aaaaaa;
+      --brand: #ff3333;
+      --brand-light: #ff6666;
+      --brand-dark: #cc0000;
+      --action: #ff3333;
+      --transition: all 0.3s ease;
+      --gradient: linear-gradient(135deg, #ff3333 0%, #cc0000 100%);
+    }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 70px;
+    }
+
+    /* ======= NAVBAR ======= */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 0 15px;
+      background: #000000;
+      border-bottom: 1px solid #333333;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo-img {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(255, 51, 51, 0.7));
+    }
+    
+    /* ======= MAIN CONTENT ======= */
+    .main-container {
+      padding: 65px 4% 20px;
+      min-height: calc(100vh - 70px);
+    }
+
+    /* ======= SEARCH & FILTER SECTION ======= */
+    .search-section {
+      margin-bottom: 25px;
+    }
+
+    .search-title {
+      font-size: 1.3rem;
+      text-align: center;
+      margin-bottom: 15px;
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    .search-container {
+      background: #111111;
+      border-radius: 10px;
+      padding: 15px;
+      border: 1px solid #333333;
+      margin-bottom: 15px;
+    }
+
+    .search-input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid #333333;
+      background: #222222;
+      color: white;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 2px rgba(255, 51, 51, 0.2);
+    }
+
+    .search-btn {
+      padding: 12px 20px;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .apply-filters-btn {
+      padding: 12px 20px;
+      background: #222222;
+      color: var(--text);
+      border: 1px solid #444;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .apply-filters-btn:hover {
+      background: rgba(255, 51, 51, 0.1);
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+
+    .filters-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .filter-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-select {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #333333;
+      background: #222222;
+      color: white;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--brand);
+    }
+
+    .filter-option {
+      background: #222222;
+      color: white;
+    }
+
+    .active-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+      padding: 10px;
+      background: rgba(255, 51, 51, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 51, 51, 0.2);
+      min-height: 50px;
+      align-items: center;
+    }
+
+    .no-filters {
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+
+    .filter-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(255, 51, 51, 0.1);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--brand);
+    }
+
+    .filter-chip i {
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .filter-chip i:hover {
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .clear-filters {
+      padding: 8px 15px;
+      background: transparent;
+      border: 1px solid #333333;
+      color: var(--muted);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .clear-filters:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+
+    .results-info {
+      margin-top: 15px;
+      padding: 10px;
+      background: rgba(255, 51, 51, 0.05);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .results-count {
+      color: var(--brand);
+      font-weight: 600;
+    }
+
+    .realtime-indicator {
+      font-size: 0.75rem;
+      color: var(--brand);
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .realtime-indicator i {
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* ======= MOVIES GRID ======= */
+    .movies-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .movies-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      
+      .filters-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .movies-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      
+      .filters-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .search-input-group {
+        flex-direction: column;
+      }
+    }
+
+    .movie-card {
+      position: relative;
+      background: #222222;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+      aspect-ratio: 2/3;
+      border: 1px solid #333333;
+      animation: fadeInUp 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    .movie-card:hover {
+      transform: scale(1.03);
+      border-color: var(--brand);
+      box-shadow: 0 5px 15px rgba(255, 51, 51, 0.1);
+    }
+    
+    .movie-poster {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      position: relative;
+      z-index: 0;
+    }
+    
+    .movie-card-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+      color: white;
+      z-index: 2;
+    }
+    
+    .movie-card-title {
+      font-size: 0.8rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .movie-card-meta {
+      font-size: 0.7rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--brand);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 0.65rem;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    /* Animation for cards */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .movie-card:nth-child(1) { animation-delay: 0.1s; }
+    .movie-card:nth-child(2) { animation-delay: 0.15s; }
+    .movie-card:nth-child(3) { animation-delay: 0.2s; }
+    .movie-card:nth-child(4) { animation-delay: 0.25s; }
+
+    /* ======= LOADING & EMPTY STATES ======= */
+    .loading-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 40px 0;
+    }
+    
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--brand);
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+    
+    .dot:nth-child(1) { animation-delay: -0.32s; }
+    .dot:nth-child(2) { animation-delay: -0.16s; }
+    
+    @keyframes bounce {
+      0%, 80%, 100% { 
+        transform: scale(0);
+        opacity: 0.5;
+      }
+      40% { 
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      border: 1px solid #333333;
+      margin: 20px 0;
+    }
+    
+    .no-results i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: var(--brand);
+      opacity: 0.5;
+    }
+
+    /* ======= PAGINATION ======= */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+      padding: 15px;
+    }
+
+    .page-btn {
+      width: 35px;
+      height: 35px;
+      border-radius: 6px;
+      border: 1px solid #333333;
+      background: #222222;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-btn:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+
+    .page-btn.active {
+      background: var(--gradient);
+      border-color: var(--brand);
+      color: white;
+    }
+
+    .page-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ======= BOTTOM NAV ======= */
+    .bottom-navbar {
+      position: fixed;
+      inset: auto 0 0 0;
+      background: #000000;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 8px 0;
+      z-index: 100;
+      border-top: 1px solid #333333;
+    }
+    
+    .nav-item {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.7rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: var(--transition);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+      flex: 1;
+      text-align: center;
+      max-width: 70px;
+    }
+    
+    .nav-item i {
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    
+    .nav-item:hover {
+      color: var(--brand);
+      background: rgba(255, 51, 51, 0.1);
+    }
+    
+    .nav-item.active {
+      color: var(--brand);
+      background: rgba(255, 51, 51, 0.1);
+    }
+
+    /* ======= FOOTER ======= */
+    footer {
+      background: #000000;
+      padding: 25px 4%;
+      text-align: center;
+      margin-top: 40px;
+      border-top: 1px solid #333333;
+    }
+
+    .footer-logo {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 15px;
+      display: block;
+      filter: drop-shadow(0 0 8px rgba(255, 51, 51, 0.5));
+    }
+
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .social-link {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #222222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand);
+      font-size: 1.1rem;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .social-link:hover {
+      background: var(--brand);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .footer-bio {
+      max-width: 500px;
+      margin: 15px auto;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.8rem;
+    }
+
+    .copyright {
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-top: 15px;
+    }
+
+    .designer-credit {
+      color: var(--brand);
+      font-size: 0.7rem;
+      margin-top: 8px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navbar -->
+  <nav class="navbar">
+    <div class="logo-container">
+      <img src="logo.png" class="logo-img" alt="MovieShow">
+    </div>
+  </nav>
+  
+  <!-- Main Content -->
+  <div class="main-container">
+    <!-- Search & Filter Section -->
+    <section class="search-section">
+      <h1 class="search-title"><i class="fas fa-search"></i> Advanced Movie Search</h1>
+      
+      <div class="search-container">
+        <div class="search-input-group">
+          <input type="text" 
+                 class="search-input" 
+                 id="searchInput" 
+                 placeholder="Search by title, interpreter, description...">
+          <button class="search-btn" id="searchButton">
+            <i class="fas fa-search"></i> Search
+          </button>
+        </div>
+        
+        <div class="filters-container">
+          <div class="filter-group">
+            <label class="filter-label"><i class="fas fa-calendar-alt"></i> Year</label>
+            <select class="filter-select" id="yearFilter">
+              <option value="">All Years</option>
+              <!-- Will be populated by JavaScript -->
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label"><i class="fas fa-tags"></i> Genre</label>
+            <select class="filter-select" id="genreFilter">
+              <option value="">All Genres</option>
+              <!-- Will be populated by JavaScript -->
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label"><i class="fas fa-language"></i> Language</label>
+            <select class="filter-select" id="languageFilter">
+              <option value="">All Languages</option>
+              <!-- Will be populated by JavaScript -->
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label"><i class="fas fa-microphone"></i> Interpreter</label>
+            <select class="filter-select" id="interpreterFilter">
+              <option value="">All Interpreters</option>
+              <!-- Will be populated by JavaScript -->
+            </select>
+          </div>
+        </div>
+        
+        <button class="apply-filters-btn" id="applyFilters">
+          <i class="fas fa-check-circle"></i> Apply Filters
+        </button>
+        
+        <div class="active-filters" id="activeFilters">
+          <div class="no-filters">No filters applied</div>
+        </div>
+        
+        <button class="clear-filters" id="clearFilters">
+          <i class="fas fa-times"></i> Clear All Filters
+        </button>
+      </div>
+      
+      <div class="results-info" id="resultsInfo">
+        <div>
+          Showing <span class="results-count" id="resultsCount">0</span> movies
+          <div class="realtime-indicator" id="realtimeIndicator">
+            <i class="fas fa-bolt"></i> Real-time Search
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Movies Grid -->
+    <div class="loading-dots" id="loadingSpinner">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    
+    <div id="moviesGrid" class="movies-grid"></div>
+    
+    <div class="no-results" id="noResults" style="display: none;">
+      <i class="fas fa-film"></i>
+      <h3>No movies found</h3>
+      <p>Try adjusting your search criteria or filters</p>
+    </div>
+    
+    <!-- Pagination -->
+    <div class="pagination" id="pagination" style="display: none;">
+      <!-- Pagination buttons will be added here -->
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer>
+    <img src="logo.png" class="footer-logo" alt="MovieShow">
+    
+    <div class="footer-social">
+      <a href="https://facebook.com/audrypaulin.dushime.7" class="social-link" target="_blank">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://wa.me/25776389163" class="social-link" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+      <a href="mailto:support@movieshow.com" class="social-link">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </div>
+
+    <div class="footer-bio">
+      MovieShow is your ultimate streaming platform for movies and TV series. 
+      Enjoy unlimited entertainment with our constantly updated library. 
+      Stream anytime, anywhere on any device.
+    </div>
+
+    <div class="copyright">
+      &copy; 2025 MovieShow. All rights reserved.
+    </div>
+    <div class="designer-credit">
+      Designed by @audrypaulin
+    </div>
+  </footer>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-navbar">
+    <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="movies.html" class="nav-item active"><i class="fas fa-film"></i><span>Movies</span></a>
+    <a href="tvshow.html" class="nav-item"><i class="fas fa-tv"></i><span>Series</span></a>
+    <a href="#" class="nav-item" id="bottomSearch"><i class="fas fa-search"></i><span>Search</span></a>
+    
+    <div class="nav-item nav-menu">
+      <i class="fas fa-bars"></i><span>Menu</span>
+      <div class="dropdown-menu" style="display: none;">
+        <a href="#" class="dropdown-item" id="menuCategories"><i class="fas fa-tags"></i> Categories</a>
+        <a href="#" class="dropdown-item" id="menuHelp"><i class="fas fa-question-circle"></i> Help</a>
+        <a href="privacy.html" class="dropdown-item"><i class="fas fa-shield-alt"></i> Privacy</a>
+        <a href="#" class="dropdown-item" id="menuSupport"><i class="fas fa-headset"></i> Support</a>
+        <a href="premium.html" class="dropdown-item premium-item"><i class="fas fa-crown"></i> Go Premium</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
+      authDomain: "cinetv257.firebaseapp.com",
+      projectId: "cinetv257",
+      storageBucket: "cinetv257.appspot.com",
+      messagingSenderId: "402664770835",
+      appId: "1:402664770835:web:1adaea98f40ca609645ee6"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Configuration
+    const ADSTERRA_SMARTLINK = "https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
+    const WATCH_URL_PREFIX = 'watch.html?id=';
+    const CURRENT_YEAR = new Date().getFullYear();
+    const MAX_FUTURE_YEAR = 2026; // Support jusqu'à 2026
+    
+    // Global variables
+    let allMovies = [];
+    let filteredMovies = [];
+    let filters = {
+      search: '',
+      year: '',
+      genre: '',
+      language: '',
+      interpreter: ''
+    };
+    let currentPage = 1;
+    const moviesPerPage = 16;
+    let availableFilters = {
+      years: new Set(),
+      genres: new Set(),
+      languages: new Set(),
+      interpreters: new Set()
+    };
+    let searchTimeout = null;
+    let realtimeSearchActive = true;
+
+    // Create movie card element
+    function createMovieCard(movie, key) {
+      const card = document.createElement('div');
+      card.className = 'movie-card';
+      card.setAttribute('data-key', key);
+      card.setAttribute('data-destination', WATCH_URL_PREFIX + key);
+
+      const badgeHtml = movie.badge ? `<div class="badge">${movie.badge}</div>` : '';
+      const yearHtml = movie.year ? `<span>${movie.year}</span>` : '';
+      const interpreterHtml = movie.interpreter ? `<span>${movie.interpreter.substring(0, 15)}${movie.interpreter.length > 15 ? '...' : ''}</span>` : '';
+
+      card.innerHTML = `
+        <img class="movie-poster" src="${movie.imageUrl || ''}" alt="${movie.title || ''}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+        ${badgeHtml}
+        <div class="movie-card-info">
+          <div class="movie-card-title">${movie.title ? movie.title.substring(0, 20) + (movie.title.length > 20 ? '...' : '') : ''}</div>
+          <div class="movie-card-meta">
+            ${yearHtml}
+            ${interpreterHtml}
+          </div>
+        </div>
+      `;
+
+      // Click event for card
+      card.addEventListener('click', function(e) {
+        e.preventDefault();
+        const destination = this.getAttribute('data-destination');
+        
+        // Open ad in new tab
+        window.open(ADSTERRA_SMARTLINK, '_blank');
+        
+        // Redirect current page to content
+        setTimeout(() => {
+          window.location.href = destination;
+        }, 300);
+      });
+
+      return card;
+    }
+
+    // Load movies from Firebase
+    async function loadMovies() {
+      showLoading(true);
+      
+      try {
+        const snapshot = await db.ref('movies').once('value');
+        const movies = snapshot.val() || {};
+        
+        // Convert to array
+        allMovies = Object.entries(movies);
+        
+        // Extract filter options
+        extractFilterOptions(allMovies);
+        
+        // Populate filter dropdowns with future years support
+        populateFilterDropdowns();
+        
+        // Initial display
+        applyFilters();
+        
+      } catch (error) {
+        console.error("Error loading movies:", error);
+        showNoResults(true);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // Extract filter options from movies
+    function extractFilterOptions(movies) {
+      availableFilters.years.clear();
+      availableFilters.genres.clear();
+      availableFilters.languages.clear();
+      availableFilters.interpreters.clear();
+      
+      movies.forEach(([_, movie]) => {
+        // Extract year (ajouter jusqu'à 2026)
+        if (movie.year) {
+          availableFilters.years.add(movie.year.toString());
+        }
+        
+        // Extract genres (could be array or string)
+        if (movie.category) {
+          if (Array.isArray(movie.category)) {
+            movie.category.forEach(genre => availableFilters.genres.add(genre));
+          } else {
+            availableFilters.genres.add(movie.category);
+          }
+        }
+        
+        // Extract language
+        if (movie.language) {
+          if (Array.isArray(movie.language)) {
+            movie.language.forEach(lang => availableFilters.languages.add(lang));
+          } else {
+            availableFilters.languages.add(movie.language);
+          }
+        }
+        
+        // Extract interpreter
+        if (movie.interpreter) {
+          availableFilters.interpreters.add(movie.interpreter);
+        }
+      });
+      
+      // Add future years up to 2026
+      for (let year = CURRENT_YEAR; year <= MAX_FUTURE_YEAR; year++) {
+        availableFilters.years.add(year.toString());
+      }
+      
+      // Sort options
+      availableFilters.years = new Set([...availableFilters.years].sort((a, b) => b - a));
+      availableFilters.genres = new Set([...availableFilters.genres].sort());
+      availableFilters.languages = new Set([...availableFilters.languages].sort());
+      availableFilters.interpreters = new Set([...availableFilters.interpreters].sort());
+    }
+
+    // Populate filter dropdowns
+    function populateFilterDropdowns() {
+      const yearFilter = document.getElementById('yearFilter');
+      const genreFilter = document.getElementById('genreFilter');
+      const languageFilter = document.getElementById('languageFilter');
+      const interpreterFilter = document.getElementById('interpreterFilter');
+      
+      // Clear existing options
+      yearFilter.innerHTML = '<option value="">All Years</option>';
+      genreFilter.innerHTML = '<option value="">All Genres</option>';
+      languageFilter.innerHTML = '<option value="">All Languages</option>';
+      interpreterFilter.innerHTML = '<option value="">All Interpreters</option>';
+      
+      // Populate years (including future years)
+      availableFilters.years.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year + (parseInt(year) > CURRENT_YEAR ? ' (Upcoming)' : '');
+        yearFilter.appendChild(option);
+      });
+      
+      // Populate genres
+      availableFilters.genres.forEach(genre => {
+        const option = document.createElement('option');
+        option.value = genre;
+        option.textContent = genre;
+        genreFilter.appendChild(option);
+      });
+      
+      // Populate languages
+      availableFilters.languages.forEach(language => {
+        const option = document.createElement('option');
+        option.value = language;
+        option.textContent = language;
+        languageFilter.appendChild(option);
+      });
+      
+      // Populate interpreters
+      availableFilters.interpreters.forEach(interpreter => {
+        const option = document.createElement('option');
+        option.value = interpreter;
+        option.textContent = interpreter;
+        interpreterFilter.appendChild(option);
+      });
+    }
+
+    // Apply filters with real-time search
+    function applyFilters() {
+      filteredMovies = allMovies.filter(([_, movie]) => {
+        // Search filter (titre, interprète ET description)
+        if (filters.search) {
+          const searchTerm = filters.search.toLowerCase();
+          const titleMatch = movie.title && movie.title.toLowerCase().includes(searchTerm);
+          const interpreterMatch = movie.interpreter && movie.interpreter.toLowerCase().includes(searchTerm);
+          const descriptionMatch = movie.description && movie.description.toLowerCase().includes(searchTerm);
+          
+          if (!titleMatch && !interpreterMatch && !descriptionMatch) return false;
+        }
+        
+        // Year filter
+        if (filters.year) {
+          if (movie.year !== filters.year) {
+            return false;
+          }
+        }
+        
+        // Genre filter
+        if (filters.genre) {
+          if (!movie.category) return false;
+          
+          if (Array.isArray(movie.category)) {
+            if (!movie.category.includes(filters.genre)) return false;
+          } else {
+            if (movie.category !== filters.genre) return false;
+          }
+        }
+        
+        // Language filter
+        if (filters.language) {
+          if (!movie.language) return false;
+          
+          if (Array.isArray(movie.language)) {
+            if (!movie.language.includes(filters.language)) return false;
+          } else {
+            if (movie.language !== filters.language) return false;
+          }
+        }
+        
+        // Interpreter filter
+        if (filters.interpreter && movie.interpreter !== filters.interpreter) {
+          return false;
+        }
+        
+        return true;
+      });
+      
+      // Update active filters display
+      updateActiveFilters();
+      
+      // Update results info
+      updateResultsInfo();
+      
+      // Display movies
+      displayMovies();
+      
+      // Show/hide pagination
+      setupPagination();
+    }
+
+    // Real-time search function
+    function performRealtimeSearch() {
+      if (searchTimeout) {
+        clearTimeout(searchTimeout);
+      }
+      
+      searchTimeout = setTimeout(() => {
+        filters.search = document.getElementById('searchInput').value.trim();
+        currentPage = 1;
+        applyFilters();
+      }, 300); // Délai de 300ms pour éviter les recherches trop fréquentes
+    }
+
+    // Update active filters display
+    function updateActiveFilters() {
+      const activeFiltersContainer = document.getElementById('activeFilters');
+      const noFiltersMessage = activeFiltersContainer.querySelector('.no-filters');
+      
+      // Remove existing chips
+      const existingChips = activeFiltersContainer.querySelectorAll('.filter-chip');
+      existingChips.forEach(chip => chip.remove());
+      
+      // Create chips for active filters
+      let hasActiveFilters = false;
+      
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value && key !== 'search') {
+          hasActiveFilters = true;
+          const filterChip = document.createElement('div');
+          filterChip.className = 'filter-chip';
+          
+          let label = '';
+          let icon = '';
+          switch(key) {
+            case 'year': 
+              label = `Year: ${value}`; 
+              icon = 'calendar-alt';
+              break;
+            case 'genre': 
+              label = `Genre: ${value}`; 
+              icon = 'tags';
+              break;
+            case 'language': 
+              label = `Language: ${value}`; 
+              icon = 'language';
+              break;
+            case 'interpreter': 
+              label = `Interpreter: ${value}`; 
+              icon = 'microphone';
+              break;
+          }
+          
+          filterChip.innerHTML = `
+            <i class="fas fa-${icon}"></i>
+            <span>${label}</span>
+            <i class="fas fa-times" data-filter="${key}"></i>
+          `;
+          
+          activeFiltersContainer.appendChild(filterChip);
+        }
+      });
+      
+      // Show/hide "no filters" message
+      if (noFiltersMessage) {
+        noFiltersMessage.style.display = hasActiveFilters ? 'none' : 'block';
+      }
+      
+      // Add event listeners to remove buttons
+      activeFiltersContainer.querySelectorAll('.fa-times[data-filter]').forEach(button => {
+        button.addEventListener('click', function() {
+          const filterToRemove = this.getAttribute('data-filter');
+          removeFilter(filterToRemove);
+        });
+      });
+    }
+
+    // Remove a specific filter
+    function removeFilter(filterName) {
+      filters[filterName] = '';
+      document.getElementById(filterName + 'Filter').value = '';
+      applyFilters();
+    }
+
+    // Clear all filters
+    function clearAllFilters() {
+      filters = {
+        search: '',
+        year: '',
+        genre: '',
+        language: '',
+        interpreter: ''
+      };
+      
+      document.getElementById('searchInput').value = '';
+      document.getElementById('yearFilter').value = '';
+      document.getElementById('genreFilter').value = '';
+      document.getElementById('languageFilter').value = '';
+      document.getElementById('interpreterFilter').value = '';
+      
+      applyFilters();
+    }
+
+    // Apply selected filters (button click)
+    function applySelectedFilters() {
+      filters.year = document.getElementById('yearFilter').value;
+      filters.genre = document.getElementById('genreFilter').value;
+      filters.language = document.getElementById('languageFilter').value;
+      filters.interpreter = document.getElementById('interpreterFilter').value;
+      
+      currentPage = 1;
+      applyFilters();
+    }
+
+    // Update results info
+    function updateResultsInfo() {
+      const resultsCount = document.getElementById('resultsCount');
+      const resultsInfo = document.getElementById('resultsInfo');
+      
+      resultsCount.textContent = filteredMovies.length;
+      
+      if (filteredMovies.length === 0) {
+        resultsInfo.querySelector('div').innerHTML = `
+          No movies found
+          <div class="realtime-indicator">
+            <i class="fas fa-bolt"></i> Real-time Search
+          </div>
+        `;
+      } else if (filteredMovies.length === 1) {
+        resultsInfo.querySelector('div').innerHTML = `
+          Showing 1 movie
+          <div class="realtime-indicator">
+            <i class="fas fa-bolt"></i> Real-time Search
+          </div>
+        `;
+      } else {
+        resultsInfo.querySelector('div').innerHTML = `
+          Showing ${filteredMovies.length} movies
+          <div class="realtime-indicator">
+            <i class="fas fa-bolt"></i> Real-time Search
+          </div>
+        `;
+      }
+    }
+
+    // Display movies with pagination
+    function displayMovies() {
+      const moviesGrid = document.getElementById('moviesGrid');
+      moviesGrid.innerHTML = '';
+      
+      const startIndex = (currentPage - 1) * moviesPerPage;
+      const endIndex = startIndex + moviesPerPage;
+      const pageMovies = filteredMovies.slice(startIndex, endIndex);
+      
+      if (pageMovies.length === 0) {
+        showNoResults(true);
+        return;
+      }
+      
+      showNoResults(false);
+      
+      pageMovies.forEach(([key, movie], index) => {
+        const card = createMovieCard(movie, key);
+        card.style.animationDelay = `${0.1 + (index * 0.05)}s`;
+        moviesGrid.appendChild(card);
+      });
+    }
+
+    // Setup pagination
+    function setupPagination() {
+      const paginationContainer = document.getElementById('pagination');
+      paginationContainer.innerHTML = '';
+      
+      const totalPages = Math.ceil(filteredMovies.length / moviesPerPage);
+      
+      if (totalPages <= 1) {
+        paginationContainer.style.display = 'none';
+        return;
+      }
+      
+      paginationContainer.style.display = 'flex';
+      
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.className = `page-btn ${currentPage === 1 ? 'disabled' : ''}`;
+      prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      prevButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          displayMovies();
+          updatePaginationButtons();
+        }
+      });
+      paginationContainer.appendChild(prevButton);
+      
+      // Page buttons
+      const maxVisiblePages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+      
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        pageButton.textContent = i;
+        pageButton.addEventListener('click', () => {
+          currentPage = i;
+          displayMovies();
+          updatePaginationButtons();
+        });
+        paginationContainer.appendChild(pageButton);
+      }
+      
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.className = `page-btn ${currentPage === totalPages ? 'disabled' : ''}`;
+      nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      nextButton.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          displayMovies();
+          updatePaginationButtons();
+        }
+      });
+      paginationContainer.appendChild(nextButton);
+    }
+
+    // Update pagination buttons state
+    function updatePaginationButtons() {
+      const totalPages = Math.ceil(filteredMovies.length / moviesPerPage);
+      const buttons = document.querySelectorAll('.page-btn');
+      
+      buttons.forEach((button, index) => {
+        button.classList.remove('active', 'disabled');
+        
+        if (button.textContent === currentPage.toString()) {
+          button.classList.add('active');
+        }
+        
+        if (index === 0 && currentPage === 1) {
+          button.classList.add('disabled');
+        }
+        
+        if (index === buttons.length - 1 && currentPage === totalPages) {
+          button.classList.add('disabled');
+        }
+      });
+    }
+
+    // Show/hide loading spinner
+    function showLoading(show) {
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      loadingSpinner.style.display = show ? 'flex' : 'none';
+    }
+
+    // Show/hide no results message
+    function showNoResults(show) {
+      const moviesGrid = document.getElementById('moviesGrid');
+      const noResults = document.getElementById('noResults');
+      
+      if (show) {
+        moviesGrid.style.display = 'none';
+        noResults.style.display = 'block';
+        document.getElementById('pagination').style.display = 'none';
+      } else {
+        moviesGrid.style.display = 'grid';
+        noResults.style.display = 'none';
+      }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load movies
+      loadMovies();
+      
+      // Real-time search input
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', () => {
+        if (realtimeSearchActive) {
+          performRealtimeSearch();
+        }
+      });
+      
+      // Search button event
+      document.getElementById('searchButton').addEventListener('click', () => {
+        filters.search = searchInput.value.trim();
+        currentPage = 1;
+        applyFilters();
+      });
+      
+      // Enter key in search input
+      searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          filters.search = e.target.value.trim();
+          currentPage = 1;
+          applyFilters();
+        }
+      });
+      
+      // Apply filters button
+      document.getElementById('applyFilters').addEventListener('click', applySelectedFilters);
+      
+      // Clear filters button
+      document.getElementById('clearFilters').addEventListener('click', clearAllFilters);
+      
+      // Bottom nav search
+      document.getElementById('bottomSearch').addEventListener('click', (e) => {
+        e.preventDefault();
+        searchInput.focus();
+      });
+      
+      // Menu functionality
+      const navMenu = document.querySelector('.nav-menu');
+      const dropdownMenu = document.querySelector('.dropdown-menu');
+      
+      navMenu.addEventListener('click', (e) => {
+        e.preventDefault();
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!navMenu.contains(e.target)) {
+          dropdownMenu.style.display = 'none';
+        }
+      });
+      
+      // Menu item clicks
+      document.getElementById('menuCategories').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = 'index.html#categoriesSection';
+      });
+      
+      document.getElementById('menuHelp').addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Help Center - Frequently Asked Questions\n\n1. How to search movies?\nUse the search bar and filters above.\n\n2. How to watch movies?\nClick on any movie card.\n\n3. Is it free?\nYes, with ads. Upgrade to Premium for ad-free experience.');
+      });
+      
+      document.getElementById('menuSupport').addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Support Contact:\n\nEmail: support@movieshow.com\nPhone: +257 76 38 91 63\nWhatsApp: +257 62 66 65 71\n\nWe\'re available 24/7!');
+      });
+    });
+  </script>
+</body>
+</html>
