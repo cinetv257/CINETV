@@ -48,6 +48,7 @@
       color: var(--text);
       min-height: 100vh;
       padding-bottom: 70px;
+      overflow-x: hidden;
     }
 
     /* ======= NAVBAR ======= */
@@ -79,10 +80,10 @@
       filter: drop-shadow(0 0 10px rgba(3, 199, 113, 0.7));
     }
     
-    /* ======= HERO SECTION WITH AUTO SCROLL ======= */
+    /* ======= HERO SECTION - SINGLE FEATURED WITH SWIPE ======= */
     .hero-section {
       margin-top: 55px;
-      padding: 15px 4% 20px;
+      padding: 20px 4% 30px;
       position: relative;
       overflow: hidden;
       background: linear-gradient(to bottom, #000000 0%, #0a0a0a 100%);
@@ -92,7 +93,7 @@
     .hero-title {
       font-size: 1.3rem;
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       color: var(--brand);
       font-weight: 700;
       text-transform: uppercase;
@@ -102,113 +103,136 @@
     .featured-slider-container {
       position: relative;
       width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
       overflow: hidden;
-      border-radius: 8px;
-      background: #111111;
-      padding: 10px 0;
-      border: 1px solid #333333;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
     }
 
     .featured-slider {
       display: flex;
-      gap: 12px;
-      animation: slide 30s linear infinite;
-      width: max-content;
+      transition: transform 0.5s ease;
+      width: 100%;
     }
 
-    .featured-slider:hover {
-      animation-play-state: paused;
-    }
-
-    @keyframes slide {
-      0% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(-50%);
-      }
-    }
-
-    .featured-card {
-      flex: 0 0 180px;
-      background: #222222;
-      border-radius: 8px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: var(--transition);
-      border: 1px solid #333333;
-    }
-
-    .featured-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--brand);
-      box-shadow: 0 5px 15px rgba(3, 199, 113, 0.2);
+    .featured-slide {
+      flex: 0 0 100%;
+      width: 100%;
+      position: relative;
     }
 
     .featured-poster {
       width: 100%;
-      height: 240px;
+      height: 450px;
       object-fit: cover;
       display: block;
     }
 
-    .featured-info {
-      padding: 12px;
+    .featured-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
+      padding: 25px 20px 20px;
     }
 
     .featured-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 8px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 10px;
       color: var(--white-element);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
     }
 
     .featured-meta {
       display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 12px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
     }
 
     .featured-meta span {
-      background: rgba(3, 199, 113, 0.1);
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--brand);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 6px 14px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white-element);
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+    }
+
+    .featured-meta .quality {
+      background: var(--gradient);
+      color: var(--white-element);
+      font-weight: bold;
     }
 
     .watch-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 28px;
       background: var(--gradient);
       color: var(--white-element);
       border: none;
-      border-radius: 6px;
-      font-size: 0.8rem;
+      border-radius: 10px;
+      font-size: 1rem;
       cursor: pointer;
       transition: var(--transition);
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 700;
+      width: 100%;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
     }
 
     .watch-btn:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(3, 199, 113, 0.5);
+    }
+
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .slider-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .slider-dot.active {
+      background: var(--brand);
+      transform: scale(1.3);
+    }
+
+    /* Swipe instructions */
+    .swipe-hint {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.8rem;
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
     
     /* ======= CATEGORIES ======= */
     .section {
-      padding: 15px 4%;
+      padding: 25px 4%;
       position: relative;
     }
     
@@ -216,139 +240,212 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
-      border-bottom: 1px solid #333333;
-      padding-bottom: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .section-title {
-      font-size: 1.1rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--white-element);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
     
     .see-all-btn {
-      padding: 6px 12px;
-      background: rgba(3, 199, 113, 0.1);
-      color: var(--white-element);
+      padding: 8px 16px;
+      background: rgba(3, 199, 113, 0.15);
+      color: var(--brand-light);
       border: 1px solid var(--brand);
-      border-radius: 6px;
-      font-size: 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
       cursor: pointer;
       transition: var(--transition);
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      font-weight: 600;
+      white-space: nowrap;
     }
     
     .see-all-btn:hover {
-      background: var(--brand);
+      background: var(--gradient);
       color: var(--white-element);
+      transform: translateX(5px);
     }
     
-    /* ======= CARDS GRID - 4 COLUMNS ON ALL DEVICES ======= */
+    /* ======= HORIZONTAL SCROLL FOR CATEGORIES ======= */
+    .category-scroll-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding: 10px 0;
+    }
+
+    .category-scroll {
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 10px 5px;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+      scroll-snap-type: x mandatory;
+    }
+
+    .category-scroll::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+
+    /* ======= 3 COLUMNS CARDS GRID ON ALL MOBILE DEVICES ======= */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
     }
 
-    @media (max-width: 576px) {
+    /* Larger screens can have more columns */
+    @media (min-width: 768px) {
       .cards-grid {
-        gap: 8px;
-      }
-    }
-
-    @media (max-width: 400px) {
-      .cards-grid {
-        gap: 6px;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 20px;
       }
     }
 
     .card {
       position: relative;
-      background: #222222;
-      border-radius: 8px;
+      background: #1a1a1a;
+      border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
       transition: var(--transition);
       animation: fadeInUp 0.5s ease forwards;
       opacity: 0;
-      border: 1px solid #333333;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      scroll-snap-align: start;
+      flex: 0 0 calc(33.333% - 10px);
+      min-width: 0;
+    }
+
+    /* For horizontal scroll in categories */
+    .category-scroll .card {
+      flex: 0 0 140px;
+      scroll-snap-align: start;
+    }
+
+    @media (min-width: 480px) {
+      .category-scroll .card {
+        flex: 0 0 160px;
+      }
     }
 
     .card:hover {
-      transform: scale(1.03);
+      transform: translateY(-8px) scale(1.03);
       border-color: var(--brand);
-      box-shadow: 0 5px 15px rgba(3, 199, 113, 0.2);
+      box-shadow: 0 15px 30px rgba(3, 199, 113, 0.25);
+      z-index: 2;
+    }
+    
+    .poster-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 2/3;
+      overflow: hidden;
     }
     
     .poster {
       width: 100%;
-      aspect-ratio: 2/3;
+      height: 100%;
       object-fit: cover;
       display: block;
+      transition: var(--transition);
+    }
+
+    .card:hover .poster {
+      transform: scale(1.08);
     }
     
     .card-info {
-      padding: 8px;
-      background: #1a1a1a;
+      padding: 12px 8px;
+      background: rgba(26, 26, 26, 0.95);
+      position: relative;
+      z-index: 1;
     }
     
     .card-title {
-      font-size: 0.75rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-weight: 600;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      font-weight: 700;
       margin-bottom: 6px;
       color: var(--white-element);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: 2.4em;
     }
     
     .card-meta {
-      font-size: 0.65rem;
-      color: var(--muted);
       display: flex;
       justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 6px;
     }
 
     .card-meta-item {
       display: flex;
       align-items: center;
-      gap: 3px;
-      color: var(--white-element);
+      gap: 4px;
+      color: var(--brand-light);
+      font-size: 0.7rem;
+      font-weight: 600;
     }
 
     .card-meta-item i {
       color: var(--brand);
-      font-size: 0.7rem;
+      font-size: 0.75rem;
     }
 
     .badge {
       position: absolute;
-      top: 6px;
-      right: 6px;
-      background: var(--badge-color);
+      top: 8px;
+      right: 8px;
+      background: var(--gradient);
       color: var(--white-element);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.6rem;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 0.65rem;
       font-weight: bold;
       z-index: 2;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .quality-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0, 0, 0, 0.8);
+      color: var(--white-element);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: bold;
+      z-index: 2;
+      border: 1px solid var(--brand);
     }
 
     /* Animation for cards */
     @keyframes fadeInUp {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
       }
       to {
         opacity: 1;
@@ -356,18 +453,18 @@
       }
     }
 
-    .card:nth-child(1) { animation-delay: 0.1s; }
-    .card:nth-child(2) { animation-delay: 0.15s; }
-    .card:nth-child(3) { animation-delay: 0.2s; }
-    .card:nth-child(4) { animation-delay: 0.25s; }
-    .card:nth-child(5) { animation-delay: 0.3s; }
-    .card:nth-child(6) { animation-delay: 0.35s; }
-    .card:nth-child(7) { animation-delay: 0.4s; }
-    .card:nth-child(8) { animation-delay: 0.45s; }
-    .card:nth-child(9) { animation-delay: 0.5s; }
-    .card:nth-child(10) { animation-delay: 0.55s; }
-    .card:nth-child(11) { animation-delay: 0.6s; }
-    .card:nth-child(12) { animation-delay: 0.65s; }
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.15s; }
+    .card:nth-child(4) { animation-delay: 0.2s; }
+    .card:nth-child(5) { animation-delay: 0.25s; }
+    .card:nth-child(6) { animation-delay: 0.3s; }
+    .card:nth-child(7) { animation-delay: 0.35s; }
+    .card:nth-child(8) { animation-delay: 0.4s; }
+    .card:nth-child(9) { animation-delay: 0.45s; }
+    .card:nth-child(10) { animation-delay: 0.5s; }
+    .card:nth-child(11) { animation-delay: 0.55s; }
+    .card:nth-child(12) { animation-delay: 0.6s; }
     
     /* ======= MODALS ======= */
     .modal {
@@ -384,20 +481,20 @@
     .modal-content {
       background: #111111;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 16px;
       max-width: 500px;
       width: 100%;
       max-height: 80vh;
       overflow: auto;
       animation: modalFadeIn 0.3s ease;
       border: 1px solid #333333;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
     }
     
     @keyframes modalFadeIn {
       from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
       }
       to {
         opacity: 1;
@@ -409,26 +506,26 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #333333;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .modal-title {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--white-element);
     }
     
     .close {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       cursor: pointer;
       color: var(--white-element);
       transition: var(--transition);
       background: none;
       border: none;
-      width: 30px;
-      height: 30px;
+      width: 35px;
+      height: 35px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -438,75 +535,86 @@
     .close:hover {
       color: var(--brand);
       background: rgba(3, 199, 113, 0.1);
+      transform: rotate(90deg);
     }
     
-    /* Search Modal */
+    /* Search Modal - 3 columns */
     .search-results {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 15px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .search-results {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
     }
 
     .search-input {
       width: 100%;
-      padding: 10px;
-      border-radius: 6px;
+      padding: 12px 16px;
+      border-radius: 12px;
       border: 1px solid #333333;
-      background: #222222;
+      background: #1a1a1a;
       color: var(--white-element);
-      margin-bottom: 15px;
-      font-size: 0.9rem;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      transition: var(--transition);
     }
 
     .search-input:focus {
       outline: none;
       border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(3, 199, 113, 0.1);
     }
     
     /* ======= BOTTOM NAV ======= */
     .bottom-navbar {
       position: fixed;
       inset: auto 0 0 0;
-      background: #000000;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
       display: flex;
       justify-content: space-around;
       align-items: center;
-      padding: 8px 0;
+      padding: 10px 0;
       z-index: 100;
-      border-top: 1px solid #333333;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .nav-item {
       color: var(--white-element);
       text-decoration: none;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
       transition: var(--transition);
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-weight: 600;
       flex: 1;
       text-align: center;
       max-width: 70px;
     }
     
     .nav-item i {
-      font-size: 1rem;
+      font-size: 1.1rem;
       transition: var(--transition);
     }
     
     .nav-item:hover {
       color: var(--brand);
       background: rgba(3, 199, 113, 0.1);
+      transform: translateY(-3px);
     }
     
     .nav-item.active {
       color: var(--brand);
-      background: rgba(3, 199, 113, 0.1);
+      background: rgba(3, 199, 113, 0.15);
     }
 
     .nav-menu {
@@ -517,17 +625,18 @@
       position: absolute;
       bottom: 100%;
       left: 50%;
-      transform: translateX(-50%) translateY(-8px);
-      background: #111111;
-      border-radius: 8px;
-      padding: 8px;
-      min-width: 160px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-      border: 1px solid #333333;
+      transform: translateX(-50%) translateY(-10px);
+      background: rgba(17, 17, 17, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 10px;
+      min-width: 180px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       opacity: 0;
       pointer-events: none;
       transition: all 0.3s ease;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       z-index: 101;
     }
 
@@ -540,91 +649,101 @@
     .dropdown-item {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px;
+      gap: 10px;
+      padding: 12px 15px;
       color: var(--white-element);
       text-decoration: none;
-      border-radius: 6px;
+      border-radius: 12px;
       transition: var(--transition);
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       white-space: nowrap;
+      margin: 2px 0;
     }
 
     .dropdown-item:hover {
-      background: rgba(3, 199, 113, 0.1);
+      background: rgba(3, 199, 113, 0.15);
       color: var(--brand);
+      transform: translateX(5px);
     }
 
     .premium-item {
       color: var(--premium-color) !important;
+      background: rgba(255, 215, 0, 0.1) !important;
+    }
+
+    .premium-item:hover {
+      background: rgba(255, 215, 0, 0.2) !important;
     }
     
     /* ======= FOOTER ======= */
     footer {
       background: #000000;
-      padding: 25px 4%;
+      padding: 30px 4%;
       text-align: center;
-      margin-top: 30px;
-      border-top: 1px solid #333333;
+      margin-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .footer-logo {
-      width: 110px;
-      height: 30px;
-      margin: 0 auto 15px;
+      width: 120px;
+      height: 35px;
+      margin: 0 auto 20px;
       display: block;
-      filter: drop-shadow(0 0 8px rgba(3, 199, 113, 0.5));
+      filter: drop-shadow(0 0 10px rgba(3, 199, 113, 0.6));
     }
 
     .footer-social {
       display: flex;
       justify-content: center;
-      gap: 15px;
-      margin: 15px 0;
+      gap: 20px;
+      margin: 20px 0;
     }
 
     .social-link {
-      width: 35px;
-      height: 35px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      background: #222222;
+      background: #1a1a1a;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--white-element);
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       transition: var(--transition);
       text-decoration: none;
-      border: 1px solid #333333;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .social-link:hover {
-      background: var(--brand);
+      background: var(--gradient);
       color: var(--white-element);
-      transform: translateY(-2px);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(3, 199, 113, 0.4);
     }
 
     .footer-bio {
       max-width: 500px;
-      margin: 15px auto;
+      margin: 20px auto;
       color: var(--white-element);
-      line-height: 1.5;
-      font-size: 0.8rem;
+      line-height: 1.6;
+      font-size: 0.85rem;
       opacity: 0.9;
+      padding: 0 10px;
     }
 
     .copyright {
       color: var(--white-element);
-      font-size: 0.75rem;
-      margin-top: 15px;
-      opacity: 0.8;
+      font-size: 0.8rem;
+      margin-top: 20px;
+      opacity: 0.7;
     }
 
     .designer-credit {
       color: var(--brand);
-      font-size: 0.7rem;
-      margin-top: 8px;
+      font-size: 0.75rem;
+      margin-top: 10px;
       font-style: italic;
+      letter-spacing: 0.5px;
     }
 
     /* White elements styling */
@@ -700,20 +819,20 @@
 
     /* ======= ADS ======= */
     .ad-container {
-      margin: 20px auto;
+      margin: 25px auto;
       padding: 0;
       background: transparent;
-      border-radius: 8px;
+      border-radius: 12px;
       text-align: center;
       max-width: 728px;
       overflow: hidden;
-      border: 1px solid #333333;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .ad-banner {
       width: 100%;
       height: auto;
-      border-radius: 8px;
+      border-radius: 12px;
       display: block;
       margin: 0 auto;
     }
@@ -730,11 +849,12 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 15px;
-      margin: 20px 4%;
-      padding: 15px;
-      background: #111111;
-      border-radius: 10px;
-      border: 1px solid #333333;
+      margin: 25px 4%;
+      padding: 20px;
+      background: rgba(17, 17, 17, 0.8);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
     }
 
     .stat-item {
@@ -742,29 +862,32 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      padding: 10px;
-      background: #1a1a1a;
-      border-radius: 8px;
-      border: 1px solid #333333;
+      padding: 15px;
+      background: rgba(26, 26, 26, 0.9);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .stat-icon {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       color: var(--brand);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .stat-number {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       font-weight: bold;
       color: var(--white-element);
       margin-bottom: 5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
 
     .stat-label {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       color: var(--muted);
+      letter-spacing: 0.5px;
     }
+
     /* Safe area */
     @supports(padding: max(0px)) {
       .navbar,
@@ -774,37 +897,154 @@
       }
       
       .bottom-navbar {
-        padding-bottom: max(8px, env(safe-area-inset-bottom));
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
       }
     }
 
-    /* Category Modal Grid */
+    /* Category Modal Grid - 3 columns */
     .category-modal-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 15px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
     }
 
-    /* Modal Close Button */
-    .modal-close {
-      font-size: 1.3rem;
-      cursor: pointer;
-      color: var(--white-element);
+    @media (min-width: 768px) {
+      .category-modal-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+    }
+
+    /* Featured card rating */
+    .rating {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #ffd700;
+      padding: 6px 12px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Card overlay for hover effect */
+    .card-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(3, 199, 113, 0.3), transparent);
+      opacity: 0;
       transition: var(--transition);
-      background: none;
-      border: none;
-      width: 30px;
-      height: 30px;
+      pointer-events: none;
+    }
+
+    .card:hover .card-overlay {
+      opacity: 1;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      opacity: 0.5;
+    }
+
+    /* Scroll indicators for horizontal scroll */
+    .scroll-indicator {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s;
+      border: 2px solid var(--brand);
     }
 
-    .modal-close:hover {
-      color: var(--brand);
-      background: rgba(3, 199, 113, 0.1);
+    .scroll-indicator.left {
+      left: 10px;
+    }
+
+    .scroll-indicator.right {
+      right: 10px;
+    }
+
+    .category-scroll-container:hover .scroll-indicator {
+      opacity: 1;
+    }
+
+    /* Featured navigation arrows */
+    .featured-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      z-index: 10;
+      opacity: 0.5;
+      transition: opacity 0.3s;
+      border: 2px solid var(--brand);
+    }
+
+    .featured-nav:hover {
+      opacity: 1;
+      background: var(--brand);
+    }
+
+    .featured-nav.prev {
+      left: 10px;
+    }
+
+    .featured-nav.next {
+      right: 10px;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--brand);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--brand-light);
     }
   </style>
 </head>
@@ -822,12 +1062,21 @@
       </div>
     </nav>
 
-
-    <!-- Featured Movies with Auto Scroll -->
+    <!-- Featured Movies with Single Slide + Swipe -->
     <div class="hero-section">
-      <h2 class="hero-title">Featured Movies</h2>
       <div class="featured-slider-container">
         <div class="featured-slider" id="featuredSlider"></div>
+        <div class="featured-nav prev" id="featuredPrev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="featured-nav next" id="featuredNext">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="slider-dots" id="featuredDots"></div>
+      <div class="swipe-hint">
+        <i class="fas fa-hand-point-up"></i>
+        Swipe or use arrows to see more featured movies
       </div>
     </div>
 
@@ -864,7 +1113,6 @@
 
     <div class="section" id="categoriesSection">
       <div class="section-header">
-        <h2 class="section-title"><i class="fas fa-tags white-text"></i> Categories</h2>
       </div>
       <div id="categoriesContainer"></div>
     </div>
@@ -888,7 +1136,7 @@
       </div>
     </div>
 
-    <!-- Category Modal (corrected) -->
+    <!-- Category Modal - 3 columns -->
     <div class="modal" id="categoryModal">
       <div class="modal-content" style="max-width: 95%;">
         <div class="modal-header">
@@ -899,7 +1147,7 @@
       </div>
     </div>
 
-    <!-- Support Modal (corrected) -->
+    <!-- Support Modal -->
     <div class="modal" id="supportModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -918,7 +1166,7 @@
       </div>
     </div>
 
-    <!-- Help Modal (corrected) -->
+    <!-- Help Modal -->
     <div class="modal" id="helpModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -1010,19 +1258,23 @@
     // Helper function to create slug
     const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-    // Create movie card (4 columns)
+    // Featured slider state
+    let featuredMovies = [];
+    let currentFeaturedIndex = 0;
+    let featuredSlides = [];
+
+    // Create movie card (3 columns design - no date)
     function makeCard(key, movie) {
       const card = document.createElement('div');
       card.className = 'card';
       card.setAttribute('data-key', key);
       card.setAttribute('data-destination', WATCH_URL_PREFIX + key);
 
+      // Badges
       const badgeHtml = movie.badge ? `<div class="badge">${movie.badge}</div>` : '';
-      const yearHtml = movie.year ? `
-        <div class="card-meta-item">
-          <i class="fas fa-calendar-alt"></i>
-          <span>${movie.year}</span>
-        </div>` : '';
+      const qualityHtml = movie.quality ? `<div class="quality-badge">${movie.quality}</div>` : '';
+      
+      // Interpreter only (no year)
       const interpreterHtml = movie.interpreter ? `
         <div class="card-meta-item">
           <i class="fas fa-user"></i>
@@ -1030,12 +1282,15 @@
         </div>` : '';
 
       card.innerHTML = `
-        <img class="poster" src="${movie.imageUrl || ''}" alt="${movie.title || ''}" loading="lazy">
-        ${badgeHtml}
+        <div class="poster-container">
+          <img class="poster" src="${movie.imageUrl || ''}" alt="${movie.title || ''}" loading="lazy">
+          ${badgeHtml}
+          ${qualityHtml}
+          <div class="card-overlay"></div>
+        </div>
         <div class="card-info">
           <div class="card-title">${movie.title ? movie.title.substring(0, 18) + (movie.title.length > 18 ? '...' : '') : ''}</div>
           <div class="card-meta">
-            ${yearHtml}
             ${interpreterHtml}
           </div>
         </div>
@@ -1058,45 +1313,38 @@
       return card;
     }
 
-    // Create featured card for auto-scroll slider
-    function makeFeaturedCard(key, movie) {
-      const card = document.createElement('div');
-      card.className = 'featured-card';
-      card.setAttribute('data-key', key);
-      card.setAttribute('data-destination', WATCH_URL_PREFIX + key);
+    // Create featured slide for single featured movie
+    function makeFeaturedSlide(key, movie, index) {
+      const slide = document.createElement('div');
+      slide.className = 'featured-slide';
+      slide.setAttribute('data-index', index);
+      slide.setAttribute('data-key', key);
+      slide.setAttribute('data-destination', WATCH_URL_PREFIX + key);
 
-      const badgeHtml = movie.badge ? `<span><i class="fas fa-star"></i> ${movie.badge}</span>` : '';
-      const yearHtml = movie.year ? `<span><i class="fas fa-calendar-alt"></i> ${movie.year}</span>` : '';
+      // Badges
+      const badgeHtml = movie.badge ? `<span class="quality">${movie.badge}</span>` : '';
+      const ratingHtml = movie.rating ? `<div class="rating"><i class="fas fa-star"></i> ${movie.rating}</div>` : '';
+      
+      // Interpreter only (no year)
       const interpreterHtml = movie.interpreter ? `<span><i class="fas fa-user"></i> ${movie.interpreter.substring(0, 15)}${movie.interpreter.length > 15 ? '...' : ''}</span>` : '';
 
-      card.innerHTML = `
+      slide.innerHTML = `
+        ${ratingHtml}
         <img class="featured-poster" src="${movie.imageUrl || ''}" alt="${movie.title || ''}">
-        <div class="featured-info">
-          <h3 class="featured-title white-text">${movie.title ? movie.title.substring(0, 22) + (movie.title.length > 22 ? '...' : '') : ''}</h3>
+        <div class="featured-overlay">
+          <h3 class="featured-title white-text">${movie.title || 'Movie Title'}</h3>
           <div class="featured-meta">
-            ${yearHtml}
-            ${interpreterHtml}
             ${badgeHtml}
+            ${interpreterHtml}
           </div>
           <button class="watch-btn watch-featured-btn" data-destination="${WATCH_URL_PREFIX + key}">
-            <i class="fas fa-play"></i> Watch
+            <i class="fas fa-play"></i> Watch Now
           </button>
         </div>
       `;
 
-      // Click event for featured card
-      card.addEventListener('click', function(e) {
-        if (!e.target.classList.contains('watch-featured-btn')) {
-          const destination = this.getAttribute('data-destination');
-          window.open(ADSTERRA_SMARTLINK, '_blank');
-          setTimeout(() => {
-            window.location.href = destination;
-          }, 300);
-        }
-      });
-
       // Click event for watch button
-      card.querySelector('.watch-featured-btn').addEventListener('click', function(e) {
+      slide.querySelector('.watch-featured-btn').addEventListener('click', function(e) {
         e.stopPropagation();
         const destination = this.getAttribute('data-destination');
         window.open(ADSTERRA_SMARTLINK, '_blank');
@@ -1105,31 +1353,159 @@
         }, 300);
       });
 
-      return card;
+      return slide;
     }
 
-    // Render featured content with auto-scroll
+    // Render featured content with single slide + swipe
     function renderFeaturedContent(entries) {
       const slider = document.getElementById('featuredSlider');
+      const dotsContainer = document.getElementById('featuredDots');
       
       slider.innerHTML = '';
+      dotsContainer.innerHTML = '';
       
-      // Get 8 random featured movies
-      const shuffled = entries.sort(() => 0.5 - Math.random());
-      const featured = shuffled.slice(0, 8);
+      // Filter only movies with images for featured section
+      const availableMovies = entries.filter(([, movie]) => 
+        movie.imageUrl && movie.title
+      );
       
-      // Create duplicate for seamless scrolling
-      featured.forEach(([key, movie]) => {
-        slider.appendChild(makeFeaturedCard(key, movie));
+      // Get 5-8 random featured movies
+      const shuffled = availableMovies.sort(() => 0.5 - Math.random());
+      featuredMovies = shuffled.slice(0, Math.min(8, shuffled.length));
+      
+      if (featuredMovies.length === 0) {
+        // Show message if no featured movies
+        slider.innerHTML = `
+          <div class="featured-slide">
+            <div style="padding: 40px 20px; text-align: center;">
+              <i class="fas fa-film" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+              <h3>No Featured Movies</h3>
+              <p>Check back later for updates</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      // Create slides
+      featuredSlides = [];
+      featuredMovies.forEach(([key, movie], index) => {
+        const slide = makeFeaturedSlide(key, movie, index);
+        slider.appendChild(slide);
+        featuredSlides.push(slide);
+        
+        // Create dot
+        const dot = document.createElement('div');
+        dot.className = `slider-dot ${index === 0 ? 'active' : ''}`;
+        dot.setAttribute('data-index', index);
+        dot.addEventListener('click', () => goToFeaturedSlide(index));
+        dotsContainer.appendChild(dot);
       });
       
-      // Duplicate for infinite scroll effect
-      featured.forEach(([key, movie]) => {
-        slider.appendChild(makeFeaturedCard(key, movie));
+      // Update slider position
+      updateFeaturedSlider();
+      
+      // Setup swipe functionality
+      setupFeaturedSwipe();
+    }
+
+    // Update featured slider position
+    function updateFeaturedSlider() {
+      const slider = document.getElementById('featuredSlider');
+      slider.style.transform = `translateX(-${currentFeaturedIndex * 100}%)`;
+      
+      // Update dots
+      document.querySelectorAll('.slider-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentFeaturedIndex);
       });
     }
 
-    // Render categories with 4 columns
+    // Go to specific featured slide
+    function goToFeaturedSlide(index) {
+      if (index < 0) index = featuredMovies.length - 1;
+      if (index >= featuredMovies.length) index = 0;
+      
+      currentFeaturedIndex = index;
+      updateFeaturedSlider();
+    }
+
+    // Next featured slide
+    function nextFeaturedSlide() {
+      goToFeaturedSlide(currentFeaturedIndex + 1);
+    }
+
+    // Previous featured slide
+    function prevFeaturedSlide() {
+      goToFeaturedSlide(currentFeaturedIndex - 1);
+    }
+
+    // Setup swipe functionality for featured
+    function setupFeaturedSwipe() {
+      const sliderContainer = document.querySelector('.featured-slider-container');
+      let startX = 0;
+      let isSwiping = false;
+      
+      sliderContainer.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isSwiping = true;
+      });
+      
+      sliderContainer.addEventListener('touchmove', (e) => {
+        if (!isSwiping) return;
+        e.preventDefault();
+      });
+      
+      sliderContainer.addEventListener('touchend', (e) => {
+        if (!isSwiping) return;
+        
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > 50) { // Minimum swipe distance
+          if (diff > 0) {
+            // Swipe left - next
+            nextFeaturedSlide();
+          } else {
+            // Swipe right - previous
+            prevFeaturedSlide();
+          }
+        }
+        
+        isSwiping = false;
+      });
+      
+      // Mouse events for desktop
+      sliderContainer.addEventListener('mousedown', (e) => {
+        startX = e.clientX;
+        isSwiping = true;
+      });
+      
+      sliderContainer.addEventListener('mouseup', (e) => {
+        if (!isSwiping) return;
+        
+        const endX = e.clientX;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) {
+            nextFeaturedSlide();
+          } else {
+            prevFeaturedSlide();
+          }
+        }
+        
+        isSwiping = false;
+      });
+      
+      // Navigation buttons
+      document.getElementById('featuredPrev').addEventListener('click', prevFeaturedSlide);
+      document.getElementById('featuredNext').addEventListener('click', nextFeaturedSlide);
+      
+      // Auto-rotate every 8 seconds
+      setInterval(nextFeaturedSlide, 8000);
+    }
+
+    // Render categories with horizontal scroll
     function renderCategories(entries) {
       const container = document.getElementById('categoriesContainer');
       container.innerHTML = '';
@@ -1144,7 +1520,7 @@
         }
       });
       
-      // Create category sections
+      // Create category sections with horizontal scroll
       const categoriesArray = Array.from(categories);
       categoriesArray.forEach(category => {
         // Get movies for this category
@@ -1156,39 +1532,94 @@
           } else {
             return movie.category === category;
           }
-        }).slice(0, 8); // Show only 8 initially (2 rows of 4)
+        }).slice(0, 15); // Show up to 15 movies per category
         
         if (categoryMovies.length === 0) return;
         
         const section = document.createElement('div');
         section.className = 'category-section';
-        section.style.marginBottom = '25px';
+        section.style.marginBottom = '35px';
         
         section.innerHTML = `
           <div class="section-header">
-            <h3 class="section-title"><i class="fas fa-tag"></i> ${category.substring(0, 20)}${category.length > 20 ? '...' : ''}</h3>
+            <h3 class="section-title"><i class="fas fa-tag"></i> ${category.substring(0, 25)}${category.length > 25 ? '...' : ''}</h3>
             <button class="see-all-btn" data-category="${category}" data-count="${categoryMovies.length}">
-              <i class="fas fa-arrow-right"></i> All (${categoryMovies.length})
+              <i class="fas fa-arrow-right"></i> View All
             </button>
           </div>
-          <div class="cards-grid" id="cat-${slug(category)}"></div>
+          <div class="category-scroll-container">
+            <div class="category-scroll" id="cat-${slug(category)}"></div>
+          </div>
         `;
         
-        const grid = section.querySelector(`#cat-${slug(category)}`);
+        const scrollContainer = section.querySelector(`#cat-${slug(category)}`);
         categoryMovies.forEach(([key, movie]) => {
-          grid.appendChild(makeCard(key, movie));
+          scrollContainer.appendChild(makeCard(key, movie));
         });
         
         container.appendChild(section);
         
-        // Add event listener to "See All" button - CORRECTED
+        // Add event listener to "See All" button
         section.querySelector('.see-all-btn').addEventListener('click', function() {
           openCategoryModal(category, entries);
         });
+        
+        // Setup horizontal scroll with drag
+        setupHorizontalScroll(scrollContainer);
       });
     }
 
-    // Open category modal with 4 columns - CORRECTED
+    // Setup horizontal scroll with drag functionality
+    function setupHorizontalScroll(container) {
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+      
+      container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        container.classList.add('active');
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+      });
+      
+      container.addEventListener('mouseleave', () => {
+        isDown = false;
+        container.classList.remove('active');
+      });
+      
+      container.addEventListener('mouseup', () => {
+        isDown = false;
+        container.classList.remove('active');
+      });
+      
+      container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 2; // Scroll speed
+        container.scrollLeft = scrollLeft - walk;
+      });
+      
+      // Touch events for mobile
+      container.addEventListener('touchstart', (e) => {
+        isDown = true;
+        startX = e.touches[0].pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+      });
+      
+      container.addEventListener('touchend', () => {
+        isDown = false;
+      });
+      
+      container.addEventListener('touchmove', (e) => {
+        if (!isDown) return;
+        const x = e.touches[0].pageX - container.offsetLeft;
+        const walk = (x - startX) * 2;
+        container.scrollLeft = scrollLeft - walk;
+      });
+    }
+
+    // Open category modal with 3 columns
     function openCategoryModal(category, entries) {
       const modal = document.getElementById('categoryModal');
       const title = document.getElementById('categoryModalTitle');
@@ -1216,7 +1647,7 @@
       document.body.style.overflow = 'hidden';
     }
 
-    // Close modals - CORRECTED
+    // Close modals
     function closeModal(id) {
       const modal = document.getElementById(id);
       if (modal) {
@@ -1225,7 +1656,7 @@
       }
     }
 
-    // Open modals - CORRECTED
+    // Open modals
     function openModal(id) {
       const modal = document.getElementById(id);
       if (modal) {
@@ -1260,7 +1691,7 @@
       }
     }
 
-    // Search functionality with 4 columns
+    // Search functionality with 3 columns
     function setupSearch(entries) {
       const searchInput = document.getElementById('searchInput');
       const resultsContainer = document.getElementById('searchResults');
@@ -1277,7 +1708,17 @@
           (movie.title && movie.title.toLowerCase().includes(query)) ||
           (movie.interpreter && movie.interpreter.toLowerCase().includes(query)) ||
           (movie.description && movie.description.toLowerCase().includes(query))
-        ).slice(0, 16); // Show 16 results (4 rows of 4)
+        ).slice(0, 12); // Show 12 results (4 rows of 3)
+        
+        if (results.length === 0) {
+          resultsContainer.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1;">
+              <i class="fas fa-search"></i>
+              <p>No results found for "${query}"</p>
+            </div>
+          `;
+          return;
+        }
         
         results.forEach(([key, movie]) => {
           resultsContainer.appendChild(makeCard(key, movie));
@@ -1309,7 +1750,7 @@
         closeCategory.addEventListener('click', () => closeModal('categoryModal'));
       }
       
-      // Menu buttons - CORRECTED
+      // Menu buttons
       const menuCategoriesBtn = document.getElementById('menuCategoriesBtn');
       if (menuCategoriesBtn) {
         menuCategoriesBtn.addEventListener('click', (e) => {
@@ -1388,7 +1829,7 @@
       navMenu.addEventListener('mouseleave', () => {
         dropdownMenu.style.opacity = '0';
         dropdownMenu.style.pointerEvents = 'none';
-        dropdownMenu.style.transform = 'translateX(-50%) translateY(-8px)';
+        dropdownMenu.style.transform = 'translateX(-50%) translateY(-10px)';
       });
     }
 
@@ -1400,7 +1841,7 @@
       initModalListeners();
       initDropdownMenu();
       
-      // Load content directly without CTA modal
+      // Load content
       try {
         const entries = await loadMovies();
         
@@ -1412,6 +1853,17 @@
           // Show content
           const contentWrapper = document.getElementById('contentWrapper');
           if (contentWrapper) contentWrapper.style.display = 'block';
+        } else {
+          // Show empty state
+          const contentWrapper = document.getElementById('contentWrapper');
+          if (contentWrapper) contentWrapper.style.display = 'block';
+          contentWrapper.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-film"></i>
+              <h3>No Content Available</h3>
+              <p>Please check back later</p>
+            </div>
+          `;
         }
       } catch (error) {
         console.error("Loading error:", error);
