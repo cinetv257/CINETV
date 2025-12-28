@@ -725,47 +725,6 @@
       }
     }
 
-    /* ======= CTA ======= */
-    #ctaContainer {
-      position: fixed;
-      inset: 0;
-      background: #000000;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      z-index: 150;
-      padding: 20px;
-    }
-
-    #ctaContainer .cta-logo {
-      width: 70px;
-      height: 70px;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 0 10px rgba(3, 199, 113, 0.7));
-    }
-
-    #ctaContainer h1 {
-      color: var(--brand);
-      margin-bottom: 15px;
-      font-size: 1.8rem;
-    }
-
-    #ctaContainer p {
-      font-size: 0.95rem;
-      margin-bottom: 20px;
-      color: var(--white-element);
-      max-width: 400px;
-      line-height: 1.5;
-      opacity: 0.9;
-    }
-
-    #playMoviesNowBtn {
-      padding: 15px 30px;
-      font-size: 1rem;
-    }
-
     /* Stats section with white elements */
     .stats-container {
       display: grid;
@@ -806,30 +765,6 @@
       font-size: 0.7rem;
       color: var(--muted);
     }
-
-    /* Info banners with white text */
-    .info-banner {
-      margin: 15px 4%;
-      padding: 12px 15px;
-      background: rgba(3, 199, 113, 0.1);
-      border-radius: 8px;
-      border-left: 4px solid var(--brand);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .info-banner i {
-      color: var(--brand);
-      font-size: 1.1rem;
-    }
-
-    .info-banner p {
-      color: var(--white-element);
-      font-size: 0.8rem;
-      flex: 1;
-    }
-
     /* Safe area */
     @supports(padding: max(0px)) {
       .navbar,
@@ -880,18 +815,6 @@
     </div>
   </div>
 
-  <div id="ctaContainer">
-    <img src="logo.png" alt="MovieShow" class="cta-logo">
-    <h1>Welcome to MovieShow</h1>
-    <p>
-      To continue and access all movies and series for free, please click the button below.
-      (This helps us keep the platform free.)
-    </p>
-    <button class="watch-btn" id="playMoviesNowBtn" style="padding: 15px 30px; font-size: 1rem;">
-      <i class="fas fa-play"></i> PLAY MOVIES NOW
-    </button>
-  </div>
-
   <div id="contentWrapper" style="display: none;">
     <nav class="navbar">
       <div class="logo-container">
@@ -899,11 +822,6 @@
       </div>
     </nav>
 
-    <!-- Info Banner with white text -->
-    <div class="info-banner">
-      <i class="fas fa-info-circle"></i>
-      <p><strong>New:</strong> Stream the latest movies in HD quality with our new player</p>
-    </div>
 
     <!-- Featured Movies with Auto Scroll -->
     <div class="hero-section">
@@ -917,17 +835,17 @@
     <div class="stats-container">
       <div class="stat-item">
         <i class="fas fa-film stat-icon"></i>
-        <div class="stat-number white-text">5,000+</div>
+        <div class="stat-number white-text">100+</div>
         <div class="stat-label">Movies</div>
       </div>
       <div class="stat-item">
         <i class="fas fa-tv stat-icon"></i>
-        <div class="stat-number white-text">2,000+</div>
+        <div class="stat-number white-text">70+</div>
         <div class="stat-label">TV Shows</div>
       </div>
       <div class="stat-item">
         <i class="fas fa-users stat-icon"></i>
-        <div class="stat-number white-text">1M+</div>
+        <div class="stat-number white-text">300+</div>
         <div class="stat-label">Users</div>
       </div>
       <div class="stat-item">
@@ -1073,7 +991,6 @@
   <script>
     // Configuration
     const ADSTERRA_SMARTLINK = "https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
-    const VISITED_KEY = 'movieshow_visited';
     const WATCH_URL_PREFIX = 'watch.html?id=';
 
     // Firebase Configuration
@@ -1483,49 +1400,28 @@
       initModalListeners();
       initDropdownMenu();
       
-      // Check if first visit
-      const hasVisited = localStorage.getItem(VISITED_KEY);
-      
-      if (!hasVisited) {
-        // First visit - show CTA
-        document.getElementById('ctaContainer').style.display = 'flex';
-        if (loader) loader.style.display = 'none';
+      // Load content directly without CTA modal
+      try {
+        const entries = await loadMovies();
         
-        const playMoviesNowBtn = document.getElementById('playMoviesNowBtn');
-        if (playMoviesNowBtn) {
-          playMoviesNowBtn.addEventListener('click', () => {
-            localStorage.setItem(VISITED_KEY, 'true');
-            window.open(ADSTERRA_SMARTLINK, '_blank');
-            window.location.reload();
-          });
-        }
-      } else {
-        // Returning visitor - load content
-        const ctaContainer = document.getElementById('ctaContainer');
-        if (ctaContainer) ctaContainer.style.display = 'none';
-        
-        try {
-          const entries = await loadMovies();
+        if (entries.length > 0) {
+          renderFeaturedContent(entries);
+          renderCategories(entries);
+          setupSearch(entries);
           
-          if (entries.length > 0) {
-            renderFeaturedContent(entries);
-            renderCategories(entries);
-            setupSearch(entries);
-            
-            // Show content
-            const contentWrapper = document.getElementById('contentWrapper');
-            if (contentWrapper) contentWrapper.style.display = 'block';
-          }
-        } catch (error) {
-          console.error("Loading error:", error);
-        } finally {
-          // Hide loader
-          if (loader) {
-            loader.style.opacity = '0';
-            setTimeout(() => {
-              loader.style.display = 'none';
-            }, 300);
-          }
+          // Show content
+          const contentWrapper = document.getElementById('contentWrapper');
+          if (contentWrapper) contentWrapper.style.display = 'block';
+        }
+      } catch (error) {
+        console.error("Loading error:", error);
+      } finally {
+        // Hide loader
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(() => {
+            loader.style.display = 'none';
+          }, 300);
         }
       }
     });
