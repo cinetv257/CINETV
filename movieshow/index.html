@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MovieShow - Welcome</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    :root {
+      --bg: #000000;
+      --brand: #03C771;
+      --brand-light: #34d187;
+      --white-element: #ffffff;
+      --muted: #cccccc;
+      --gradient: linear-gradient(135deg, #03C771 0%, #02a55c 100%);
+      --premium-color: #ffd700;
+    }
+    
+    body {
+      background: var(--bg);
+      color: var(--white-element);
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    /* Background Image */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('background.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.3;
+      z-index: -1;
+    }
+    
+    /* ======= SPLASH SCREEN ======= */
+    .splash-container {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      padding: 15px;
+      text-align: center;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    
+    .logo-animation {
+      width: 120px; /* Réduit de 180px */
+      height: 120px; /* Réduit de 180px */
+      margin-bottom: 20px; /* Réduit de 30px */
+      position: relative;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .logo-animation img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 15px rgba(3, 199, 113, 0.7)); /* Réduit de 20px */
+    }
+    
+    .loading-bar {
+      width: 180px; /* Réduit de 200px */
+      height: 3px; /* Réduit de 4px */
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin: 20px auto; /* Réduit de 30px */
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .loading-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--gradient);
+      border-radius: 2px;
+      animation: loading 7s ease-in-out forwards; /* Augmenté à 7 secondes */
+    }
+    
+    .loading-text {
+      font-size: 0.8rem; /* Réduit de 0.9rem */
+      color: var(--muted);
+      margin-top: 12px; /* Réduit de 15px */
+      letter-spacing: 1.5px; /* Réduit de 2px */
+      text-transform: uppercase;
+    }
+    
+    .loading-timer {
+      font-size: 0.7rem;
+      color: var(--brand);
+      margin-top: 8px;
+      font-weight: 600;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 15px rgba(3, 199, 113, 0.7)); /* Réduit de 20px */
+      }
+      50% {
+        transform: scale(1.03); /* Réduit de 1.05 */
+        filter: drop-shadow(0 0 20px rgba(3, 199, 113, 0.9)); /* Réduit de 30px */
+      }
+    }
+    
+    @keyframes loading {
+      0% {
+        width: 0%;
+      }
+      100% {
+        width: 100%;
+      }
+    }
+    
+    /* ======= SELECTION SCREEN ======= */
+    .selection-container {
+      position: fixed;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.97);
+      z-index: 999;
+      padding: 15px;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+      overflow-y: auto;
+    }
+    
+    .selection-title {
+      font-size: 1.5rem; /* Réduit de 2rem */
+      color: var(--brand);
+      margin-bottom: 8px; /* Réduit de 10px */
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px; /* Réduit de 1px */
+    }
+    
+    .selection-subtitle {
+      font-size: 0.9rem; /* Réduit de 1rem */
+      color: var(--muted);
+      margin-bottom: 25px; /* Réduit de 40px */
+      max-width: 450px; /* Réduit de 500px */
+      line-height: 1.4;
+    }
+    
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px; /* Réduit de 20px */
+      width: 100%;
+      max-width: 380px; /* Réduit de 400px */
+      margin: 0 auto;
+    }
+    
+    .option-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 255, 255, 0.1); /* Réduit de 2px */
+      border-radius: 12px; /* Réduit de 15px */
+      padding: 20px; /* Réduit de 25px */
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .option-card:hover {
+      transform: translateY(-3px); /* Réduit de 5px */
+      border-color: var(--brand);
+      background: rgba(3, 199, 113, 0.1);
+      box-shadow: 0 8px 15px rgba(3, 199, 113, 0.2); /* Réduit de 10px 20px */
+    }
+    
+    .option-card.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .option-card.disabled:hover {
+      transform: none;
+      border-color: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: none;
+    }
+    
+    .option-icon {
+      font-size: 2rem; /* Réduit de 2.5rem */
+      margin-bottom: 12px; /* Réduit de 15px */
+      color: var(--brand);
+    }
+    
+    .option-card.disabled .option-icon {
+      color: var(--muted);
+    }
+    
+    .option-title {
+      font-size: 1.1rem; /* Réduit de 1.3rem */
+      font-weight: 700;
+      margin-bottom: 8px; /* Réduit de 10px */
+      color: var(--white-element);
+    }
+    
+    .option-card.disabled .option-title {
+      color: var(--muted);
+    }
+    
+    .option-description {
+      font-size: 0.85rem; /* Réduit de 0.9rem */
+      color: var(--muted);
+      line-height: 1.4;
+      margin-bottom: 12px; /* Réduit de 15px */
+    }
+    
+    .option-badge {
+      position: absolute;
+      top: 12px; /* Réduit de 15px */
+      right: 12px; /* Réduit de 15px */
+      background: var(--premium-color);
+      color: #000;
+      padding: 3px 8px; /* Réduit de 4px 10px */
+      border-radius: 10px; /* Réduit de 12px */
+      font-size: 0.65rem; /* Réduit de 0.7rem */
+      font-weight: bold;
+    }
+    
+    .coming-soon {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+    }
+    
+    .option-features {
+      text-align: left;
+      margin-top: 12px; /* Réduit de 15px */
+      padding-top: 12px; /* Réduit de 15px */
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 6px; /* Réduit de 8px */
+      margin-bottom: 6px; /* Réduit de 8px */
+      font-size: 0.8rem; /* Réduit de 0.85rem */
+      color: var(--muted);
+    }
+    
+    .feature-item i {
+      color: var(--brand);
+      font-size: 0.85rem; /* Réduit de 0.9rem */
+    }
+    
+    .feature-item.disabled i {
+      color: #ff3333;
+    }
+    
+    .continue-btn {
+      padding: 12px 30px; /* Réduit de 15px 40px */
+      background: var(--gradient);
+      color: var(--white-element);
+      border: none;
+      border-radius: 40px; /* Réduit de 50px */
+      font-size: 0.9rem; /* Réduit de 1rem */
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 15px; /* Réduit de 20px */
+      display: flex;
+      align-items: center;
+      gap: 8px; /* Réduit de 10px */
+      justify-content: center;
+    }
+    
+    .continue-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(3, 199, 113, 0.3); /* Réduit de 10px 20px */
+    }
+    
+    .continue-btn.disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+    
+    .continue-btn.disabled:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .terms-note {
+      margin-top: 20px; /* Réduit de 30px */
+      font-size: 0.75rem; /* Réduit de 0.8rem */
+      color: var(--muted);
+      max-width: 450px; /* Réduit de 500px */
+      line-height: 1.4;
+      padding: 0 10px;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px); /* Réduit de 20px */
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* ======= RESPONSIVE ======= */
+    @media (max-width: 768px) {
+      .logo-animation {
+        width: 100px; /* Réduit de 150px */
+        height: 100px; /* Réduit de 150px */
+      }
+      
+      .selection-title {
+        font-size: 1.3rem; /* Réduit de 1.5rem */
+      }
+      
+      .selection-subtitle {
+        font-size: 0.85rem; /* Réduit de 0.9rem */
+        padding: 0 15px; /* Réduit de 20px */
+      }
+      
+      .option-card {
+        padding: 15px; /* Réduit de 20px */
+      }
+      
+      .option-title {
+        font-size: 1rem; /* Réduit de 1.1rem */
+      }
+      
+      .option-description {
+        font-size: 0.8rem; /* Réduit de 0.85rem */
+      }
+      
+      .continue-btn {
+        padding: 10px 25px; /* Réduit de 12px 30px */
+        font-size: 0.85rem; /* Réduit de 0.9rem */
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .logo-animation {
+        width: 90px; /* Réduit de 120px */
+        height: 90px; /* Réduit de 120px */
+        margin-bottom: 15px; /* Réduit de 20px */
+      }
+      
+      .selection-title {
+        font-size: 1.1rem; /* Réduit de 1.3rem */
+      }
+      
+      .selection-subtitle {
+        font-size: 0.8rem; /* Réduit de 0.85rem */
+        margin-bottom: 20px; /* Réduit de 30px */
+      }
+      
+      .option-card {
+        padding: 12px; /* Réduit de 15px */
+      }
+      
+      .option-icon {
+        font-size: 1.8rem; /* Réduit de 2rem */
+      }
+      
+      .continue-btn {
+        padding: 10px 20px; /* Réduit de 12px 30px */
+        font-size: 0.8rem; /* Réduit de 0.9rem */
+      }
+      
+      .terms-note {
+        font-size: 0.7rem; /* Réduit de 0.75rem */
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div class="splash-container" id="splashScreen">
+    <div class="logo-animation">
+      <img src="logo.png" alt="MovieShow">
+    </div>
+    <div class="loading-bar">
+      <div class="loading-progress"></div>
+    </div>
+    <div class="loading-text">Loading MovieShow...</div>
+    <div class="loading-timer" id="loadingTimer">7s</div>
+  </div>
+  
+  <!-- Selection Screen -->
+  <div class="selection-container" id="selectionScreen">
+    <h1 class="selection-title">Choose Your Experience</h1>
+    <p class="selection-subtitle">Select between free streaming with ads or premium ad-free access with downloads.</p>
+    
+    <div class="options-container">
+      <!-- Free Option -->
+      <div class="option-card" id="freeOption">
+        <i class="fas fa-play-circle option-icon"></i>
+        <h2 class="option-title">Free Streaming</h2>
+        <p class="option-description">Watch thousands of movies & series with ads support. No registration needed.</p>
+        
+        <div class="option-features">
+          <div class="feature-item">
+            <i class="fas fa-check-circle"></i>
+            <span>Unlimited streaming</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check-circle"></i>
+            <span>HD quality (720p)</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check-circle"></i>
+            <span>No sign-up required</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-ad"></i>
+            <span>Ads supported</span>
+          </div>
+          <div class="feature-item disabled">
+            <i class="fas fa-times-circle"></i>
+            <span>No downloads</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Premium Option -->
+      <div class="option-card disabled" id="premiumOption">
+        <div class="option-badge coming-soon">COMING SOON</div>
+        <i class="fas fa-crown option-icon"></i>
+        <h2 class="option-title">Premium Access</h2>
+        <p class="option-description">Ad-free experience with downloads and exclusive content.</p>
+        
+        <div class="option-features">
+          <div class="feature-item">
+            <i class="fas fa-check-circle"></i>
+            <span>All free features +</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check-circle"></i>
+            <span>No ads</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check-circle"></i>
+            <span>Download movies</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check-circle"></i>
+            <span>4K Ultra HD</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check-circle"></i>
+            <span>Early access</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <button class="continue-btn" id="continueBtn">
+      <i class="fas fa-arrow-right"></i>
+      Start Free Streaming
+    </button>
+    
+    <p class="terms-note">
+      By continuing, you accept our Terms. Free version shows ads. Premium ($4.99/month) coming soon.
+      Your choice will be saved for future visits.
+    </p>
+  </div>
+
+  <script>
+    // Constants
+    const SPLASH_DURATION = 7000; // 7 seconds
+    const CHOICE_KEY = 'movieshow_user_choice';
+    const FIRST_VISIT_KEY = 'movieshow_first_visit';
+    
+    // DOM Elements
+    const splashScreen = document.getElementById('splashScreen');
+    const selectionScreen = document.getElementById('selectionScreen');
+    const loadingTimer = document.getElementById('loadingTimer');
+    const freeOption = document.getElementById('freeOption');
+    const premiumOption = document.getElementById('premiumOption');
+    const continueBtn = document.getElementById('continueBtn');
+    
+    // Timer countdown
+    let secondsLeft = SPLASH_DURATION / 1000;
+    const timerInterval = setInterval(() => {
+      secondsLeft--;
+      if (loadingTimer) {
+        loadingTimer.textContent = `${secondsLeft}s`;
+      }
+      if (secondsLeft <= 0) {
+        clearInterval(timerInterval);
+      }
+    }, 1000);
+    
+    // Check if user has already made a choice
+    function checkPreviousChoice() {
+      const userChoice = localStorage.getItem(CHOICE_KEY);
+      const isFirstVisit = localStorage.getItem(FIRST_VISIT_KEY) !== 'true';
+      
+      // If it's not first visit and user has chosen free mode
+      if (!isFirstVisit && userChoice === 'free') {
+        // Skip selection, go directly to home after splash
+        setTimeout(() => {
+          redirectToHome();
+        }, SPLASH_DURATION);
+        return true;
+      }
+      
+      return false;
+    }
+    
+    // Redirect to home page
+    function redirectToHome() {
+      // Store first visit flag
+      localStorage.setItem(FIRST_VISIT_KEY, 'true');
+      
+      // Show loading state
+      if (continueBtn) {
+        continueBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+        continueBtn.disabled = true;
+      }
+      
+      // Redirect after short delay
+      setTimeout(() => {
+        window.location.href = 'home.html';
+      }, 500);
+    }
+    
+    // Initialize the splash screen
+    function initSplashScreen() {
+      const hasPreviousChoice = checkPreviousChoice();
+      
+      // Hide splash and show selection after duration
+      setTimeout(() => {
+        // Fade out splash screen
+        splashScreen.style.opacity = '0';
+        splashScreen.style.visibility = 'hidden';
+        
+        // If user has previous choice, skip selection
+        if (hasPreviousChoice) {
+          redirectToHome();
+          return;
+        }
+        
+        // Show selection screen
+        setTimeout(() => {
+          selectionScreen.style.display = 'flex';
+          
+          // Focus on free option
+          freeOption.focus();
+          
+          // Initialize option selection
+          freeOption.click();
+        }, 300);
+      }, SPLASH_DURATION);
+    }
+    
+    // Set up event listeners for selection screen
+    function setupSelectionListeners() {
+      // Free option selection
+      freeOption.addEventListener('click', function() {
+        // Reset premium option
+        premiumOption.classList.remove('active');
+        premiumOption.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        premiumOption.style.background = 'rgba(255, 255, 255, 0.05)';
+        
+        // Highlight free option
+        this.classList.add('active');
+        this.style.borderColor = '#03C771';
+        this.style.background = 'rgba(3, 199, 113, 0.15)';
+        
+        // Update continue button
+        continueBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Start Free Streaming';
+        continueBtn.className = 'continue-btn';
+      });
+      
+      // Premium option click (disabled for now)
+      premiumOption.addEventListener('click', function() {
+        alert('Premium subscription is coming soon! Currently only free streaming is available.');
+        // Still select free option
+        freeOption.click();
+      });
+      
+      // Continue button click
+      continueBtn.addEventListener('click', function() {
+        // Store user choice
+        localStorage.setItem(CHOICE_KEY, 'free');
+        
+        // Redirect to home
+        redirectToHome();
+      });
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (selectionScreen.style.display !== 'flex') return;
+        
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          
+          if (freeOption.classList.contains('active')) {
+            premiumOption.focus();
+            premiumOption.click();
+          } else {
+            freeOption.focus();
+            freeOption.click();
+          }
+        }
+        
+        if (e.key === 'Enter') {
+          continueBtn.click();
+        }
+        
+        if (e.key === 'Escape') {
+          freeOption.click();
+        }
+      });
+    }
+    
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Start splash screen
+      initSplashScreen();
+      
+      // Setup selection screen listeners
+      setupSelectionListeners();
+      
+      // Auto-redirect after 45 seconds if user is inactive
+      setTimeout(() => {
+        if (selectionScreen.style.display === 'flex') {
+          const confirmRedirect = confirm('Auto-selecting free streaming in 5 seconds... Continue?');
+          if (confirmRedirect) {
+            continueBtn.click();
+          }
+        }
+      }, 45000);
+    });
+    
+    // Clean up timer when leaving page
+    window.addEventListener('beforeunload', function() {
+      clearInterval(timerInterval);
+    });
+  </script>
+</body>
+</html>

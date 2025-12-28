@@ -26,9 +26,9 @@
       --panel: #111111;
       --panel-2: #222222;
       --text: #ffffff;
-      --text-secondary: #f0f0f0; /* Blanc pour texte secondaire */
-      --muted: #cccccc; /* Plus clair */
-      --brand: #03C771; /* Vert ciel */
+      --text-secondary: #f0f0f0;
+      --muted: #cccccc;
+      --brand: #03C771;
       --brand-light: #34d187;
       --brand-dark: #02a55c;
       --action: #03C771;
@@ -39,7 +39,8 @@
       --year-color: #67dba3;
       --gradient: linear-gradient(135deg, #03C771 0%, #02a55c 100%);
       --badge-color: #03C771;
-      --white-element: #ffffff; /* Blanc pur pour certains éléments */
+      --white-element: #ffffff;
+      --premium-color: #ffd700;
     }
     
     body {
@@ -159,7 +160,7 @@
       font-size: 0.9rem;
       font-weight: 600;
       margin-bottom: 8px;
-      color: var(--text);
+      color: var(--white-element);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -190,7 +191,7 @@
       gap: 6px;
       padding: 8px 16px;
       background: var(--gradient);
-      color: white;
+      color: var(--white-element);
       border: none;
       border-radius: 6px;
       font-size: 0.8rem;
@@ -527,6 +528,7 @@
       pointer-events: none;
       transition: all 0.3s ease;
       margin-bottom: 8px;
+      z-index: 101;
     }
 
     .nav-menu:hover .dropdown-menu {
@@ -545,6 +547,7 @@
       border-radius: 6px;
       transition: var(--transition);
       font-size: 0.85rem;
+      white-space: nowrap;
     }
 
     .dropdown-item:hover {
@@ -553,7 +556,7 @@
     }
 
     .premium-item {
-      color: #ffd700 !important;
+      color: var(--premium-color) !important;
     }
     
     /* ======= FOOTER ======= */
@@ -567,7 +570,7 @@
 
     .footer-logo {
       width: 110px;
-      height: 20px;
+      height: 30px;
       margin: 0 auto 15px;
       display: block;
       filter: drop-shadow(0 0 8px rgba(3, 199, 113, 0.5));
@@ -839,10 +842,43 @@
         padding-bottom: max(8px, env(safe-area-inset-bottom));
       }
     }
+
+    /* Category Modal Grid */
+    .category-modal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    /* Modal Close Button */
+    .modal-close {
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--white-element);
+      transition: var(--transition);
+      background: none;
+      border: none;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .modal-close:hover {
+      color: var(--brand);
+      background: rgba(3, 199, 113, 0.1);
+    }
   </style>
 </head>
 <body>
-
+  <div class="loader-container" id="loader">
+    <div class="movieshow-loader">
+      <img src="logo.png" class="loader-logo" alt="MovieShow">
+    </div>
+  </div>
 
   <div id="ctaContainer">
     <img src="logo.png" alt="MovieShow" class="cta-logo">
@@ -934,6 +970,7 @@
       </div>
     </div>
 
+    <!-- Category Modal (corrected) -->
     <div class="modal" id="categoryModal">
       <div class="modal-content" style="max-width: 95%;">
         <div class="modal-header">
@@ -944,6 +981,7 @@
       </div>
     </div>
 
+    <!-- Support Modal (corrected) -->
     <div class="modal" id="supportModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -955,13 +993,14 @@
           <br>
           <p><strong style="color: var(--white-element);">Email:</strong> support@movieshow.com</p>
           <p><strong style="color: var(--white-element);">Phone:</strong> +257 76 38 91 63</p>
-          <p><strong style="color: var(--white-element);">WhatsApp:</strong> +257 62 66 65 71</p>
+          <p><strong style="color: var(--white-element);">WhatsApp:</strong> +257 76 38 91 63</p>
           <br>
           <p>We're available 24/7 to assist you with any issues.</p>
         </div>
       </div>
     </div>
 
+    <!-- Help Modal (corrected) -->
     <div class="modal" id="helpModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -989,10 +1028,10 @@
       <div class="nav-item nav-menu">
         <i class="fas fa-bars"></i><span>Menu</span>
         <div class="dropdown-menu">
-          <a href="#" class="dropdown-item" id="menuCategories"><i class="fas fa-tags"></i> Categories</a>
-          <a href="#" class="dropdown-item" id="menuHelp"><i class="fas fa-question-circle"></i> Help</a>
+          <a href="#" class="dropdown-item" id="menuCategoriesBtn"><i class="fas fa-tags"></i> Categories</a>
+          <a href="#" class="dropdown-item" id="menuHelpBtn"><i class="fas fa-question-circle"></i> Help</a>
           <a href="privacy.html" class="dropdown-item"><i class="fas fa-shield-alt"></i> Privacy</a>
-          <a href="#" class="dropdown-item" id="menuSupport"><i class="fas fa-headset"></i> Support</a>
+          <a href="#" class="dropdown-item" id="menuSupportBtn"><i class="fas fa-headset"></i> Support</a>
           <a href="premium.html" class="dropdown-item premium-item"><i class="fas fa-crown"></i> Go Premium</a>
         </div>
       </div>
@@ -1054,7 +1093,7 @@
     // Helper function to create slug
     const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-    // Create movie card (4 columns) with Font Awesome icons
+    // Create movie card (4 columns)
     function makeCard(key, movie) {
       const card = document.createElement('div');
       card.className = 'card';
@@ -1102,7 +1141,7 @@
       return card;
     }
 
-    // Create featured card for auto-scroll slider with Font Awesome icons
+    // Create featured card for auto-scroll slider
     function makeFeaturedCard(key, movie) {
       const card = document.createElement('div');
       card.className = 'featured-card';
@@ -1183,6 +1222,8 @@
       entries.forEach(([, movie]) => {
         if (movie.category && Array.isArray(movie.category)) {
           movie.category.forEach(cat => categories.add(cat));
+        } else if (movie.category && typeof movie.category === 'string') {
+          categories.add(movie.category);
         }
       });
       
@@ -1190,9 +1231,15 @@
       const categoriesArray = Array.from(categories);
       categoriesArray.forEach(category => {
         // Get movies for this category
-        const categoryMovies = entries.filter(([, movie]) => 
-          movie.category && movie.category.includes(category)
-        ).slice(0, 8); // Show only 8 initially (2 rows of 4)
+        const categoryMovies = entries.filter(([, movie]) => {
+          if (!movie.category) return false;
+          
+          if (Array.isArray(movie.category)) {
+            return movie.category.includes(category);
+          } else {
+            return movie.category === category;
+          }
+        }).slice(0, 8); // Show only 8 initially (2 rows of 4)
         
         if (categoryMovies.length === 0) return;
         
@@ -1217,14 +1264,14 @@
         
         container.appendChild(section);
         
-        // Add event listener to "See All" button
+        // Add event listener to "See All" button - CORRECTED
         section.querySelector('.see-all-btn').addEventListener('click', function() {
           openCategoryModal(category, entries);
         });
       });
     }
 
-    // Open category modal with 4 columns
+    // Open category modal with 4 columns - CORRECTED
     function openCategoryModal(category, entries) {
       const modal = document.getElementById('categoryModal');
       const title = document.getElementById('categoryModalTitle');
@@ -1234,9 +1281,15 @@
       content.innerHTML = '';
       
       // Get all movies for this category
-      const categoryMovies = entries.filter(([, movie]) => 
-        movie.category && movie.category.includes(category)
-      );
+      const categoryMovies = entries.filter(([, movie]) => {
+        if (!movie.category) return false;
+        
+        if (Array.isArray(movie.category)) {
+          return movie.category.includes(category);
+        } else {
+          return movie.category === category;
+        }
+      });
       
       categoryMovies.forEach(([key, movie]) => {
         content.appendChild(makeCard(key, movie));
@@ -1246,16 +1299,22 @@
       document.body.style.overflow = 'hidden';
     }
 
-    // Close modals
+    // Close modals - CORRECTED
     function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-      document.body.style.overflow = 'auto';
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
     }
 
-    // Open modals
+    // Open modals - CORRECTED
     function openModal(id) {
-      document.getElementById(id).style.display = 'flex';
-      document.body.style.overflow = 'hidden';
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
     }
 
     // Load movies from cache or Firebase
@@ -1289,6 +1348,8 @@
       const searchInput = document.getElementById('searchInput');
       const resultsContainer = document.getElementById('searchResults');
       
+      if (!searchInput || !resultsContainer) return;
+      
       searchInput.addEventListener('input', function() {
         const query = this.value.toLowerCase().trim();
         resultsContainer.innerHTML = '';
@@ -1297,7 +1358,8 @@
         
         const results = entries.filter(([, movie]) => 
           (movie.title && movie.title.toLowerCase().includes(query)) ||
-          (movie.interpreter && movie.interpreter.toLowerCase().includes(query))
+          (movie.interpreter && movie.interpreter.toLowerCase().includes(query)) ||
+          (movie.description && movie.description.toLowerCase().includes(query))
         ).slice(0, 16); // Show 16 results (4 rows of 4)
         
         results.forEach(([key, movie]) => {
@@ -1306,9 +1368,120 @@
       });
     }
 
+    // Initialize modal event listeners
+    function initModalListeners() {
+      // Search modal
+      const bottomSearch = document.getElementById('bottomSearch');
+      if (bottomSearch) {
+        bottomSearch.addEventListener('click', (e) => {
+          e.preventDefault();
+          openModal('searchModal');
+          document.getElementById('searchInput')?.focus();
+        });
+      }
+      
+      // Close search modal
+      const closeSearch = document.getElementById('closeSearch');
+      if (closeSearch) {
+        closeSearch.addEventListener('click', () => closeModal('searchModal'));
+      }
+      
+      // Close category modal
+      const closeCategory = document.getElementById('closeCategory');
+      if (closeCategory) {
+        closeCategory.addEventListener('click', () => closeModal('categoryModal'));
+      }
+      
+      // Menu buttons - CORRECTED
+      const menuCategoriesBtn = document.getElementById('menuCategoriesBtn');
+      if (menuCategoriesBtn) {
+        menuCategoriesBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          document.getElementById('categoriesSection').scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        });
+      }
+      
+      const menuHelpBtn = document.getElementById('menuHelpBtn');
+      if (menuHelpBtn) {
+        menuHelpBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openModal('helpModal');
+        });
+      }
+      
+      const menuSupportBtn = document.getElementById('menuSupportBtn');
+      if (menuSupportBtn) {
+        menuSupportBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openModal('supportModal');
+        });
+      }
+      
+      // Close help modal
+      const closeHelp = document.getElementById('closeHelp');
+      if (closeHelp) {
+        closeHelp.addEventListener('click', () => closeModal('helpModal'));
+      }
+      
+      // Close support modal
+      const closeSupport = document.getElementById('closeSupport');
+      if (closeSupport) {
+        closeSupport.addEventListener('click', () => closeModal('supportModal'));
+      }
+      
+      // Close modals on overlay click
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeModal(this.id);
+          }
+        });
+      });
+      
+      // Close modals on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          const openModal = document.querySelector('.modal[style*="display: flex"]');
+          if (openModal) {
+            closeModal(openModal.id);
+          }
+        }
+      });
+    }
+
+    // Initialize dropdown menu
+    function initDropdownMenu() {
+      const navMenu = document.querySelector('.nav-menu');
+      const dropdownMenu = document.querySelector('.dropdown-menu');
+      
+      if (!navMenu || !dropdownMenu) return;
+      
+      navMenu.addEventListener('mouseenter', () => {
+        dropdownMenu.style.opacity = '1';
+        dropdownMenu.style.pointerEvents = 'auto';
+        dropdownMenu.style.transform = 'translateX(-50%) translateY(0)';
+      });
+      
+      navMenu.addEventListener('mouseleave', () => {
+        dropdownMenu.style.opacity = '0';
+        dropdownMenu.style.pointerEvents = 'none';
+        dropdownMenu.style.transform = 'translateX(-50%) translateY(-8px)';
+      });
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', async () => {
       const loader = document.getElementById('loader');
+      
+      // Initialize modal listeners first
+      initModalListeners();
+      initDropdownMenu();
       
       // Check if first visit
       const hasVisited = localStorage.getItem(VISITED_KEY);
@@ -1316,16 +1489,20 @@
       if (!hasVisited) {
         // First visit - show CTA
         document.getElementById('ctaContainer').style.display = 'flex';
-        loader.style.display = 'none';
+        if (loader) loader.style.display = 'none';
         
-        document.getElementById('playMoviesNowBtn').addEventListener('click', () => {
-          localStorage.setItem(VISITED_KEY, 'true');
-          window.open(ADSTERRA_SMARTLINK, '_blank');
-          window.location.reload();
-        });
+        const playMoviesNowBtn = document.getElementById('playMoviesNowBtn');
+        if (playMoviesNowBtn) {
+          playMoviesNowBtn.addEventListener('click', () => {
+            localStorage.setItem(VISITED_KEY, 'true');
+            window.open(ADSTERRA_SMARTLINK, '_blank');
+            window.location.reload();
+          });
+        }
       } else {
         // Returning visitor - load content
-        document.getElementById('ctaContainer').style.display = 'none';
+        const ctaContainer = document.getElementById('ctaContainer');
+        if (ctaContainer) ctaContainer.style.display = 'none';
         
         try {
           const entries = await loadMovies();
@@ -1336,41 +1513,55 @@
             setupSearch(entries);
             
             // Show content
-            document.getElementById('contentWrapper').style.display = 'block';
+            const contentWrapper = document.getElementById('contentWrapper');
+            if (contentWrapper) contentWrapper.style.display = 'block';
           }
         } catch (error) {
           console.error("Loading error:", error);
         } finally {
           // Hide loader
-          loader.style.opacity = '0';
-          setTimeout(() => {
-            loader.style.display = 'none';
-          }, 300);
+          if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+              loader.style.display = 'none';
+            }, 300);
+          }
         }
       }
-      
-      // Modal event listeners
-      document.getElementById('bottomSearch').addEventListener('click', () => openModal('searchModal'));
-      document.getElementById('closeSearch').addEventListener('click', () => closeModal('searchModal'));
-      document.getElementById('closeCategory').addEventListener('click', () => closeModal('categoryModal'));
-      document.getElementById('menuSupport').addEventListener('click', () => openModal('supportModal'));
-      document.getElementById('closeSupport').addEventListener('click', () => closeModal('supportModal'));
-      document.getElementById('menuHelp').addEventListener('click', () => openModal('helpModal'));
-      document.getElementById('closeHelp').addEventListener('click', () => closeModal('helpModal'));
-      document.getElementById('menuCategories').addEventListener('click', () => {
-        document.getElementById('categoriesSection').scrollIntoView({ behavior: 'smooth' });
-      });
-      
-      // Close modals on overlay click
-      document.querySelectorAll('.modal').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-          if (e.target === this) {
-            this.style.display = 'none';
-            document.body.style.overflow = 'auto';
-          }
-        });
-      });
     });
+
+    // Ads System
+    const ADSTERRA_SMARTLINK_ADS = "https://www.effectivegatecpm.com/wu0xndpxcg?key=962747162b526b8e35632b7e46f1e881";
+    
+    // Delays in milliseconds
+    const delayFirstOpen = 10 * 60 * 1000;  // 10 minutes = 600,000 ms
+    const repeatInterval = 15 * 60 * 1000;   // 15 minutes = 900,000 ms
+
+    // Function to open ad URL
+    function openAdUrl() {
+      window.open(ADSTERRA_SMARTLINK_ADS, '_blank');
+      console.log("Opening ad URL.");
+    }
+
+    // Function to check if user is premium
+    function isPremiumUser() {
+      return localStorage.getItem('movieshow_premium') === 'true';
+    }
+
+    // Only run ad system for non-premium users
+    if (!isPremiumUser()) {
+      // 1. Schedule FIRST opening after 10 minutes
+      setTimeout(() => {
+        openAdUrl(); // Execute first opening
+        console.log("First ad opening after 10 minutes.");
+
+        // 2. Schedule REPEAT opening every 15 minutes
+        setInterval(openAdUrl, repeatInterval);
+        
+      }, delayFirstOpen);
+    } else {
+      console.log("Premium user detected - ads disabled.");
+    }
   </script>
 </body>
 </html>
