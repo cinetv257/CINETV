@@ -165,7 +165,7 @@
             gap: 15px;
             width: 100%;
             max-width: 400px;
-            margin: 0 auto;
+            margin: 0 auto 40px;
         }
 
         .cover-btn {
@@ -204,6 +204,70 @@
         .download-btn:hover {
             background: rgba(3, 199, 113, 0.2);
             transform: translateY(-3px);
+        }
+
+        /* ======= SIMILAR MOVIES ON COVER PAGE ======= */
+        .similar-on-cover {
+            width: 100%;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .similar-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--brand);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .similar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .similar-card {
+            position: relative;
+            background: var(--panel-2);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            aspect-ratio: 2/3;
+            border: 1px solid #333333;
+        }
+
+        .similar-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--brand);
+            box-shadow: 0 10px 20px rgba(3, 199, 113, 0.2);
+        }
+
+        .similar-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .similar-card-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            color: var(--white-element);
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* ======= FULLSCREEN PLAYER ======= */
@@ -498,6 +562,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            text-decoration: none;
+            color: inherit;
         }
 
         .quality-option:hover {
@@ -538,7 +604,7 @@
             line-height: 1.5;
         }
 
-        /* ======= SIMILAR MOVIES ======= */
+        /* ======= SIMILAR MOVIES SECTION ======= */
         .similar-movies {
             padding: 30px 4% 40px;
             background: var(--bg);
@@ -692,13 +758,13 @@
                 font-size: 1rem;
             }
             
-            .episodes-sidebar {
-                width: 100%;
-            }
-            
-            .movies-grid {
+            .similar-grid, .movies-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 10px;
+            }
+            
+            .episodes-sidebar {
+                width: 100%;
             }
         }
 
@@ -724,7 +790,7 @@
                 padding: 5px 10px;
             }
             
-            .movies-grid {
+            .similar-grid, .movies-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 8px;
             }
@@ -742,17 +808,17 @@
             }
         }
 
-        .movie-card {
+        .similar-card, .movie-card {
             animation: fadeInUp 0.5s ease forwards;
             opacity: 0;
         }
 
-        .movie-card:nth-child(1) { animation-delay: 0.1s; }
-        .movie-card:nth-child(2) { animation-delay: 0.15s; }
-        .movie-card:nth-child(3) { animation-delay: 0.2s; }
-        .movie-card:nth-child(4) { animation-delay: 0.25s; }
-        .movie-card:nth-child(5) { animation-delay: 0.3s; }
-        .movie-card:nth-child(6) { animation-delay: 0.35s; }
+        .similar-card:nth-child(1), .movie-card:nth-child(1) { animation-delay: 0.1s; }
+        .similar-card:nth-child(2), .movie-card:nth-child(2) { animation-delay: 0.15s; }
+        .similar-card:nth-child(3), .movie-card:nth-child(3) { animation-delay: 0.2s; }
+        .similar-card:nth-child(4), .movie-card:nth-child(4) { animation-delay: 0.25s; }
+        .similar-card:nth-child(5), .movie-card:nth-child(5) { animation-delay: 0.3s; }
+        .similar-card:nth-child(6), .movie-card:nth-child(6) { animation-delay: 0.35s; }
     </style>
 </head>
 <body>
@@ -786,10 +852,21 @@
                     <span>Watch Movie</span>
                 </button>
                 
-                <button class="cover-btn download-btn" id="downloadCoverButton">
+                <a href="#" class="cover-btn download-btn" id="directDownloadButton">
                     <i class="fas fa-download"></i>
                     <span>Download Movie</span>
-                </button>
+                </a>
+            </div>
+            
+            <!-- Similar Movies on Cover Page -->
+            <div class="similar-on-cover" id="similarOnCover">
+                <h3 class="similar-title">
+                    <i class="fas fa-film"></i>
+                    Similar Movies
+                </h3>
+                <div class="similar-grid" id="similarMoviesGridCover">
+                    <!-- Similar movies will be loaded here -->
+                </div>
             </div>
         </div>
     </div>
@@ -859,7 +936,7 @@
         </div>
     </div>
     
-    <!-- Similar Movies Section -->
+    <!-- Similar Movies Section (outside cover page) -->
     <section class="similar-movies" id="similarMoviesSection">
         <h3 class="section-title">
             <i class="fas fa-film"></i>
@@ -925,8 +1002,8 @@
         const episodeId = urlParams.get('episode');
         const partId = urlParams.get('part');
 
-        // Default video URL (fake video first)
-        const DEFAULT_VIDEO_URL = "https://drive.google.com/file/d/1PsAxqd5gTMluA2_cKWQjsTEoI09JrVeM/view?usp=drivesdk";
+        // Video intro URL (à afficher d'abord)
+        const INTRO_VIDEO_URL = "https://drive.google.com/file/d/1PsAxqd5gTMluA2_cKWQjsTEoI09JrVeM/view?usp=drivesdk";
         
         // Current movie data
         let currentMovie = null;
@@ -963,10 +1040,10 @@
         function makeCard(key, movie) {
             const a = document.createElement('a');
             a.href = `watch.html?id=${key}`;
-            a.className = 'movie-card';
+            a.className = 'similar-card';
             a.innerHTML = `
                 <img src="${movie.imageUrl || ''}" alt="${movie.title || ''}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
-                <div class="movie-card-title">${movie.title || ''}</div>
+                <div class="similar-card-title">${movie.title || ''}</div>
             `;
             return a;
         }
@@ -1008,7 +1085,13 @@
                     // Update cover page
                     updateCoverPage(movie);
                     
-                    // Load similar movies
+                    // Setup direct download button
+                    setupDirectDownloadButton();
+                    
+                    // Load similar movies on cover page
+                    loadSimilarMoviesCover(movieId, movie.category);
+                    
+                    // Load similar movies in main section
                     loadSimilarMovies(movieId, movie.category);
                 } else {
                     showError("Movie not found");
@@ -1075,6 +1158,27 @@
             }
         }
 
+        // Setup direct download button
+        function setupDirectDownloadButton() {
+            const directDownloadButton = document.getElementById('directDownloadButton');
+            
+            if (directDownloadButton && currentVideoUrl) {
+                // Convert Google Drive view URL to direct download URL
+                const downloadUrl = getGoogleDriveDirectDownloadUrl(currentVideoUrl);
+                
+                // Set download attributes
+                directDownloadButton.href = downloadUrl;
+                directDownloadButton.target = '_blank';
+                directDownloadButton.download = `${currentMovie.title || 'movie'}.mp4`;
+                
+                // Add click event for tracking
+                directDownloadButton.addEventListener('click', function(e) {
+                    console.log('Direct download initiated:', downloadUrl);
+                    // You can add analytics tracking here
+                });
+            }
+        }
+
         // Show error message
         function showError(message) {
             document.getElementById('coverPage').innerHTML = `
@@ -1092,12 +1196,15 @@
             `;
         }
 
-        // Load similar movies
-        function loadSimilarMovies(currentMovieId, categories) {
-            if (!categories || categories.length === 0) return;
+        // Load similar movies on cover page
+        function loadSimilarMoviesCover(currentMovieId, categories) {
+            if (!categories || categories.length === 0) {
+                document.getElementById('similarOnCover').style.display = 'none';
+                return;
+            }
             
             const moviesRef = database.ref('movies');
-            const similarMoviesGrid = document.getElementById('similarMoviesGrid');
+            const similarMoviesGrid = document.getElementById('similarMoviesGridCover');
             
             moviesRef.once('value').then((snapshot) => {
                 const movies = snapshot.val();
@@ -1121,7 +1228,51 @@
                         similarMoviesGrid.appendChild(makeCard(movie.id, movie));
                     });
                 } else {
-                    similarMoviesGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary);">No similar movies found</p>';
+                    document.getElementById('similarOnCover').style.display = 'none';
+                }
+            });
+        }
+
+        // Load similar movies in main section
+        function loadSimilarMovies(currentMovieId, categories) {
+            if (!categories || categories.length === 0) {
+                document.getElementById('similarMoviesSection').style.display = 'none';
+                return;
+            }
+            
+            const moviesRef = database.ref('movies');
+            const similarMoviesGrid = document.getElementById('similarMoviesGrid');
+            
+            moviesRef.once('value').then((snapshot) => {
+                const movies = snapshot.val();
+                const similarMovies = [];
+                
+                // Filter similar movies
+                for (const [id, movie] of Object.entries(movies)) {
+                    if (id !== currentMovieId && movie.category && 
+                        movie.category.some(cat => categories.includes(cat))) {
+                        similarMovies.push({ id, ...movie });
+                    }
+                }
+                
+                // Sort by popularity and limit to 6
+                const topSimilar = similarMovies.slice(0, 6);
+                
+                // Display similar movies
+                similarMoviesGrid.innerHTML = '';
+                if (topSimilar.length > 0) {
+                    topSimilar.forEach(movie => {
+                        const card = document.createElement('a');
+                        card.href = `watch.html?id=${movie.id}`;
+                        card.className = 'movie-card';
+                        card.innerHTML = `
+                            <img src="${movie.imageUrl || ''}" alt="${movie.title || ''}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+                            <div class="movie-card-title">${movie.title || ''}</div>
+                        `;
+                        similarMoviesGrid.appendChild(card);
+                    });
+                } else {
+                    document.getElementById('similarMoviesSection').style.display = 'none';
                 }
             });
         }
@@ -1138,7 +1289,19 @@
             return driveUrl;
         }
 
-        // Show download options
+        // Get Google Drive direct download URL
+        function getGoogleDriveDirectDownloadUrl(driveUrl) {
+            // Convert Google Drive view URL to direct download URL
+            if (driveUrl.includes('drive.google.com/file/d/')) {
+                const fileIdMatch = driveUrl.match(/\/d\/([^\/]+)/);
+                if (fileIdMatch && fileIdMatch[1]) {
+                    return `https://drive.google.com/uc?export=download&id=${fileIdMatch[1]}`;
+                }
+            }
+            return driveUrl;
+        }
+
+        // Show download options modal
         function showDownloadOptions() {
             const downloadModal = document.getElementById('downloadModal');
             const downloadQuality = document.getElementById('downloadQuality');
@@ -1173,12 +1336,6 @@
                     url: currentVideoUrl,
                     size: '1.2 GB'
                 });
-                
-                qualities.push({
-                    name: 'SD 480p',
-                    url: currentVideoUrl.replace(/\/[^\/]+$/, '/sd') || currentVideoUrl,
-                    size: '600 MB'
-                });
             }
             
             // Create download links
@@ -1203,7 +1360,7 @@
             downloadModal.style.display = 'flex';
         }
 
-        // Play video with fake URL first, then real URL
+        // Play video with intro first, then real URL
         function playVideo() {
             const fullscreenPlayer = document.getElementById('fullscreenPlayer');
             const videoIframe = document.getElementById('videoIframe');
@@ -1214,15 +1371,15 @@
             fullscreenPlayer.style.display = 'flex';
             coverPage.style.display = 'none';
             
-            // Load fake video first
-            videoIframe.src = DEFAULT_VIDEO_URL;
+            // Load intro video first
+            videoIframe.src = INTRO_VIDEO_URL;
             loadingVideo.style.display = 'flex';
             
-            // After 3 seconds, load real video
+            // After 5 seconds, load real video
             setTimeout(() => {
                 videoIframe.src = currentVideoUrl;
                 loadingVideo.style.display = 'none';
-            }, 3000);
+            }, 5000);
             
             // Load episodes if it's a series
             if (isSeries && currentEpisodes) {
@@ -1265,6 +1422,9 @@
                 
                 episodesList.appendChild(episodeCard);
             });
+            
+            // Show toggle button for series
+            document.getElementById('toggleEpisodes').style.display = 'flex';
         }
 
         // Initialize event listeners
@@ -1272,14 +1432,14 @@
             // Watch button
             document.getElementById('watchButton').addEventListener('click', playVideo);
             
-            // Download button on cover
-            document.getElementById('downloadCoverButton').addEventListener('click', showDownloadOptions);
-            
             // Close player button
             document.getElementById('closePlayer').addEventListener('click', function() {
                 document.getElementById('fullscreenPlayer').style.display = 'none';
                 document.getElementById('coverPage').style.display = 'flex';
                 document.getElementById('videoIframe').src = '';
+                
+                // Hide episodes sidebar
+                document.getElementById('episodesSidebar').classList.remove('show');
             });
             
             // Close download modal
@@ -1304,6 +1464,18 @@
                         this.style.display = 'none';
                     }
                 });
+            });
+            
+            // Add keyboard shortcut to close player
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const player = document.getElementById('fullscreenPlayer');
+                    if (player.style.display === 'flex') {
+                        player.style.display = 'none';
+                        document.getElementById('coverPage').style.display = 'flex';
+                        document.getElementById('videoIframe').src = '';
+                    }
+                }
             });
         }
 
