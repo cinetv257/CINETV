@@ -47,7 +47,7 @@
     }
     
     body {
-      background: var(--bg);
+      background: var(--bg) url('background.png') center/cover no-repeat fixed;
       color: var(--text);
       min-height: 100vh;
       padding-bottom: 70px;
@@ -62,9 +62,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: url('background.png') center/cover no-repeat;
-      filter: blur(10px);
-      opacity: 0.1;
+      background: rgba(0, 0, 0, 0.85);
       z-index: -1;
     }
 
@@ -80,8 +78,9 @@
       justify-content: center;
       z-index: 100;
       padding: 0 15px;
-      background: #000000;
-      border-bottom: 1px solid #333333;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(51, 51, 51, 0.5);
     }
     
     .logo-container {
@@ -101,11 +100,12 @@
     .quick-filters-container {
       margin-top: 55px;
       padding: 10px 4% 8px;
-      background: #000000;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
       position: sticky;
       top: 55px;
       z-index: 90;
-      border-bottom: 1px solid #333333;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.5);
     }
 
     .quick-filters {
@@ -123,8 +123,8 @@
 
     .filter-btn {
       padding: 10px 20px;
-      background: #1a1a1a;
-      border: 1px solid #333333;
+      background: rgba(26, 26, 26, 0.8);
+      border: 1px solid rgba(51, 51, 51, 0.5);
       border-radius: 25px;
       color: var(--white-element);
       font-size: 0.9rem;
@@ -133,6 +133,7 @@
       transition: var(--transition);
       white-space: nowrap;
       flex-shrink: 0;
+      backdrop-filter: blur(10px);
     }
 
     .filter-btn.active {
@@ -144,7 +145,117 @@
 
     .filter-btn:hover {
       transform: translateY(-2px);
-      background: #222222;
+      background: rgba(34, 34, 34, 0.9);
+      border-color: var(--brand);
+    }
+
+    /* ======= GENRES RECTANGLES (Horizontal Scroll) ======= */
+    .genres-section {
+      padding: 15px 4% 20px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      margin: 0 4%;
+      border-radius: 12px;
+      margin-top: -10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .genres-title {
+      font-size: 1.1rem;
+      color: var(--brand);
+      margin-bottom: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .genres-title i {
+      font-size: 1rem;
+    }
+
+    .genres-scroll-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .genres-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 5px 5px 15px 5px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .genres-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .genre-rectangle {
+      flex: 0 0 auto;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      backdrop-filter: blur(5px);
+      color: var(--white-element);
+      font-size: 0.85rem;
+      font-weight: 600;
+      min-width: 120px;
+      text-align: center;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .genre-rectangle:hover {
+      background: rgba(3, 199, 113, 0.25);
+      transform: translateY(-3px);
+      border-color: var(--brand);
+      box-shadow: 0 5px 15px rgba(3, 199, 113, 0.2);
+    }
+
+    /* Scroll indicators */
+    .scroll-indicator {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white-element);
+      cursor: pointer;
+      z-index: 2;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .genres-scroll-container:hover .scroll-indicator {
+      opacity: 1;
+    }
+
+    .scroll-left {
+      left: 5px;
+    }
+
+    .scroll-right {
+      right: 5px;
+    }
+
+    .scroll-indicator:hover {
+      background: rgba(3, 199, 113, 0.7);
       border-color: var(--brand);
     }
 
@@ -156,6 +267,7 @@
       position: relative;
       border: 1px solid rgba(255, 152, 0, 0.3);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.8);
     }
 
     .sponsored-label {
@@ -189,10 +301,13 @@
 
     /* ======= HERO SECTION ======= */
     .hero-section {
-      padding: 20px 4% 20px;
+      padding: 20px 4% 0;
       position: relative;
       overflow: hidden;
-      background: #000000;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      margin: 10px 4% 0;
+      border-radius: 12px 12px 0 0;
     }
 
     .hero-title {
@@ -325,8 +440,10 @@
     .section {
       padding: 20px 4%;
       position: relative;
-      background: #000000;
-      margin: 10px 0 0 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      margin: 10px 4%;
+      border-radius: 12px;
     }
     
     .section-header {
@@ -335,7 +452,7 @@
       align-items: center;
       margin-bottom: 15px;
       padding-bottom: 10px;
-      border-bottom: 1px solid #333333;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.5);
     }
     
     .section-title {
@@ -369,29 +486,6 @@
       transform: translateX(3px);
     }
     
-    /* ======= HORIZONTAL SCROLL FOR CATEGORIES ======= */
-    .category-scroll-container {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      padding: 5px 0;
-    }
-
-    .category-scroll {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding: 5px 5px 10px 5px;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      scroll-snap-type: x mandatory;
-    }
-
-    .category-scroll::-webkit-scrollbar {
-      display: none;
-    }
-
     /* ======= 3 COLUMNS CARDS GRID FOR ALL DEVICES ======= */
     .cards-grid {
       display: grid;
@@ -400,63 +494,111 @@
       margin-bottom: 15px;
     }
 
+    .watch-later-btn {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      color: var(--white-element);
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 3;
+      transition: var(--transition);
+      opacity: 0;
+    }
+
+    .card:hover .watch-later-btn {
+      opacity: 1;
+    }
+
+    .watch-later-btn.active {
+      color: var(--premium-color);
+      opacity: 1;
+    }
+
     /* Pour les écrans très petits */
     @media (max-width: 360px) {
       .cards-grid {
         gap: 8px;
       }
+      .genre-rectangle {
+        min-width: 100px;
+        padding: 12px 15px;
+        font-size: 0.8rem;
+      }
     }
 
-    /* Pour les tablettes et desktop - TOUJOURS 3 COLONNES */
+    /* Pour les tablettes et desktop */
     @media (min-width: 768px) {
       .cards-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 15px;
       }
       
-      .section {
+      .section, .hero-section, .genres-section, .sponsored-banner {
+        margin: 20px 6%;
         padding: 25px 6%;
       }
       
-      .sponsored-banner {
-        margin: 20px 6%;
+      .hero-section {
+        padding: 25px 6% 0;
+      }
+      
+      .genres-section {
+        padding: 15px 6% 20px;
+      }
+      
+      .genre-rectangle {
+        min-width: 140px;
+        padding: 15px 25px;
+        font-size: 0.9rem;
       }
     }
 
-    /* Pour les grands écrans - TOUJOURS 3 COLONNES */
+    /* Pour les grands écrans */
     @media (min-width: 1024px) {
       .cards-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 20px;
       }
       
-      .section {
+      .section, .hero-section, .genres-section, .sponsored-banner {
+        margin: 25px 8%;
         padding: 30px 8%;
       }
       
-      .sponsored-banner {
-        margin: 25px 8%;
+      .hero-section {
+        padding: 30px 8% 0;
+      }
+      
+      .genres-section {
+        padding: 15px 8% 20px;
+      }
+      
+      .genre-rectangle {
+        min-width: 150px;
+        padding: 15px 30px;
       }
     }
 
     .card {
       position: relative;
-      background: #1a1a1a;
+      background: rgba(26, 26, 26, 0.8);
       border-radius: 10px;
       overflow: hidden;
       cursor: pointer;
       transition: var(--transition);
       animation: fadeInUp 0.5s ease forwards;
       opacity: 0;
-      border: 1px solid #333333;
+      border: 1px solid rgba(51, 51, 51, 0.5);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      scroll-snap-align: start;
-    }
-
-    .category-scroll .card {
-      flex: 0 0 calc(33.333% - 7px);
-      min-width: 0;
-      scroll-snap-align: start;
+      backdrop-filter: blur(5px);
     }
 
     .card:hover {
@@ -487,7 +629,7 @@
     
     .card-info {
       padding: 10px 8px;
-      background: #1a1a1a;
+      background: transparent;
       position: relative;
       z-index: 1;
     }
@@ -581,7 +723,7 @@
       font-weight: bold;
       position: absolute;
       top: 8px;
-      left: 8px;
+      left: 45px;
       z-index: 2;
       box-shadow: 0 4px 8px rgba(156, 39, 176, 0.4);
     }
@@ -862,13 +1004,14 @@
     .bottom-navbar {
       position: fixed;
       inset: auto 0 0 0;
-      background: #000000;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
       display: flex;
       justify-content: space-around;
       align-items: center;
       padding: 10px 0;
       z-index: 100;
-      border-top: 1px solid #333333;
+      border-top: 1px solid rgba(51, 51, 51, 0.5);
     }
     
     .nav-item {
@@ -988,6 +1131,268 @@
     .watch-ad-btn:hover {
       background: #ffac33;
       transform: translateY(-2px);
+    }
+
+    /* ======= LONG PRESS MODAL ======= */
+    .long-press-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 110;
+    }
+    
+    .long-press-content {
+      background: #111111;
+      padding: 25px;
+      border-radius: 16px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      border: 2px solid var(--brand);
+      position: relative;
+    }
+    
+    .long-press-title {
+      color: var(--brand);
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    
+    .long-press-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .watch-option-btn {
+      padding: 15px;
+      background: rgba(3, 199, 113, 0.1);
+      border: 1px solid var(--brand);
+      border-radius: 10px;
+      color: var(--white-element);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .watch-option-btn:hover {
+      background: var(--gradient);
+      transform: translateY(-3px);
+    }
+    
+    .watch-later-option-btn {
+      padding: 15px;
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid var(--premium-color);
+      border-radius: 10px;
+      color: var(--premium-color);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .watch-later-option-btn:hover {
+      background: rgba(255, 215, 0, 0.3);
+      transform: translateY(-3px);
+    }
+    
+    .cancel-option-btn {
+      padding: 15px;
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid var(--trending-color);
+      border-radius: 10px;
+      color: var(--trending-color);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .cancel-option-btn:hover {
+      background: rgba(255, 107, 107, 0.3);
+      transform: translateY(-3px);
+    }
+    
+    /* Close button for long press modal */
+    .long-press-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--white-element);
+      transition: var(--transition);
+      background: none;
+      border: none;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      z-index: 2;
+    }
+    
+    .long-press-close:hover {
+      color: var(--brand);
+      background: rgba(3, 199, 113, 0.1);
+      transform: rotate(90deg);
+    }
+    
+    /* ======= CONTACT MODAL ======= */
+    .contact-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 130;
+    }
+    
+    .contact-content {
+      background: #111111;
+      padding: 30px;
+      border-radius: 16px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      border: 2px solid var(--brand);
+    }
+    
+    .contact-title {
+      color: var(--brand);
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    
+    .contact-message {
+      color: var(--white-element);
+      font-size: 1rem;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+    
+    .contact-whatsapp-btn {
+      padding: 15px 25px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+    
+    .contact-whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-3px);
+    }
+    
+    /* ======= CATEGORY FULL MODAL ======= */
+    .category-full-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000000;
+      display: none;
+      flex-direction: column;
+      z-index: 120;
+    }
+    
+    .category-full-header {
+      background: #111111;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333333;
+    }
+    
+    .category-full-title {
+      color: var(--brand);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    
+    .category-full-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    
+    .category-full-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    
+    /* ======= WATCH LATER & HISTORY MODAL ======= */
+    .history-modal-content {
+      max-width: 100%;
+      max-height: 100%;
+      height: 100%;
+      border-radius: 0;
+      background: #000000;
+      padding: 20px;
+    }
+    
+    .history-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #333333;
+      padding-bottom: 10px;
+    }
+    
+    .history-tab {
+      padding: 10px 20px;
+      background: rgba(26, 26, 26, 0.8);
+      border: 1px solid #333333;
+      border-radius: 25px;
+      color: var(--white-element);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .history-tab.active {
+      background: var(--gradient);
+      border-color: var(--brand);
+    }
+    
+    .history-tab:hover {
+      background: rgba(3, 199, 113, 0.2);
     }
     
     /* ======= LOADER ======= */
@@ -1113,11 +1518,12 @@
     
     /* ======= FOOTER ======= */
     footer {
-      background: #000000;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
       padding: 30px 4%;
       text-align: center;
       margin-top: 40px;
-      border-top: 1px solid #333333;
+      border-top: 1px solid rgba(51, 51, 51, 0.5);
     }
 
     .footer-logo {
@@ -1188,10 +1594,6 @@
         gap: 8px;
       }
       
-      .card {
-        flex: 0 0 calc(33.333% - 5px);
-      }
-      
       .quick-filters {
         padding: 0;
       }
@@ -1205,7 +1607,7 @@
         padding: 8px 4% 5px;
       }
       
-      .sponsored-banner {
+      .sponsored-banner, .hero-section, .section, .genres-section {
         margin: 10px 4%;
       }
       
@@ -1213,22 +1615,35 @@
         gap: 8px;
       }
       
-      .section {
-        padding: 15px 4%;
-        margin: 5px 0 0 0;
+      .genre-rectangle {
+        min-width: 100px;
+        padding: 12px 15px;
+        font-size: 0.8rem;
+      }
+      
+      .hero-section {
+        padding: 20px 4% 0;
+      }
+      
+      .genres-section {
+        padding: 15px 4% 20px;
       }
     }
     
     /* Pour les cartes dans les modales - TOUJOURS 3 COLONNES */
     #categoryModalContent.cards-grid,
-    #bookmarksGrid.cards-grid {
+    #bookmarksGrid.cards-grid,
+    #watchLaterGrid.cards-grid,
+    #historyGrid.cards-grid {
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
     }
     
     @media (min-width: 768px) {
       #categoryModalContent.cards-grid,
-      #bookmarksGrid.cards-grid {
+      #bookmarksGrid.cards-grid,
+      #watchLaterGrid.cards-grid,
+      #historyGrid.cards-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 15px;
       }
@@ -1281,6 +1696,69 @@
     </div>
   </div>
 
+  <!-- Contact Modal -->
+  <div class="contact-modal" id="contactModal">
+    <div class="contact-content">
+      <div class="contact-title">Need Website?</div>
+      <div class="contact-message">
+        Contact us on WhatsApp for professional website development services
+      </div>
+      <a href="https://wa.me/25776389163" target="_blank" class="contact-whatsapp-btn">
+        <i class="fab fa-whatsapp"></i>
+        <span>Contact on WhatsApp</span>
+      </a>
+      <button class="cancel-option-btn" id="closeContactModal" style="margin-top: 15px;">Close</button>
+    </div>
+  </div>
+
+  <!-- Long Press Modal -->
+  <div class="long-press-modal" id="longPressModal">
+    <div class="long-press-content">
+      <button class="long-press-close" id="closeLongPressModal">&times;</button>
+      <div class="long-press-title">Watch Options</div>
+      <div class="long-press-options">
+        <button class="watch-option-btn" id="watchDirectBtn">
+          <i class="fas fa-play"></i>
+          <span>Watch Direct</span>
+        </button>
+        <button class="watch-later-option-btn" id="watchLaterBtn">
+          <i class="far fa-clock"></i>
+          <span>Watch Later</span>
+        </button>
+        <button class="cancel-option-btn" id="cancelLongPressBtn">
+          <span>Cancel</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Full Modal -->
+  <div class="category-full-modal" id="categoryFullModal">
+    <div class="category-full-header">
+      <div class="category-full-title" id="categoryFullTitle">Category</div>
+      <button class="close" id="closeCategoryFull">&times;</button>
+    </div>
+    <div class="category-full-content">
+      <div class="category-full-grid" id="categoryFullGrid"></div>
+    </div>
+  </div>
+
+  <!-- History & Watch Later Modal -->
+  <div class="modal" id="historyModal">
+    <div class="history-modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-history"></i> History & Watch Later</h3>
+        <button class="close" id="closeHistory">&times;</button>
+      </div>
+      <div class="history-tabs">
+        <button class="history-tab active" data-tab="watchHistory">Watch History</button>
+        <button class="history-tab" data-tab="watchLater">Watch Later</button>
+      </div>
+      <div class="cards-grid" id="watchHistoryGrid"></div>
+      <div class="cards-grid" id="watchLaterGrid" style="display: none;"></div>
+    </div>
+  </div>
+
   <!-- Interstitial Ad -->
   <div class="interstitial-ad" id="interstitialAd">
     <div class="interstitial-content">
@@ -1322,9 +1800,9 @@
           <i class="fas fa-download"></i>
           <span>Downloaded</span>
         </a>
-        <a href="#" class="menu-item" id="menuBookmarks">
-          <i class="fas fa-bookmark"></i>
-          <span>Bookmarks</span>
+        <a href="#" class="menu-item" id="menuHistory">
+          <i class="fas fa-history"></i>
+          <span>History & Watch Later</span>
         </a>
         <a href="help.html" class="menu-item">
           <i class="fas fa-question-circle"></i>
@@ -1391,17 +1869,6 @@
       </div>
     </div>
 
-    <!-- First Sponsored Banner -->
-    <div class="sponsored-banner" id="sponsoredBanner1">
-      <div class="sponsored-label">
-        <i class="fas fa-ad"></i>
-        Sponsored
-      </div>
-      <a href="javascript:void(0)" class="sponsored-link">
-        <img src="banner.gif" alt="Sponsored Content">
-      </a>
-    </div>
-
     <!-- Featured Movies Section -->
     <div class="hero-section">
       <h3 class="hero-title">Featured Movies</h3>
@@ -1411,15 +1878,20 @@
       </div>
     </div>
 
-    <!-- Second Sponsored Banner -->
-    <div class="sponsored-banner" id="sponsoredBanner2">
-      <div class="sponsored-label">
-        <i class="fas fa-star"></i>
-        Special Offer
+    <!-- Genres Rectangles (Horizontal Scroll) -->
+    <div class="genres-section">
+      <h3 class="genres-title"><i class="fas fa-tags"></i> Browse Genres</h3>
+      <div class="genres-scroll-container">
+        <div class="scroll-indicator scroll-left" id="scrollLeft">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="genres-scroll" id="genresScroll">
+          <!-- Genres will be loaded dynamically -->
+        </div>
+        <div class="scroll-indicator scroll-right" id="scrollRight">
+          <i class="fas fa-chevron-right"></i>
+        </div>
       </div>
-      <a href="javascript:void(0)" class="sponsored-link">
-        <img src="banner.gif" alt="Special Offer">
-      </a>
     </div>
 
     <!-- Categories Sections -->
@@ -1509,6 +1981,7 @@
     let currentFilter = 'all';
     let bookmarks = JSON.parse(localStorage.getItem('movieshow_bookmarks') || '[]');
     let watchHistory = JSON.parse(localStorage.getItem('movieshow_watch_history') || '[]');
+    let watchLater = JSON.parse(localStorage.getItem('movieshow_watch_later') || '[]');
     let settings = JSON.parse(localStorage.getItem('movieshow_settings') || '{"autoPlay":true,"dataSaver":false,"notifications":true,"reduceAds":false}');
     let adBlockEnabled = localStorage.getItem('movieshow_ad_blocked') === 'true';
     let adBlockExpiry = parseInt(localStorage.getItem('movieshow_ad_block_expiry') || '0');
@@ -1524,8 +1997,22 @@
     let currentFeaturedIndex = 0;
     let featuredSlides = [];
 
-    // Create movie card - TOUJOURS 3 COLONNES
-    function makeCard(key, movie) {
+    // Long press state
+    let longPressMovieKey = null;
+    let longPressTimer = null;
+
+    // Random contact modal display
+    function maybeShowContactModal() {
+      // Show contact modal randomly (10% chance)
+      if (Math.random() < 0.1) {
+        setTimeout(() => {
+          openModal('contactModal');
+        }, 3000);
+      }
+    }
+
+    // Create movie card
+    function makeCard(key, movie, showWatchLater = true) {
       const card = document.createElement('div');
       card.className = 'card';
       card.setAttribute('data-key', key);
@@ -1538,6 +2025,9 @@
       // Vérifier si c'est un film en vedette (ID commence par =)
       const isFeatured = key.startsWith('=');
       
+      // Vérifier si dans watch later
+      const isInWatchLater = watchLater.includes(key);
+      
       // Badges
       let badgesHTML = '';
       if (movie.badge) badgesHTML += `<div class="badge">${movie.badge}</div>`;
@@ -1545,16 +2035,18 @@
       if (movie.views && movie.views.count > 10) badgesHTML += '<div class="new-badge">POPULAR</div>';
       if (isSeries) badgesHTML += '<div class="series-badge">SERIES</div>';
       
-      // Vérifier si bookmark
-      const isBookmarked = bookmarks.includes(key);
+      // Watch later button
+      const watchLaterBtnHTML = showWatchLater ? `
+        <button class="watch-later-btn ${isInWatchLater ? 'active' : ''}" data-key="${key}">
+          <i class="far fa-clock"></i>
+        </button>
+      ` : '';
       
       card.innerHTML = `
         <div class="poster-container">
           <img class="poster" src="${movie.imageUrl || ''}" alt="${movie.title || ''}" loading="lazy">
           ${badgesHTML}
-          <div class="bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-key="${key}">
-            <i class="fas fa-bookmark"></i>
-          </div>
+          ${watchLaterBtnHTML}
         </div>
         <div class="card-info">
           <div class="card-title">${movie.title ? movie.title.substring(0, 20) + (movie.title.length > 20 ? '...' : '') : ''}</div>
@@ -1575,9 +2067,9 @@
         </div>
       `;
 
-      // Click event pour card
+      // Click event pour card (short press)
       card.addEventListener('click', function(e) {
-        if (e.target.closest('.bookmark-btn')) return;
+        if (e.target.closest('.watch-later-btn')) return;
         
         e.preventDefault();
         const destination = this.getAttribute('data-destination');
@@ -1595,15 +2087,50 @@
         }
       });
 
-      // Bookmark event
-      const bookmarkBtn = card.querySelector('.bookmark-btn');
-      if (bookmarkBtn) {
-        bookmarkBtn.addEventListener('click', function(e) {
+      // Watch later event
+      const watchLaterBtn = card.querySelector('.watch-later-btn');
+      if (watchLaterBtn) {
+        watchLaterBtn.addEventListener('click', function(e) {
           e.stopPropagation();
           const movieKey = this.getAttribute('data-key');
-          toggleBookmark(movieKey, this);
+          toggleWatchLater(movieKey, this);
         });
       }
+
+      // Long press event for watch options
+      let pressTimer;
+      card.addEventListener('touchstart', function(e) {
+        pressTimer = setTimeout(() => {
+          longPressMovieKey = key;
+          openLongPressModal();
+        }, 800); // 800ms pour long press
+      });
+
+      card.addEventListener('touchend', function(e) {
+        clearTimeout(pressTimer);
+      });
+
+      card.addEventListener('touchmove', function(e) {
+        clearTimeout(pressTimer);
+      });
+
+      // Mouse events for desktop
+      card.addEventListener('mousedown', function(e) {
+        if (e.button === 0) { // Left click only
+          pressTimer = setTimeout(() => {
+            longPressMovieKey = key;
+            openLongPressModal();
+          }, 800);
+        }
+      });
+
+      card.addEventListener('mouseup', function(e) {
+        clearTimeout(pressTimer);
+      });
+
+      card.addEventListener('mouseleave', function(e) {
+        clearTimeout(pressTimer);
+      });
 
       return card;
     }
@@ -1652,9 +2179,91 @@
       return slide;
     }
 
+    // ======= WATCH LATER SYSTEM =======
+    function toggleWatchLater(movieKey, element) {
+      const index = watchLater.indexOf(movieKey);
+      if (index === -1) {
+        watchLater.push(movieKey);
+        if (element) element.classList.add('active');
+        showNotification('Added to Watch Later');
+      } else {
+        watchLater.splice(index, 1);
+        if (element) element.classList.remove('active');
+        showNotification('Removed from Watch Later');
+      }
+      localStorage.setItem('movieshow_watch_later', JSON.stringify(watchLater));
+      updateWatchLaterGrid();
+    }
+
+    function updateWatchLaterGrid() {
+      const grid = document.getElementById('watchLaterGrid');
+      if (!grid) return;
+      
+      grid.innerHTML = '';
+      
+      if (watchLater.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1; padding: 40px 20px; text-align: center;">
+            <i class="far fa-clock" style="font-size: 2rem; margin-bottom: 10px; color: var(--muted);"></i>
+            <p style="color: var(--muted);">No movies in Watch Later</p>
+          </div>
+        `;
+        return;
+      }
+      
+      watchLater.forEach(key => {
+        const movie = allMovies.find(([k]) => k === key);
+        if (movie) {
+          grid.appendChild(makeCard(key, movie[1], false));
+        }
+      });
+    }
+
+    function updateHistoryGrid() {
+      const grid = document.getElementById('watchHistoryGrid');
+      if (!grid) return;
+      
+      grid.innerHTML = '';
+      
+      if (watchHistory.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1; padding: 40px 20px; text-align: center;">
+            <i class="fas fa-history" style="font-size: 2rem; margin-bottom: 10px; color: var(--muted);"></i>
+            <p style="color: var(--muted);">No watch history yet</p>
+          </div>
+        `;
+        return;
+      }
+      
+      watchHistory.forEach(item => {
+        const movie = allMovies.find(([key]) => key === item.key);
+        if (movie) {
+          grid.appendChild(makeCard(item.key, movie[1], false));
+        }
+      });
+    }
+
+    // ======= LONG PRESS MODAL =======
+    function openLongPressModal() {
+      if (!longPressMovieKey) return;
+      
+      const modal = document.getElementById('longPressModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeLongPressModal() {
+      const modal = document.getElementById('longPressModal');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        longPressMovieKey = null;
+      }
+    }
+
     // ======= AD SYSTEM =======
-    
-    // Montrer annonce avec redirection vers ADSTERRA
     function showInterstitialAd(callback) {
       if (adBlockEnabled) {
         if (callback) callback();
@@ -1696,7 +2305,6 @@
       };
     }
     
-    // Track ad watched
     function trackAdWatched() {
       let adCount = parseInt(localStorage.getItem('movieshow_ad_count') || '0');
       adCount++;
@@ -1714,23 +2322,6 @@
     }
     
     // ======= APP FUNCTIONS =======
-    
-    // Toggle bookmark
-    function toggleBookmark(movieKey, element) {
-      const index = bookmarks.indexOf(movieKey);
-      if (index === -1) {
-        bookmarks.push(movieKey);
-        element.classList.add('bookmarked');
-        showNotification('Added to bookmarks');
-      } else {
-        bookmarks.splice(index, 1);
-        element.classList.remove('bookmarked');
-        showNotification('Removed from bookmarks');
-      }
-      localStorage.setItem('movieshow_bookmarks', JSON.stringify(bookmarks));
-    }
-
-    // Add to watch history
     function addToWatchHistory(key, movie) {
       // Remove if already exists
       watchHistory = watchHistory.filter(item => item.key !== key);
@@ -1750,13 +2341,12 @@
       }
       
       localStorage.setItem('movieshow_watch_history', JSON.stringify(watchHistory));
+      updateHistoryGrid();
     }
 
-    // Show notification
     function showNotification(message) {
       if (!settings.notifications) return;
       
-      // Create notification element
       const notification = document.createElement('div');
       notification.style.cssText = `
         position: fixed;
@@ -1784,13 +2374,11 @@
       
       document.body.appendChild(notification);
       
-      // Remove after 3 seconds
       setTimeout(() => {
         notification.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => notification.remove(), 300);
       }, 3000);
       
-      // Add animation styles
       if (!document.querySelector('#notificationStyles')) {
         const style = document.createElement('style');
         style.id = 'notificationStyles';
@@ -1808,16 +2396,14 @@
       }
     }
 
-    // Apply filter
+    // Apply filter - FONCTIONNEL
     function applyFilter(filterType) {
       currentFilter = filterType;
       
-      // Update active filter button
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.filter === filterType);
       });
       
-      // Filter movies based on type - FONCTIONNEL
       filteredMovies = allMovies.filter(([, movie]) => {
         const isMovie = movie.type === 'movie' || movie.type === 'multi-part';
         const isSeries = movie.type === 'series';
@@ -1832,33 +2418,25 @@
         }
       });
       
-      // Re-render categories avec films filtrés
       renderCategories(filteredMovies);
+      renderGenres(filteredMovies);
     }
 
-    // Load featured movies (ID commence par =)
     function loadFeaturedMovies() {
-      // Filtrer les films dont l'ID commence par =
       featuredMovies = allMovies.filter(([key]) => key.startsWith('='));
       
-      // Si pas assez, prendre des films populaires
       if (featuredMovies.length < 3) {
-        // Prendre des films avec beaucoup de vues
         const popularMovies = allMovies.filter(([, movie]) => 
           movie.views && movie.views.count > 0
         ).sort((a, b) => b[1].views.count - a[1].views.count);
         
-        // Combiner
         featuredMovies = [...featuredMovies, ...popularMovies.slice(0, 5 - featuredMovies.length)];
       }
       
-      // Limiter à 5 films max
       featuredMovies = featuredMovies.slice(0, 5);
-      
       return featuredMovies;
     }
 
-    // Render featured content
     function renderFeaturedContent(featuredEntries) {
       const slider = document.getElementById('featuredSlider');
       const dotsContainer = document.getElementById('featuredDots');
@@ -1867,7 +2445,6 @@
       dotsContainer.innerHTML = '';
       
       if (featuredEntries.length === 0) {
-        // Message si pas de films en vedette
         slider.innerHTML = `
           <div class="featured-slide">
             <div style="padding: 40px 20px; text-align: center;">
@@ -1880,14 +2457,12 @@
         return;
       }
       
-      // Créer slides
       featuredSlides = [];
       featuredEntries.forEach(([key, movie], index) => {
         const slide = makeFeaturedSlide(key, movie, index);
         slider.appendChild(slide);
         featuredSlides.push(slide);
         
-        // Créer dot
         const dot = document.createElement('div');
         dot.className = `slider-dot ${index === 0 ? 'active' : ''}`;
         dot.setAttribute('data-index', index);
@@ -1895,27 +2470,22 @@
         dotsContainer.appendChild(dot);
       });
       
-      // Update slider position
       updateFeaturedSlider();
       
-      // Setup auto rotation
       setInterval(() => {
         nextFeaturedSlide();
       }, 5000);
     }
 
-    // Update featured slider position
     function updateFeaturedSlider() {
       const slider = document.getElementById('featuredSlider');
       slider.style.transform = `translateX(-${currentFeaturedIndex * 100}%)`;
       
-      // Update dots
       document.querySelectorAll('.slider-dot').forEach((dot, index) => {
         dot.classList.toggle('active', index === currentFeaturedIndex);
       });
     }
 
-    // Go to specific featured slide
     function goToFeaturedSlide(index) {
       if (index < 0) index = featuredMovies.length - 1;
       if (index >= featuredMovies.length) index = 0;
@@ -1924,12 +2494,10 @@
       updateFeaturedSlider();
     }
 
-    // Next featured slide
     function nextFeaturedSlide() {
       goToFeaturedSlide(currentFeaturedIndex + 1);
     }
 
-    // Setup swipe functionality for featured
     function setupFeaturedSwipe() {
       const sliderContainer = document.querySelector('.featured-slider-container');
       let startX = 0;
@@ -1958,12 +2526,116 @@
       });
     }
 
-    // Render categories with horizontal scroll - TOUJOURS 3 COLONNES
+    // Render genres rectangles with horizontal scroll
+    function renderGenres(entries) {
+      const genresScroll = document.getElementById('genresScroll');
+      if (!genresScroll) return;
+      
+      const genres = new Set();
+      entries.forEach(([, movie]) => {
+        if (movie.category) {
+          if (Array.isArray(movie.category)) {
+            movie.category.forEach(cat => genres.add(cat));
+          } else {
+            genres.add(movie.category);
+          }
+        }
+      });
+      
+      genresScroll.innerHTML = '';
+      const genresArray = Array.from(genres);
+      
+      genresArray.forEach(genre => {
+        const genreElement = document.createElement('div');
+        genreElement.className = 'genre-rectangle';
+        genreElement.textContent = genre.substring(0, 15) + (genre.length > 15 ? '...' : '');
+        genreElement.setAttribute('data-genre', genre);
+        
+        genreElement.addEventListener('click', () => {
+          const genreMovies = entries.filter(([, movie]) => {
+            if (!movie.category) return false;
+            if (Array.isArray(movie.category)) {
+              return movie.category.includes(genre);
+            } else {
+              return movie.category === genre;
+            }
+          });
+          
+          if (genreMovies.length > 0) {
+            showCategoryFull(genre, genreMovies);
+          }
+        });
+        
+        genresScroll.appendChild(genreElement);
+      });
+      
+      // Setup scroll buttons
+      setupGenresScroll();
+    }
+
+    function setupGenresScroll() {
+      const genresScroll = document.getElementById('genresScroll');
+      const scrollLeft = document.getElementById('scrollLeft');
+      const scrollRight = document.getElementById('scrollRight');
+      
+      if (!genresScroll || !scrollLeft || !scrollRight) return;
+      
+      scrollLeft.addEventListener('click', () => {
+        genresScroll.scrollBy({ left: -200, behavior: 'smooth' });
+      });
+      
+      scrollRight.addEventListener('click', () => {
+        genresScroll.scrollBy({ left: 200, behavior: 'smooth' });
+      });
+      
+      // Touch swipe for mobile
+      let isSwiping = false;
+      let startX = 0;
+      
+      genresScroll.addEventListener('touchstart', (e) => {
+        isSwiping = true;
+        startX = e.touches[0].clientX;
+      });
+      
+      genresScroll.addEventListener('touchmove', (e) => {
+        if (!isSwiping) return;
+        e.preventDefault();
+      });
+      
+      genresScroll.addEventListener('touchend', (e) => {
+        if (!isSwiping) return;
+        
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > 50) {
+          genresScroll.scrollBy({ left: diff > 0 ? 200 : -200, behavior: 'smooth' });
+        }
+        
+        isSwiping = false;
+      });
+    }
+
+    // Show category in full screen
+    function showCategoryFull(categoryName, movies) {
+      const titleElement = document.getElementById('categoryFullTitle');
+      const gridElement = document.getElementById('categoryFullGrid');
+      
+      titleElement.textContent = categoryName;
+      gridElement.innerHTML = '';
+      
+      movies.slice(0, 30).forEach(([key, movie]) => {
+        gridElement.appendChild(makeCard(key, movie));
+      });
+      
+      openModal('categoryFullModal');
+    }
+
+    // Render categories avec "See All" button
     function renderCategories(entries) {
       const container = document.getElementById('categoriesContainer');
       container.innerHTML = '';
       
-      // Get all categories
       const categories = new Set();
       entries.forEach(([, movie]) => {
         if (movie.category && Array.isArray(movie.category)) {
@@ -1973,46 +2645,63 @@
         }
       });
       
-      // Create category sections
       const categoriesArray = Array.from(categories);
       categoriesArray.forEach(category => {
-        // Get movies for this category
         const categoryMovies = entries.filter(([, movie]) => {
           if (!movie.category) return false;
-          
           if (Array.isArray(movie.category)) {
             return movie.category.includes(category);
           } else {
             return movie.category === category;
           }
-        }).slice(0, 12); // Limiter à 12 films par catégorie
+        }).slice(0, 3); // Seulement 3 films par catégorie
         
         if (categoryMovies.length === 0) return;
         
         const section = document.createElement('div');
         section.className = 'category-section';
-        section.style.marginBottom = '20px';
+        section.style.marginBottom = '25px';
         section.setAttribute('data-category', category);
         
         section.innerHTML = `
           <div class="section-header">
             <h3 class="section-title"><i class="fas fa-tag"></i> ${category.substring(0, 20)}${category.length > 20 ? '...' : ''}</h3>
+            <button class="see-all-btn see-category-btn" data-category="${category}">
+              <i class="fas fa-list"></i>
+              <span>See All</span>
+            </button>
           </div>
-          <div class="category-scroll-container">
-            <div class="category-scroll" id="cat-${category.replace(/\s+/g, '-').toLowerCase()}"></div>
-          </div>
+          <div class="cards-grid" id="cat-${category.replace(/\s+/g, '-').toLowerCase()}"></div>
         `;
         
-        const scrollContainer = section.querySelector(`#cat-${category.replace(/\s+/g, '-').toLowerCase()}`);
+        const gridContainer = section.querySelector(`#cat-${category.replace(/\s+/g, '-').toLowerCase()}`);
         categoryMovies.forEach(([key, movie]) => {
-          scrollContainer.appendChild(makeCard(key, movie));
+          gridContainer.appendChild(makeCard(key, movie));
         });
         
         container.appendChild(section);
       });
+      
+      // Add event listeners to "See All" buttons
+      document.querySelectorAll('.see-category-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const category = this.getAttribute('data-category');
+          const categoryMovies = entries.filter(([, movie]) => {
+            if (!movie.category) return false;
+            if (Array.isArray(movie.category)) {
+              return movie.category.includes(category);
+            } else {
+              return movie.category === category;
+            }
+          });
+          
+          if (categoryMovies.length > 0) {
+            showCategoryFull(category, categoryMovies);
+          }
+        });
+      });
     }
 
-    // Setup search with suggestions and animated placeholder
     function setupSearch(entries) {
       const searchInput = document.getElementById('searchInput');
       const animatedPlaceholder = document.getElementById('animatedPlaceholder');
@@ -2021,7 +2710,6 @@
       
       if (!searchInput || !animatedPlaceholder || !interpretersList || !resultsContainer) return;
       
-      // Get all unique interpreters for suggestions
       const interpreters = new Set();
       entries.forEach(([, movie]) => {
         if (movie.interpreter) {
@@ -2029,7 +2717,6 @@
         }
       });
       
-      // Add interpreters to suggestions
       interpretersList.innerHTML = '';
       Array.from(interpreters).slice(0, 8).forEach(interpreter => {
         const tag = document.createElement('div');
@@ -2042,12 +2729,10 @@
         interpretersList.appendChild(tag);
       });
       
-      // Get movie titles for animated placeholder
       const movieTitles = entries.map(([, movie]) => movie.title).filter(title => title).slice(0, 8);
       const placeholderText = movieTitles.join(' • ');
       animatedPlaceholder.textContent = placeholderText;
       
-      // Search functionality
       searchInput.addEventListener('input', function() {
         const query = this.value.trim();
         if (query.length < 2) {
@@ -2058,7 +2743,6 @@
       });
     }
     
-    // Perform search
     function performSearch(query) {
       const resultsContainer = document.getElementById('searchResults');
       resultsContainer.innerHTML = '';
@@ -2085,7 +2769,6 @@
       });
     }
 
-    // Close modals
     function closeModal(id) {
       const modal = document.getElementById(id);
       if (modal) {
@@ -2094,7 +2777,6 @@
       }
     }
 
-    // Open modals
     function openModal(id) {
       const modal = document.getElementById(id);
       if (modal) {
@@ -2103,7 +2785,6 @@
       }
     }
 
-    // Load movies from cache or Firebase
     async function loadMovies() {
       const cache = localStorage.getItem('movieshow_movies');
       const cacheTime = localStorage.getItem('movieshow_cache_time');
@@ -2134,49 +2815,41 @@
       const loader = document.getElementById('loader');
       const contentWrapper = document.getElementById('contentWrapper');
       
-      // Initialize event listeners
       initEventListeners();
       
-      // Setup sponsored banners
-      document.querySelectorAll('.sponsored-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          window.open(ADSTERRA_SMARTLINK, '_blank');
-        });
-      });
+      // Show random contact modal
+      maybeShowContactModal();
       
-      // Load content
       try {
         const entries = await loadMovies();
         allMovies = entries;
         filteredMovies = entries;
         
         if (entries.length > 0) {
-          // Load featured movies (ID commence par =)
           featuredMovies = loadFeaturedMovies();
           
-          // Render content
           renderFeaturedContent(featuredMovies);
           setupFeaturedSwipe();
+          renderGenres(entries);
           renderCategories(entries);
           setupSearch(entries);
           
-          // Apply initial filter
           applyFilter('all');
           
-          // Set up filter buttons
           document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
               applyFilter(btn.dataset.filter);
             });
           });
           
-          // Show content
           if (contentWrapper) {
             contentWrapper.style.display = 'block';
           }
+          
+          // Update history and watch later grids
+          updateHistoryGrid();
+          updateWatchLaterGrid();
         } else {
-          // Show empty state
           if (contentWrapper) {
             contentWrapper.style.display = 'block';
             contentWrapper.innerHTML = `
@@ -2201,7 +2874,6 @@
           `;
         }
       } finally {
-        // Hide loader
         setTimeout(() => {
           document.body.classList.remove('loading');
           if (loader) {
@@ -2214,7 +2886,6 @@
       }
     });
 
-    // Initialize event listeners
     function initEventListeners() {
       // Navigation buttons
       document.getElementById('navHome').addEventListener('click', (e) => {
@@ -2256,11 +2927,63 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
       
+      // History button
+      document.getElementById('menuHistory').addEventListener('click', (e) => {
+        e.preventDefault();
+        closeModal('menuModal');
+        openModal('historyModal');
+        document.querySelector('.history-tab.active').click();
+      });
+      
       // Close buttons
       document.getElementById('closeSearch').addEventListener('click', () => closeModal('searchModal'));
       document.getElementById('closeMenu').addEventListener('click', () => closeModal('menuModal'));
+      document.getElementById('closeHistory').addEventListener('click', () => closeModal('historyModal'));
+      document.getElementById('closeCategoryFull').addEventListener('click', () => closeModal('categoryFullModal'));
+      document.getElementById('closeContactModal').addEventListener('click', () => closeModal('contactModal'));
+      document.getElementById('closeLongPressModal').addEventListener('click', closeLongPressModal);
       
-      // Ad block button in menu
+      // History tabs
+      document.querySelectorAll('.history-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          document.querySelectorAll('.history-tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          
+          const tabType = this.dataset.tab;
+          document.getElementById('watchHistoryGrid').style.display = tabType === 'watchHistory' ? 'grid' : 'none';
+          document.getElementById('watchLaterGrid').style.display = tabType === 'watchLater' ? 'grid' : 'none';
+        });
+      });
+      
+      // Long press modal buttons
+      document.getElementById('watchDirectBtn').addEventListener('click', () => {
+        if (longPressMovieKey) {
+          const movie = allMovies.find(([key]) => key === longPressMovieKey);
+          if (movie) {
+            closeLongPressModal();
+            addToWatchHistory(longPressMovieKey, movie[1]);
+            
+            if (!adBlockEnabled) {
+              showInterstitialAd(() => {
+                window.location.href = WATCH_URL_PREFIX + longPressMovieKey;
+              });
+            } else {
+              window.location.href = WATCH_URL_PREFIX + longPressMovieKey;
+            }
+          }
+        }
+      });
+      
+      document.getElementById('watchLaterBtn').addEventListener('click', () => {
+        if (longPressMovieKey) {
+          toggleWatchLater(longPressMovieKey);
+          closeLongPressModal();
+        }
+      });
+      
+      document.getElementById('cancelLongPressBtn').addEventListener('click', closeLongPressModal);
+      
+      // Ad block button
       const adBlockBtn = document.getElementById('adBlockBtn');
       if (adBlockBtn) {
         adBlockBtn.addEventListener('click', () => {
@@ -2274,20 +2997,17 @@
         });
       }
       
-      // Bookmarks button in menu
-      const menuBookmarks = document.getElementById('menuBookmarks');
-      if (menuBookmarks) {
-        menuBookmarks.addEventListener('click', (e) => {
-          e.preventDefault();
-          showNotification('Bookmarks feature coming soon!');
-        });
-      }
-      
       // Close modals on overlay click
-      document.querySelectorAll('.modal').forEach(modal => {
+      document.querySelectorAll('.modal, .long-press-modal, .contact-modal').forEach(modal => {
         modal.addEventListener('click', function(e) {
           if (e.target === this) {
-            closeModal(this.id);
+            if (this.id === 'longPressModal') {
+              closeLongPressModal();
+            } else if (this.id === 'contactModal') {
+              closeModal('contactModal');
+            } else {
+              closeModal(this.id);
+            }
           }
         });
       });
@@ -2295,6 +3015,18 @@
       // Close modals on Escape key
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
+          const longPressModal = document.getElementById('longPressModal');
+          if (longPressModal && longPressModal.style.display === 'flex') {
+            closeLongPressModal();
+            return;
+          }
+          
+          const contactModal = document.getElementById('contactModal');
+          if (contactModal && contactModal.style.display === 'flex') {
+            closeModal('contactModal');
+            return;
+          }
+          
           const openModal = document.querySelector('.modal[style*="display: flex"]');
           if (openModal) {
             closeModal(openModal.id);
