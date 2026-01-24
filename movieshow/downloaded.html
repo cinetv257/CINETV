@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MovieShow - Downloaded Videos</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    :root {
+      --bg: #000000;
+      --panel: #111111;
+      --panel-2: #222222;
+      --text: #ffffff;
+      --text-secondary: #f0f0f0;
+      --muted: #cccccc;
+      --brand: #03C771;
+      --brand-light: #34d187;
+      --brand-dark: #02a55c;
+      --action: #03C771;
+      --success: #03C771;
+      --transition: all 0.3s ease;
+      --title-color: #03C771;
+      --gradient: linear-gradient(135deg, #03C771 0%, #02a55c 100%);
+      --white-element: #ffffff;
+      --warning-color: #ff9800;
+      --error-color: #ff6b6b;
+      --info-color: #4d96ff;
+    }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 70px;
+      overflow-x: hidden;
+    }
+
+    /* ======= NAVBAR ======= */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 0 15px;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(51, 51, 51, 0.5);
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo-img {
+      width: 155px;
+      height: 155px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(3, 199, 113, 0.7));
+    }
+
+    /* ======= CONTAINER ======= */
+    .container {
+      margin-top: 55px;
+      padding: 20px 15px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ======= HEADER ======= */
+    .page-header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.5);
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      color: var(--brand);
+      margin-bottom: 8px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .page-subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ======= TIP CARD ======= */
+    .tip-card {
+      background: rgba(255, 152, 0, 0.1);
+      border: 1px solid var(--warning-color);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      max-height: 200px;
+      transition: max-height 0.4s ease, padding 0.4s ease, margin 0.4s ease;
+    }
+
+    .tip-card.collapsed {
+      max-height: 50px;
+      padding: 10px 15px;
+      margin-bottom: 15px;
+      cursor: pointer;
+    }
+
+    .tip-card.collapsed:hover {
+      background: rgba(255, 152, 0, 0.15);
+    }
+
+    .tip-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .tip-title-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tip-icon {
+      color: var(--warning-color);
+      font-size: 1.2rem;
+    }
+
+    .tip-title {
+      color: var(--warning-color);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .toggle-tip-btn {
+      background: none;
+      border: none;
+      color: var(--warning-color);
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .toggle-tip-btn:hover {
+      background: rgba(255, 152, 0, 0.2);
+      transform: rotate(90deg);
+    }
+
+    .tip-content {
+      color: var(--white-element);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .tip-card.collapsed .tip-content {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .tip-content ul {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+
+    .tip-content li {
+      margin-bottom: 5px;
+    }
+
+    /* ======= ACTION SECTION ======= */
+    .action-section {
+      background: rgba(26, 26, 26, 0.5);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(51, 51, 51, 0.5);
+      backdrop-filter: blur(5px);
+      text-align: center;
+    }
+
+    .action-title {
+      font-size: 1.1rem;
+      color: var(--brand);
+      margin-bottom: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .action-subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .browse-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      background: var(--gradient);
+      color: var(--white-element);
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      margin-bottom: 15px;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .browse-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(3, 199, 113, 0.5);
+    }
+
+    .file-info {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+
+    /* ======= FILE LIST SECTION ======= */
+    .files-section {
+      background: rgba(26, 26, 26, 0.5);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(51, 51, 51, 0.5);
+      backdrop-filter: blur(5px);
+      display: none;
+    }
+
+    .files-section.visible {
+      display: block;
+    }
+
+    .files-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .files-title {
+      font-size: 1.1rem;
+      color: var(--brand);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .files-count {
+      background: var(--brand);
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+
+    .clear-btn {
+      padding: 6px 12px;
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid var(--error-color);
+      border-radius: 6px;
+      color: var(--error-color);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+    }
+
+    .clear-btn:hover {
+      background: rgba(255, 107, 107, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .files-list {
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 5px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: var(--transition);
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .file-item:hover {
+      background: rgba(3, 199, 113, 0.1);
+      border-color: rgba(3, 199, 113, 0.3);
+      transform: translateX(5px);
+    }
+
+    .file-item.active {
+      background: rgba(3, 199, 113, 0.2);
+      border-color: var(--brand);
+    }
+
+    .file-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(3, 199, 113, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand);
+      font-size: 1.2rem;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+
+    .file-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .file-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--white-element);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-meta {
+      display: flex;
+      gap: 10px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .file-size {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .file-type {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .file-play-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(3, 199, 113, 0.2);
+      border: 1px solid var(--brand);
+      color: var(--brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+      margin-left: 10px;
+    }
+
+    .file-play-btn:hover {
+      background: var(--gradient);
+      color: var(--white-element);
+      transform: scale(1.1);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      opacity: 0.5;
+    }
+
+    .empty-title {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--brand);
+    }
+
+    .empty-text {
+      font-size: 0.9rem;
+    }
+
+    /* ======= VIDEO PLAYER MODAL ======= */
+    .player-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000000;
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+    }
+
+    .player-modal.active {
+      display: flex;
+    }
+
+    .player-header {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.5);
+      z-index: 10;
+    }
+
+    .player-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white-element);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 70%;
+    }
+
+    .player-close {
+      background: none;
+      border: none;
+      color: var(--white-element);
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .player-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--brand);
+    }
+
+    .player-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #videoPlayer {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .player-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+      padding: 20px 15px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .player-container:hover .player-controls {
+      opacity: 1;
+    }
+
+    .progress-container {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 2px;
+      width: 0%;
+      position: relative;
+    }
+
+    .progress-time {
+      position: absolute;
+      bottom: -20px;
+      font-size: 0.75rem;
+      color: var(--white-element);
+      background: rgba(0, 0, 0, 0.7);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .progress-container:hover .progress-time {
+      display: block;
+    }
+
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .left-controls, .right-controls, .center-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .control-btn {
+      background: none;
+      border: none;
+      color: var(--white-element);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .control-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--brand);
+    }
+
+    .play-pause-btn {
+      background: var(--brand);
+      color: var(--white-element);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+    .play-pause-btn:hover {
+      background: var(--brand-light);
+      transform: scale(1.05);
+    }
+
+    .time-display {
+      color: var(--white-element);
+      font-size: 0.9rem;
+      font-weight: 600;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .volume-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .volume-slider {
+      width: 80px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .volume-level {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 2px;
+      width: 80%;
+    }
+
+    /* Speed control */
+    .speed-control {
+      position: relative;
+    }
+
+    .speed-btn {
+      background: none;
+      border: none;
+      color: var(--white-element);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      transition: var(--transition);
+    }
+
+    .speed-btn:hover {
+      background: rgba(3, 199, 113, 0.2);
+    }
+
+    .speed-options {
+      position: absolute;
+      bottom: 45px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 8px;
+      padding: 8px;
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 80px;
+      border: 1px solid rgba(51, 51, 51, 0.5);
+      z-index: 10;
+    }
+
+    .speed-options.show {
+      display: flex;
+    }
+
+    .speed-option {
+      background: none;
+      border: none;
+      color: var(--white-element);
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    .speed-option:hover {
+      background: rgba(3, 199, 113, 0.3);
+    }
+
+    .speed-option.active {
+      background: var(--brand);
+      color: white;
+      font-weight: 600;
+    }
+
+    /* ======= BOTTOM NAV ======= */
+    .bottom-navbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      z-index: 100;
+      border-top: 1px solid rgba(51, 51, 51, 0.5);
+    }
+    
+    .nav-item {
+      color: var(--white-element);
+      text-decoration: none;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: var(--transition);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      flex: 1;
+      text-align: center;
+      max-width: 70px;
+    }
+    
+    .nav-item i {
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+    
+    .nav-item:hover {
+      color: var(--brand);
+      background: rgba(3, 199, 113, 0.1);
+      transform: translateY(-3px);
+    }
+    
+    .nav-item.active {
+      color: var(--brand);
+      background: rgba(3, 199, 113, 0.15);
+    }
+
+    /* ======= RESPONSIVE ======= */
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px 10px;
+      }
+      
+      .page-title {
+        font-size: 1.3rem;
+      }
+      
+      .action-section, .files-section, .tip-card {
+        padding: 15px;
+      }
+      
+      .file-item {
+        padding: 10px 12px;
+      }
+      
+      .file-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+        margin-right: 10px;
+      }
+      
+      .player-header {
+        padding: 10px 15px;
+      }
+      
+      .center-controls {
+        display: none;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 25px 20px;
+      }
+      
+      .page-title {
+        font-size: 1.8rem;
+      }
+      
+      .files-list {
+        max-height: 500px;
+      }
+      
+      .player-modal {
+        padding: 20px;
+      }
+      
+      .player-header {
+        padding: 20px 30px;
+      }
+      
+      .player-title {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--brand);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--brand-light);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease;
+    }
+
+    .slide-up {
+      animation: slideUp 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo-container">
+      <img src="logo.png" class="logo-img" alt="MovieShow">
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <!-- HEADER -->
+    <div class="page-header fade-in">
+      <h1 class="page-title">
+        <i class="fas fa-download"></i>
+        Downloaded Videos
+      </h1>
+      <p class="page-subtitle">
+        Browse and watch videos stored locally on your device
+      </p>
+    </div>
+
+    <!-- TIP CARD -->
+    <div class="tip-card slide-up" id="tipCard">
+      <div class="tip-header">
+        <div class="tip-title-container">
+          <i class="fas fa-lightbulb tip-icon"></i>
+          <div class="tip-title">Important Tip</div>
+        </div>
+        <button class="toggle-tip-btn" id="toggleTipBtn">
+          <i class="fas fa-chevron-up" id="tipToggleIcon"></i>
+        </button>
+      </div>
+      <div class="tip-content">
+        <p>For the best experience, select your video files from the <strong>Download</strong> folder on your phone:</p>
+        <ul>
+          <li>Go to <strong>Download</strong> or <strong>Downloads</strong> folder</li>
+          <li>Select video files (MP4, MKV, AVI, etc.)</li>
+          <li>Avoid system or protected folders</li>
+          <li>Videos must be in a format supported by your browser</li>
+          <li>You can select multiple files at once</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ACTION SECTION -->
+    <div class="action-section slide-up">
+      <h3 class="action-title">
+        <i class="fas fa-folder-open"></i>
+        Select Video to Watch
+      </h3>
+      <p class="action-subtitle">
+        Choose video files from your device to watch offline. Select one or multiple files.
+      </p>
+      <input type="file" id="fileInput" accept="video/*" multiple style="display: none;">
+      <button class="browse-btn" id="browseBtn">
+        <i class="fas fa-folder"></i>
+        Browse Files
+      </button>
+      <p class="file-info">
+        Supported formats: MP4, WebM, OGG, MKV, AVI, MOV, 3GP, FLV
+      </p>
+    </div>
+
+    <!-- FILES LIST SECTION -->
+    <div class="files-section" id="filesSection">
+      <div class="files-header">
+        <h3 class="files-title">
+          <i class="fas fa-file-video"></i>
+          Selected Videos
+          <span class="files-count" id="filesCount">0</span>
+        </h3>
+        <button class="clear-btn" id="clearBtn">
+          <i class="fas fa-trash"></i>
+          <span>Clear All</span>
+        </button>
+      </div>
+      <div class="files-list" id="filesList">
+        <div class="empty-state">
+          <i class="fas fa-film empty-icon"></i>
+          <div class="empty-title">No files selected</div>
+          <div class="empty-text">Use the "Browse Files" button above to add videos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO PLAYER MODAL -->
+  <div class="player-modal" id="playerModal">
+    <div class="player-header">
+      <div class="player-title" id="playerTitle">Video Player</div>
+      <button class="player-close" id="playerClose">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="player-container">
+      <video id="videoPlayer" controls>
+        Your browser does not support the video tag.
+      </video>
+      <div class="player-controls">
+        <div class="progress-container" id="progressContainer">
+          <div class="progress-bar" id="progressBar"></div>
+          <div class="progress-time" id="progressTime">0:00</div>
+        </div>
+        <div class="controls-bar">
+          <div class="left-controls">
+            <button class="control-btn play-pause-btn" id="playPauseBtn">
+              <i class="fas fa-play" id="playPauseIcon"></i>
+            </button>
+            <div class="time-display">
+              <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+            </div>
+          </div>
+          <div class="center-controls">
+            <div class="speed-control">
+              <button class="speed-btn" id="speedBtn">1.0x</button>
+              <div class="speed-options" id="speedOptions">
+                <button class="speed-option" data-speed="0.25">0.25x</button>
+                <button class="speed-option" data-speed="0.5">0.5x</button>
+                <button class="speed-option" data-speed="0.75">0.75x</button>
+                <button class="speed-option active" data-speed="1.0">1.0x</button>
+                <button class="speed-option" data-speed="1.25">1.25x</button>
+                <button class="speed-option" data-speed="1.5">1.5x</button>
+                <button class="speed-option" data-speed="1.75">1.75x</button>
+                <button class="speed-option" data-speed="2.0">2.0x</button>
+              </div>
+            </div>
+          </div>
+          <div class="right-controls">
+            <div class="volume-container">
+              <button class="control-btn" id="muteBtn">
+                <i class="fas fa-volume-up" id="volumeIcon"></i>
+              </button>
+              <div class="volume-slider" id="volumeSlider">
+                <div class="volume-level" id="volumeLevel"></div>
+              </div>
+            </div>
+            <button class="control-btn" id="fullscreenBtn">
+              <i class="fas fa-expand"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION -->
+  <div class="bottom-navbar">
+    <a href="home.html" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-item" id="navSearch">
+      <i class="fas fa-search"></i>
+      <span>Search</span>
+    </a>
+    <a href="#" class="nav-item active">
+      <i class="fas fa-download"></i>
+      <span>Downloaded</span>
+    </a>
+    <a href="#" class="nav-item" id="navMenu">
+      <i class="fas fa-bars"></i>
+      <span>Menu</span>
+    </a>
+  </div>
+
+  <script>
+    // App state
+    let selectedFiles = JSON.parse(localStorage.getItem('movieshow_downloaded_files') || '[]');
+    let currentPlayingFile = null;
+    let videoPlayer = null;
+    let isPlaying = false;
+    let isFullscreen = false;
+    let volume = 1.0;
+    let isMuted = false;
+    let playbackSpeed = 1.0;
+    let updateInterval = null;
+    let isTipCollapsed = localStorage.getItem('movieshow_tip_collapsed') === 'true';
+
+    // DOM elements
+    const fileInput = document.getElementById('fileInput');
+    const browseBtn = document.getElementById('browseBtn');
+    const filesSection = document.getElementById('filesSection');
+    const filesList = document.getElementById('filesList');
+    const filesCount = document.getElementById('filesCount');
+    const clearBtn = document.getElementById('clearBtn');
+    const tipCard = document.getElementById('tipCard');
+    const toggleTipBtn = document.getElementById('toggleTipBtn');
+    const tipToggleIcon = document.getElementById('tipToggleIcon');
+    const playerModal = document.getElementById('playerModal');
+    const playerClose = document.getElementById('playerClose');
+    const videoElement = document.getElementById('videoPlayer');
+    const playerTitle = document.getElementById('playerTitle');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playPauseIcon = document.getElementById('playPauseIcon');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressTime = document.getElementById('progressTime');
+    const muteBtn = document.getElementById('muteBtn');
+    const volumeIcon = document.getElementById('volumeIcon');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeLevel = document.getElementById('volumeLevel');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const speedBtn = document.getElementById('speedBtn');
+    const speedOptions = document.getElementById('speedOptions');
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      initEventListeners();
+      loadStoredFiles();
+      updateFilesList();
+      setupTipCard();
+    });
+
+    // Initialize event listeners
+    function initEventListeners() {
+      // Browse button
+      browseBtn.addEventListener('click', function() {
+        fileInput.click();
+      });
+
+      // File selection
+      fileInput.addEventListener('change', handleFileSelect);
+
+      // Clear button
+      clearBtn.addEventListener('click', clearAllFiles);
+
+      // Tip toggle button
+      toggleTipBtn.addEventListener('click', toggleTipCard);
+
+      // Close player
+      playerClose.addEventListener('click', closePlayer);
+
+      // Video player controls
+      videoElement.addEventListener('loadedmetadata', setupVideoPlayer);
+      videoElement.addEventListener('timeupdate', updateProgress);
+      videoElement.addEventListener('play', () => setPlayingState(true));
+      videoElement.addEventListener('pause', () => setPlayingState(false));
+      videoElement.addEventListener('ended', () => setPlayingState(false));
+
+      // Play/pause button
+      playPauseBtn.addEventListener('click', togglePlayPause);
+
+      // Progress control
+      progressContainer.addEventListener('click', seekVideo);
+      progressContainer.addEventListener('mousemove', updateProgressTime);
+
+      // Volume control
+      muteBtn.addEventListener('click', toggleMute);
+      volumeSlider.addEventListener('click', setVolume);
+
+      // Playback speed
+      speedBtn.addEventListener('click', toggleSpeedOptions);
+      
+      // Speed options
+      document.querySelectorAll('.speed-option').forEach(option => {
+        option.addEventListener('click', function() {
+          setPlaybackSpeed(parseFloat(this.dataset.speed));
+          speedOptions.classList.remove('show');
+        });
+      });
+
+      // Close speed options when clicking elsewhere
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.speed-control')) {
+          speedOptions.classList.remove('show');
+        }
+      });
+
+      // Fullscreen
+      fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', handleKeyPress);
+
+      // Navigation
+      document.getElementById('navSearch').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = 'home.html#search';
+      });
+
+      document.getElementById('navMenu').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = 'home.html#menu';
+      });
+    }
+
+    // Setup tip card
+    function setupTipCard() {
+      if (isTipCollapsed) {
+        tipCard.classList.add('collapsed');
+        tipToggleIcon.className = 'fas fa-chevron-down';
+      } else {
+        tipCard.classList.remove('collapsed');
+        tipToggleIcon.className = 'fas fa-chevron-up';
+      }
+    }
+
+    // Toggle tip card
+    function toggleTipCard() {
+      isTipCollapsed = !isTipCollapsed;
+      
+      if (isTipCollapsed) {
+        tipCard.classList.add('collapsed');
+        tipToggleIcon.className = 'fas fa-chevron-down';
+      } else {
+        tipCard.classList.remove('collapsed');
+        tipToggleIcon.className = 'fas fa-chevron-up';
+      }
+      
+      localStorage.setItem('movieshow_tip_collapsed', isTipCollapsed.toString());
+    }
+
+    // Handle file selection
+    function handleFileSelect(event) {
+      const files = Array.from(event.target.files);
+      
+      if (files.length === 0) return;
+      
+      files.forEach(file => {
+        if (file.type.startsWith('video/')) {
+          const fileInfo = {
+            name: file.name,
+            size: formatFileSize(file.size),
+            type: file.type,
+            path: URL.createObjectURL(file),
+            lastModified: file.lastModified,
+            file: file
+          };
+          
+          // Check if file is not already in the list
+          const exists = selectedFiles.some(f => f.name === fileInfo.name && f.size === fileInfo.size);
+          
+          if (!exists) {
+            selectedFiles.unshift(fileInfo);
+          }
+        }
+      });
+      
+      // Limit to 50 files
+      if (selectedFiles.length > 50) {
+        selectedFiles = selectedFiles.slice(0, 50);
+      }
+      
+      saveFilesToStorage();
+      updateFilesList();
+      showNotification(`${files.length} file(s) added`);
+      
+      // Reset input
+      fileInput.value = '';
+    }
+
+    // Load stored files
+    function loadStoredFiles() {
+      if (selectedFiles.length > 0) {
+        filesSection.classList.add('visible');
+      }
+    }
+
+    // Save files to local storage
+    function saveFilesToStorage() {
+      // Don't save the complete File object (cannot be serialized)
+      const filesToSave = selectedFiles.map(file => ({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        path: file.path,
+        lastModified: file.lastModified
+      }));
+      
+      localStorage.setItem('movieshow_downloaded_files', JSON.stringify(filesToSave));
+    }
+
+    // Update files list
+    function updateFilesList() {
+      filesCount.textContent = selectedFiles.length;
+      
+      if (selectedFiles.length === 0) {
+        filesList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-film empty-icon"></i>
+            <div class="empty-title">No files selected</div>
+            <div class="empty-text">Use the "Browse Files" button above to add videos</div>
+          </div>
+        `;
+        filesSection.classList.remove('visible');
+        return;
+      }
+      
+      filesSection.classList.add('visible');
+      
+      let filesHTML = '';
+      
+      selectedFiles.forEach((file, index) => {
+        const fileExtension = file.name.split('.').pop().toUpperCase();
+        
+        filesHTML += `
+          <div class="file-item ${currentPlayingFile === index ? 'active' : ''}" data-index="${index}">
+            <div class="file-icon">
+              <i class="fas fa-file-video"></i>
+            </div>
+            <div class="file-details">
+              <div class="file-name" title="${file.name}">${file.name}</div>
+              <div class="file-meta">
+                <div class="file-size">
+                  <i class="fas fa-hdd"></i>
+                  <span>${file.size}</span>
+                </div>
+                <div class="file-type">
+                  <i class="fas fa-tag"></i>
+                  <span>${fileExtension}</span>
+                </div>
+              </div>
+            </div>
+            <div class="file-play-btn" data-index="${index}">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+        `;
+      });
+      
+      filesList.innerHTML = filesHTML;
+      
+      // Add event listeners to new elements
+      document.querySelectorAll('.file-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+          if (!e.target.closest('.file-play-btn')) {
+            const index = parseInt(this.getAttribute('data-index'));
+            playFile(index);
+          }
+        });
+      });
+      
+      document.querySelectorAll('.file-play-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const index = parseInt(this.getAttribute('data-index'));
+          playFile(index);
+        });
+      });
+    }
+
+    // Play a file
+    function playFile(index) {
+      if (index < 0 || index >= selectedFiles.length) return;
+      
+      const file = selectedFiles[index];
+      currentPlayingFile = index;
+      
+      // Update interface
+      updateFilesList();
+      
+      // Open player
+      openPlayer(file);
+    }
+
+    // Open player
+    function openPlayer(file) {
+      playerTitle.textContent = file.name;
+      videoElement.src = file.path;
+      
+      playerModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      // Try to play automatically
+      setTimeout(() => {
+        videoElement.play().catch(e => {
+          console.log("Autoplay blocked:", e);
+        });
+      }, 300);
+    }
+
+    // Close player
+    function closePlayer() {
+      if (videoElement) {
+        videoElement.pause();
+        videoElement.src = '';
+      }
+      
+      playerModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+      
+      // Clean up update interval
+      if (updateInterval) {
+        clearInterval(updateInterval);
+        updateInterval = null;
+      }
+      
+      currentPlayingFile = null;
+      updateFilesList();
+    }
+
+    // Setup video player
+    function setupVideoPlayer() {
+      // Set volume
+      videoElement.volume = volume;
+      videoElement.muted = isMuted;
+      
+      // Set playback speed
+      videoElement.playbackRate = playbackSpeed;
+      speedBtn.textContent = `${playbackSpeed.toFixed(2)}x`;
+      
+      // Update active speed option
+      document.querySelectorAll('.speed-option').forEach(option => {
+        if (parseFloat(option.dataset.speed) === playbackSpeed) {
+          option.classList.add('active');
+        } else {
+          option.classList.remove('active');
+        }
+      });
+      
+      // Update duration display
+      durationEl.textContent = formatTime(videoElement.duration);
+      
+      // Update volume UI
+      updateVolumeUI();
+      
+      // Start update interval
+      if (updateInterval) {
+        clearInterval(updateInterval);
+      }
+      
+      updateInterval = setInterval(updateTimeDisplay, 100);
+    }
+
+    // Toggle play/pause
+    function togglePlayPause() {
+      if (videoElement.paused || videoElement.ended) {
+        videoElement.play();
+      } else {
+        videoElement.pause();
+      }
+    }
+
+    // Set playing state
+    function setPlayingState(playing) {
+      isPlaying = playing;
+      playPauseIcon.className = playing ? 'fas fa-pause' : 'fas fa-play';
+    }
+
+    // Update progress
+    function updateProgress() {
+      const percent = (videoElement.currentTime / videoElement.duration) * 100;
+      progressBar.style.width = `${percent}%`;
+    }
+
+    // Update time display
+    function updateTimeDisplay() {
+      currentTimeEl.textContent = formatTime(videoElement.currentTime);
+      
+      if (!isNaN(videoElement.duration)) {
+        durationEl.textContent = formatTime(videoElement.duration);
+      }
+    }
+
+    // Seek in video
+    function seekVideo(event) {
+      const rect = progressContainer.getBoundingClientRect();
+      const pos = (event.clientX - rect.left) / rect.width;
+      videoElement.currentTime = pos * videoElement.duration;
+    }
+
+    // Update progress time on hover
+    function updateProgressTime(event) {
+      const rect = progressContainer.getBoundingClientRect();
+      const pos = (event.clientX - rect.left) / rect.width;
+      const time = pos * videoElement.duration;
+      
+      progressTime.textContent = formatTime(time);
+      progressTime.style.left = `${event.clientX - rect.left}px`;
+    }
+
+    // Toggle mute
+    function toggleMute() {
+      isMuted = !isMuted;
+      videoElement.muted = isMuted;
+      updateVolumeUI();
+    }
+
+    // Set volume
+    function setVolume(event) {
+      const rect = volumeSlider.getBoundingClientRect();
+      let pos = (event.clientX - rect.left) / rect.width;
+      pos = Math.max(0, Math.min(1, pos));
+      
+      volume = pos;
+      videoElement.volume = volume;
+      
+      if (volume === 0) {
+        isMuted = true;
+        videoElement.muted = true;
+      } else if (isMuted) {
+        isMuted = false;
+        videoElement.muted = false;
+      }
+      
+      updateVolumeUI();
+    }
+
+    // Update volume UI
+    function updateVolumeUI() {
+      volumeLevel.style.width = `${volume * 100}%`;
+      
+      if (isMuted || volume === 0) {
+        volumeIcon.className = 'fas fa-volume-mute';
+      } else if (volume < 0.5) {
+        volumeIcon.className = 'fas fa-volume-down';
+      } else {
+        volumeIcon.className = 'fas fa-volume-up';
+      }
+    }
+
+    // Toggle speed options
+    function toggleSpeedOptions() {
+      speedOptions.classList.toggle('show');
+    }
+
+    // Set playback speed
+    function setPlaybackSpeed(speed) {
+      playbackSpeed = speed;
+      videoElement.playbackRate = speed;
+      speedBtn.textContent = `${speed.toFixed(2)}x`;
+      
+      // Update active option
+      document.querySelectorAll('.speed-option').forEach(option => {
+        if (parseFloat(option.dataset.speed) === speed) {
+          option.classList.add('active');
+        } else {
+          option.classList.remove('active');
+        }
+      });
+      
+      showNotification(`Playback speed: ${speed.toFixed(2)}x`);
+    }
+
+    // Toggle fullscreen
+    function toggleFullscreen() {
+      if (!isFullscreen) {
+        if (videoElement.requestFullscreen) {
+          videoElement.requestFullscreen();
+        } else if (videoElement.webkitRequestFullscreen) {
+          videoElement.webkitRequestFullscreen();
+        } else if (videoElement.mozRequestFullScreen) {
+          videoElement.mozRequestFullScreen();
+        } else if (videoElement.msRequestFullscreen) {
+          videoElement.msRequestFullscreen();
+        }
+        isFullscreen = true;
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+        isFullscreen = false;
+      }
+    }
+
+    // Handle keyboard shortcuts
+    function handleKeyPress(event) {
+      if (!playerModal.classList.contains('active')) return;
+      
+      switch (event.key) {
+        case ' ':
+        case 'Spacebar':
+          event.preventDefault();
+          togglePlayPause();
+          break;
+        case 'ArrowLeft':
+          event.preventDefault();
+          videoElement.currentTime = Math.max(0, videoElement.currentTime - 10);
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          videoElement.currentTime = Math.min(videoElement.duration, videoElement.currentTime + 10);
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          volume = Math.min(1, volume + 0.1);
+          videoElement.volume = volume;
+          updateVolumeUI();
+          break;
+        case 'ArrowDown':
+          event.preventDefault();
+          volume = Math.max(0, volume - 0.1);
+          videoElement.volume = volume;
+          updateVolumeUI();
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 'm':
+        case 'M':
+          toggleMute();
+          break;
+        case '>':
+        case '.':
+          event.preventDefault();
+          setPlaybackSpeed(Math.min(2.0, playbackSpeed + 0.25));
+          break;
+        case '<':
+        case ',':
+          event.preventDefault();
+          setPlaybackSpeed(Math.max(0.25, playbackSpeed - 0.25));
+          break;
+        case 'Escape':
+          if (isFullscreen) {
+            toggleFullscreen();
+          } else {
+            closePlayer();
+          }
+          break;
+      }
+    }
+
+    // Clear all files
+    function clearAllFiles() {
+      if (selectedFiles.length === 0) {
+        showNotification('No files to clear');
+        return;
+      }
+      
+      if (confirm(`Are you sure you want to clear all ${selectedFiles.length} files?`)) {
+        // Release object URLs
+        selectedFiles.forEach(file => {
+          if (file.path && file.path.startsWith('blob:')) {
+            URL.revokeObjectURL(file.path);
+          }
+        });
+        
+        selectedFiles = [];
+        saveFilesToStorage();
+        updateFilesList();
+        showNotification('All files have been cleared');
+        
+        // Close player if open
+        if (playerModal.classList.contains('active')) {
+          closePlayer();
+        }
+      }
+    }
+
+    // Show notification
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        background: linear-gradient(135deg, #03C771 0%, #02a55c 100%);
+        color: white;
+        padding: 12px 18px;
+        border-radius: 10px;
+        z-index: 1000;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        animation: slideIn 0.3s ease;
+        max-width: 280px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      `;
+      
+      notification.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${message}</span>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+      
+      // Add animation styles if needed
+      if (!document.querySelector('#notificationStyles')) {
+        const style = document.createElement('style');
+        style.id = 'notificationStyles';
+        style.textContent = `
+          @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+          @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+
+    // Format file size
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // Format time (mm:ss)
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00';
+      
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    // Handle fullscreen change
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+    function handleFullscreenChange() {
+      isFullscreen = !!(document.fullscreenElement || 
+                        document.webkitFullscreenElement || 
+                        document.mozFullScreenElement || 
+                        document.msFullscreenElement);
+    }
+  </script>
+</body>
+</html>
