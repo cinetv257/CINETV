@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Connectify - Contacts</title>
+    <title>Connectify - Discussions</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -23,102 +23,160 @@
         /* Container principal */
         .app-container {
             display: flex;
+            flex-direction: column;
             height: 100vh;
             background: white;
         }
 
-        /* Sidebar des contacts */
-        .contacts-sidebar {
-            width: 380px;
-            background: white;
-            border-right: 1px solid #e9ecef;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        /* En-tête du sidebar */
-        .sidebar-header {
+        /* En-tête */
+        .app-header {
             background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
-            padding: 25px 20px;
             color: white;
-        }
-
-        .user-profile {
+            padding: 15px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .profile-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            position: relative;
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .status-dot {
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            width: 12px;
-            height: 12px;
-            background: #4caf50;
-            border-radius: 50%;
-            border: 2px solid white;
-        }
-
-        .user-name {
+        .logo-area h2 {
+            font-size: 1.3rem;
             font-weight: 600;
-            font-size: 1.1rem;
         }
 
-        .logout-btn {
+        .logo-area p {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .menu-btn {
             background: rgba(255,255,255,0.2);
             border: none;
             color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             cursor: pointer;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
         }
 
-        .logout-btn:hover {
+        .menu-btn:hover {
             background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
+            transform: scale(1.1);
         }
 
-        /* Barre de recherche */
-        .search-container {
+        /* Menu déroulant */
+        .dropdown-menu {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            width: 250px;
+            z-index: 1000;
+            display: none;
+            overflow: hidden;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-item:hover {
+            background: #f5f5f5;
+        }
+
+        .dropdown-item i {
+            width: 20px;
+            color: #075e54;
+        }
+
+        .dropdown-item span {
+            flex: 1;
+            color: #333;
+        }
+
+        /* Barre de navigation inférieure */
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            padding: 10px 20px;
+            gap: 20px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: #999;
+            font-weight: 500;
+        }
+
+        .nav-item.active {
+            background: #e8f5e9;
+            color: #075e54;
+        }
+
+        .nav-item i {
+            font-size: 1.3rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .nav-item span {
+            font-size: 0.7rem;
+        }
+
+        /* Contenu principal */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
             padding: 15px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
+        }
+
+        /* Section recherche d'amis */
+        .search-section {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .search-box {
             position: relative;
+            margin-bottom: 15px;
         }
 
         .search-box i {
@@ -127,59 +185,33 @@
             top: 50%;
             transform: translateY(-50%);
             color: #999;
-            font-size: 1rem;
         }
 
         .search-box input {
             width: 100%;
             padding: 12px 15px 12px 45px;
-            border: none;
+            border: 1px solid #e0e0e0;
             border-radius: 30px;
-            background: white;
             font-size: 0.95rem;
             outline: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .search-box input:focus {
-            box-shadow: 0 2px 8px rgba(18, 140, 126, 0.2);
-            border: 1px solid #128c7e;
-        }
-
-        /* Liste des contacts */
-        .contacts-list {
-            flex: 1;
+        .search-results {
+            max-height: 300px;
             overflow-y: auto;
-            padding: 10px 0;
         }
 
-        .contact-item {
+        .search-user-item {
             display: flex;
             align-items: center;
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
+            padding: 10px;
             border-bottom: 1px solid #f0f0f0;
+            gap: 12px;
         }
 
-        .contact-item:hover {
-            background: #f5f5f5;
-        }
-
-        .contact-item.selected {
-            background: #e8f5e9;
-        }
-
-        .contact-avatar {
-            position: relative;
-            margin-right: 15px;
-        }
-
-        .contact-avatar .avatar-img {
-            width: 50px;
-            height: 50px;
+        .search-user-avatar {
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
             display: flex;
@@ -187,10 +219,107 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 1.1rem;
+            position: relative;
         }
 
-        .online-indicator {
+        .search-user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .search-user-info {
+            flex: 1;
+        }
+
+        .search-user-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .search-user-email {
+            font-size: 0.7rem;
+            color: #999;
+        }
+
+        .follow-btn {
+            background: #075e54;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .follow-btn.following {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        /* Liste des discussions */
+        .discussions-list {
+            display: none;
+        }
+
+        .discussions-list.active {
+            display: block;
+        }
+
+        .friends-list {
+            display: none;
+        }
+
+        .friends-list.active {
+            display: block;
+        }
+
+        /* Item de discussion */
+        .discussion-item, .friend-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .discussion-item:hover, .friend-item:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .discussion-avatar, .friend-avatar {
+            position: relative;
+            margin-right: 15px;
+        }
+
+        .avatar-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .avatar-img img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .online-badge {
             position: absolute;
             bottom: 2px;
             right: 2px;
@@ -203,58 +332,30 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 0.8;
-            }
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
         }
 
-        .contact-info {
+        .discussion-info, .friend-info {
             flex: 1;
         }
 
-        .contact-name {
+        .discussion-name, .friend-name {
             font-weight: 600;
-            color: #111;
             margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
         }
 
         .last-message {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #999;
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .last-message i {
-            font-size: 0.7rem;
-        }
-
-        .message-preview {
-            max-width: 180px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .contact-meta {
-            text-align: right;
-            min-width: 50px;
+            gap: 5px;
         }
 
         .message-time {
             font-size: 0.7rem;
             color: #999;
-            margin-bottom: 5px;
         }
 
         .unread-badge {
@@ -263,188 +364,268 @@
             border-radius: 50%;
             min-width: 20px;
             height: 20px;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.7rem;
             font-weight: bold;
             padding: 0 5px;
-            animation: bounce 0.5s ease;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+        .call-indicator {
+            background: #075e54;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-top: 5px;
+            display: inline-block;
         }
 
-        /* Zone de chat (placeholder) */
-        .chat-area {
-            flex: 1;
-            background: #f8f9fa;
-            display: flex;
+        /* Modal paramètres */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            display: none;
             align-items: center;
             justify-content: center;
-            position: relative;
         }
 
-        .welcome-screen {
-            text-align: center;
-            color: #999;
-        }
-
-        .welcome-screen i {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        .welcome-screen h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #666;
-        }
-
-        .welcome-screen p {
-            font-size: 0.9rem;
-        }
-
-        /* Indicateur de chargement */
-        .loading-spinner {
+        .modal.active {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
         }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #e0e0e0;
-            border-top-color: #128c7e;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Scrollbar personnalisée */
-        .contacts-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .contacts-list::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        .contacts-list::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        .contacts-list::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .contacts-sidebar {
-                width: 100%;
-                position: absolute;
-                z-index: 10;
-                transform: translateX(0);
-                transition: transform 0.3s ease;
-            }
-            
-            .contacts-sidebar.hide {
-                transform: translateX(-100%);
-            }
-            
-            .chat-area {
-                width: 100%;
-            }
-        }
-
-        /* Animation de nouveau message */
-        @keyframes slideIn {
+        @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateX(-20px);
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateY(0);
             }
         }
 
-        .contact-item.new-message {
-            animation: slideIn 0.3s ease;
-            background: #fff3e0;
+        .modal-header {
+            background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
         }
 
-        /* Badge de statut */
-        .status-text {
-            font-size: 0.7rem;
+        .modal-body {
+            padding: 20px;
         }
 
-        .status-text.online {
-            color: #4caf50;
+        .profile-pic {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
         }
 
-        .status-text.offline {
-            color: #999;
+        .profile-pic img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .change-photo-btn {
+            position: absolute;
+            bottom: 0;
+            right: 35%;
+            background: #075e54;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Notification appel entrant */
+        .incoming-call-toast {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1500;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        .incoming-call-toast.show {
+            display: block;
+        }
+
+        /* Scrollbar */
+        .main-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar des contacts -->
-        <div class="contacts-sidebar" id="contactsSidebar">
-            <div class="sidebar-header">
-                <div class="user-profile">
-                    <div class="profile-info">
-                        <div class="avatar" id="currentUserAvatar">
-                            <div class="status-dot"></div>
-                        </div>
-                        <div class="user-name" id="currentUserName">Chargement...</div>
-                    </div>
-                    <button id="logoutBtn" class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i> Quitter
-                    </button>
-                </div>
+        <!-- En-tête -->
+        <div class="app-header">
+            <div class="logo-area">
+                <h2><i class="fas fa-comments"></i> Connectify</h2>
+                <p>Communication sécurisée</p>
             </div>
-            
-            <div class="search-container">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Rechercher un contact...">
-                </div>
+            <button class="menu-btn" id="menuBtn">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+
+        <!-- Menu déroulant -->
+        <div class="dropdown-menu" id="dropdownMenu">
+            <div class="dropdown-item" id="profileMenuItem">
+                <i class="fas fa-user-circle"></i>
+                <span>Mon profil</span>
             </div>
-            
-            <div class="contacts-list" id="contactsList">
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                </div>
+            <div class="dropdown-item" id="settingsMenuItem">
+                <i class="fas fa-cog"></i>
+                <span>Paramètres</span>
+            </div>
+            <div class="dropdown-item" id="helpMenuItem">
+                <i class="fas fa-question-circle"></i>
+                <span>Aide</span>
+            </div>
+            <div class="dropdown-item" id="logoutMenuItem">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Déconnexion</span>
             </div>
         </div>
-        
-        <!-- Zone de chat -->
-        <div class="chat-area">
-            <div class="welcome-screen">
-                <i class="fas fa-comments"></i>
-                <h3>Bienvenue sur Connectify</h3>
-                <p>Sélectionnez un contact pour commencer à discuter</p>
+
+        <!-- Barre de navigation inférieure -->
+        <div class="bottom-nav">
+            <button class="nav-item active" data-tab="discussions">
+                <i class="fas fa-comment-dots"></i>
+                <span>Discussions</span>
+            </button>
+            <button class="nav-item" data-tab="friends">
+                <i class="fas fa-users"></i>
+                <span>Amis</span>
+            </button>
+            <button class="nav-item" data-tab="search">
+                <i class="fas fa-search"></i>
+                <span>Trouver</span>
+            </button>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="main-content">
+            <!-- Section Discussions -->
+            <div id="discussionsSection" class="discussions-list active">
+                <div id="discussionsContainer"></div>
             </div>
+
+            <!-- Section Amis -->
+            <div id="friendsSection" class="friends-list">
+                <div id="friendsContainer"></div>
+            </div>
+
+            <!-- Section Recherche -->
+            <div id="searchSection" class="search-section">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchUserInput" placeholder="Rechercher des utilisateurs...">
+                </div>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Paramètres -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> Paramètres</h3>
+            </div>
+            <div class="modal-body">
+                <div class="profile-pic">
+                    <img id="profilePhoto" src="" alt="Photo de profil">
+                    <button class="change-photo-btn" id="changePhotoBtn">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                </div>
+                <input type="text" id="editName" class="modal-input" placeholder="Nom complet">
+                <button id="saveSettingsBtn" class="save-btn">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification appel entrant -->
+    <div id="incomingCallToast" class="incoming-call-toast">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="avatar-img" id="callerAvatar" style="width: 50px; height: 50px;"></div>
+            <div style="flex: 1;">
+                <strong id="callerName">Appel entrant</strong>
+                <p style="font-size: 0.8rem; color: #666;">Vous appelle...</p>
+            </div>
+            <button id="acceptCallToast" style="background: #4caf50; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer;">
+                <i class="fas fa-phone-alt"></i>
+            </button>
+            <button id="rejectCallToast" style="background: #f44336; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-        import { getDatabase, ref, set, onValue, onDisconnect, remove, query, orderByChild, equalTo, get, update, onChildAdded, limitToLast } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+        import { getAuth, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getDatabase, ref, set, onValue, update, remove, push, onChildAdded, query, orderByChild, get } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-        // Configuration Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
             authDomain: "cinetv257.firebaseapp.com",
@@ -454,325 +635,416 @@
             appId: "1:402664770835:web:1adaea98f40ca609645ee6"
         };
 
-        // Initialisation
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const database = getDatabase(app);
 
         let currentUser = null;
-        let allUsers = {};
-        let chatsData = {};
-        let unreadMessages = {};
-        let searchTimeout = null;
+        let friendsList = [];
+        let pendingCalls = {};
+
+        // API ImageBB
+        const IMGBB_API_KEY = "3380c77ffa8895e275acf5b67038d9f5";
 
         // Éléments DOM
-        const contactsListDiv = document.getElementById('contactsList');
-        const searchInput = document.getElementById('searchInput');
-        const currentUserNameSpan = document.getElementById('currentUserName');
-        const currentUserAvatarDiv = document.getElementById('currentUserAvatar');
-        const logoutBtn = document.getElementById('logoutBtn');
+        const discussionsContainer = document.getElementById('discussionsContainer');
+        const friendsContainer = document.getElementById('friendsContainer');
+        const searchResults = document.getElementById('searchResults');
+        const searchInput = document.getElementById('searchUserInput');
+        const menuBtn = document.getElementById('menuBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const settingsModal = document.getElementById('settingsModal');
+        const editName = document.getElementById('editName');
+        const profilePhoto = document.getElementById('profilePhoto');
+        const photoInput = document.getElementById('photoInput');
+        const changePhotoBtn = document.getElementById('changePhotoBtn');
+        const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+        const incomingCallToast = document.getElementById('incomingCallToast');
+        const callerNameSpan = document.getElementById('callerName');
+        const callerAvatarDiv = document.getElementById('callerAvatar');
 
-        // Fonction pour générer un ID de chat unique
-        function getChatId(uid1, uid2) {
-            return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
+        // Navigation entre onglets
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const tab = item.dataset.tab;
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                document.getElementById('discussionsSection').classList.remove('active');
+                document.getElementById('friendsSection').classList.remove('active');
+                document.getElementById('searchSection').style.display = 'none';
+                
+                if (tab === 'discussions') {
+                    document.getElementById('discussionsSection').classList.add('active');
+                } else if (tab === 'friends') {
+                    document.getElementById('friendsSection').classList.add('active');
+                    loadFriends();
+                } else if (tab === 'search') {
+                    document.getElementById('searchSection').style.display = 'block';
+                }
+            });
+        });
+
+        // Menu déroulant
+        menuBtn.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+        });
+        document.addEventListener('click', (e) => {
+            if (!menuBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        document.getElementById('profileMenuItem').addEventListener('click', () => {
+            settingsModal.classList.add('active');
+            dropdownMenu.classList.remove('show');
+        });
+        document.getElementById('settingsMenuItem').addEventListener('click', () => {
+            settingsModal.classList.add('active');
+            dropdownMenu.classList.remove('show');
+        });
+        document.getElementById('helpMenuItem').addEventListener('click', () => {
+            alert("📞 Aide Connectify\n\n• Cliquez sur un contact pour discuter\n• Appuyez sur 📞 pour appeler\n• Envoyez des images et fichiers\n• Modifiez votre profil dans Paramètres");
+            dropdownMenu.classList.remove('show');
+        });
+        document.getElementById('logoutMenuItem').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
+        // Fermer modal
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.remove('active');
+            }
+        });
+
+        // Upload image sur ImageBB
+        async function uploadImageToImgBB(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('key', IMGBB_API_KEY);
+            
+            const response = await fetch('https://api.imgbb.com/1/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            if (data.success) {
+                return data.data.url;
+            }
+            throw new Error('Upload failed');
         }
 
-        // Mettre à jour la présence de l'utilisateur
-        async function updateUserPresence(user) {
-            if (!user) return;
+        // Changer photo de profil
+        changePhotoBtn.addEventListener('click', () => {
+            photoInput.click();
+        });
+        photoInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                try {
+                    const imageUrl = await uploadImageToImgBB(file);
+                    await updateProfile(auth.currentUser, { photoURL: imageUrl });
+                    await update(ref(database, `users/${currentUser.uid}/photoURL`), imageUrl);
+                    profilePhoto.src = imageUrl;
+                    alert('Photo mise à jour !');
+                } catch (error) {
+                    console.error(error);
+                    alert('Erreur lors de l\'upload');
+                }
+            }
+        });
+
+        // Sauvegarder paramètres
+        saveSettingsBtn.addEventListener('click', async () => {
+            const newName = editName.value;
+            if (newName && newName !== currentUser.displayName) {
+                await updateProfile(auth.currentUser, { displayName: newName });
+                await update(ref(database, `users/${currentUser.uid}/name`), newName);
+                alert('Nom mis à jour !');
+            }
+            settingsModal.classList.remove('active');
+        });
+
+        // Envoyer une invitation d'ami
+        async function sendFriendRequest(targetUserId, targetUserName) {
+            const requestRef = ref(database, `friendRequests/${targetUserId}/${currentUser.uid}`);
+            await set(requestRef, {
+                from: currentUser.uid,
+                fromName: currentUser.displayName,
+                fromPhoto: currentUser.photoURL || '',
+                status: 'pending',
+                timestamp: Date.now()
+            });
+            alert('Invitation envoyée !');
+        }
+
+        // Accepter invitation
+        async function acceptFriendRequest(fromUserId, fromUserName, fromUserPhoto) {
+            // Ajouter aux amis
+            const userFriendRef = ref(database, `friends/${currentUser.uid}/${fromUserId}`);
+            await set(userFriendRef, {
+                uid: fromUserId,
+                name: fromUserName,
+                photoURL: fromUserPhoto,
+                since: Date.now()
+            });
             
+            const otherFriendRef = ref(database, `friends/${fromUserId}/${currentUser.uid}`);
+            await set(otherFriendRef, {
+                uid: currentUser.uid,
+                name: currentUser.displayName,
+                photoURL: currentUser.photoURL || '',
+                since: Date.now()
+            });
+            
+            // Supprimer la requête
+            await remove(ref(database, `friendRequests/${currentUser.uid}/${fromUserId}`));
+            
+            loadFriends();
+            alert(`${fromUserName} est maintenant votre ami !`);
+        }
+
+        // Rechercher des utilisateurs
+        searchInput.addEventListener('input', async (e) => {
+            const term = e.target.value.toLowerCase();
+            if (term.length < 2) {
+                searchResults.innerHTML = '';
+                return;
+            }
+            
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            const users = snapshot.val() || {};
+            
+            const results = Object.values(users).filter(user => 
+                user.uid !== currentUser.uid && 
+                (user.name.toLowerCase().includes(term) || user.email.toLowerCase().includes(term))
+            );
+            
+            searchResults.innerHTML = results.map(user => `
+                <div class="search-user-item">
+                    <div class="search-user-avatar">
+                        ${user.photoURL ? `<img src="${user.photoURL}">` : user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div class="search-user-info">
+                        <div class="search-user-name">${user.name}</div>
+                        <div class="search-user-email">${user.email}</div>
+                    </div>
+                    <button class="follow-btn" data-uid="${user.uid}" data-name="${user.name}" data-photo="${user.photoURL || ''}">
+                        <i class="fas fa-user-plus"></i> Suivre
+                    </button>
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.follow-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const uid = btn.dataset.uid;
+                    const name = btn.dataset.name;
+                    sendFriendRequest(uid, name);
+                });
+            });
+        });
+
+        // Charger les amis
+        async function loadFriends() {
+            const friendsRef = ref(database, `friends/${currentUser.uid}`);
+            onValue(friendsRef, async (snapshot) => {
+                const friends = snapshot.val() || {};
+                const friendsArray = Object.values(friends);
+                
+                // Récupérer les statuts en ligne
+                const usersRef = ref(database, 'users');
+                const usersSnapshot = await get(usersRef);
+                const users = usersSnapshot.val() || {};
+                
+                friendsContainer.innerHTML = friendsArray.map(friend => {
+                    const userData = users[friend.uid] || {};
+                    const isOnline = userData.status === 'En ligne';
+                    return `
+                        <div class="friend-item" data-uid="${friend.uid}" data-name="${friend.name}">
+                            <div class="discussion-avatar">
+                                <div class="avatar-img">
+                                    ${friend.photoURL ? `<img src="${friend.photoURL}">` : friend.name.charAt(0).toUpperCase()}
+                                </div>
+                                ${isOnline ? '<div class="online-badge"></div>' : ''}
+                            </div>
+                            <div class="discussion-info">
+                                <div class="discussion-name">${friend.name}</div>
+                                <div class="last-message">
+                                    <i class="fas ${isOnline ? 'fa-circle' : 'fa-clock'}" style="color: ${isOnline ? '#4caf50' : '#999'}; font-size: 0.6rem;"></i>
+                                    ${isOnline ? 'En ligne' : 'Hors ligne'}
+                                </div>
+                            </div>
+                            <div>
+                                <button class="call-friend-btn" data-uid="${friend.uid}" data-name="${friend.name}" style="background: #075e54; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;">
+                                    <i class="fas fa-phone-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                // Événements sur les amis
+                document.querySelectorAll('.friend-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        if (!e.target.closest('.call-friend-btn')) {
+                            const uid = item.dataset.uid;
+                            const name = item.dataset.name;
+                            sessionStorage.setItem('selectedUser', JSON.stringify({ uid, name }));
+                            window.location.href = 'call.html';
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.call-friend-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const uid = btn.dataset.uid;
+                        const name = btn.dataset.name;
+                        sessionStorage.setItem('selectedUser', JSON.stringify({ uid, name }));
+                        sessionStorage.setItem('startCall', 'true');
+                        window.location.href = 'call.html';
+                    });
+                });
+            });
+        }
+
+        // Charger les discussions
+        function loadDiscussions() {
+            const chatsRef = ref(database, 'chats');
+            onValue(chatsRef, async (snapshot) => {
+                const chats = snapshot.val() || {};
+                const userChats = [];
+                
+                for (const [chatId, chatData] of Object.entries(chats)) {
+                    if (chatId.includes(currentUser.uid)) {
+                        const otherUid = chatId.replace(currentUser.uid, '').replace('_', '');
+                        const userRef = ref(database, `users/${otherUid}`);
+                        const userSnapshot = await get(userRef);
+                        const otherUser = userSnapshot.val();
+                        
+                        if (otherUser) {
+                            const messages = chatData.messages ? Object.values(chatData.messages) : [];
+                            const lastMessage = messages[messages.length - 1];
+                            userChats.push({
+                                uid: otherUid,
+                                name: otherUser.name,
+                                photoURL: otherUser.photoURL,
+                                lastMessage: lastMessage?.text || 'Aucun message',
+                                lastTime: lastMessage?.timestamp || 0,
+                                status: otherUser.status
+                            });
+                        }
+                    }
+                }
+                
+                userChats.sort((a, b) => b.lastTime - a.lastTime);
+                
+                discussionsContainer.innerHTML = userChats.map(chat => `
+                    <div class="discussion-item" data-uid="${chat.uid}" data-name="${chat.name}">
+                        <div class="discussion-avatar">
+                            <div class="avatar-img">
+                                ${chat.photoURL ? `<img src="${chat.photoURL}">` : chat.name.charAt(0).toUpperCase()}
+                            </div>
+                            ${chat.status === 'En ligne' ? '<div class="online-badge"></div>' : ''}
+                        </div>
+                        <div class="discussion-info">
+                            <div class="discussion-name">${chat.name}</div>
+                            <div class="last-message">
+                                <i class="fas fa-reply-all"></i>
+                                <span>${chat.lastMessage.substring(0, 40)}</span>
+                            </div>
+                        </div>
+                        <div class="message-time">
+                            ${chat.lastTime ? new Date(chat.lastTime).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : ''}
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.querySelectorAll('.discussion-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const uid = item.dataset.uid;
+                        const name = item.dataset.name;
+                        sessionStorage.setItem('selectedUser', JSON.stringify({ uid, name }));
+                        window.location.href = 'call.html';
+                    });
+                });
+            });
+        }
+
+        // Écouter les appels entrants
+        function listenForIncomingCalls() {
+            const callsRef = ref(database, 'calls');
+            onChildAdded(callsRef, (snapshot) => {
+                const callData = snapshot.val();
+                if (callData.to === currentUser.uid && callData.status === 'waiting') {
+                    callerNameSpan.textContent = callData.fromName;
+                    callerAvatarDiv.innerHTML = callData.fromPhoto ? `<img src="${callData.fromPhoto}" style="width:100%;height:100%;border-radius:50%">` : callData.fromName.charAt(0);
+                    incomingCallToast.classList.add('show');
+                    
+                    const acceptHandler = () => {
+                        sessionStorage.setItem('selectedUser', JSON.stringify({
+                            uid: callData.from,
+                            name: callData.fromName
+                        }));
+                        sessionStorage.setItem('incomingCall', snapshot.key);
+                        window.location.href = 'call.html';
+                    };
+                    
+                    const rejectHandler = async () => {
+                        await update(ref(database, `calls/${snapshot.key}/status`), 'rejected');
+                        incomingCallToast.classList.remove('show');
+                    };
+                    
+                    document.getElementById('acceptCallToast').onclick = acceptHandler;
+                    document.getElementById('rejectCallToast').onclick = rejectHandler;
+                    
+                    setTimeout(() => {
+                        incomingCallToast.classList.remove('show');
+                    }, 30000);
+                }
+            });
+        }
+
+        // Mettre à jour la présence
+        async function updateUserPresence(user) {
             const userStatusRef = ref(database, `users/${user.uid}`);
-            const userData = {
+            await set(userStatusRef, {
                 uid: user.uid,
                 name: user.displayName || user.email.split('@')[0],
                 email: user.email,
+                photoURL: user.photoURL || '',
                 status: "En ligne",
-                lastSeen: Date.now(),
-                photoURL: user.photoURL || null
-            };
+                lastSeen: Date.now()
+            });
             
-            await set(userStatusRef, userData);
-            
-            // Configuration onDisconnect
             const onDisconnectRef = onDisconnect(userStatusRef);
             await onDisconnectRef.update({
                 status: "Hors ligne",
                 lastSeen: Date.now()
             });
-            
-            console.log('Présence mise à jour pour', user.displayName);
         }
 
-        // Écouter les nouveaux messages pour les indicateurs
-        function listenForNewMessages() {
-            if (!currentUser) return;
-            
-            const chatsRef = ref(database, 'chats');
-            onChildAdded(chatsRef, (snapshot) => {
-                const chatId = snapshot.key;
-                const [uid1, uid2] = chatId.split('_');
-                const otherUserId = uid1 === currentUser.uid ? uid2 : uid1;
-                
-                // Écouter uniquement les messages de ce chat
-                const messagesRef = ref(database, `chats/${chatId}/messages`);
-                const lastMessageQuery = query(messagesRef, limitToLast(1));
-                
-                onValue(lastMessageQuery, (snapshot) => {
-                    const messages = snapshot.val();
-                    if (messages) {
-                        const lastMessage = Object.values(messages)[0];
-                        if (lastMessage && lastMessage.from !== currentUser.uid) {
-                            // Incrémenter le compteur de messages non lus
-                            if (!unreadMessages[otherUserId]) {
-                                unreadMessages[otherUserId] = 0;
-                            }
-                            unreadMessages[otherUserId]++;
-                            displayUsers(allUsers);
-                        }
-                    }
-                });
-            });
-        }
-
-        // Marquer les messages comme lus
-        async function markMessagesAsRead(otherUserId) {
-            if (!currentUser || !otherUserId) return;
-            
-            const chatId = getChatId(currentUser.uid, otherUserId);
-            const messagesRef = ref(database, `chats/${chatId}/messages`);
-            
-            // Réinitialiser le compteur non lu
-            if (unreadMessages[otherUserId]) {
-                unreadMessages[otherUserId] = 0;
-                displayUsers(allUsers);
-            }
-        }
-
-        // Obtenir le dernier message d'un chat
-        async function getLastMessage(otherUserId) {
-            if (!currentUser || !otherUserId) return null;
-            
-            const chatId = getChatId(currentUser.uid, otherUserId);
-            const messagesRef = ref(database, `chats/${chatId}/messages`);
-            const lastMessageQuery = query(messagesRef, limitToLast(1));
-            
-            return new Promise((resolve) => {
-                onValue(lastMessageQuery, (snapshot) => {
-                    const messages = snapshot.val();
-                    if (messages) {
-                        const lastMessage = Object.values(messages)[0];
-                        resolve(lastMessage);
-                    } else {
-                        resolve(null);
-                    }
-                }, { onlyOnce: true });
-            });
-        }
-
-        // Afficher la liste des utilisateurs avec recherche et indicateurs
-        async function displayUsers(users, searchTerm = '') {
-            if (!currentUser) return;
-            
-            // Filtrer les utilisateurs
-            let filteredUsers = Object.values(users).filter(user => 
-                user.uid !== currentUser.uid && user.name
-            );
-            
-            if (searchTerm) {
-                filteredUsers = filteredUsers.filter(user =>
-                    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-                );
-            }
-            
-            if (filteredUsers.length === 0) {
-                contactsListDiv.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: #999;">
-                        <i class="fas fa-user-friends" style="font-size: 3rem; margin-bottom: 10px; display: block;"></i>
-                        <p>Aucun utilisateur trouvé</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Trier par statut (en ligne d'abord) et par nom
-            filteredUsers.sort((a, b) => {
-                if (a.status === 'En ligne' && b.status !== 'En ligne') return -1;
-                if (a.status !== 'En ligne' && b.status === 'En ligne') return 1;
-                return a.name.localeCompare(b.name);
-            });
-            
-            // Générer le HTML pour chaque utilisateur
-            let usersHTML = '';
-            
-            for (const user of filteredUsers) {
-                const lastMessage = await getLastMessage(user.uid);
-                const unreadCount = unreadMessages[user.uid] || 0;
-                const isOnline = user.status === 'En ligne';
-                
-                // Formater l'heure du dernier message
-                let timeStr = '';
-                if (lastMessage) {
-                    const date = new Date(lastMessage.timestamp);
-                    const now = new Date();
-                    if (date.toDateString() === now.toDateString()) {
-                        timeStr = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-                    } else {
-                        timeStr = date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
-                    }
-                }
-                
-                usersHTML += `
-                    <div class="contact-item" data-uid="${user.uid}" data-name="${user.name}" data-email="${user.email}">
-                        <div class="contact-avatar">
-                            <div class="avatar-img">
-                                ${user.photoURL ? `<img src="${user.photoURL}" style="width: 50px; height: 50px; border-radius: 50%;">` : user.name.charAt(0).toUpperCase()}
-                            </div>
-                            ${isOnline ? '<div class="online-indicator"></div>' : ''}
-                        </div>
-                        <div class="contact-info">
-                            <div class="contact-name">
-                                ${escapeHtml(user.name)}
-                                ${isOnline ? '<span class="status-text online">🟢 En ligne</span>' : '<span class="status-text offline">⚫ Hors ligne</span>'}
-                            </div>
-                            <div class="last-message">
-                                ${lastMessage ? `
-                                    <i class="fas fa-reply-all"></i>
-                                    <span class="message-preview">${escapeHtml(lastMessage.text.substring(0, 30))}${lastMessage.text.length > 30 ? '...' : ''}</span>
-                                ` : '<span class="message-preview">Aucun message</span>'}
-                            </div>
-                        </div>
-                        <div class="contact-meta">
-                            ${timeStr ? `<div class="message-time">${timeStr}</div>` : ''}
-                            ${unreadCount > 0 ? `<div class="unread-badge">${unreadCount}</div>` : ''}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            contactsListDiv.innerHTML = usersHTML;
-            
-            // Ajouter les événements de clic
-            document.querySelectorAll('.contact-item').forEach(item => {
-                item.addEventListener('click', async () => {
-                    const uid = item.dataset.uid;
-                    const name = item.dataset.name;
-                    const email = item.dataset.email;
-                    
-                    // Marquer les messages comme lus
-                    await markMessagesAsRead(uid);
-                    
-                    // Stocker l'utilisateur sélectionné
-                    sessionStorage.setItem('selectedUser', JSON.stringify({ uid, name, email }));
-                    
-                    // Ajouter un effet visuel de sélection
-                    document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('selected'));
-                    item.classList.add('selected');
-                    
-                    // Rediriger vers la page de chat
-                    window.location.href = 'call.html';
-                });
-            });
-        }
-
-        // Échapper les caractères HTML
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Écouter les changements dans la base de données
-        function listenForUsers() {
-            const usersRef = ref(database, 'users');
-            onValue(usersRef, async (snapshot) => {
-                const users = snapshot.val() || {};
-                allUsers = users;
-                const searchTerm = searchInput.value;
-                await displayUsers(users, searchTerm);
-            });
-        }
-
-        // Écouter les mises à jour de statut en temps réel
-        function listenForStatusUpdates() {
-            const usersRef = ref(database, 'users');
-            onValue(usersRef, async (snapshot) => {
-                const users = snapshot.val() || {};
-                allUsers = users;
-                const searchTerm = searchInput.value;
-                await displayUsers(users, searchTerm);
-            });
-        }
-
-        // Recherche en temps réel avec debounce
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                const searchTerm = e.target.value;
-                displayUsers(allUsers, searchTerm);
-            }, 300);
-        });
-
-        // Déconnexion
-        async function logout() {
-            try {
-                if (currentUser) {
-                    // Mettre à jour le statut
-                    const userRef = ref(database, `users/${currentUser.uid}`);
-                    await update(userRef, {
-                        status: "Hors ligne",
-                        lastSeen: Date.now()
-                    });
-                }
-                await signOut(auth);
-                window.location.href = 'index.html';
-            } catch (error) {
-                console.error('Erreur lors de la déconnexion:', error);
-            }
-        }
-
-        // Afficher les informations de l'utilisateur courant
-        function displayCurrentUserInfo(user) {
-            if (user.photoURL) {
-                currentUserAvatarDiv.innerHTML = `
-                    <img src="${user.photoURL}" style="width: 45px; height: 45px; border-radius: 50%;">
-                    <div class="status-dot"></div>
-                `;
-            } else {
-                currentUserAvatarDiv.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
-                        ${user.displayName ? user.displayName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
-                    </div>
-                    <div class="status-dot"></div>
-                `;
-            }
-            currentUserNameSpan.textContent = user.displayName || user.email.split('@')[0];
-        }
-
-        // Initialisation et vérification de l'authentification
+        // Initialisation
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                displayCurrentUserInfo(user);
+                editName.value = user.displayName || '';
+                profilePhoto.src = user.photoURL || 'https://via.placeholder.com/100';
                 await updateUserPresence(user);
-                listenForUsers();
-                listenForStatusUpdates();
-                listenForNewMessages();
+                loadDiscussions();
+                loadFriends();
+                listenForIncomingCalls();
             } else {
                 window.location.href = 'index.html';
             }
         });
-
-        // Événement de déconnexion
-        logoutBtn.addEventListener('click', logout);
-
-        // Rafraîchir la liste périodiquement
-        setInterval(async () => {
-            if (currentUser && allUsers) {
-                const searchTerm = searchInput.value;
-                await displayUsers(allUsers, searchTerm);
-            }
-        }, 5000);
     </script>
 </body>
 </html>
