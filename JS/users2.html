@@ -46,7 +46,6 @@
             transform: translateX(-100%);
         }
 
-        /* En-tête de la vue utilisateurs avec nom du site */
         .users-header {
             background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
             padding: 20px;
@@ -141,7 +140,6 @@
             background: rgba(255,255,255,0.3);
         }
 
-        /* Barre de recherche */
         .search-container {
             padding: 12px 15px;
             background: #f8f9fa;
@@ -171,11 +169,6 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .search-box input:focus {
-            box-shadow: 0 2px 8px rgba(18, 140, 126, 0.2);
-        }
-
-        /* Liste des contacts */
         .contacts-list {
             flex: 1;
             overflow-y: auto;
@@ -189,6 +182,18 @@
             cursor: pointer;
             transition: all 0.2s ease;
             border-bottom: 1px solid #f0f0f0;
+            animation: fadeInLeft 0.3s ease;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .contact-item:hover {
@@ -197,6 +202,15 @@
 
         .contact-item:active {
             background: #e8f5e9;
+        }
+
+        .contact-item.new-message-animation {
+            animation: messagePulse 0.5s ease;
+        }
+
+        @keyframes messagePulse {
+            0%, 100% { background: transparent; }
+            50% { background: #e8f5e9; }
         }
 
         .contact-avatar {
@@ -257,6 +271,11 @@
             white-space: nowrap;
         }
 
+        .typing-preview {
+            color: #128c7e;
+            font-style: italic;
+        }
+
         .contact-meta {
             text-align: right;
             min-width: 55px;
@@ -301,7 +320,6 @@
             transform: translateX(0);
         }
 
-        /* En-tête du chat avec nom du site */
         .chat-header {
             background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
             color: white;
@@ -311,12 +329,6 @@
             gap: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding-top: 45px;
-        }
-
-        .chat-header .site-logo {
-            font-size: 0.8rem;
-            font-weight: normal;
-            opacity: 0.8;
         }
 
         .back-btn {
@@ -329,10 +341,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 1rem;
-        }
-
-        .back-btn:hover {
-            background: rgba(255,255,255,0.3);
         }
 
         .chat-contact-info {
@@ -382,10 +390,6 @@
             font-size: 1rem;
         }
 
-        .action-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
         .action-btn.in-call {
             background: #f44336;
             animation: callPulse 1s infinite;
@@ -396,7 +400,7 @@
             50% { transform: scale(1.1); }
         }
 
-        /* Zone des messages */
+        /* Messages area */
         .messages-area {
             flex: 1;
             overflow-y: auto;
@@ -410,8 +414,20 @@
 
         .message {
             display: flex;
-            animation: fadeInUp 0.2s ease;
+            animation: messageSlideIn 0.2s ease;
             max-width: 75%;
+            position: relative;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.sent {
@@ -429,6 +445,11 @@
             padding: 10px 14px;
             border-radius: 18px;
             position: relative;
+            transition: transform 0.1s ease;
+        }
+
+        .message-bubble:active {
+            transform: scale(0.98);
         }
 
         .message.sent .message-bubble {
@@ -443,6 +464,28 @@
             border-bottom-left-radius: 4px;
         }
 
+        /* Message réponse (quote) */
+        .message-quote {
+            background: rgba(0,0,0,0.05);
+            border-left: 3px solid #128c7e;
+            padding: 5px 8px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .message-quote .quote-sender {
+            font-weight: bold;
+            color: #075e54;
+        }
+
+        .message-quote .quote-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .message-text {
             font-size: 0.9rem;
             line-height: 1.4;
@@ -454,6 +497,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            min-width: 180px;
         }
 
         .voice-play-btn {
@@ -462,30 +506,37 @@
             cursor: pointer;
             font-size: 1.2rem;
             color: inherit;
-        }
-
-        .voice-wave {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 2px;
+            justify-content: center;
+            transition: background 0.2s;
         }
 
-        .voice-wave span {
+        .voice-play-btn:hover {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .voice-wave-form {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 30px;
+        }
+
+        .wave-bar {
             width: 3px;
-            height: 8px;
             background: currentColor;
             border-radius: 2px;
-            animation: wave 1s infinite;
-        }
-
-        @keyframes wave {
-            0%, 100% { height: 8px; }
-            50% { height: 16px; }
+            transition: height 0.1s ease;
         }
 
         .voice-duration {
             font-size: 0.7rem;
             opacity: 0.7;
+            font-family: monospace;
         }
 
         .message-info {
@@ -498,50 +549,37 @@
             opacity: 0.7;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Menu contextuel pour réponse */
+        .message-context-menu {
+            position: absolute;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            padding: 8px 0;
+            z-index: 100;
+            display: none;
+            min-width: 150px;
         }
 
-        /* Indicateur de frappe */
-        .typing-indicator {
-            padding: 8px 15px;
-            font-size: 0.75rem;
-            color: #999;
-            display: none;
+        .message-context-menu button {
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 10px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .message-context-menu button:hover {
             background: #f0f2f5;
         }
 
-        .typing-dots {
-            display: flex;
-            gap: 3px;
-        }
-
-        .typing-dots span {
-            width: 5px;
-            height: 5px;
-            background: #999;
-            border-radius: 50%;
-            animation: typingAnim 1.4s infinite;
-        }
-
-        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes typingAnim {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-            30% { transform: translateY(-8px); opacity: 1; }
-        }
-
-        /* Zone de saisie - CORRIGÉE (visible) */
+        /* Zone de saisie - 2.5cm du bas */
         .input-area {
             background: #f0f2f5;
             padding: 12px 15px;
@@ -549,7 +587,7 @@
             align-items: center;
             gap: 10px;
             border-top: 1px solid #e9ecef;
-            min-height: 70px;
+            margin-bottom: 25px;
         }
 
         .message-input {
@@ -578,10 +616,6 @@
             transition: all 0.3s ease;
         }
 
-        .input-btn:hover {
-            background: rgba(7, 94, 84, 0.1);
-        }
-
         .input-btn.recording {
             background: #f44336;
             color: white;
@@ -591,6 +625,68 @@
         @keyframes recordingPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
+        }
+
+        /* Panneau d'enregistrement vocal */
+        .recording-panel {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 60px;
+            padding: 15px 20px;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            z-index: 200;
+            animation: slideUp 0.2s ease;
+        }
+
+        .recording-timer {
+            font-size: 1.3rem;
+            font-family: monospace;
+            font-weight: bold;
+            color: #f44336;
+            min-width: 60px;
+        }
+
+        .recording-wave {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 40px;
+        }
+
+        .recording-wave .wave-bar {
+            width: 4px;
+            background: #075e54;
+            border-radius: 2px;
+            transition: height 0.05s ease;
+        }
+
+        .stop-recording-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .cancel-recording-btn {
+            background: #999;
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
         }
 
         .send-btn {
@@ -604,8 +700,77 @@
             transition: all 0.3s ease;
         }
 
-        .send-btn:hover {
-            transform: scale(1.05);
+        /* Indicateur de réponse en cours */
+        .reply-indicator {
+            background: #e8f5e9;
+            padding: 8px 15px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 3px solid #128c7e;
+            margin: 0 15px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        .reply-indicator .reply-content {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .reply-indicator .reply-sender {
+            font-weight: bold;
+            color: #075e54;
+        }
+
+        .cancel-reply-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            font-size: 1rem;
+        }
+
+        .typing-indicator {
+            padding: 8px 15px;
+            font-size: 0.75rem;
+            color: #999;
+            display: none;
+            align-items: center;
+            gap: 5px;
+            background: #f0f2f5;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .typing-dots span {
+            width: 5px;
+            height: 5px;
+            background: #999;
+            border-radius: 50%;
+            animation: typingAnim 1.4s infinite;
+        }
+
+        @keyframes typingAnim {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+
+        .empty-chat {
+            text-align: center;
+            color: #999;
+            padding: 50px 20px;
+        }
+
+        .empty-chat i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
         }
 
         /* Modal d'appel */
@@ -665,7 +830,6 @@
             display: flex;
             justify-content: center;
             gap: 20px;
-            flex-wrap: wrap;
         }
 
         .call-control {
@@ -683,20 +847,11 @@
             color: white;
         }
 
-        .call-control.mute, .call-control.transfer {
+        .call-control.mute {
             background: rgba(255,255,255,0.2);
             color: white;
         }
 
-        .call-control.active {
-            background: #ff9800;
-        }
-
-        .call-control:hover {
-            transform: scale(1.05);
-        }
-
-        /* Modal de transfert */
         .transfer-modal {
             position: fixed;
             top: 0;
@@ -743,7 +898,6 @@
             padding: 12px;
             cursor: pointer;
             border-bottom: 1px solid #eee;
-            transition: background 0.2s;
         }
 
         .transfer-item:hover {
@@ -768,12 +922,6 @@
 
         .transfer-name {
             font-weight: 600;
-            margin-bottom: 3px;
-        }
-
-        .transfer-status {
-            font-size: 0.7rem;
-            color: #999;
         }
 
         .transfer-close {
@@ -783,10 +931,8 @@
             padding: 12px;
             width: 100%;
             cursor: pointer;
-            font-size: 1rem;
         }
 
-        /* Notification d'appel entrant */
         .incoming-call {
             position: fixed;
             bottom: 20px;
@@ -798,20 +944,8 @@
             padding: 15px 20px;
             z-index: 1000;
             display: none;
-            animation: slideUp 0.3s ease;
             max-width: 350px;
             margin: 0 auto;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .incoming-call-content {
@@ -826,12 +960,6 @@
 
         .incoming-call-info h4 {
             color: #111;
-            margin-bottom: 5px;
-        }
-
-        .incoming-call-info p {
-            color: #666;
-            font-size: 0.75rem;
         }
 
         .incoming-call-actions {
@@ -839,7 +967,7 @@
             gap: 10px;
         }
 
-        .incoming-call-actions button {
+        .accept-incoming, .reject-incoming {
             width: 42px;
             height: 42px;
             border-radius: 50%;
@@ -858,20 +986,6 @@
             color: white;
         }
 
-        /* Message vide */
-        .empty-chat {
-            text-align: center;
-            color: #999;
-            padding: 50px 20px;
-        }
-
-        .empty-chat i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        /* Loader */
         .spinner {
             width: 35px;
             height: 35px;
@@ -886,22 +1000,30 @@
             to { transform: rotate(360deg); }
         }
 
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Scrollbar */
         .messages-area::-webkit-scrollbar,
-        .contacts-list::-webkit-scrollbar,
-        .transfer-list::-webkit-scrollbar {
+        .contacts-list::-webkit-scrollbar {
             width: 5px;
         }
 
         .messages-area::-webkit-scrollbar-track,
-        .contacts-list::-webkit-scrollbar-track,
-        .transfer-list::-webkit-scrollbar-track {
+        .contacts-list::-webkit-scrollbar-track {
             background: #f1f1f1;
         }
 
         .messages-area::-webkit-scrollbar-thumb,
-        .contacts-list::-webkit-scrollbar-thumb,
-        .transfer-list::-webkit-scrollbar-thumb {
+        .contacts-list::-webkit-scrollbar-thumb {
             background: #c1c1c1;
             border-radius: 3px;
         }
@@ -967,9 +1089,17 @@
                         <i class="fas fa-phone-alt"></i>
                     </button>
                 </div>
-                <div class="site-logo">
-                    <i class="fas fa-comment-dots"></i>
+            </div>
+
+            <!-- Indicateur de réponse -->
+            <div class="reply-indicator" id="replyIndicator">
+                <div class="reply-content">
+                    <span class="reply-sender" id="replySender"></span>
+                    <span id="replyText"></span>
                 </div>
+                <button class="cancel-reply-btn" id="cancelReplyBtn">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
 
             <div class="messages-area" id="messagesArea">
@@ -986,7 +1116,6 @@
                 </div>
             </div>
 
-            <!-- Zone de saisie avec bouton vocal -->
             <div class="input-area">
                 <button class="input-btn" id="voiceRecordBtn" title="Note vocale">
                     <i class="fas fa-microphone"></i>
@@ -997,6 +1126,25 @@
                 </button>
             </div>
         </div>
+    </div>
+
+    <!-- Panneau d'enregistrement vocal -->
+    <div class="recording-panel" id="recordingPanel">
+        <div class="recording-timer" id="recordingTimer">00:00</div>
+        <div class="recording-wave" id="recordingWave"></div>
+        <button class="cancel-recording-btn" id="cancelRecordingBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="stop-recording-btn" id="stopRecordingBtn">
+            <i class="fas fa-stop"></i>
+        </button>
+    </div>
+
+    <!-- Menu contextuel pour réponse -->
+    <div class="message-context-menu" id="contextMenu">
+        <button id="replyToMsgBtn">
+            <i class="fas fa-reply"></i> Répondre
+        </button>
     </div>
 
     <!-- Modal d'appel -->
@@ -1022,15 +1170,13 @@
         </div>
     </div>
 
-    <!-- Modal de transfert d'appel -->
+    <!-- Modal de transfert -->
     <div class="transfer-modal" id="transferModal">
         <div class="transfer-card">
             <div class="transfer-header">
                 <h3><i class="fas fa-exchange-alt"></i> Transférer l'appel vers</h3>
             </div>
-            <div class="transfer-list" id="transferList">
-                <!-- Liste des contacts pour transfert -->
-            </div>
+            <div class="transfer-list" id="transferList"></div>
             <button class="transfer-close" id="closeTransferBtn">
                 <i class="fas fa-times"></i> Annuler
             </button>
@@ -1059,7 +1205,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
         import { getDatabase, ref, set, onValue, push, onChildAdded, onDisconnect, update, remove, query, limitToLast, get } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
-        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB77EmeaPTvtXCH4EL-1E1SgmyW6Yz9lLI",
@@ -1073,7 +1218,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const database = getDatabase(app);
-        const storage = getStorage(app);
 
         let currentUser = null;
         let selectedUser = null;
@@ -1083,6 +1227,12 @@
         let typingListener = null;
         let typingTimeout = null;
         let isTyping = false;
+        let typingStatusListener = null;
+
+        // Variables pour la réponse à un message
+        let replyToMessage = null;
+        let contextMenuMessage = null;
+        let contextMenuElement = null;
 
         // Variables WebRTC
         let peerConnection = null;
@@ -1098,13 +1248,17 @@
         let audioChunks = [];
         let isRecording = false;
         let recordingStartTime = null;
-        let recordingTimer = null;
+        let recordingTimerInterval = null;
+        let animationFrameId = null;
+        let audioContext = null;
+        let source = null;
+        let analyser = null;
+        let recordingStream = null;
 
         const configuration = {
             iceServers: [
                 { urls: 'stun:stun.l.google.com:19302' },
-                { urls: 'stun:stun1.l.google.com:19302' },
-                { urls: 'stun:stun2.l.google.com:19302' }
+                { urls: 'stun:stun1.l.google.com:19302' }
             ]
         };
 
@@ -1139,9 +1293,20 @@
         const acceptCallBtn = document.getElementById('acceptCallBtn');
         const rejectCallBtn = document.getElementById('rejectCallBtn');
         const voiceRecordBtn = document.getElementById('voiceRecordBtn');
+        const recordingPanel = document.getElementById('recordingPanel');
+        const recordingTimer = document.getElementById('recordingTimer');
+        const recordingWave = document.getElementById('recordingWave');
+        const stopRecordingBtn = document.getElementById('stopRecordingBtn');
+        const cancelRecordingBtn = document.getElementById('cancelRecordingBtn');
         const transferModal = document.getElementById('transferModal');
         const transferList = document.getElementById('transferList');
         const closeTransferBtn = document.getElementById('closeTransferBtn');
+        const replyIndicator = document.getElementById('replyIndicator');
+        const replySender = document.getElementById('replySender');
+        const replyText = document.getElementById('replyText');
+        const cancelReplyBtn = document.getElementById('cancelReplyBtn');
+        const contextMenu = document.getElementById('contextMenu');
+        const replyToMsgBtn = document.getElementById('replyToMsgBtn');
 
         // Fonctions utilitaires
         function getChatId(uid1, uid2) {
@@ -1173,30 +1338,80 @@
             messagesArea.scrollTop = messagesArea.scrollHeight;
         }
 
-        // Afficher un message (texte ou vocal)
-        function displayMessage(message, messageId) {
+        // Fonction pour générer une forme d'onde visuelle
+        function generateWaveBars(count = 30) {
+            let bars = '';
+            for (let i = 0; i < count; i++) {
+                const height = Math.floor(Math.random() * 20) + 8;
+                bars += `<div class="wave-bar" style="height: ${height}px;"></div>`;
+            }
+            return bars;
+        }
+
+        // Mettre à jour la forme d'onde pendant l'enregistrement
+        async function startWaveAnimation() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            
+            const bars = document.querySelectorAll('#recordingWave .wave-bar');
+            const animate = () => {
+                bars.forEach(bar => {
+                    const height = Math.floor(Math.random() * 30) + 5;
+                    bar.style.height = `${height}px`;
+                });
+                animationFrameId = requestAnimationFrame(animate);
+            };
+            animate();
+        }
+
+        function stopWaveAnimation() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            const bars = document.querySelectorAll('#recordingWave .wave-bar');
+            bars.forEach(bar => {
+                bar.style.height = '8px';
+            });
+        }
+
+        // Afficher un message avec support de réponse
+        function displayMessage(message, messageId, isNew = false) {
             const isSent = message.from === currentUser?.uid;
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
             messageDiv.id = `msg_${messageId}`;
+            messageDiv.dataset.messageId = messageId;
+            messageDiv.dataset.messageText = message.text || (message.type === 'voice' ? '🎤 Note vocale' : '');
+            messageDiv.dataset.messageSender = message.fromName;
+            messageDiv.dataset.messageType = message.type || 'text';
             
             let content = '';
+            
+            // Ajouter la réponse si elle existe
+            if (message.replyTo) {
+                content += `
+                    <div class="message-quote">
+                        <div class="quote-sender">${escapeHtml(message.replyTo.senderName)}</div>
+                        <div class="quote-text">${escapeHtml(message.replyTo.text.substring(0, 50))}${message.replyTo.text.length > 50 ? '...' : ''}</div>
+                    </div>
+                `;
+            }
+            
             if (message.type === 'voice') {
-                // Message vocal
-                content = `
+                const waveBars = generateWaveBars(20);
+                content += `
                     <div class="voice-message">
-                        <button class="voice-play-btn" data-audio="${message.audioUrl}" onclick="playAudio('${message.audioUrl}', this)">
+                        <button class="voice-play-btn" data-audio="${message.audioData || ''}" onclick="playAudioFromBase64('${message.audioData || ''}', this)">
                             <i class="fas fa-play"></i>
                         </button>
-                        <div class="voice-wave">
-                            <span></span><span></span><span></span><span></span><span></span>
+                        <div class="voice-wave-form">
+                            ${waveBars}
                         </div>
                         <span class="voice-duration">${message.duration || '0:00'}</span>
                     </div>
                 `;
             } else {
-                // Message texte
-                content = `<div class="message-text">${escapeHtml(message.text)}</div>`;
+                content += `<div class="message-text">${escapeHtml(message.text)}</div>`;
             }
             
             messageDiv.innerHTML = `
@@ -1208,13 +1423,149 @@
                 </div>
             `;
             
+            // Ajouter un événement de clic long pour le menu contextuel
+            let pressTimer;
+            messageDiv.addEventListener('touchstart', (e) => {
+                pressTimer = setTimeout(() => {
+                    showContextMenu(e, message, messageId);
+                }, 500);
+            });
+            messageDiv.addEventListener('touchend', () => {
+                clearTimeout(pressTimer);
+            });
+            messageDiv.addEventListener('touchmove', () => {
+                clearTimeout(pressTimer);
+            });
+            messageDiv.addEventListener('mousedown', (e) => {
+                pressTimer = setTimeout(() => {
+                    showContextMenu(e, message, messageId);
+                }, 500);
+            });
+            messageDiv.addEventListener('mouseup', () => {
+                clearTimeout(pressTimer);
+            });
+            
             messagesArea.appendChild(messageDiv);
-            scrollToBottom();
+            
+            if (isNew) {
+                messageDiv.style.animation = 'messageSlideIn 0.3s ease';
+                scrollToBottom();
+            } else {
+                scrollToBottom();
+            }
         }
 
-        // Fonction pour lire l'audio (définie globalement)
-        window.playAudio = function(url, button) {
-            const audio = new Audio(url);
+        // Afficher le menu contextuel pour répondre
+        function showContextMenu(event, message, messageId) {
+            event.preventDefault();
+            contextMenuMessage = { ...message, id: messageId };
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = `${event.pageX}px`;
+            contextMenu.style.top = `${event.pageY}px`;
+            
+            setTimeout(() => {
+                document.addEventListener('click', hideContextMenu);
+            }, 100);
+        }
+        
+        function hideContextMenu() {
+            contextMenu.style.display = 'none';
+            contextMenuMessage = null;
+            document.removeEventListener('click', hideContextMenu);
+        }
+        
+        // Répondre à un message
+        function setReplyTo(message) {
+            replyToMessage = message;
+            replySender.textContent = message.fromName + ' : ';
+            replyText.textContent = message.text || (message.type === 'voice' ? '🎤 Note vocale' : '');
+            replyIndicator.style.display = 'flex';
+            messageInput.focus();
+            hideContextMenu();
+        }
+        
+        function cancelReply() {
+            replyToMessage = null;
+            replyIndicator.style.display = 'none';
+        }
+
+        // Envoyer un message texte
+        async function sendMessage(text) {
+            if (!text.trim() || !selectedUser || !currentUser) return;
+            
+            const chatId = getChatId(currentUser.uid, selectedUser.uid);
+            const messagesRef = ref(database, `chats/${chatId}/messages`);
+            
+            const message = {
+                from: currentUser.uid,
+                fromName: currentUser.displayName || currentUser.email.split('@')[0],
+                text: text.trim(),
+                type: 'text',
+                timestamp: Date.now(),
+                read: false
+            };
+            
+            if (replyToMessage) {
+                message.replyTo = {
+                    messageId: replyToMessage.id,
+                    senderName: replyToMessage.fromName,
+                    text: replyToMessage.text || (replyToMessage.type === 'voice' ? 'Note vocale' : '')
+                };
+                cancelReply();
+            }
+            
+            await push(messagesRef, message);
+            messageInput.value = '';
+            messageInput.focus();
+            
+            const chatMetaRef = ref(database, `chats/${chatId}/lastMessage`);
+            await set(chatMetaRef, {
+                text: text.trim(),
+                timestamp: Date.now(),
+                from: currentUser.uid
+            });
+        }
+
+        // Envoyer une note vocale (stockée en Base64 dans Realtime Database)
+        async function sendVoiceNote(audioBase64, duration) {
+            if (!selectedUser || !currentUser) return;
+            
+            const chatId = getChatId(currentUser.uid, selectedUser.uid);
+            const messagesRef = ref(database, `chats/${chatId}/messages`);
+            
+            const message = {
+                from: currentUser.uid,
+                fromName: currentUser.displayName || currentUser.email.split('@')[0],
+                type: 'voice',
+                audioData: audioBase64,
+                duration: duration,
+                timestamp: Date.now(),
+                read: false
+            };
+            
+            if (replyToMessage) {
+                message.replyTo = {
+                    messageId: replyToMessage.id,
+                    senderName: replyToMessage.fromName,
+                    text: replyToMessage.text || (replyToMessage.type === 'voice' ? 'Note vocale' : '')
+                };
+                cancelReply();
+            }
+            
+            await push(messagesRef, message);
+            
+            const chatMetaRef = ref(database, `chats/${chatId}/lastMessage`);
+            await set(chatMetaRef, {
+                text: '🎤 Note vocale',
+                timestamp: Date.now(),
+                from: currentUser.uid
+            });
+        }
+
+        // Lire l'audio depuis Base64
+        window.playAudioFromBase64 = function(base64Data, button) {
+            if (!base64Data) return;
+            const audio = new Audio(base64Data);
             const icon = button.querySelector('i');
             audio.onplay = () => {
                 icon.className = 'fas fa-pause';
@@ -1235,76 +1586,21 @@
             };
         };
 
-        // Envoyer un message texte
-        async function sendMessage(text) {
-            if (!text.trim() || !selectedUser || !currentUser) return;
-            
-            const chatId = getChatId(currentUser.uid, selectedUser.uid);
-            const messagesRef = ref(database, `chats/${chatId}/messages`);
-            
-            const message = {
-                from: currentUser.uid,
-                fromName: currentUser.displayName || currentUser.email.split('@')[0],
-                text: text.trim(),
-                type: 'text',
-                timestamp: Date.now(),
-                read: false
-            };
-            
-            await push(messagesRef, message);
-            messageInput.value = '';
-            messageInput.focus();
-            
-            const chatMetaRef = ref(database, `chats/${chatId}/lastMessage`);
-            await set(chatMetaRef, {
-                text: text.trim(),
-                timestamp: Date.now(),
-                from: currentUser.uid
+        // Convertir Blob en Base64
+        function blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
             });
-        }
-
-        // Envoyer une note vocale
-        async function sendVoiceNote(audioBlob, duration) {
-            if (!selectedUser || !currentUser) return;
-            
-            const chatId = getChatId(currentUser.uid, selectedUser.uid);
-            const fileName = `voice_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.webm`;
-            const audioRef = storageRef(storage, `voice_notes/${chatId}/${fileName}`);
-            
-            try {
-                await uploadBytes(audioRef, audioBlob);
-                const audioUrl = await getDownloadURL(audioRef);
-                
-                const messagesRef = ref(database, `chats/${chatId}/messages`);
-                const message = {
-                    from: currentUser.uid,
-                    fromName: currentUser.displayName || currentUser.email.split('@')[0],
-                    type: 'voice',
-                    audioUrl: audioUrl,
-                    duration: duration,
-                    timestamp: Date.now(),
-                    read: false
-                };
-                
-                await push(messagesRef, message);
-                
-                const chatMetaRef = ref(database, `chats/${chatId}/lastMessage`);
-                await set(chatMetaRef, {
-                    text: '🎤 Note vocale',
-                    timestamp: Date.now(),
-                    from: currentUser.uid
-                });
-            } catch (error) {
-                console.error('Erreur envoi vocal:', error);
-                alert('Erreur lors de l\'envoi de la note vocale');
-            }
         }
 
         // Démarrer l'enregistrement vocal
         async function startRecording() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
+                recordingStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(recordingStream);
                 audioChunks = [];
                 
                 mediaRecorder.ondataavailable = (event) => {
@@ -1313,25 +1609,51 @@
                 
                 mediaRecorder.onstop = async () => {
                     const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const base64 = await blobToBase64(audioBlob);
                     const duration = Math.floor((Date.now() - recordingStartTime) / 1000);
                     const durationStr = formatDuration(duration);
                     
-                    await sendVoiceNote(audioBlob, durationStr);
+                    await sendVoiceNote(base64, durationStr);
                     
-                    // Arrêter tous les tracks
-                    stream.getTracks().forEach(track => track.stop());
+                    if (recordingStream) {
+                        recordingStream.getTracks().forEach(track => track.stop());
+                        recordingStream = null;
+                    }
+                    
+                    recordingPanel.style.display = 'none';
+                    if (recordingTimerInterval) clearInterval(recordingTimerInterval);
+                    stopWaveAnimation();
                 };
                 
                 mediaRecorder.start(100);
                 recordingStartTime = Date.now();
                 isRecording = true;
-                voiceRecordBtn.classList.add('recording');
-                voiceRecordBtn.innerHTML = '<i class="fas fa-stop"></i>';
                 
-                // Arrêter automatiquement après 60 secondes
-                setTimeout(() => {
-                    if (isRecording) stopRecording();
-                }, 60000);
+                // Afficher le panneau d'enregistrement
+                recordingPanel.style.display = 'flex';
+                recordingTimer.textContent = '00:00';
+                
+                // Générer les barres d'onde
+                recordingWave.innerHTML = '';
+                for (let i = 0; i < 40; i++) {
+                    const bar = document.createElement('div');
+                    bar.className = 'wave-bar';
+                    bar.style.height = '8px';
+                    recordingWave.appendChild(bar);
+                }
+                
+                startWaveAnimation();
+                
+                // Timer
+                recordingTimerInterval = setInterval(() => {
+                    if (isRecording) {
+                        const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+                        recordingTimer.textContent = formatDuration(elapsed);
+                        if (elapsed >= 60) {
+                            stopRecording();
+                        }
+                    }
+                }, 1000);
                 
             } catch (error) {
                 console.error('Erreur microphone:', error);
@@ -1343,8 +1665,23 @@
             if (mediaRecorder && isRecording) {
                 mediaRecorder.stop();
                 isRecording = false;
-                voiceRecordBtn.classList.remove('recording');
-                voiceRecordBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                if (recordingTimerInterval) clearInterval(recordingTimerInterval);
+                stopWaveAnimation();
+            }
+        }
+        
+        function cancelRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.onstop = () => {};
+                mediaRecorder.stop();
+                isRecording = false;
+                if (recordingTimerInterval) clearInterval(recordingTimerInterval);
+                if (recordingStream) {
+                    recordingStream.getTracks().forEach(track => track.stop());
+                    recordingStream = null;
+                }
+                recordingPanel.style.display = 'none';
+                stopWaveAnimation();
             }
         }
         
@@ -1368,13 +1705,26 @@
             
             messagesListener = onChildAdded(messagesRef, (snapshot) => {
                 const message = snapshot.val();
-                displayMessage(message, snapshot.key);
+                displayMessage(message, snapshot.key, true);
                 if (message.from !== currentUser.uid && selectedUser) {
                     if (unreadMessages[selectedUser.uid]) {
                         unreadMessages[selectedUser.uid] = 0;
                     }
+                    // Animation sur le contact dans la liste
+                    animateContactNewMessage(selectedUser.uid);
                 }
             });
+        }
+        
+        // Animation pour nouveau message sur un contact
+        function animateContactNewMessage(uid) {
+            const contactElement = document.querySelector(`.contact-item[data-uid="${uid}"]`);
+            if (contactElement && !chatView.classList.contains('show')) {
+                contactElement.classList.add('new-message-animation');
+                setTimeout(() => {
+                    contactElement.classList.remove('new-message-animation');
+                }, 500);
+            }
         }
 
         // Indicateur de frappe
@@ -1392,16 +1742,57 @@
                 if (typingData && typingData.userId !== currentUser.uid && typingData.isTyping) {
                     typingUserNameSpan.textContent = typingData.userName;
                     typingIndicator.style.display = 'flex';
+                    // Mettre à jour l'indicateur de frappe dans la liste des contacts
+                    updateContactTypingStatus(selectedUser.uid, true, typingData.userName);
                     setTimeout(() => {
                         typingIndicator.style.display = 'none';
+                        updateContactTypingStatus(selectedUser.uid, false);
                     }, 2000);
                 } else {
                     typingIndicator.style.display = 'none';
+                    updateContactTypingStatus(selectedUser.uid, false);
                 }
             });
             
             messageInput.removeEventListener('input', handleTyping);
             messageInput.addEventListener('input', handleTyping);
+        }
+        
+        // Mettre à jour l'indicateur de frappe dans la liste des contacts
+        function updateContactTypingStatus(uid, isTyping, userName = '') {
+            const contactElement = document.querySelector(`.contact-item[data-uid="${uid}"]`);
+            if (contactElement) {
+                const lastMessageSpan = contactElement.querySelector('.last-message');
+                if (isTyping) {
+                    lastMessageSpan.innerHTML = `<i class="fas fa-pencil-alt"></i><span class="typing-preview">${userName} écrit...</span>`;
+                    setTimeout(() => {
+                        if (lastMessageSpan.querySelector('.typing-preview')) {
+                            refreshContactLastMessage(uid);
+                        }
+                    }, 2000);
+                } else {
+                    refreshContactLastMessage(uid);
+                }
+            }
+        }
+        
+        async function refreshContactLastMessage(uid) {
+            const chatId = getChatId(currentUser.uid, uid);
+            try {
+                const messagesRef = ref(database, `chats/${chatId}/messages`);
+                const snapshot = await get(query(messagesRef, limitToLast(1)));
+                const messages = snapshot.val();
+                let lastMessage = null;
+                if (messages) {
+                    lastMessage = Object.values(messages)[0];
+                }
+                const contactElement = document.querySelector(`.contact-item[data-uid="${uid}"]`);
+                if (contactElement && lastMessage) {
+                    const lastMessageSpan = contactElement.querySelector('.last-message');
+                    const lastMessageText = lastMessage.type === 'voice' ? '🎤 Note vocale' : (lastMessage.text?.substring(0, 25) || '');
+                    lastMessageSpan.innerHTML = `<i class="fas ${lastMessage.type === 'voice' ? 'fa-microphone' : 'fa-reply-all'}"></i><span class="message-preview">${escapeHtml(lastMessageText)}${lastMessageText.length > 25 ? '...' : ''}</span>`;
+                }
+            } catch(e) {}
         }
         
         async function handleTyping() {
@@ -1431,6 +1822,7 @@
         // Sélectionner un utilisateur
         function selectUser(user) {
             selectedUser = user;
+            cancelReply();
             
             messagesArea.innerHTML = '';
             chatContactName.textContent = user.name;
@@ -1462,10 +1854,31 @@
                 typingListener();
                 typingListener = null;
             }
+            cancelReply();
             
             messagesArea.innerHTML = '<div class="empty-chat"><i class="fas fa-comments"></i><p>Sélectionnez un contact</p></div>';
             chatView.classList.remove('show');
             displayUsers(allUsers, searchInput.value);
+        }
+
+        // Écouter les statuts de frappe pour tous les contacts
+        function listenForGlobalTypingStatus() {
+            if (typingStatusListener) return;
+            const chatsRef = ref(database, 'chats');
+            typingStatusListener = onChildAdded(chatsRef, (snapshot) => {
+                const typingRef = ref(database, `chats/${snapshot.key}/typing`);
+                onValue(typingRef, (typingSnapshot) => {
+                    const typingData = typingSnapshot.val();
+                    if (typingData && typingData.userId !== currentUser?.uid && typingData.isTyping) {
+                        const [uid1, uid2] = snapshot.key.split('_');
+                        const otherUid = uid1 === currentUser?.uid ? uid2 : uid1;
+                        updateContactTypingStatus(otherUid, true, typingData.userName);
+                        setTimeout(() => {
+                            updateContactTypingStatus(otherUid, false);
+                        }, 2000);
+                    }
+                });
+            });
         }
 
         // Afficher la liste des utilisateurs
@@ -1519,9 +1932,10 @@
                 const unreadCount = unreadMessages[user.uid] || 0;
                 const isOnline = user.status === 'En ligne';
                 const lastMessageText = lastMessage?.type === 'voice' ? '🎤 Note vocale' : (lastMessage?.text?.substring(0, 25) || 'Nouveau contact');
+                const isActive = selectedUser?.uid === user.uid;
                 
                 usersHTML += `
-                    <div class="contact-item" data-uid="${user.uid}" data-name="${user.name}" data-email="${user.email}" data-status="${user.status}">
+                    <div class="contact-item ${isActive ? 'active' : ''}" data-uid="${user.uid}" data-name="${user.name}" data-email="${user.email}" data-status="${user.status}">
                         <div class="contact-avatar">
                             <div class="avatar-img">
                                 ${user.name.charAt(0).toUpperCase()}
@@ -1782,7 +2196,6 @@
             }
         }
         
-        // Afficher le modal de transfert avec la liste des contacts
         function showTransferModal() {
             if (!currentCallId) {
                 alert('Aucun appel en cours');
@@ -1824,15 +2237,10 @@
                 return;
             }
             
-            // Terminer l'appel actuel
             await endCall();
-            
-            // Notifier le destinataire du transfert (optionnel)
             alert(`Appel transféré vers ${targetName}`);
-            
             transferModal.style.display = 'none';
             
-            // Option: démarrer un nouvel appel vers le contact de transfert
             const targetUser = allUsers[targetUid];
             if (targetUser) {
                 setTimeout(() => {
@@ -1897,6 +2305,7 @@
 
         async function logout() {
             if (isInCall) await endCall();
+            if (isRecording) cancelRecording();
             if (currentUser) {
                 const userRef = ref(database, `users/${currentUser.uid}`);
                 await update(userRef, { status: "Hors ligne", lastSeen: Date.now() });
@@ -1931,6 +2340,7 @@
                 await updateUserPresence(user);
                 listenForUsers();
                 listenForIncomingCalls();
+                listenForGlobalTypingStatus();
                 await displayUsers(allUsers, '');
             } else {
                 window.location.href = 'index.html';
@@ -1949,10 +2359,25 @@
         transferCallBtn.addEventListener('click', showTransferModal);
         endCallBtn.addEventListener('click', endCall);
         voiceRecordBtn.addEventListener('click', toggleRecording);
+        stopRecordingBtn.addEventListener('click', stopRecording);
+        cancelRecordingBtn.addEventListener('click', cancelRecording);
         closeTransferBtn.addEventListener('click', () => transferModal.style.display = 'none');
+        cancelReplyBtn.addEventListener('click', cancelReply);
+        replyToMsgBtn.addEventListener('click', () => {
+            if (contextMenuMessage) {
+                setReplyTo(contextMenuMessage);
+            }
+        });
         
         searchInput.addEventListener('input', (e) => {
             displayUsers(allUsers, e.target.value);
+        });
+        
+        // Cacher le menu contextuel au clic ailleurs
+        document.addEventListener('click', () => {
+            if (contextMenu.style.display === 'block') {
+                contextMenu.style.display = 'none';
+            }
         });
     </script>
 </body>
