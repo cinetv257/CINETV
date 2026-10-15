@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="bTicket — La plateforme africaine de billetterie numérique. Découvrez, achetez et validez vos billets d'événements en toute simplicité.">
+<meta name="google-site-verification" content="QU4RwVig48ZKkrqLn44_c5JYKU3fIos-jVKbz1Zby-o" />
+<title>bTicket — La billetterie numérique pour l'Afrique</title>
+
+<style>
+/* =========================================================
+   1. POLICE ARTICULAT CF
+   ========================================================= */
+@font-face {
+  font-family: 'Articulat CF';
+  src: url('ArticulatCF-Regular.woff2') format('woff2'),
+       url('ArticulatCF-Regular.woff')  format('woff');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Articulat CF';
+  src: url('ArticulatCF-Medium.woff2') format('woff2'),
+       url('ArticulatCF-Medium.woff')  format('woff');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Articulat CF';
+  src: url('ArticulatCF-DemiBold.woff2') format('woff2'),
+       url('ArticulatCF-DemiBold.woff')  format('woff');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Articulat CF';
+  src: url('ArticulatCF-Bold.woff2') format('woff2'),
+       url('ArticulatCF-Bold.woff')  format('woff');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* =========================================================
+   2. RESET & TOKENS
+   ========================================================= */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --noir:       #111318;
+  --anthracite: #252A34;
+  --or:         #D4AF37;
+  --ivoire:     #F4F0E6;
+  --blanc:      #FFFFFF;
+
+  --noir-soft:   #171a21;
+  --anthracite-2:#2f3540;
+  --line:        rgba(212,175,55,.18);
+  --line-soft:   rgba(255,255,255,.06);
+  --texte-muted: rgba(244,240,230,.62);
+  --texte-faint: rgba(244,240,230,.42);
+
+  --font: 'Articulat CF', system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --max: 1240px;
+  --radius: 20px;
+  --radius-sm: 14px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+body {
+  background: var(--noir);
+  color: var(--ivoire);
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+ul { list-style: none; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--blanc);
+}
+
+::selection { background: var(--or); color: var(--noir); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--noir); }
+::-webkit-scrollbar-thumb { background: var(--anthracite-2); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--or); }
+
+/* =========================================================
+   3. HELPERS
+   ========================================================= */
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.section { padding: 130px 0; position: relative; }
+.section--compact { padding: 90px 0; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 22px;
+}
+.eyebrow::before {
+  content: "";
+  width: 32px; height: 1px;
+  background: var(--or);
+}
+
+.display-title {
+  font-size: clamp(2.4rem, 6.2vw, 4.6rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  margin-bottom: 26px;
+}
+.display-title em {
+  font-style: normal;
+  color: var(--or);
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  margin-bottom: 18px;
+  line-height: 1.1;
+}
+
+.section-lead {
+  color: var(--texte-muted);
+  font-size: 1.05rem;
+  max-width: 560px;
+}
+
+.gold { color: var(--or); }
+
+/* =========================================================
+   4. BOUTONS
+   ========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border-radius: 100px;
+  font-size: .94rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease),
+              background .3s var(--ease), color .3s var(--ease),
+              border-color .3s var(--ease);
+  white-space: nowrap;
+}
+.btn svg { width: 16px; height: 16px; transition: transform .3s var(--ease); }
+
+.btn--primary {
+  background: var(--or);
+  color: var(--noir);
+}
+.btn--primary:hover {
+  background: #e0bb47;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -14px rgba(212,175,55,.75);
+}
+.btn--primary:hover svg { transform: translateX(3px); }
+
+.btn--ghost {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(244,240,230,.22);
+  color: var(--ivoire);
+  backdrop-filter: blur(10px);
+}
+.btn--ghost:hover {
+  border-color: var(--or);
+  color: var(--or);
+  transform: translateY(-2px);
+}
+
+.btn--sm { padding: 10px 22px; font-size: .86rem; }
+
+/* =========================================================
+   5. BARRE DE PROGRESSION + NAVIGATION
+   ========================================================= */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--or);
+  z-index: 1000;
+  transition: width .1s linear;
+}
+
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  padding: 20px 0;
+  transition: padding .35s var(--ease), background .35s var(--ease),
+              border-color .35s var(--ease), backdrop-filter .35s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  padding: 12px 0;
+  background: rgba(17,19,24,.85);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-bottom-color: var(--line);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.brand img { height: 36px; width: auto; object-fit: contain; }
+.brand__text {
+  font-weight: 700;
+  font-size: 1.18rem;
+  letter-spacing: -.015em;
+  color: var(--blanc);
+}
+.brand__text span { color: var(--or); }
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+.nav__links a {
+  padding: 9px 14px;
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--texte-muted);
+  border-radius: 100px;
+  transition: color .3s var(--ease), background .3s var(--ease);
+}
+.nav__links a:hover { color: var(--blanc); background: rgba(244,240,230,.05); }
+.nav__links a.active { color: var(--or); }
+
+.nav__cta { display: flex; align-items: center; gap: 12px; }
+
+.burger {
+  display: none;
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  position: relative;
+  flex-shrink: 0;
+}
+.burger span {
+  position: absolute;
+  left: 50%;
+  width: 18px; height: 1.8px;
+  background: var(--ivoire);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: transform .35s var(--ease), opacity .25s var(--ease), top .35s var(--ease);
+}
+.burger span:nth-child(1) { top: 16px; }
+.burger span:nth-child(2) { top: 21px; }
+.burger span:nth-child(3) { top: 26px; }
+.burger.open span:nth-child(1) { top: 21px; transform: translateX(-50%) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { top: 21px; transform: translateX(-50%) rotate(-45deg); }
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 890;
+  background: var(--noir);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 32px 48px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s var(--ease), visibility .4s var(--ease);
+}
+.mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-menu a {
+  display: block;
+  font-size: clamp(1.4rem, 5.6vw, 1.9rem);
+  font-weight: 600;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--ivoire);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform .45s var(--ease), opacity .45s var(--ease), color .3s;
+}
+.mobile-menu.open a { transform: translateY(0); opacity: 1; }
+.mobile-menu a:hover { color: var(--or); }
+.mobile-menu .btn { margin-top: 30px; width: 100%; }
+
+/* =========================================================
+   6. HERO VIDÉO
+   ========================================================= */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  background-image: url("IMAGES/01. hero-concert-burundi.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(17,19,24,.55) 0%, rgba(17,19,24,.7) 45%, rgba(17,19,24,.98) 100%),
+    linear-gradient(90deg, rgba(17,19,24,.85) 0%, rgba(17,19,24,.3) 60%, rgba(17,19,24,.75) 100%);
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  padding: 160px 0 100px;
+  max-width: 720px;
+}
+
+.hero__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ivoire);
+  margin-bottom: 30px;
+  animation: fadeUp .8s var(--ease) both;
+}
+.hero__tag i {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--or);
+  box-shadow: 0 0 12px var(--or);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 7vw, 5.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin-bottom: 26px;
+  animation: fadeUp .9s .08s var(--ease) both;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--or);
+}
+
+.hero p {
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  color: rgba(244,240,230,.78);
+  max-width: 520px;
+  margin-bottom: 40px;
+  animation: fadeUp .9s .16s var(--ease) both;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  animation: fadeUp .9s .24s var(--ease) both;
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: .66rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: rgba(244,240,230,.4);
+}
+.scroll-cue span {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--or), transparent);
+  animation: cue 2.4s ease-in-out infinite;
+}
+
+/* =========================================================
+   7. SECTION ÉDITORIALE
+   ========================================================= */
+.editorial {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.editorial--reverse .editorial__visual { order: 1; }
+.editorial--reverse .editorial__text { order: 2; }
+
+.editorial__visual {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 5 / 6;
+  border: 1px solid var(--line-soft);
+  box-shadow: 0 40px 80px -40px rgba(0,0,0,.8);
+}
+.editorial__visual img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease);
+}
+.editorial__visual:hover img { transform: scale(1.05); }
+
+.editorial__text h2 {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  margin-bottom: 22px;
+}
+.editorial__text p {
+  color: var(--texte-muted);
+  font-size: 1.02rem;
+  max-width: 480px;
+}
+
+/* =========================================================
+   8. CARTES MISSION / VISION
+   ========================================================= */
+.mv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+.mv-card {
+  position: relative;
+  padding: 50px 40px;
+  border-radius: var(--radius);
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  overflow: hidden;
+  transition: border-color .35s var(--ease), transform .35s var(--ease);
+}
+.mv-card::before {
+  content: "";
+  position: absolute;
+  top: -40%; right: -30%;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,175,55,.14), transparent 65%);
+  pointer-events: none;
+}
+.mv-card:hover {
+  border-color: rgba(212,175,55,.4);
+  transform: translateY(-4px);
+}
+.mv-card__label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 20px;
+}
+.mv-card h3 {
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+.mv-card p {
+  color: var(--texte-muted);
+  font-size: 1rem;
+  max-width: 420px;
+}
+
+/* =========================================================
+   9. SECTION POURQUOI
+   ========================================================= */
+.avantages__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 60px;
+}
+.avantages__head .section-title { margin-bottom: 0; }
+
+.avantages__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+.av-card {
+  position: relative;
+  padding: 34px 28px;
+  border-radius: var(--radius);
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  transition: border-color .35s var(--ease), transform .35s var(--ease);
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+}
+.av-card:hover {
+  border-color: rgba(212,175,55,.4);
+  transform: translateY(-6px);
+}
+.av-card__num {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  color: var(--or);
+  margin-bottom: 26px;
+}
+.av-card__icon {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  display: grid; place-items: center;
+  background: rgba(212,175,55,.1);
+  border: 1px solid var(--line);
+  color: var(--or);
+  margin-bottom: 22px;
+}
+.av-card__icon svg { width: 20px; height: 20px; }
+.av-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+.av-card p {
+  font-size: .88rem;
+  color: var(--texte-muted);
+  line-height: 1.55;
+  margin-top: auto;
+}
+
+/* =========================================================
+   10. APERÇU APPLICATION
+   ========================================================= */
+.apercu {
+  background: var(--noir-soft);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  overflow: hidden;
+}
+.apercu__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 60px;
+}
+.apercu__head .section-title { margin-bottom: 0; }
+
+.apercu__scroll {
+  display: flex;
+  gap: 28px;
+  padding: 20px 24px 40px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-inline: -24px;
+}
+.apercu__scroll::-webkit-scrollbar { display: none; }
+
+.apercu__phone {
+  flex: 0 0 auto;
+  width: 260px;
+  scroll-snap-align: center;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  aspect-ratio: 9 / 17.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 30px 60px -30px rgba(0,0,0,.85);
+  transition: transform .5s var(--ease), border-color .5s var(--ease);
+}
+.apercu__phone:hover {
+  transform: translateY(-8px);
+  border-color: rgba(212,175,55,.4);
+}
+.apercu__phone img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+
+.apercu__hint {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--texte-faint);
+}
+.apercu__hint svg {
+  width: 18px; height: 18px;
+  animation: swipeHint 2.2s ease-in-out infinite;
+}
+
+/* =========================================================
+   11. CTA FINAL
+   ========================================================= */
+.cta {
+  position: relative;
+  padding: 140px 0;
+  overflow: hidden;
+  text-align: center;
+}
+.cta__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("IMAGES/05. cultural-event.jpg");
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+.cta__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(17,19,24,.7) 0%, rgba(17,19,24,.85) 100%);
+}
+.cta__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin-inline: auto;
+}
+.cta h2 {
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  margin-bottom: 22px;
+  line-height: 1.05;
+}
+.cta p {
+  color: rgba(244,240,230,.78);
+  font-size: 1.05rem;
+  margin-bottom: 36px;
+}
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
+/* =========================================================
+   12. FOOTER
+   ========================================================= */
+.footer {
+  padding: 80px 0 34px;
+  background: var(--noir);
+  border-top: 1px solid var(--line-soft);
+}
+.footer__top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+  gap: 44px;
+  padding-bottom: 52px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.footer__brand p {
+  color: var(--texte-muted);
+  font-size: .88rem;
+  margin: 20px 0 22px;
+  max-width: 320px;
+}
+.footer__socials { display: flex; gap: 10px; }
+.footer__socials a {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  color: var(--texte-muted);
+  transition: all .3s var(--ease);
+}
+.footer__socials a:hover {
+  background: var(--or);
+  border-color: var(--or);
+  color: var(--noir);
+  transform: translateY(-3px);
+}
+.footer__socials svg { width: 17px; height: 17px; }
+
+.footer__col h4 {
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 18px;
+}
+.footer__col ul { display: flex; flex-direction: column; gap: 11px; }
+.footer__col a {
+  font-size: .88rem;
+  color: var(--texte-muted);
+  transition: color .3s var(--ease), padding-left .3s var(--ease);
+}
+.footer__col a:hover { color: var(--or); padding-left: 4px; }
+
+.footer__bottom {
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: .82rem;
+  color: var(--texte-faint);
+}
+
+/* =========================================================
+   13. ANIMATIONS
+   ========================================================= */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cue {
+  0%   { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: scaleY(1); transform-origin: top; opacity: 0; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .6; transform: scale(1.2); }
+}
+@keyframes swipeHint {
+  0%, 100% { transform: translateX(0); opacity: .6; }
+  50%      { transform: translateX(6px); opacity: 1; }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity .9s var(--ease), transform .9s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal[data-delay="1"] { transition-delay: .08s; }
+.reveal[data-delay="2"] { transition-delay: .16s; }
+.reveal[data-delay="3"] { transition-delay: .24s; }
+
+.no-js .reveal { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   14. RESPONSIVE
+   ========================================================= */
+@media (max-width: 1080px) {
+  .nav__links { display: none; }
+  .burger { display: block; }
+  .nav__cta .btn { display: none; }
+
+  .editorial { grid-template-columns: 1fr; gap: 50px; }
+  .editorial--reverse .editorial__visual,
+  .editorial--reverse .editorial__text { order: unset; }
+
+  .avantages__grid { grid-template-columns: repeat(2, 1fr); }
+  .mv-grid { grid-template-columns: 1fr; }
+
+  .footer__top { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer__brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 720px) {
+  .section { padding: 88px 0; }
+  .section--compact { padding: 70px 0; }
+  .container { padding-inline: 20px; }
+
+  .hero__inner { padding: 140px 0 80px; }
+  .hero__actions .btn { width: 100%; }
+
+  .avantages__grid { grid-template-columns: 1fr; gap: 16px; }
+  .av-card { min-height: auto; padding: 30px 24px; }
+
+  .mv-card { padding: 40px 30px; }
+
+  .apercu__scroll { margin-inline: -20px; padding: 16px 20px 32px; }
+  .apercu__phone { width: 230px; }
+
+  .cta { padding: 100px 0; }
+  .cta__actions .btn { width: 100%; }
+
+  .footer__top { grid-template-columns: 1fr; gap: 32px; }
+  .footer__bottom { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .brand img { height: 32px; }
+  .brand__text { font-size: 1.05rem; }
+  .apercu__phone { width: 210px; }
+}
+
+/* =========================================================
+   15. ASSISTANT IA FLOTTANT — Safi Ai
+   ========================================================= */
+.bt-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 950;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--or) 0%, #b8912a 100%);
+  color: var(--noir);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 28px -8px rgba(212,175,55,.65),
+              0 4px 12px -4px rgba(0,0,0,.5);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+  border: none;
+  cursor: pointer;
+}
+.bt-fab:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 18px 36px -10px rgba(212,175,55,.85),
+              0 6px 16px -6px rgba(0,0,0,.6);
+}
+.bt-fab:active { transform: translateY(-1px) scale(.98); }
+.bt-fab svg { width: 26px; height: 26px; }
+.bt-fab__badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid var(--noir);
+  box-shadow: 0 0 8px rgba(16,185,129,.9);
+}
+.bt-fab__icon-close { display: none; }
+.bt-fab.open .bt-fab__icon-chat { display: none; }
+.bt-fab.open .bt-fab__icon-close { display: block; }
+.bt-fab.open {
+  transform: rotate(90deg);
+}
+
+.bt-chat {
+  position: fixed;
+  right: 24px;
+  bottom: 100px;
+  z-index: 940;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  height: 560px;
+  max-height: calc(100vh - 140px);
+  background: var(--anthracite);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,.85),
+              0 0 0 1px rgba(255,255,255,.03) inset;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(.96);
+  transform-origin: bottom right;
+  transition: opacity .35s var(--ease), visibility .35s var(--ease), transform .35s var(--ease);
+}
+.bt-chat.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.bt-chat__header {
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(212,175,55,.12), rgba(212,175,55,.02));
+  border-bottom: 1px solid var(--line-soft);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bt-chat__avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--or), #b8912a);
+  display: grid; place-items: center;
+  color: var(--noir);
+  flex-shrink: 0;
+}
+.bt-chat__avatar svg {
+  width: 22px; height: 22px;
+}
+.bt-chat__title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.bt-chat__title strong {
+  font-size: .95rem;
+  color: var(--blanc);
+  font-weight: 600;
+}
+.bt-chat__status {
+  font-size: .72rem;
+  color: var(--texte-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.bt-chat__status i {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+.bt-chat__close {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--line-soft);
+  color: var(--texte-muted);
+  display: grid; place-items: center;
+  transition: all .25s var(--ease);
+}
+.bt-chat__close:hover {
+  background: rgba(255,255,255,.05);
+  color: var(--ivoire);
+}
+.bt-chat__close svg { width: 14px; height: 14px; }
+
+.bt-chat__body {
+  flex: 1;
+  padding: 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+}
+.bt-chat__body::-webkit-scrollbar { width: 6px; }
+.bt-chat__body::-webkit-scrollbar-thumb { background: var(--anthracite-2); border-radius: 6px; }
+
+.bt-msg {
+  max-width: 85%;
+  padding: 11px 15px;
+  border-radius: 14px;
+  font-size: .9rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+  animation: btFade .3s var(--ease);
+}
+.bt-msg--ai {
+  align-self: flex-start;
+  background: rgba(255,255,255,.05);
+  color: var(--ivoire);
+  border-bottom-left-radius: 4px;
+}
+.bt-msg--user {
+  align-self: flex-end;
+  background: var(--or);
+  color: var(--noir);
+  border-bottom-right-radius: 4px;
+  font-weight: 500;
+}
+.bt-msg--error {
+  align-self: center;
+  background: rgba(220,38,38,.15);
+  color: #fca5a5;
+  font-size: .82rem;
+  text-align: center;
+  border: 1px solid rgba(220,38,38,.3);
+}
+
+.bt-typing {
+  align-self: flex-start;
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,.05);
+  border-radius: 14px;
+  border-bottom-left-radius: 4px;
+}
+.bt-typing span {
+  width: 6px; height: 6px;
+  background: var(--texte-muted);
+  border-radius: 50%;
+  animation: btBounce 1.4s infinite ease-in-out both;
+}
+.bt-typing span:nth-child(1) { animation-delay: -0.32s; }
+.bt-typing span:nth-child(2) { animation-delay: -0.16s; }
+
+.bt-chat__footer {
+  padding: 14px;
+  border-top: 1px solid var(--line-soft);
+  background: rgba(0,0,0,.15);
+}
+.bt-chat__form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.bt-chat__input {
+  flex: 1;
+  padding: 11px 15px;
+  border-radius: 100px;
+  border: 1px solid var(--line-soft);
+  background: var(--noir-soft);
+  color: var(--ivoire);
+  font-family: var(--font);
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .25s var(--ease);
+}
+.bt-chat__input:focus { border-color: var(--or); }
+.bt-chat__input::placeholder { color: var(--texte-faint); }
+.bt-chat__send {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--or);
+  color: var(--noir);
+  display: grid; place-items: center;
+  transition: background .25s var(--ease), transform .15s var(--ease);
+  flex-shrink: 0;
+}
+.bt-chat__send:hover:not(:disabled) { background: #e0bb47; }
+.bt-chat__send:active:not(:disabled) { transform: scale(.92); }
+.bt-chat__send:disabled {
+  background: var(--anthracite-2);
+  color: var(--texte-faint);
+  cursor: not-allowed;
+}
+.bt-chat__send svg { width: 16px; height: 16px; }
+
+@keyframes btFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes btBounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+@media (max-width: 480px) {
+  .bt-fab { right: 16px; bottom: 16px; width: 56px; height: 56px; }
+  .bt-chat {
+    right: 16px;
+    bottom: 84px;
+    width: calc(100vw - 32px);
+    height: calc(100vh - 120px);
+    max-height: none;
+  }
+}
+</style>
+</head>
+<body class="no-js">
+
+<!-- ===================== PROGRESS ===================== -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ===================== NAVIGATION ===================== -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand">
+      <img src="IMAGES/logo.png" alt="bTicket">
+      <span class="brand__text">b<span>Ticket</span></span>
+    </a>
+
+    <nav class="nav__links">
+      <a href="index.html" class="active">Accueil</a>
+      <a href="application.html">Application</a>
+      <a href="organisateurs.html">Organisateurs</a>
+      <a href="agents.html">Agents</a>
+      <a href="tarifs.html">Tarifs</a>
+      <a href="a-propos.html">À propos</a>
+    </nav>
+
+    <div class="nav__cta">
+      <a href="telecharger.html" class="btn btn--primary btn--sm">
+        Télécharger
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== MOBILE MENU ===================== -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Accueil</a>
+  <a href="application.html">Application</a>
+  <a href="organisateurs.html">Organisateurs</a>
+  <a href="agents.html">Agents</a>
+  <a href="tarifs.html">Tarifs</a>
+  <a href="a-propos.html">À propos</a>
+  <a href="telecharger.html" class="btn btn--primary">Télécharger l'app</a>
+</div>
+
+<main>
+
+<!-- ===================== HERO VIDÉO ===================== -->
+<section class="hero">
+  <video
+    class="hero__video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    poster="IMAGES/01. hero-concert-burundi.jpg">
+    <source src="IMAGES/hero-video.mp4" type="video/mp4">
+    <source src="IMAGES/hero-video.webm" type="video/webm">
+  </video>
+
+  <div class="hero__overlay"></div>
+
+  <div class="container hero__inner">
+    <div class="hero__tag">
+      <i></i>
+      Plateforme africaine de billetterie
+    </div>
+
+    <h1>Vivez vos événements <em>sans limites.</em></h1>
+
+    <p>
+      Découvrez, achetez et validez vos billets numériques en quelques
+      secondes. Une seule application pour toute l'Afrique.
+    </p>
+
+    <div class="hero__actions">
+      <a href="application.html" class="btn btn--primary">
+        Découvrir l'application
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="organisateurs.html" class="btn btn--ghost">Devenir organisateur</a>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    Défiler
+    <span></span>
+  </div>
+</section>
+
+<!-- ===================== ÉDITORIAL ===================== -->
+<section class="section">
+  <div class="container editorial">
+    <div class="editorial__text reveal">
+      <span class="eyebrow">La nouvelle façon</span>
+      <h2 class="section-title">
+        bTicket, la nouvelle façon de vivre les événements en Afrique.
+      </h2>
+      <p>
+        Concerts, festivals, conférences, rencontres sportives : bTicket
+        connecte les organisateurs et le public autour d'une expérience
+        simple et moderne.
+      </p>
+    </div>
+
+    <div class="editorial__visual reveal" data-delay="1">
+      <img src="IMAGES/04. dj-live-event.jpg" alt="Ambiance d'un événement africain">
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MISSION & VISION ===================== -->
+<section class="section section--compact">
+  <div class="container">
+    <div class="mv-grid">
+      <article class="mv-card reveal">
+        <span class="mv-card__label">Notre mission</span>
+        <h3>Simplifier la billetterie événementielle en Afrique.</h3>
+        <p>
+          Offrir aux organisateurs et au public une solution fiable,
+          accessible et adaptée aux réalités du continent.
+        </p>
+      </article>
+
+      <article class="mv-card reveal" data-delay="1">
+        <span class="mv-card__label">Notre vision</span>
+        <h3>Devenir la référence de la billetterie digitale africaine.</h3>
+        <p>
+          Connecter les talents, les événements et les publics à travers
+          une expérience moderne et sécurisée.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POURQUOI BTICKET ===================== -->
+<section class="section">
+  <div class="container">
+    <div class="avantages__head reveal">
+      <div>
+        <span class="eyebrow">Pourquoi bTicket</span>
+        <h2 class="section-title">Simple. Rapide. Sécurisé.</h2>
+      </div>
+      <a href="tarifs.html" class="btn btn--ghost">
+        Voir les tarifs
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <div class="avantages__grid">
+      <article class="av-card reveal">
+        <span class="av-card__num">01</span>
+        <div class="av-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 7a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v3a2 2 0 0 0 0 4v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-3a2 2 0 0 0 0-4V7z"/>
+            <path d="M12 5v14"/>
+          </svg>
+        </div>
+        <h3>Billets 100% numériques</h3>
+        <p>Fini le papier. Vos billets sont dans votre téléphone, toujours disponibles.</p>
+      </article>
+
+      <article class="av-card reveal" data-delay="1">
+        <span class="av-card__num">02</span>
+        <div class="av-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <h3>Paiement sécurisé</h3>
+        <p>Transactions protégées et confirmations instantanées à chaque achat.</p>
+      </article>
+
+      <article class="av-card reveal" data-delay="2">
+        <span class="av-card__num">03</span>
+        <div class="av-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+            <path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h.01"/>
+          </svg>
+        </div>
+        <h3>Validation par QR code</h3>
+        <p>Un scan à l'entrée, une seconde de vérification. Fluide et anti-fraude.</p>
+      </article>
+
+      <article class="av-card reveal" data-delay="3">
+        <span class="av-card__num">04</span>
+        <div class="av-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/>
+          </svg>
+        </div>
+        <h3>Pensé pour l'Afrique</h3>
+        <p>Une solution adaptée aux usages et aux réalités du continent.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== APERÇU APPLICATION ===================== -->
+<section class="section apercu">
+  <div class="container">
+    <div class="apercu__head reveal">
+      <div>
+        <span class="eyebrow">L'application</span>
+        <h2 class="section-title">Tout dans votre poche.</h2>
+      </div>
+      <a href="application.html" class="btn btn--ghost">
+        En savoir plus
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <div class="apercu__scroll">
+      <div class="apercu__phone reveal">
+        <img src="IMAGES/01-home-events.png" alt="Écran d'accueil de l'application">
+      </div>
+      <div class="apercu__phone reveal" data-delay="1">
+        <img src="IMAGES/02-event-details.png" alt="Détails d'un événement">
+      </div>
+      <div class="apercu__phone reveal" data-delay="2">
+        <img src="IMAGES/03-ticket-selection.png" alt="Sélection des billets">
+      </div>
+      <div class="apercu__phone reveal" data-delay="3">
+        <img src="IMAGES/04-secure-payment.png" alt="Paiement sécurisé">
+      </div>
+      <div class="apercu__phone reveal">
+        <img src="IMAGES/10-payment-success-ticket.png" alt="Billet confirmé">
+      </div>
+    </div>
+
+    <div class="apercu__hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </svg>
+      Faites défiler
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA FINAL ===================== -->
+<section class="cta">
+  <div class="cta__bg"></div>
+  <div class="cta__overlay"></div>
+
+  <div class="container cta__inner reveal">
+    <span class="eyebrow" style="justify-content:center;">Rejoignez bTicket</span>
+    <h2>Prêt à vivre vos <span class="gold">prochains événements</span> autrement ?</h2>
+    <p>
+      Téléchargez l'application et découvrez une nouvelle façon
+      d'acheter et de valider vos billets.
+    </p>
+    <div class="cta__actions">
+      <a href="telecharger.html" class="btn btn--primary">
+        Télécharger l'application
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <a href="tarifs.html" class="btn btn--ghost">Voir les tarifs</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="index.html" class="brand">
+          <img src="IMAGES/logo.png" alt="bTicket">
+          <span class="brand__text">b<span>Ticket</span></span>
+        </a>
+        <p>La plateforme africaine de billetterie numérique. Achetez, gérez et validez vos billets en toute simplicité.</p>
+        <div class="footer__socials">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3 0-1.3-.1-2.45-.1-2.4 0-4.05 1.5-4.05 4.2v2.2H7.5V14h2.7v8h3.3z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 3h3l-6.6 7.6L21.7 21h-5.9l-4.3-5.6L6.4 21H3.3l7-8.1L2.7 3h6l3.9 5.2L17.5 3zm-1 16h1.6L7.6 4.6H5.9L16.5 19z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3V9.5zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-4.9c0-1.17-.02-2.68-1.7-2.68-1.7 0-1.96 1.28-1.96 2.6V21h-4V9.5z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="application.html">Application</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="telecharger.html">Télécharger</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Ressources</h4>
+        <ul>
+          <li><a href="application.html">Fonctionnalités</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="conditions-utilisation.html">Conditions d'utilisation</a></li>
+          <li><a href="politique-remboursement.html">Politique de remboursement</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© <span id="year"></span> bTicket. Tous droits réservés.</span>
+      <span>Conçu pour l'Afrique</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== ASSISTANT IA FLOTTANT ===================== -->
+<button class="bt-fab" id="btFab" aria-label="Ouvrir l'assistant Safi Ai">
+  <span class="bt-fab__badge"></span>
+  <svg class="bt-fab__icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+  <svg class="bt-fab__icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 6L6 18M6 6l12 12"/>
+  </svg>
+</button>
+
+<aside class="bt-chat" id="btChat" aria-hidden="true">
+  <div class="bt-chat__header">
+    <div class="bt-chat__avatar">
+      <!-- Tête de robot corrigée et propre -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="8" width="16" height="12" rx="3"/>
+        <path d="M12 8V4M10 4h4"/>
+        <circle cx="9" cy="13" r="1.5"/>
+        <circle cx="15" cy="13" r="1.5"/>
+        <path d="M9 17h6"/>
+        <path d="M2 13h2M20 13h2"/>
+      </svg>
+    </div>
+    <div class="bt-chat__title">
+      <strong>Safi Ai</strong>
+      <span class="bt-chat__status"><i></i> En ligne</span>
+    </div>
+    <button class="bt-chat__close" id="btChatClose" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="bt-chat__body" id="btChatBody">
+    <div class="bt-msg bt-msg--ai">
+      Bonjour 👋 Je suis Safi Ai, votre assistant bTicket. Comment puis-je vous aider aujourd'hui ?
+    </div>
+  </div>
+
+  <div class="bt-chat__footer">
+    <div class="bt-chat__form" id="btChatForm">
+      <input
+        type="text"
+        class="bt-chat__input"
+        id="btChatInput"
+        placeholder="Posez votre question..."
+        autocomplete="off">
+      <button type="button" class="bt-chat__send" id="btChatSend" aria-label="Envoyer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<script>
+/* =========================================================
+   INIT
+   ========================================================= */
+document.body.classList.remove('no-js');
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* =========================================================
+   1. NAV — état au scroll + progression
+   ========================================================= */
+const nav = document.getElementById('nav');
+const progressBar = document.getElementById('progressBar');
+
+function onScroll() {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 40);
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* =========================================================
+   2. MENU MOBILE
+   ========================================================= */
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileLinks = mobileMenu.querySelectorAll('a');
+
+function toggleMenu(force) {
+  const open = force !== undefined ? force : !mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', open);
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+  document.body.style.overflow = open ? 'hidden' : '';
+  mobileLinks.forEach((link, i) => {
+    link.style.transitionDelay = open ? (0.05 * i + 0.08) + 's' : '0s';
+  });
+}
+burger.addEventListener('click', () => toggleMenu());
+mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') toggleMenu(false);
+});
+
+/* =========================================================
+   3. RÉVÉLATION AU SCROLL
+   ========================================================= */
+const revealObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* =========================================================
+   4. VIDÉO HERO — fallback si non supportée
+   ========================================================= */
+const heroVideo = document.querySelector('.hero__video');
+if (heroVideo) {
+  heroVideo.addEventListener('error', () => {
+    heroVideo.style.display = 'none';
+  });
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroVideo.pause();
+  }
+}
+
+/* =========================================================
+   5. APERÇU — drag horizontal simple (desktop)
+   ========================================================= */
+const apercuScroll = document.querySelector('.apercu__scroll');
+if (apercuScroll) {
+  let isDown = false, startX = 0, startScroll = 0, moved = false;
+
+  apercuScroll.addEventListener('mousedown', e => {
+    isDown = true; moved = false;
+    startX = e.pageX;
+    startScroll = apercuScroll.scrollLeft;
+    apercuScroll.style.cursor = 'grabbing';
+  });
+  window.addEventListener('mouseup', () => {
+    isDown = false;
+    apercuScroll.style.cursor = '';
+  });
+  window.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    const d = e.pageX - startX;
+    if (Math.abs(d) > 4) moved = true;
+    apercuScroll.scrollLeft = startScroll - d;
+  });
+  apercuScroll.addEventListener('click', e => {
+    if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+  }, true);
+}
+</script>
+
+<!-- ===================== ASSISTANT IA — FIREBASE (Safi Ai) ===================== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+  import { getAI, getGenerativeModel, GoogleAIBackend } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-ai.js";
+  import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app-check.js";
+
+  // --- Configuration Firebase (publique) ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyBcf1eysXtdI5vOgI02yd8sCFs3wGWJ90A",
+    authDomain: "bticket-burundi.firebaseapp.com",
+    databaseURL: "https://bticket-burundi-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "bticket-burundi",
+    storageBucket: "bticket-burundi.firebasestorage.app",
+    messagingSenderId: "407762427157",
+    appId: "1:407762427157:web:ceb8dc08a4f5bd93575d1c",
+    measurementId: "G-43R1VG1P09"
+  };
+
+  const app = initializeApp(firebaseConfig);
+
+  // --- App Check (Protection anti-abus) ---
+  // ⚠️ IMPORTANT : Si vous testez en local, décommentez la ligne suivante.
+  // En production (GitHub Pages), laissez-la commentée.
+  // self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+
+  initializeAppCheck(app, {
+    provider: new ReCaptchaEnterpriseProvider('6LeZr_AtAAAAAChqXQEC0w6tMGcG6EuluuU_nqvo'),
+    isTokenAutoRefreshEnabled: true
+  });
+
+  // --- Initialisation de Safi Ai ---
+  const ai = getAI(app, { backend: new GoogleAIBackend() });
+  
+  // CORRECTION MAJEURE : Utilisation de gemini-1.5-flash (stable et gratuit)
+  const model = getGenerativeModel(ai, {
+    model: "gemini-1.5-flash",
+    systemInstruction: `Tu es Safi Ai, l'assistant virtuel officiel de bTicket, la plateforme africaine de billetterie numérique.
+Tu réponds toujours en français, de façon chaleureuse, professionnelle et concise.
+Tu aides les utilisateurs avec :
+- L'achat et la validation de billets
+- Les questions sur les événements
+- Les informations sur les organisateurs et les agents
+- Les tarifs et les fonctionnalités de l'application
+Si tu ne connais pas une information précise, invite l'utilisateur à consulter l'application ou à contacter le support.
+Ne donne jamais d'informations inventées. Reste toujours dans le contexte de bTicket.`
+  });
+
+  // --- Interface du chat ---
+  const fab = document.getElementById('btFab');
+  const chat = document.getElementById('btChat');
+  const chatClose = document.getElementById('btChatClose');
+  const chatBody = document.getElementById('btChatBody');
+  const chatInput = document.getElementById('btChatInput');
+  const chatSend = document.getElementById('btChatSend');
+
+  let chatHistory = [];
+
+  function openChat() {
+    chat.classList.add('open');
+    chat.setAttribute('aria-hidden', 'false');
+    fab.classList.add('open');
+    setTimeout(() => chatInput.focus(), 300);
+  }
+
+  function closeChat() {
+    chat.classList.remove('open');
+    chat.setAttribute('aria-hidden', 'true');
+    fab.classList.remove('open');
+  }
+
+  fab.addEventListener('click', () => {
+    if (chat.classList.contains('open')) closeChat();
+    else openChat();
+  });
+  chatClose.addEventListener('click', closeChat);
+
+  function addMessage(text, type) {
+    const div = document.createElement('div');
+    div.classList.add('bt-msg', `bt-msg--${type}`);
+    div.textContent = text;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return div;
+  }
+
+  function showTyping() {
+    const div = document.createElement('div');
+    div.classList.add('bt-typing');
+    div.id = 'btTyping';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('btTyping');
+    if (t) t.remove();
+  }
+
+  async function envoyerMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    addMessage(text, 'user');
+    chatInput.value = '';
+    chatSend.disabled = true;
+    showTyping();
+
+    try {
+      const result = await model.generateContent({
+        contents: [
+          ...chatHistory,
+          { role: 'user', parts: [{ text }] }
+        ]
+      });
+
+      const responseText = result.response.text();
+      removeTyping();
+      addMessage(responseText, 'ai');
+
+      chatHistory.push({ role: 'user', parts: [{ text }] });
+      chatHistory.push({ role: 'model', parts: [{ text: responseText }] });
+
+      if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+    } catch (error) {
+      console.error("Erreur Safi Ai :", error);
+      removeTyping();
+      // Affichage de l'erreur réelle pour vous aider à déboguer
+      addMessage(`Erreur technique : ${error.message || "Problème de connexion."}`, 'error');
+    } finally {
+      chatSend.disabled = false;
+      chatInput.focus();
+    }
+  }
+
+  // Écouteurs d'événements pour le bouton et la touche Entrée
+  chatSend.addEventListener('click', envoyerMessage);
+  chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      envoyerMessage();
+    }
+  });
+</script>
+
+</body>
+</html>
