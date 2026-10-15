@@ -1629,10 +1629,9 @@ if (apercuScroll) {
   // --- Initialisation de Safi Ai ---
   const ai = getAI(app, { backend: new GoogleAIBackend() });
   
-  // ✅ MODÈLE CORRIGÉ : gemini-3.8-flash (stable et inclus dans le tier gratuit)
-  const model = getGenerativeModel(ai, {
-    model: "gemini-3.8-flash",
-    systemInstruction: `Tu es Safi Ai, l'assistant virtuel officiel de bTicket, la plateforme africaine de billetterie numérique.
+  // Modèles essayés dans l'ordre : si l'un est refusé, on passe au suivant
+  const MODELES = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite"];
+  const CONSIGNE = `Tu es Safi Ai, l'assistant virtuel officiel de bTicket, la plateforme africaine de billetterie numérique.
 Tu réponds toujours en français, de façon chaleureuse, professionnelle et concise.
 Tu aides les utilisateurs avec :
 - L'achat et la validation de billets
@@ -1640,8 +1639,8 @@ Tu aides les utilisateurs avec :
 - Les informations sur les organisateurs et les agents
 - Les tarifs et les fonctionnalités de l'application
 Si tu ne connais pas une information précise, invite l'utilisateur à consulter l'application ou à contacter le support.
-Ne donne jamais d'informations inventées. Reste toujours dans le contexte de bTicket.`
-  });
+Ne donne jamais d'informations inventées. Reste toujours dans le contexte de bTicket.`;
+  const modeles = MODELES.map(nom => getGenerativeModel(ai, { model: nom, systemInstruction: CONSIGNE }));
 
   // --- Interface du chat ---
   const fab = document.getElementById('btFab');
@@ -1705,14 +1704,25 @@ Ne donne jamais d'informations inventées. Reste toujours dans le contexte de bT
     showTyping();
 
     try {
-      const result = await model.generateContent({
-        contents: [
-          ...chatHistory,
-          { role: 'user', parts: [{ text }] }
-        ]
-      });
+      let responseText = null;
+      let derniereErreur = null;
+      for (let i = 0; i < modeles.length; i++) {
+        try {
+          const result = await modeles[i].generateContent({
+            contents: [
+              ...chatHistory,
+              { role: 'user', parts: [{ text }] }
+            ]
+          });
+          responseText = result.response.text();
+          break;
+        } catch (e) {
+          console.error("Modèle " + MODELES[i] + " en échec :", e);
+          derniereErreur = e;
+        }
+      }
+      if (responseText === null) throw derniereErreur;
 
-      const responseText = result.response.text();
       removeTyping();
       addMessage(responseText, 'ai');
 
@@ -1723,7 +1733,6 @@ Ne donne jamais d'informations inventées. Reste toujours dans le contexte de bT
     } catch (error) {
       console.error("Erreur Safi Ai :", error);
       removeTyping();
-      // Affichage de l'erreur réelle pour vous aider à déboguer
       addMessage(`Erreur technique : ${error.message || "Problème de connexion."}`, 'error');
     } finally {
       chatSend.disabled = false;
