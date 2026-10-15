@@ -1629,9 +1629,9 @@ if (apercuScroll) {
   // --- Initialisation de Safi Ai ---
   const ai = getAI(app, { backend: new GoogleAIBackend() });
   
-  // CORRECTION MAJEURE : Utilisation de gemini-1.5-flash (stable et gratuit)
+  // ✅ MODÈLE CORRIGÉ : gemini-3.8-flash (stable et inclus dans le tier gratuit)
   const model = getGenerativeModel(ai, {
-    model: "gemini-1.5-flash",
+    model: "gemini-3.8-flash",
     systemInstruction: `Tu es Safi Ai, l'assistant virtuel officiel de bTicket, la plateforme africaine de billetterie numérique.
 Tu réponds toujours en français, de façon chaleureuse, professionnelle et concise.
 Tu aides les utilisateurs avec :
