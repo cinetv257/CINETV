@@ -1,11 +1,10 @@
 /* =========================================================
    Safi Ai — Assistant IA officiel de bTicket
    ---------------------------------------------------------
-   • Système de PROFILS : chaque profil a ses propres données
-     et son propre prompt système. Un seul fichier pour
-     plusieurs IA personnalisées.
-   • Génération d'affiches : Veida.ai + Kavel.ai + Pollinations
-   • Multilingue · Font Awesome · Fondateur : Audry Paulin Dushime
+   • MODÈLES : Safi 1.0 (rapide) et Safi 1.5 (avancé)
+   • PROFILS : chaque profil a ses propres données
+   • Multilingue · Font Awesome
+   • Fondateur : Audry Paulin Dushime
    ========================================================= */
 (function () {
   'use strict';
@@ -30,23 +29,58 @@
   };
 
   var CLE_SITE_RECAPTCHA = '6LfCFfEtAAAAAFhBn3JVI6cZ8qIp7tOafOjYkWDC';
-  var MODELES_TEXTE = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite"];
 
   /* =========================================================
-     2. CONFIGURATION DES PROFILS IA
+     2. DÉFINITION DES MODÈLES SAFI
      ---------------------------------------------------------
-     Chaque profil contient :
-     - id          : identifiant unique (utilisé dans l'URL via ?ai=...)
+     Chaque modèle a :
+     - id          : '1.0' ou '1.5'
      - name        : nom affiché
-     - avatar      : icône Font Awesome
-     - connaissances : données spécifiques à ce profil
-     - promptSysteme : instructions système
-     - accueil     : message d'accueil
-     - placeholders : textes d'exemple
-     - chips       : suggestions rapides
+     - icon        : icône Font Awesome
+     - description : texte du menu
+     - modeles     : liste des Gemini à essayer dans l'ordre
+     - temperature : créativité (0 = déterministe, 1 = créatif)
+     ========================================================= */
+  var SAFI_MODELS = {
+    '1.5': {
+      id: '1.5',
+      name: 'Safi 1.5',
+      icon: 'fa-solid fa-gem',
+      description: 'Le plus avancé · Raisonnement approfondi',
+      modeles: ['gemini-3.8-flash', 'gemini-3.5-flash'],
+      temperature: 0.35
+    },
+    '1.0': {
+      id: '1.0',
+      name: 'Safi 1.0',
+      icon: 'fa-solid fa-bolt',
+      description: 'Rapide et efficace · Réponses instantanées',
+      modeles: ['gemini-3.1-flash-lite'],
+      temperature: 0.2
+    }
+  };
 
-     Pour créer une nouvelle IA : ajoutez un objet dans ce tableau
-     et accédez-y via ?ai=identifiant
+  var CLE_MODELE = 'bticket_safi_modele_v1';
+  var MODELE_DEFAUT = '1.5';
+
+  function getModeleActif() {
+    try {
+      var saved = localStorage.getItem(CLE_MODELE);
+      if (saved && SAFI_MODELS[saved]) return SAFI_MODELS[saved];
+    } catch (e) {}
+    return SAFI_MODELS[MODELE_DEFAUT];
+  }
+
+  function setModeleActif(id) {
+    if (!SAFI_MODELS[id]) return;
+    try { localStorage.setItem(CLE_MODELE, id); } catch (e) {}
+    promesseIA = null; // force le rechargement du modèle
+  }
+
+  var MODELE = getModeleActif();
+
+  /* =========================================================
+     3. PROFILS IA
      ========================================================= */
   var PROFILS_IA = [
     {
@@ -136,22 +170,17 @@
         "{{CONNAISSANCES}}",
         "===== FIN DES INFORMATIONS OFFICIELLES ====="
       ].join('\n'),
-      accueil: "Bonjour, je suis Safi Ai, l'assistant officiel de bTicket.\n\nPosez-moi vos questions sur l'application, les tarifs, les organisateurs ou les agents — dans la langue de votre choix.\n\nVous organisez un événement ? Je peux vous aider à le préparer ou créer une affiche.",
+      accueil: "Bonjour, je suis Safi Ai, l'assistant officiel de bTicket.\n\nPosez-moi vos questions sur l'application, les tarifs, les organisateurs ou les agents — dans la langue de votre choix.\n\nVous organisez un événement ? Je peux vous aider à le préparer.",
       inputPlaceholder: "Posez votre question…",
       chips: [
         { icon: 'fa-solid fa-microphone-lines', label: 'Préparer un concert', q: 'Aide-moi à préparer un concert' },
         { icon: 'fa-solid fa-ticket', label: 'Catégories de billets', q: 'Propose-moi des idées de catégories de billets pour mon événement' },
         { icon: 'fa-regular fa-calendar', label: 'Planning', q: 'Propose-moi un planning J-30 / J-15 / J-7 / J-1 pour mon événement' },
         { icon: 'fa-solid fa-bullhorn', label: 'Communication', q: 'Donne-moi des idées de communication sur les réseaux sociaux pour mon événement' },
-        { icon: 'fa-solid fa-lightbulb', label: 'Stratégie de prix', q: 'Conseille-moi pour fixer le prix de mes billets et proposer des promotions' },
-        { icon: 'fa-solid fa-wand-magic-sparkles', label: 'Créer une affiche', q: '__POSTER__' }
+        { icon: 'fa-solid fa-lightbulb', label: 'Stratégie de prix', q: 'Conseille-moi pour fixer le prix de mes billets et proposer des promotions' }
       ]
     },
 
-    /* -------------------------------------------------------
-       PROFIL EXEMPLE 2 : Assistant Support Technique
-       Accessible via ?ai=support
-       ------------------------------------------------------- */
     {
       id: 'support',
       name: 'Support Technique',
@@ -178,7 +207,7 @@
         "Tu aides les utilisateurs à résoudre leurs problèmes techniques.",
         "Tu réponds UNIQUEMENT sur la base des INFORMATIONS SUPPORT ci-dessous.",
         "Tu réponds dans la langue de l'utilisateur.",
-        "Si le problème n'est pas résolu par les solutions proposées, oriente vers le support humain.",
+        "Si le problème n'est pas résolu, oriente vers le support humain.",
         "",
         "===== INFORMATIONS SUPPORT =====",
         "{{CONNAISSANCES}}",
@@ -198,7 +227,7 @@
   ];
 
   /* =========================================================
-     3. SÉLECTION DU PROFIL
+     4. SÉLECTION DU PROFIL
      ========================================================= */
   function getProfilActif() {
     try {
@@ -214,9 +243,6 @@
 
   var PROFIL = getProfilActif();
 
-  /* =========================================================
-     4. GÉNÉRATION DU PROMPT FINAL (remplace {{CONNAISSANCES}})
-     ========================================================= */
   function buildPromptSysteme(profil) {
     var connu = Array.isArray(profil.connaissances) ? profil.connaissances.join('\n') : profil.connaissances;
     return profil.promptSysteme.replace('{{CONNAISSANCES}}', connu);
@@ -340,6 +366,9 @@
   function chargerIA() {
     if (promesseIA) return promesseIA;
     setStatus('loading', 'Connexion…');
+    var modelesList = MODELE.modeles;
+    var temp = MODELE.temperature;
+
     promesseIA = (function () {
       var base = 'https://www.gstatic.com/firebasejs/' + VERSION_FIREBASE + '/';
       return Promise.all([
@@ -356,17 +385,18 @@
           });
         } catch (e) {}
         var ai = aiMod.getAI(app, { backend: new aiMod.GoogleAIBackend() });
-        var modeles = MODELES_TEXTE.map(function (nom) {
+        var modeles = modelesList.map(function (nom) {
           return aiMod.getGenerativeModel(ai, {
             model: nom,
             systemInstruction: CONSIGNE_BASE,
-            generationConfig: { temperature: 0.3 }
+            generationConfig: { temperature: temp }
           });
         });
-        setStatus('ready', 'En ligne · multilingue');
+        setStatus('ready', 'En ligne · ' + MODELE.name);
         return modeles;
       });
     })();
+
     promesseIA.catch(function (err) {
       console.error('Safi Ai : erreur de chargement IA', err);
       promesseIA = null;
@@ -532,7 +562,7 @@
           reponse = result.response.text();
           break;
         } catch (e) {
-          console.error('Modèle ' + MODELES_TEXTE[i] + ' en échec :', e);
+          console.error('Modèle ' + MODELE.modeles[i] + ' en échec :', e);
           derniereErreur = e;
         }
       }
@@ -546,7 +576,7 @@
         body.appendChild(createBubble(reponse, 'assistant'));
         body.scrollTop = body.scrollHeight;
       }
-      setStatus('ready', 'En ligne · multilingue');
+      setStatus('ready', 'En ligne · ' + MODELE.name);
     } catch (error) {
       console.error('Erreur Safi Ai :', error);
       hideTyping();
@@ -565,360 +595,83 @@
   }
 
   /* =========================================================
-     11. GÉNÉRATION D'AFFICHE
-     ---------------------------------------------------------
-     Moteurs disponibles :
-     - pollinations : gratuit, illimité, sans clé
-     - veida        : gratuit, anonyme, watermarké
-     - kavel        : gratuit, anonyme, watermarké
+     11. SÉLECTEUR DE MODÈLE
      ========================================================= */
-
-  var MOTEURS_IMAGE = {
-    pollinations: {
-      name: 'Pollinations',
-      icon: 'fa-solid fa-cloud',
-      badge: 'Gratuit · Illimité',
-      generate: async function (prompt) {
-        var seed = Math.floor(Math.random() * 1000000);
-        var url = 'https://image.pollinations.ai/prompt/' +
-          encodeURIComponent(prompt) +
-          '?width=1080&height=1350&nologo=true&model=flux&seed=' + seed;
-        return url;
-      }
-    },
-
-    veida: {
-      name: 'Veida.ai',
-      icon: 'fa-solid fa-wand-magic-sparkles',
-      badge: 'Gratuit · Watermarké · 1 img/appel',
-      generate: async function (prompt) {
-        var anonId = 'safi-' + Math.random().toString(36).slice(2, 12);
-        var API = 'https://veida.ai/api/ai';
-
-        var submitted = await fetch(API + '/generate', {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            'x-anon-id': anonId
-          },
-          body: JSON.stringify({
-            provider: 'kie',
-            mediaType: 'image',
-            model: 'veida-image-v1',
-            scene: 'text-to-image',
-            prompt: prompt,
-            options: { aspect_ratio: '4:5' }
-          })
-        }).then(function (r) { return r.json(); });
-
-        if (submitted && submitted.data && submitted.data.wall) {
-          throw new Error('Quota Veida atteint. Réessayez dans quelques minutes ou choisissez un autre moteur.');
-        }
-        var taskId = submitted && submitted.data && submitted.data.id;
-        if (!taskId) throw new Error('Réponse Veida invalide');
-
-        var maxTries = 40;
-        var delay = 3000;
-        for (var i = 0; i < maxTries; i++) {
-          await new Promise(function (r) { setTimeout(r, delay); });
-          try {
-            var statut = await fetch(API + '/anon-query?taskId=' + encodeURIComponent(taskId) + '&provider=kie&mediaType=image', {
-              headers: { 'x-anon-id': anonId }
-            }).then(function (r) { return r.json(); });
-
-            var d = statut && statut.data;
-            if (!d) continue;
-            if (d.images && d.images[0]) return d.images[0];
-            if (d.status === 'failed' || d.status === 'error') {
-              throw new Error('Génération Veida échouée');
-            }
-          } catch (e) {
-            if (e.message && e.message.indexOf('Veida') !== -1) throw e;
-          }
-        }
-        throw new Error('Délai Veida dépassé. Réessayez.');
-      }
-    },
-
-    kavel: {
-      name: 'Kavel.ai',
-      icon: 'fa-solid fa-palette',
-      badge: 'Gratuit · Watermarké · 2 img/IP/jour',
-      generate: async function (prompt) {
-        var anonId = 'anon-' + Math.random().toString(36).slice(2, 14) + Date.now().toString(36);
-        var API = 'https://www.kavel.ai/api/ai';
-
-        var submitted = await fetch(API + '/generate', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-anon-id': anonId
-          },
-          body: JSON.stringify({
-            provider: 'kie',
-            mediaType: 'image',
-            model: 'kavel-image-v1',
-            scene: 'text-to-image',
-            prompt: prompt,
-            options: { aspect_ratio: '4:5' }
-          })
-        }).then(function (r) { return r.json(); });
-
-        if (submitted && submitted.data && submitted.data.wall) {
-          throw new Error('Quota Kavel atteint pour cette IP. Réessayez demain ou choisissez un autre moteur.');
-        }
-        var taskId = submitted && submitted.data && submitted.data.id;
-        if (!taskId) throw new Error('Réponse Kavel invalide');
-
-        var maxTries = 40;
-        var delay = 3000;
-        for (var i = 0; i < maxTries; i++) {
-          await new Promise(function (r) { setTimeout(r, delay); });
-          try {
-            var statut = await fetch(API + '/anon-query?taskId=' + encodeURIComponent(taskId) + '&provider=kie&mediaType=image', {
-              headers: { 'x-anon-id': anonId }
-            }).then(function (r) { return r.json(); });
-
-            var d = statut && statut.data;
-            if (!d) continue;
-            if (d.images && d.images[0]) return d.images[0];
-            if (d.status === 'failed' || d.status === 'error') {
-              throw new Error('Génération Kavel échouée');
-            }
-          } catch (e) {
-            if (e.message && e.message.indexOf('Kavel') !== -1) throw e;
-          }
-        }
-        throw new Error('Délai Kavel dépassé. Réessayez.');
-      }
-    }
-  };
-
-  function wrapText(ctx, text, maxWidth) {
-    var words = String(text).split(' ');
-    var lines = [];
-    var line = '';
-    for (var i = 0; i < words.length; i++) {
-      var test = line ? line + ' ' + words[i] : words[i];
-      if (ctx.measureText(test).width > maxWidth && line) {
-        lines.push(line);
-        line = words[i];
-      } else {
-        line = test;
-      }
-    }
-    if (line) lines.push(line);
-    return lines;
+  function openModelDropdown() {
+    var dd = document.getElementById('safiModelDropdown');
+    if (dd) dd.classList.add('open');
   }
 
-  async function generatePoster() {
-    var descEl = document.getElementById('safiPosterDescription');
-    var engineEl = document.getElementById('safiPosterEngine');
-    var titreEl = document.getElementById('safiPosterTitle');
-    var dateEl = document.getElementById('safiPosterDate');
-    var lieuEl = document.getElementById('safiPosterVenue');
+  function closeModelDropdown() {
+    var dd = document.getElementById('safiModelDropdown');
+    if (dd) dd.classList.remove('open');
+  }
 
-    var description = descEl ? descEl.value.trim() : '';
-    var engine = engineEl ? engineEl.value : 'pollinations';
-    var title = titreEl ? titreEl.value.trim() : '';
-    var date = dateEl ? dateEl.value.trim() : '';
-    var venue = lieuEl ? lieuEl.value.trim() : '';
+  function updateModelUI() {
+    // Nom du modèle dans le bouton
+    document.querySelectorAll('.safi-model-name').forEach(function (el) {
+      el.textContent = MODELE.name;
+    });
+    // Icône du badge
+    document.querySelectorAll('.safi-model-badge').forEach(function (el) {
+      el.className = MODELE.icon + ' safi-model-badge';
+    });
+    // Options actives
+    document.querySelectorAll('.safi-model-option').forEach(function (opt) {
+      if (opt.getAttribute('data-model') === MODELE.id) opt.classList.add('active');
+      else opt.classList.remove('active');
+    });
+    // Status
+    setStatus('ready', 'En ligne · ' + MODELE.name);
+  }
 
-    var preview = document.getElementById('safiPosterPreview');
-    var btn = document.getElementById('safiPosterGenerate');
-    if (!preview || !btn) return;
-
-    if (!description && !title) {
-      preview.innerHTML = '<div class="safi-poster-error"><i class="fa-solid fa-circle-exclamation"></i> Décrivez votre affiche ou entrez un titre.</div>';
+  function switchModel(id) {
+    if (!SAFI_MODELS[id] || id === MODELE.id) {
+      closeModelDropdown();
       return;
     }
+    MODELE = SAFI_MODELS[id];
+    setModeleActif(id);
+    updateModelUI();
+    closeModelDropdown();
 
-    btn.disabled = true;
-    var moteur = MOTEURS_IMAGE[engine] || MOTEURS_IMAGE.pollinations;
+    // Info dans le chat : le changement s'applique aux prochains messages
+    var body = document.getElementById('safiBody');
+    if (body && currentConv() && currentConv().messages.length) {
+      var notice = document.createElement('div');
+      notice.className = 'safi-model-notice';
+      notice.innerHTML = '<i class="' + MODELE.icon + '"></i> Modèle changé : ' + escapeHtml(MODELE.name);
+      body.appendChild(notice);
+      body.scrollTop = body.scrollHeight;
+    }
+  }
 
-    preview.innerHTML = '<div class="safi-poster-loading">' +
-      '<i class="fa-solid fa-spinner fa-spin"></i> Génération avec <strong>' + moteur.name + '</strong>… Cela peut prendre jusqu\'à 1 min.</div>';
-
-    // Prompt complet
-    var promptBase = description || ('Event poster for ' + title + ', professional photography, cinematic lighting, dramatic atmosphere, african modern aesthetic, high quality');
-    var prompt = promptBase + ', vertical 4:5 composition, no text no letters no watermark, professional event poster background';
-
-    try {
-      if (document.fonts && document.fonts.ready) {
-        try { await document.fonts.ready; } catch (e) {}
-      }
-
-      var imageUrl = await moteur.generate(prompt);
-
-      var img = new Image();
-      img.crossOrigin = 'anonymous';
-
-      await new Promise(function (resolve, reject) {
-        img.onload = resolve;
-        img.onerror = function () { reject(new Error('Impossible de charger l\'image générée.')); };
-        img.src = imageUrl;
+  function wireModelSelector() {
+    document.querySelectorAll('.safi-model-btn').forEach(function (btn) {
+      if (btn.__safiWired) return;
+      btn.__safiWired = true;
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var dd = document.getElementById('safiModelDropdown');
+        if (dd && dd.classList.contains('open')) closeModelDropdown();
+        else openModelDropdown();
       });
+    });
 
-      var canvas = document.createElement('canvas');
-      canvas.width = 1080;
-      canvas.height = 1350;
-      var ctx = canvas.getContext('2d');
+    document.querySelectorAll('.safi-model-option').forEach(function (opt) {
+      if (opt.__safiWired) return;
+      opt.__safiWired = true;
+      opt.addEventListener('click', function () {
+        switchModel(opt.getAttribute('data-model'));
+      });
+    });
 
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      // Overlay bas
-      var grdBottom = ctx.createLinearGradient(0, canvas.height * 0.30, 0, canvas.height);
-      grdBottom.addColorStop(0, 'rgba(17,19,24,0)');
-      grdBottom.addColorStop(0.35, 'rgba(17,19,24,0.55)');
-      grdBottom.addColorStop(0.75, 'rgba(17,19,24,0.92)');
-      grdBottom.addColorStop(1, 'rgba(17,19,24,0.99)');
-      ctx.fillStyle = grdBottom;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Overlay haut
-      var grdTop = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.20);
-      grdTop.addColorStop(0, 'rgba(17,19,24,0.85)');
-      grdTop.addColorStop(1, 'rgba(17,19,24,0)');
-      ctx.fillStyle = grdTop;
-      ctx.fillRect(0, 0, canvas.width, canvas.height * 0.20);
-
-      // Barre dorée
-      ctx.fillStyle = '#D4AF37';
-      ctx.fillRect(0, canvas.height - 14, canvas.width, 14);
-
-      // Logo bTicket
-      ctx.textAlign = 'right';
-      ctx.font = '700 46px Montserrat, Arial, sans-serif';
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillText('b', canvas.width - 220, 92);
-      ctx.fillStyle = '#D4AF37';
-      ctx.fillText('Ticket', canvas.width - 60, 92);
-      ctx.font = '500 18px Montserrat, Arial, sans-serif';
-      ctx.fillStyle = 'rgba(244,240,230,0.65)';
-      ctx.fillText('BILLETTERIE NUMÉRIQUE', canvas.width - 60, 122);
-
-      // Titre
-      if (title) {
-        var maxWidth = canvas.width - 120;
-        var titleFontSize = 110;
-        ctx.textAlign = 'left';
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = '700 ' + titleFontSize + 'px Montserrat, Arial, sans-serif';
-
-        var titleLines = wrapText(ctx, title.toUpperCase(), maxWidth);
-        while (titleLines.length > 3 && titleFontSize > 60) {
-          titleFontSize -= 10;
-          ctx.font = '700 ' + titleFontSize + 'px Montserrat, Arial, sans-serif';
-          titleLines = wrapText(ctx, title.toUpperCase(), maxWidth);
-        }
-
-        var lineHeight = titleFontSize * 1.05;
-        var totalTitleHeight = titleLines.length * lineHeight;
-        var y = canvas.height - 440 - (totalTitleHeight - lineHeight);
-
-        ctx.fillStyle = '#D4AF37';
-        ctx.fillRect(60, y - 60, 80, 4);
-
-        titleLines.forEach(function (line) {
-          ctx.fillText(line, 60, y);
-          y += lineHeight;
-        });
-
-        // Date / lieu
-        ctx.fillStyle = '#D4AF37';
-        ctx.fillRect(60, y + 20, 60, 2);
-        y += 60;
-
-        if (date) {
-          ctx.font = '600 30px Montserrat, Arial, sans-serif';
-          ctx.fillStyle = '#FFFFFF';
-          ctx.fillText(date, 60, y);
-          y += 44;
-        }
-        if (venue) {
-          ctx.font = '400 26px Montserrat, Arial, sans-serif';
-          ctx.fillStyle = 'rgba(244,240,230,0.75)';
-          ctx.fillText(venue, 60, y);
-        }
-      }
-
-      var dataUrl = canvas.toDataURL('image/png');
-      preview.innerHTML = '';
-
-      var previewImg = document.createElement('img');
-      previewImg.src = dataUrl;
-      previewImg.className = 'safi-poster-preview__img';
-      preview.appendChild(previewImg);
-
-      var actions = document.createElement('div');
-      actions.className = 'safi-poster-actions';
-
-      var safeName = (title || 'affiche').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-
-      var dlLink = document.createElement('a');
-      dlLink.className = 'safi-poster-download';
-      dlLink.href = dataUrl;
-      dlLink.download = 'affiche-bticket-' + safeName + '.png';
-      dlLink.innerHTML = '<i class="fa-solid fa-download"></i> Télécharger';
-      actions.appendChild(dlLink);
-
-      var regenBtn = document.createElement('button');
-      regenBtn.type = 'button';
-      regenBtn.className = 'safi-poster-regen';
-      regenBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Regénérer';
-      regenBtn.addEventListener('click', generatePoster);
-      actions.appendChild(regenBtn);
-
-      preview.appendChild(actions);
-    } catch (err) {
-      console.error('Erreur génération affiche :', err);
-      preview.innerHTML = '<div class="safi-poster-error"><i class="fa-solid fa-triangle-exclamation"></i> ' +
-        escapeHtml(err.message || 'Impossible de générer l\'affiche.') +
-        '<br><button type="button" class="safi-poster-regen" style="margin-top:14px">' +
-        '<i class="fa-solid fa-rotate-right"></i> Réessayer</button></div>';
-      var retry = preview.querySelector('.safi-poster-regen');
-      if (retry) retry.addEventListener('click', generatePoster);
-    } finally {
-      btn.disabled = false;
-    }
-  }
-
-  function openPosterModal() {
-    var modal = document.getElementById('safiPosterModal');
-    if (!modal) return;
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-    setTimeout(function () {
-      var t = document.getElementById('safiPosterDescription');
-      if (t) t.focus();
-    }, 200);
-  }
-
-  function closePosterModal() {
-    var modal = document.getElementById('safiPosterModal');
-    if (!modal) return;
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
-  }
-
-  function setupPosterModal() {
-    if (!document.getElementById('safiPosterModal')) {
-      var wrap = document.createElement('div');
-      wrap.innerHTML = buildPosterModalHtml();
-      while (wrap.firstChild) document.body.appendChild(wrap.firstChild);
-    }
-
-    var closeBtn = document.getElementById('safiPosterClose');
-    if (closeBtn) closeBtn.addEventListener('click', closePosterModal);
-
-    var backdrop = document.getElementById('safiPosterBackdrop');
-    if (backdrop) backdrop.addEventListener('click', closePosterModal);
-
-    var genBtn = document.getElementById('safiPosterGenerate');
-    if (genBtn) genBtn.addEventListener('click', generatePoster);
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.safi-model-selector')) closeModelDropdown();
+    });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closePosterModal();
+      if (e.key === 'Escape') closeModelDropdown();
     });
   }
 
@@ -971,38 +724,143 @@
 .safi-chat--float.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
 .safi-head {
-  padding: 16px 18px;
+  padding: 14px 16px;
   background: linear-gradient(135deg, rgba(212,175,55,.12), rgba(212,175,55,.02));
   border-bottom: 1px solid rgba(255,255,255,.06);
-  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
 }
 .safi-head__avatar {
-  width: 40px; height: 40px; border-radius: 50%;
+  width: 38px; height: 38px; border-radius: 50%;
   background: linear-gradient(135deg, #D4AF37, #b8912a);
   display: grid; place-items: center; color: #111318; flex-shrink: 0;
-  font-size: 18px;
+  font-size: 17px;
 }
 .safi-head__title { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.safi-head__title strong { font-size: .98rem; color: #fff; font-weight: 600; }
+.safi-head__title strong { font-size: .95rem; color: #fff; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .safi-head__status {
-  font-size: .72rem; color: rgba(244,240,230,.62);
+  font-size: .7rem; color: rgba(244,240,230,.62);
   display: flex; align-items: center; gap: 6px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .safi-head__status i {
   width: 6px; height: 6px; border-radius: 50%;
   background: #10b981; box-shadow: 0 0 6px #10b981;
+  flex-shrink: 0;
 }
 .safi-head__status.loading i { background: #D4AF37; box-shadow: 0 0 6px #D4AF37; animation: safiPulse 1.4s ease-in-out infinite; }
 .safi-head__status.error i { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
 
 .safi-head__btn {
-  width: 34px; height: 34px; border-radius: 9px;
+  width: 32px; height: 32px; border-radius: 9px;
   background: transparent; border: 1px solid rgba(255,255,255,.06);
   color: rgba(244,240,230,.62); display: grid; place-items: center;
   cursor: pointer; transition: all .25s; flex-shrink: 0;
-  font-size: 13px;
+  font-size: 12px;
 }
 .safi-head__btn:hover { background: rgba(255,255,255,.05); color: #F4F0E6; border-color: rgba(212,175,55,.35); }
+
+/* ===== Sélecteur de modèle ===== */
+.safi-model-selector {
+  position: relative;
+  flex-shrink: 0;
+}
+.safi-model-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  background: rgba(212,175,55,.1);
+  border: 1px solid rgba(212,175,55,.3);
+  color: #F4F0E6;
+  font-family: inherit;
+  font-size: .72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.safi-model-btn:hover {
+  background: rgba(212,175,55,.18);
+  border-color: #D4AF37;
+}
+.safi-model-badge { color: #D4AF37; font-size: .85em; }
+.safi-model-chevron { color: rgba(244,240,230,.5); font-size: .7em; transition: transform .2s; }
+.safi-model-selector.open .safi-model-chevron { transform: rotate(180deg); }
+
+.safi-model-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 280px;
+  background: #1a1e25;
+  border: 1px solid rgba(212,175,55,.28);
+  border-radius: 12px;
+  box-shadow: 0 24px 48px -12px rgba(0,0,0,.9);
+  padding: 6px;
+  z-index: 200;
+  display: none;
+  animation: safiFade .18s cubic-bezier(.22,.61,.36,1);
+}
+.safi-model-dropdown.open { display: block; }
+
+.safi-model-option {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .15s;
+  text-align: left;
+  width: 100%;
+  border: none;
+  background: none;
+  font-family: inherit;
+  color: inherit;
+}
+.safi-model-option:hover { background: rgba(255,255,255,.04); }
+.safi-model-option.active { background: rgba(212,175,55,.1); }
+
+.safi-model-option__icon {
+  color: #D4AF37;
+  font-size: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+}
+.safi-model-option__info { flex: 1; min-width: 0; }
+.safi-model-option__name {
+  font-size: .86rem;
+  font-weight: 700;
+  color: #fff;
+  display: block;
+  margin-bottom: 3px;
+}
+.safi-model-option__desc {
+  font-size: .7rem;
+  color: rgba(244,240,230,.55);
+  line-height: 1.4;
+  display: block;
+}
+.safi-model-option__check {
+  color: #D4AF37;
+  font-size: 14px;
+  margin-top: 4px;
+  opacity: 0;
+  flex-shrink: 0;
+}
+.safi-model-option.active .safi-model-option__check { opacity: 1; }
+
+.safi-model-notice {
+  align-self: center;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  background: rgba(212,175,55,.08);
+  border: 1px solid rgba(212,175,55,.22);
+  border-radius: 100px;
+  font-size: .74rem;
+  color: rgba(244,240,230,.75);
+  animation: safiFade .3s;
+}
+.safi-model-notice i { color: #D4AF37; }
 
 .safi-body {
   flex: 1; padding: 20px; overflow-y: auto;
@@ -1051,7 +909,6 @@
 .safi-typing span:nth-child(2) { animation-delay: .18s; }
 .safi-typing span:nth-child(3) { animation-delay: .36s; }
 
-/* Quick chips */
 .safi-quick {
   display: flex; flex-wrap: wrap; gap: 8px;
   padding: 10px 14px;
@@ -1215,191 +1072,6 @@
 
 .safi-mobile-menu-btn { display: none; margin-left: auto; }
 
-/* ===== Modale affiche ===== */
-.safi-poster-modal {
-  position: fixed; inset: 0; z-index: 1100;
-  display: none;
-  align-items: center; justify-content: center;
-  padding: 20px;
-  font-family: 'Montserrat', system-ui, sans-serif;
-}
-.safi-poster-modal.open { display: flex; }
-
-.safi-poster-modal__backdrop {
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,.78);
-  backdrop-filter: blur(6px);
-  cursor: pointer;
-}
-.safi-poster-modal__content {
-  position: relative;
-  width: 100%; max-width: 820px;
-  max-height: calc(100vh - 40px);
-  background: #1a1e25;
-  border: 1px solid rgba(212,175,55,.28);
-  border-radius: 20px;
-  overflow-y: auto;
-  box-shadow: 0 40px 80px -20px rgba(0,0,0,.9);
-  animation: safiFade .3s cubic-bezier(.22,.61,.36,1);
-}
-.safi-poster-modal__header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 24px;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-  position: sticky; top: 0;
-  background: #1a1e25;
-  z-index: 2;
-}
-.safi-poster-modal__header h3 {
-  font-size: 1.1rem; color: #fff; font-weight: 700;
-  display: flex; align-items: center; gap: 10px;
-  margin: 0;
-}
-.safi-poster-modal__header h3 i { color: #D4AF37; }
-.safi-poster-modal__close {
-  width: 34px; height: 34px; border-radius: 9px;
-  background: transparent; border: 1px solid rgba(255,255,255,.08);
-  color: rgba(244,240,230,.6); cursor: pointer;
-  display: grid; place-items: center;
-  transition: all .2s;
-  font-size: 14px;
-}
-.safi-poster-modal__close:hover { background: rgba(255,255,255,.05); color: #fff; }
-
-.safi-poster-form {
-  padding: 24px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-.safi-poster-form label {
-  display: block;
-  font-size: .72rem; font-weight: 600;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: rgba(244,240,230,.55);
-  margin-bottom: 6px;
-}
-.safi-poster-form input,
-.safi-poster-form select,
-.safi-poster-form textarea {
-  width: 100%; padding: 12px 15px;
-  border-radius: 12px;
-  background: #0f1217;
-  border: 1px solid rgba(255,255,255,.08);
-  color: #F4F0E6; font-family: inherit; font-size: .92rem;
-  outline: none;
-  transition: border-color .2s;
-  box-sizing: border-box;
-  resize: vertical;
-}
-.safi-poster-form input:focus,
-.safi-poster-form select:focus,
-.safi-poster-form textarea:focus { border-color: #D4AF37; }
-.safi-poster-form input::placeholder,
-.safi-poster-form textarea::placeholder { color: rgba(244,240,230,.3); }
-.safi-poster-form .full { grid-column: 1 / -1; }
-
-.safi-poster-engine-pills {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-.safi-poster-engine-pill {
-  position: relative;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 12px 10px;
-  background: #0f1217;
-  border: 1.5px solid rgba(255,255,255,.08);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all .2s;
-  text-align: center;
-  font-family: inherit;
-  color: rgba(244,240,230,.65);
-}
-.safi-poster-engine-pill:hover {
-  border-color: rgba(212,175,55,.4);
-  color: #F4F0E6;
-}
-.safi-poster-engine-pill.active {
-  border-color: #D4AF37;
-  background: rgba(212,175,55,.1);
-  color: #fff;
-}
-.safi-poster-engine-pill i {
-  font-size: 20px;
-  color: #D4AF37;
-}
-.safi-poster-engine-pill strong {
-  font-size: .82rem;
-  font-weight: 600;
-}
-.safi-poster-engine-pill small {
-  font-size: .66rem;
-  color: rgba(244,240,230,.45);
-  line-height: 1.3;
-}
-.safi-poster-engine-pill.active small { color: rgba(244,240,230,.65); }
-
-.safi-poster-generate {
-  grid-column: 1 / -1;
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 14px 24px;
-  background: linear-gradient(135deg, #D4AF37, #b8912a);
-  color: #111318;
-  border: none; border-radius: 100px;
-  font-family: inherit; font-size: .95rem; font-weight: 700;
-  cursor: pointer;
-  transition: all .25s;
-  margin-top: 6px;
-}
-.safi-poster-generate:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -12px rgba(212,175,55,.7); }
-.safi-poster-generate:disabled { opacity: .55; cursor: not-allowed; transform: none; }
-
-.safi-poster-preview {
-  padding: 0 24px 24px;
-  text-align: center;
-}
-.safi-poster-loading,
-.safi-poster-error {
-  padding: 40px 20px;
-  color: rgba(244,240,230,.6);
-  font-size: .9rem;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  flex-direction: column;
-}
-.safi-poster-error { color: #ff8a8a; }
-.safi-poster-preview__img {
-  width: 100%; max-width: 420px;
-  margin: 0 auto;
-  border-radius: 14px;
-  box-shadow: 0 20px 50px -20px rgba(0,0,0,.9);
-  display: block;
-}
-.safi-poster-actions {
-  display: flex; gap: 10px; justify-content: center;
-  margin-top: 18px; flex-wrap: wrap;
-}
-.safi-poster-download,
-.safi-poster-regen {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 11px 22px; border-radius: 100px;
-  font-family: inherit; font-size: .85rem; font-weight: 600;
-  cursor: pointer; transition: all .25s;
-  text-decoration: none;
-  border: none;
-}
-.safi-poster-download {
-  background: #D4AF37; color: #111318;
-}
-.safi-poster-download:hover { background: #e0bb47; transform: translateY(-1px); }
-.safi-poster-regen {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(244,240,230,.22);
-  color: #F4F0E6;
-}
-.safi-poster-regen:hover { border-color: #D4AF37; color: #D4AF37; }
-
 /* ===== Animations ===== */
 @keyframes safiFade {
   from { opacity: 0; transform: translateY(6px); }
@@ -1431,11 +1103,14 @@
   .safi-mobile-menu-btn { display: grid; }
 }
 
-@media (max-width: 640px) {
-  .safi-poster-form { grid-template-columns: 1fr; }
-  .safi-poster-engine-pills { grid-template-columns: 1fr; }
-  .safi-poster-modal__content { max-height: calc(100vh - 20px); }
-  .safi-poster-modal__header h3 { font-size: 1rem; }
+@media (max-width: 600px) {
+  .safi-model-name { display: none; }
+  .safi-model-btn { padding: 6px 9px; }
+  .safi-model-btn::before {
+    content: attr(data-version);
+    font-weight: 700;
+  }
+  .safi-model-dropdown { min-width: 260px; right: -40px; }
 }
 
 @media (max-width: 480px) {
@@ -1476,14 +1151,41 @@
     if (!PROFIL.chips || !PROFIL.chips.length) return '';
     var html = '<div class="safi-quick">';
     PROFIL.chips.forEach(function (chip) {
-      var isPoster = chip.q === '__POSTER__';
-      html += '<button type="button" ' +
-        (isPoster ? 'class="safi-poster-open"' : 'data-q="' + escapeHtml(chip.q) + '"') + '>' +
+      html += '<button type="button" data-q="' + escapeHtml(chip.q) + '">' +
         fa(chip.icon) + ' ' + escapeHtml(chip.label) +
         '</button>';
     });
     html += '</div>';
     return html;
+  }
+
+  function buildModelSelectorHtml() {
+    var optionsHtml = '';
+    Object.keys(SAFI_MODELS).forEach(function (key) {
+      var m = SAFI_MODELS[key];
+      var active = m.id === MODELE.id ? ' active' : '';
+      optionsHtml +=
+        '<button type="button" class="safi-model-option' + active + '" data-model="' + m.id + '">' +
+          '<i class="' + m.icon + ' safi-model-option__icon"></i>' +
+          '<span class="safi-model-option__info">' +
+            '<span class="safi-model-option__name">' + escapeHtml(m.name) + '</span>' +
+            '<span class="safi-model-option__desc">' + escapeHtml(m.description) + '</span>' +
+          '</span>' +
+          '<i class="fa-solid fa-check safi-model-option__check"></i>' +
+        '</button>';
+    });
+
+    return '' +
+      '<div class="safi-model-selector">' +
+        '<button type="button" class="safi-model-btn" id="safiModelBtn" data-version="' + MODELE.id + '" aria-haspopup="true" aria-expanded="false" title="Changer de modèle">' +
+          '<i class="' + MODELE.icon + ' safi-model-badge"></i>' +
+          '<span class="safi-model-name">' + escapeHtml(MODELE.name) + '</span>' +
+          '<i class="fa-solid fa-chevron-down safi-model-chevron"></i>' +
+        '</button>' +
+        '<div class="safi-model-dropdown" id="safiModelDropdown" role="menu">' +
+          optionsHtml +
+        '</div>' +
+      '</div>';
   }
 
   function buildChatHtml(extraClass, options) {
@@ -1506,6 +1208,7 @@
             '<strong>' + escapeHtml(PROFIL.name) + '</strong>' +
             '<span class="safi-head__status" data-safi-status><i></i> Connexion…</span>' +
           '</div>' +
+          buildModelSelectorHtml() +
           clearBtn +
           menuBtn +
           closeBtn +
@@ -1543,57 +1246,6 @@
       '</div>';
   }
 
-  function buildPosterModalHtml() {
-    var pillsHtml = '';
-    Object.keys(MOTEURS_IMAGE).forEach(function (key, idx) {
-      var m = MOTEURS_IMAGE[key];
-      pillsHtml +=
-        '<button type="button" class="safi-poster-engine-pill' + (idx === 0 ? ' active' : '') + '" data-engine="' + key + '">' +
-          fa(m.icon) +
-          '<strong>' + escapeHtml(m.name) + '</strong>' +
-          '<small>' + escapeHtml(m.badge) + '</small>' +
-        '</button>';
-    });
-
-    return '' +
-      '<div class="safi-poster-modal" id="safiPosterModal" aria-hidden="true">' +
-        '<div class="safi-poster-modal__backdrop" id="safiPosterBackdrop"></div>' +
-        '<div class="safi-poster-modal__content">' +
-          '<div class="safi-poster-modal__header">' +
-            '<h3>' + fa('fa-solid fa-wand-magic-sparkles') + ' Créer une affiche d\'événement</h3>' +
-            '<button class="safi-poster-modal__close" id="safiPosterClose" aria-label="Fermer">' + fa('fa-solid fa-xmark') + '</button>' +
-          '</div>' +
-          '<div class="safi-poster-form">' +
-            '<div class="full">' +
-              '<label>Décrivez votre affiche</label>' +
-              '<textarea id="safiPosterDescription" rows="3" placeholder="Ex : Concert afrobeat dans un stade illuminé, foule en délire, lumières violettes et dorées, ambiance festive africaine…"></textarea>' +
-            '</div>' +
-            '<div class="full">' +
-              '<label>Titre de l\'événement (optionnel)</label>' +
-              '<input type="text" id="safiPosterTitle" placeholder="Ex : NUIT AFRO BEAT">' +
-            '</div>' +
-            '<div>' +
-              '<label>Date et heure (optionnel)</label>' +
-              '<input type="text" id="safiPosterDate" placeholder="Ex : 20 Déc. 2026 · 20h">' +
-            '</div>' +
-            '<div>' +
-              '<label>Lieu (optionnel)</label>' +
-              '<input type="text" id="safiPosterVenue" placeholder="Ex : Bujumbura, Burundi">' +
-            '</div>' +
-            '<div class="full">' +
-              '<label>Choisissez un moteur de génération</label>' +
-              '<div class="safi-poster-engine-pills" id="safiPosterEnginePills">' +
-                pillsHtml +
-              '</div>' +
-              '<input type="hidden" id="safiPosterEngine" value="pollinations">' +
-            '</div>' +
-            '<button type="button" class="safi-poster-generate" id="safiPosterGenerate">' + fa('fa-solid fa-wand-magic-sparkles') + ' Générer l\'affiche</button>' +
-          '</div>' +
-          '<div class="safi-poster-preview" id="safiPosterPreview"></div>' +
-        '</div>' +
-      '</div>';
-  }
-
   /* =========================================================
      15. ÉVÉNEMENTS
      ========================================================= */
@@ -1611,7 +1263,6 @@
     });
 
     document.querySelectorAll('.safi-quick button').forEach(function (btn) {
-      if (btn.classList.contains('safi-poster-open')) return;
       btn.addEventListener('click', function () {
         var inp = document.getElementById('safiInput');
         var snd = document.getElementById('safiSend');
@@ -1631,6 +1282,7 @@
     chatEl.classList.add('open');
 
     attachInputEvents();
+    wireModelSelector();
 
     var newBtn = document.getElementById('safiNew');
     if (newBtn) newBtn.addEventListener('click', function () {
@@ -1709,6 +1361,7 @@
     });
 
     attachInputEvents();
+    wireModelSelector();
     renderMessages();
 
     var etaitOuvert = false;
@@ -1727,26 +1380,6 @@
     link.crossOrigin = 'anonymous';
     link.referrerPolicy = 'no-referrer';
     document.head.appendChild(link);
-  }
-
-  function wirePosterOpeners() {
-    document.querySelectorAll('.safi-poster-open').forEach(function (btn) {
-      if (btn.__safiWired) return;
-      btn.__safiWired = true;
-      btn.addEventListener('click', openPosterModal);
-    });
-  }
-
-  function wireEnginePills() {
-    var pills = document.querySelectorAll('.safi-poster-engine-pill');
-    var input = document.getElementById('safiPosterEngine');
-    pills.forEach(function (pill) {
-      pill.addEventListener('click', function () {
-        pills.forEach(function (p) { p.classList.remove('active'); });
-        pill.classList.add('active');
-        if (input) input.value = pill.getAttribute('data-engine');
-      });
-    });
   }
 
   function demarrer() {
@@ -1768,10 +1401,7 @@
       setupFloatingMode();
     }
 
-    setupPosterModal();
-    wirePosterOpeners();
-    wireEnginePills();
-
+    updateModelUI();
     chargerIA().catch(function () {});
 
     window.addEventListener('storage', function (e) {
@@ -1779,6 +1409,11 @@
         loadState();
         renderSidebar();
         renderMessages();
+      }
+      if (e.key === CLE_MODELE) {
+        MODELE = getModeleActif();
+        promesseIA = null;
+        updateModelUI();
       }
     });
   }
