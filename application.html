@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Découvrez l'application bTicket : achat de billets numériques, gestion des tickets et validation par QR code, partout en Afrique.">
+<title>Application — bTicket</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   1. POLICE MONTSERRAT (chargée via Google Fonts dans le <head>)
+   ========================================================= */
+
+/* =========================================================
+   2. RESET & TOKENS
+   ========================================================= */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --noir:       #111318;
+  --anthracite: #252A34;
+  --or:         #D4AF37;
+  --ivoire:     #F4F0E6;
+  --blanc:      #FFFFFF;
+
+  --noir-soft:   #171a21;
+  --anthracite-2:#2f3540;
+  --line:        rgba(212,175,55,.18);
+  --line-soft:   rgba(255,255,255,.06);
+  --texte-muted: rgba(244,240,230,.62);
+  --texte-faint: rgba(244,240,230,.42);
+
+  --font: 'Montserrat', system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --max: 1240px;
+  --radius: 20px;
+  --radius-sm: 14px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+body {
+  background: var(--noir);
+  color: var(--ivoire);
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+ul { list-style: none; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--blanc);
+}
+
+::selection { background: var(--or); color: var(--noir); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--noir); }
+::-webkit-scrollbar-thumb { background: var(--anthracite-2); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--or); }
+
+/* =========================================================
+   3. HELPERS
+   ========================================================= */
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.section { padding: 130px 0; position: relative; }
+.section--compact { padding: 90px 0; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 22px;
+}
+.eyebrow::before {
+  content: "";
+  width: 32px; height: 1px;
+  background: var(--or);
+}
+
+.display-title {
+  font-size: clamp(2.4rem, 6.2vw, 4.6rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  margin-bottom: 26px;
+}
+.display-title em {
+  font-style: normal;
+  color: var(--or);
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  margin-bottom: 18px;
+  line-height: 1.1;
+}
+
+.section-lead {
+  color: var(--texte-muted);
+  font-size: 1.05rem;
+  max-width: 560px;
+}
+
+.gold { color: var(--or); }
+
+/* =========================================================
+   4. BOUTONS
+   ========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border-radius: 100px;
+  font-size: .94rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease),
+              background .3s var(--ease), color .3s var(--ease),
+              border-color .3s var(--ease);
+  white-space: nowrap;
+}
+.btn svg { width: 16px; height: 16px; transition: transform .3s var(--ease); }
+
+.btn--primary {
+  background: var(--or);
+  color: var(--noir);
+}
+.btn--primary:hover {
+  background: #e0bb47;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -14px rgba(212,175,55,.75);
+}
+.btn--primary:hover svg { transform: translateX(3px); }
+
+.btn--ghost {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(244,240,230,.22);
+  color: var(--ivoire);
+  backdrop-filter: blur(10px);
+}
+.btn--ghost:hover {
+  border-color: var(--or);
+  color: var(--or);
+  transform: translateY(-2px);
+}
+
+.btn--sm { padding: 10px 22px; font-size: .86rem; }
+
+/* =========================================================
+   5. NAVIGATION
+   ========================================================= */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--or);
+  z-index: 1000;
+  transition: width .1s linear;
+}
+
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  padding: 20px 0;
+  transition: padding .35s var(--ease), background .35s var(--ease),
+              border-color .35s var(--ease), backdrop-filter .35s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  padding: 12px 0;
+  background: rgba(17,19,24,.85);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-bottom-color: var(--line);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.brand img { height: 36px; width: auto; object-fit: contain; }
+.brand__text {
+  font-weight: 700;
+  font-size: 1.18rem;
+  letter-spacing: -.015em;
+  color: var(--blanc);
+}
+.brand__text span { color: var(--or); }
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+.nav__links a {
+  padding: 9px 14px;
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--texte-muted);
+  border-radius: 100px;
+  transition: color .3s var(--ease), background .3s var(--ease);
+}
+.nav__links a:hover { color: var(--blanc); background: rgba(244,240,230,.05); }
+.nav__links a.active { color: var(--or); }
+
+.nav__cta { display: flex; align-items: center; gap: 12px; }
+
+.burger {
+  display: none;
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  position: relative;
+  flex-shrink: 0;
+}
+.burger span {
+  position: absolute;
+  left: 50%;
+  width: 18px; height: 1.8px;
+  background: var(--ivoire);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: transform .35s var(--ease), opacity .25s var(--ease), top .35s var(--ease);
+}
+.burger span:nth-child(1) { top: 16px; }
+.burger span:nth-child(2) { top: 21px; }
+.burger span:nth-child(3) { top: 26px; }
+.burger.open span:nth-child(1) { top: 21px; transform: translateX(-50%) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { top: 21px; transform: translateX(-50%) rotate(-45deg); }
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 890;
+  background: var(--noir);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 32px 48px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s var(--ease), visibility .4s var(--ease);
+}
+.mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-menu a {
+  display: block;
+  font-size: clamp(1.4rem, 5.6vw, 1.9rem);
+  font-weight: 600;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--ivoire);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform .45s var(--ease), opacity .45s var(--ease), color .3s;
+}
+.mobile-menu.open a { transform: translateY(0); opacity: 1; }
+.mobile-menu a:hover { color: var(--or); }
+.mobile-menu .btn { margin-top: 30px; width: 100%; }
+
+/* =========================================================
+   6. HERO VIDÉO — Application
+   ========================================================= */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  background-image: url("IMAGES/04. dj-live-event.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(17,19,24,.6) 0%, rgba(17,19,24,.75) 45%, rgba(17,19,24,.98) 100%),
+    linear-gradient(90deg, rgba(17,19,24,.85) 0%, rgba(17,19,24,.3) 60%, rgba(17,19,24,.7) 100%);
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  padding: 160px 0 100px;
+  max-width: 780px;
+}
+
+.hero__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ivoire);
+  margin-bottom: 30px;
+  animation: fadeUp .8s var(--ease) both;
+}
+.hero__tag i {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--or);
+  box-shadow: 0 0 12px var(--or);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 6.4vw, 4.8rem);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  animation: fadeUp .9s .08s var(--ease) both;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--or);
+}
+
+.hero p {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  color: rgba(244,240,230,.78);
+  max-width: 520px;
+  margin-bottom: 40px;
+  animation: fadeUp .9s .16s var(--ease) both;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  animation: fadeUp .9s .24s var(--ease) both;
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: .66rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: rgba(244,240,230,.4);
+}
+.scroll-cue span {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--or), transparent);
+  animation: cue 2.4s ease-in-out infinite;
+}
+
+/* =========================================================
+   7. BANDEAU CONFIANCE (logos/mentions courtes)
+   ========================================================= */
+.trust {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--noir-soft);
+}
+.trust__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 60px;
+  text-align: center;
+}
+.trust__item {
+  font-size: .8rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--texte-faint);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.trust__item b {
+  color: var(--or);
+  font-weight: 700;
+}
+
+/* =========================================================
+   8. ÉDITORIAL — image + texte
+   ========================================================= */
+.editorial {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.editorial--reverse .editorial__visual { order: 1; }
+.editorial--reverse .editorial__text { order: 2; }
+
+.editorial__visual {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--line-soft);
+  box-shadow: 0 40px 80px -40px rgba(0,0,0,.8);
+}
+.editorial__visual img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease);
+}
+.editorial__visual:hover img { transform: scale(1.05); }
+
+.editorial__text h2 {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  margin-bottom: 22px;
+}
+.editorial__text p {
+  color: var(--texte-muted);
+  font-size: 1.02rem;
+  max-width: 460px;
+}
+
+/* Mini-liste dans les éditoriaux */
+.mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 28px;
+}
+.mini-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: .95rem;
+  color: var(--texte-muted);
+}
+.mini-list li svg {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--or);
+}
+
+/* =========================================================
+   9. FONCTIONNALITÉS (3 cartes essentielles)
+   ========================================================= */
+.features {
+  background: var(--noir-soft);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+}
+.feature-card {
+  position: relative;
+  padding: 44px 34px;
+  border-radius: var(--radius);
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  transition: border-color .35s var(--ease), transform .35s var(--ease);
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+}
+.feature-card::before {
+  content: "";
+  position: absolute;
+  top: -30%; right: -20%;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,175,55,.12), transparent 65%);
+  pointer-events: none;
+}
+.feature-card:hover {
+  border-color: rgba(212,175,55,.4);
+  transform: translateY(-6px);
+}
+.feature-card__icon {
+  width: 50px; height: 50px;
+  border-radius: 14px;
+  display: grid; place-items: center;
+  background: rgba(212,175,55,.12);
+  border: 1px solid var(--line);
+  color: var(--or);
+  margin-bottom: 26px;
+}
+.feature-card__icon svg { width: 22px; height: 22px; }
+.feature-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  line-height: 1.25;
+}
+.feature-card p {
+  font-size: .92rem;
+  color: var(--texte-muted);
+  line-height: 1.6;
+  margin-top: auto;
+}
+
+/* =========================================================
+   10. APERÇU APPLICATION (scroll horizontal)
+   ========================================================= */
+.apercu {
+  overflow: hidden;
+}
+.apercu__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 60px;
+}
+.apercu__head .section-title { margin-bottom: 0; }
+
+.apercu__scroll {
+  display: flex;
+  gap: 28px;
+  padding: 20px 24px 40px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-inline: -24px;
+  cursor: grab;
+}
+.apercu__scroll.dragging { cursor: grabbing; scroll-behavior: auto; }
+.apercu__scroll.dragging * { pointer-events: none; }
+.apercu__scroll::-webkit-scrollbar { display: none; }
+
+.apercu__phone {
+  flex: 0 0 auto;
+  width: 260px;
+  scroll-snap-align: center;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  aspect-ratio: 9 / 17.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 30px 60px -30px rgba(0,0,0,.85);
+  transition: transform .5s var(--ease), border-color .5s var(--ease);
+  position: relative;
+}
+.apercu__phone:hover {
+  transform: translateY(-8px);
+  border-color: rgba(212,175,55,.4);
+}
+.apercu__phone img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+
+/* Légende de chaque capture */
+.apercu__caption {
+  position: absolute;
+  left: 14px; right: 14px; bottom: 14px;
+  z-index: 2;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(17,19,24,.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--or);
+  text-align: center;
+}
+
+.apercu__hint {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--texte-faint);
+}
+.apercu__hint svg {
+  width: 18px; height: 18px;
+  animation: swipeHint 2.2s ease-in-out infinite;
+}
+
+/* =========================================================
+   11. COMMENT ÇA MARCHE (3 étapes courtes)
+   ========================================================= */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  counter-reset: step;
+}
+.step {
+  position: relative;
+  padding: 40px 30px;
+  border-radius: var(--radius);
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  transition: border-color .35s var(--ease), transform .35s var(--ease);
+}
+.step:hover {
+  border-color: rgba(212,175,55,.4);
+  transform: translateY(-4px);
+}
+.step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(212,175,55,.12);
+  border: 1px solid var(--line);
+  color: var(--or);
+  font-size: .9rem;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+.step h3 {
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+}
+.step p {
+  font-size: .9rem;
+  color: var(--texte-muted);
+}
+
+/* =========================================================
+   12. GALERIE SECONDAIRE (organisateurs + agents)
+   ========================================================= */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+.split__item {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px 34px;
+  transition: transform .4s var(--ease), border-color .4s var(--ease);
+}
+.split__item:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212,175,55,.4);
+}
+.split__item img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: transform 1.2s var(--ease);
+}
+.split__item:hover img { transform: scale(1.06); }
+.split__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(17,19,24,.15) 0%, rgba(17,19,24,.85) 55%, rgba(17,19,24,.98) 100%);
+  z-index: 1;
+}
+.split__content {
+  position: relative;
+  z-index: 2;
+}
+.split__content span {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 14px;
+}
+.split__content h3 {
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  margin-bottom: 10px;
+  line-height: 1.15;
+}
+.split__content p {
+  font-size: .92rem;
+  color: rgba(244,240,230,.72);
+  max-width: 380px;
+  margin-bottom: 22px;
+}
+.split__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .86rem;
+  font-weight: 600;
+  color: var(--or);
+  transition: gap .3s var(--ease);
+}
+.split__link svg { width: 15px; height: 15px; }
+.split__item:hover .split__link { gap: 12px; }
+
+/* =========================================================
+   13. CTA FINAL
+   ========================================================= */
+.cta {
+  position: relative;
+  padding: 140px 0;
+  overflow: hidden;
+  text-align: center;
+}
+.cta__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("IMAGES/07. premium-event.jpg");
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+.cta__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(17,19,24,.72) 0%, rgba(17,19,24,.88) 100%);
+}
+.cta__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin-inline: auto;
+}
+.cta h2 {
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  margin-bottom: 22px;
+  line-height: 1.05;
+}
+.cta p {
+  color: rgba(244,240,230,.78);
+  font-size: 1.05rem;
+  margin-bottom: 36px;
+}
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
+/* =========================================================
+   14. FOOTER
+   ========================================================= */
+.footer {
+  padding: 80px 0 34px;
+  background: var(--noir);
+  border-top: 1px solid var(--line-soft);
+}
+.footer__top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+  gap: 44px;
+  padding-bottom: 52px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.footer__brand p {
+  color: var(--texte-muted);
+  font-size: .88rem;
+  margin: 20px 0 22px;
+  max-width: 320px;
+}
+.footer__socials { display: flex; gap: 10px; }
+.footer__socials a {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  color: var(--texte-muted);
+  transition: all .3s var(--ease);
+}
+.footer__socials a:hover {
+  background: var(--or);
+  border-color: var(--or);
+  color: var(--noir);
+  transform: translateY(-3px);
+}
+.footer__socials svg { width: 17px; height: 17px; }
+
+.footer__col h4 {
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 18px;
+}
+.footer__col ul { display: flex; flex-direction: column; gap: 11px; }
+.footer__col a {
+  font-size: .88rem;
+  color: var(--texte-muted);
+  transition: color .3s var(--ease), padding-left .3s var(--ease);
+}
+.footer__col a:hover { color: var(--or); padding-left: 4px; }
+
+.footer__bottom {
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: .82rem;
+  color: var(--texte-faint);
+}
+
+/* =========================================================
+   15. ANIMATIONS
+   ========================================================= */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cue {
+  0%   { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: scaleY(1); transform-origin: top; opacity: 0; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .6; transform: scale(1.2); }
+}
+@keyframes swipeHint {
+  0%, 100% { transform: translateX(0); opacity: .6; }
+  50%      { transform: translateX(6px); opacity: 1; }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity .9s var(--ease), transform .9s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal[data-delay="1"] { transition-delay: .08s; }
+.reveal[data-delay="2"] { transition-delay: .16s; }
+.reveal[data-delay="3"] { transition-delay: .24s; }
+
+.no-js .reveal { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   16. RESPONSIVE
+   ========================================================= */
+@media (max-width: 1080px) {
+  .nav__links { display: none; }
+  .burger { display: block; }
+  .nav__cta .btn { display: none; }
+
+  .editorial { grid-template-columns: 1fr; gap: 50px; }
+  .editorial--reverse .editorial__visual,
+  .editorial--reverse .editorial__text { order: unset; }
+
+  .features__grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+  .split { grid-template-columns: 1fr; }
+
+  .footer__top { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer__brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 720px) {
+  .section { padding: 88px 0; }
+  .section--compact { padding: 70px 0; }
+  .container { padding-inline: 20px; }
+
+  .hero__inner { padding: 140px 0 80px; }
+  .hero__actions .btn { width: 100%; }
+
+  .trust__row { gap: 26px; }
+
+  .feature-card { padding: 34px 26px; min-height: auto; }
+  .step { padding: 32px 24px; }
+
+  .apercu__scroll { margin-inline: -20px; padding: 16px 20px 32px; }
+  .apercu__phone { width: 230px; }
+
+  .cta { padding: 100px 0; }
+  .cta__actions .btn { width: 100%; }
+
+  .footer__top { grid-template-columns: 1fr; gap: 32px; }
+  .footer__bottom { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .brand img { height: 32px; }
+  .brand__text { font-size: 1.05rem; }
+  .apercu__phone { width: 210px; }
+}
+</style>
+</head>
+<body class="no-js">
+
+<!-- ===================== PROGRESS ===================== -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ===================== NAVIGATION ===================== -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand">
+      <img src="IMAGES/logo.png" alt="bTicket">
+      <span class="brand__text">b<span>Ticket</span></span>
+    </a>
+
+    <nav class="nav__links">
+      <a href="index.html">Accueil</a>
+      <a href="application.html" class="active">Application</a>
+      <a href="organisateurs.html">Organisateurs</a>
+      <a href="agents.html">Agents</a>
+      <a href="tarifs.html">Tarifs</a>
+      <a href="a-propos.html">À propos</a>
+    </nav>
+
+    <div class="nav__cta">
+      <a href="telecharger.html" class="btn btn--primary btn--sm">
+        Télécharger
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== MOBILE MENU ===================== -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Accueil</a>
+  <a href="application.html">Application</a>
+  <a href="organisateurs.html">Organisateurs</a>
+  <a href="agents.html">Agents</a>
+  <a href="tarifs.html">Tarifs</a>
+  <a href="a-propos.html">À propos</a>
+  <a href="telecharger.html" class="btn btn--primary">Télécharger l'app</a>
+</div>
+
+<main>
+
+<!-- ===================== HERO VIDÉO ===================== -->
+<section class="hero">
+  <video
+    class="hero__video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    poster="IMAGES/04. dj-live-event.jpg">
+    <source src="IMAGES/app-video.mp4" type="video/mp4">
+    <source src="IMAGES/app-video.webm" type="video/webm">
+  </video>
+
+  <div class="hero__overlay"></div>
+
+  <div class="container hero__inner">
+    <div class="hero__tag">
+      <i></i>
+      L'application bTicket
+    </div>
+
+    <h1>Toute la billetterie <em>dans votre poche.</em></h1>
+
+    <p>
+      Découvrez, achetez et validez vos billets numériques en un instant.
+      Une expérience simple, rapide et sécurisée.
+    </p>
+
+    <div class="hero__actions">
+      <a href="telecharger.html" class="btn btn--primary">
+        Télécharger l'application
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <a href="#apercu" class="btn btn--ghost">Voir les écrans</a>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    Défiler
+    <span></span>
+  </div>
+</section>
+
+<!-- ===================== BANDEAU CONFIANCE ===================== -->
+<section class="trust">
+  <div class="container">
+    <div class="trust__row">
+      <div class="trust__item"><b>100%</b> Numérique</div>
+      <div class="trust__item"><b>iOS</b> &amp; Android</div>
+      <div class="trust__item"><b>QR code</b> Sécurisé</div>
+      <div class="trust__item"><b>Afrique</b> Multi-pays</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ÉDITORIAL — ACHAT DE BILLETS ===================== -->
+<section class="section">
+  <div class="container editorial">
+    <div class="editorial__text reveal">
+      <span class="eyebrow">Acheter un billet</span>
+      <h2 class="section-title">Achetez vos billets en quelques secondes.</h2>
+      <p>
+        Parcourez les événements publiés dans l'application, choisissez
+        votre catégorie et payez en toute sécurité.
+      </p>
+
+      <ul class="mini-list">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Parcourir les événements disponibles
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Choisir sa catégorie de billet
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Payer en toute sécurité
+        </li>
+      </ul>
+    </div>
+
+    <div class="editorial__visual reveal" data-delay="1">
+      <img src="IMAGES/03-ticket-selection.png" alt="Écran de sélection des billets" style="object-fit:contain; background:#0d0f14; padding: 20px;">
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FONCTIONNALITÉS ===================== -->
+<section class="section features">
+  <div class="container">
+    <div style="text-align:center; max-width:640px; margin:0 auto 70px;" class="reveal">
+      <span class="eyebrow" style="justify-content:center;">Fonctionnalités</span>
+      <h2 class="section-title">L'essentiel, rien de plus.</h2>
+      <p class="section-lead" style="margin-inline:auto;">
+        Une application pensée pour être simple, rapide et fiable à chaque étape.
+      </p>
+    </div>
+
+    <div class="features__grid">
+
+      <article class="feature-card reveal">
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 7a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v3a2 2 0 0 0 0 4v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-3a2 2 0 0 0 0-4V7z"/>
+            <path d="M12 5v14"/>
+          </svg>
+        </div>
+        <h3>Achat de billets numériques</h3>
+        <p>Réservez votre place en quelques taps et recevez instantanément votre billet dans l'application.</p>
+      </article>
+
+      <article class="feature-card reveal" data-delay="1">
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4.5" width="18" height="16" rx="2.5"/>
+            <path d="M8 2.5v4M16 2.5v4M3 10h18"/>
+          </svg>
+        </div>
+        <h3>Gestion des tickets</h3>
+        <p>Retrouvez tous vos billets dans un espace unique, accessibles même hors connexion.</p>
+      </article>
+
+      <article class="feature-card reveal" data-delay="2">
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+            <path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h.01"/>
+          </svg>
+        </div>
+        <h3>Validation par QR code</h3>
+        <p>Présentez votre QR code à l'entrée : scan instantané, accès immédiat, sécurité garantie.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== APERÇU APPLICATION ===================== -->
+<section class="section apercu" id="apercu">
+  <div class="container">
+    <div class="apercu__head reveal">
+      <div>
+        <span class="eyebrow">Aperçu</span>
+        <h2 class="section-title">L'application en images.</h2>
+      </div>
+      <a href="telecharger.html" class="btn btn--ghost">
+        Télécharger
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+    </div>
+
+    <div class="apercu__scroll" id="apercuScroll">
+      <div class="apercu__phone reveal">
+        <img src="IMAGES/01-home-events.png" alt="Accueil">
+        <span class="apercu__caption">Accueil</span>
+      </div>
+      <div class="apercu__phone reveal" data-delay="1">
+        <img src="IMAGES/02-event-details.png" alt="Détails">
+        <span class="apercu__caption">Détails événement</span>
+      </div>
+      <div class="apercu__phone reveal" data-delay="2">
+        <img src="IMAGES/03-ticket-selection.png" alt="Sélection">
+        <span class="apercu__caption">Choix du billet</span>
+      </div>
+      <div class="apercu__phone reveal" data-delay="3">
+        <img src="IMAGES/04-secure-payment.png" alt="Paiement">
+        <span class="apercu__caption">Paiement</span>
+      </div>
+      <div class="apercu__phone reveal">
+        <img src="IMAGES/10-payment-success-ticket.png" alt="Billet confirmé">
+        <span class="apercu__caption">Billet confirmé</span>
+      </div>
+    </div>
+
+    <div class="apercu__hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </svg>
+      Faites défiler
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMMENT ÇA MARCHE ===================== -->
+<section class="section">
+  <div class="container">
+    <div style="text-align:center; max-width:640px; margin:0 auto 70px;" class="reveal">
+      <span class="eyebrow" style="justify-content:center;">En 3 étapes</span>
+      <h2 class="section-title">Simple comme bonjour.</h2>
+    </div>
+
+    <div class="steps">
+
+      <div class="step reveal">
+        <span class="step__num">01</span>
+        <h3>Découvrez</h3>
+        <p>Parcourez les événements publiés dans l'application par les organisateurs.</p>
+      </div>
+
+      <div class="step reveal" data-delay="1">
+        <span class="step__num">02</span>
+        <h3>Achetez</h3>
+        <p>Sélectionnez votre billet et payez en quelques secondes, en toute sécurité.</p>
+      </div>
+
+      <div class="step reveal" data-delay="2">
+        <span class="step__num">03</span>
+        <h3>Entrez</h3>
+        <p>Présentez votre QR code à l'entrée et profitez pleinement de l'événement.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POUR ORGANISATEURS / AGENTS ===================== -->
+<section class="section section--compact">
+  <div class="container">
+    <div style="text-align:center; max-width:640px; margin:0 auto 70px;" class="reveal">
+      <span class="eyebrow" style="justify-content:center;">Pour tous les profils</span>
+      <h2 class="section-title">Une app, plusieurs expériences.</h2>
+    </div>
+
+    <div class="split">
+
+      <article class="split__item reveal">
+        <img src="IMAGES/organizer-planning.jpg" alt="Organisateurs">
+        <div class="split__content">
+          <span>Organisateurs</span>
+          <h3>Gérez vos événements et vos ventes.</h3>
+          <p>Un espace dédié pour publier, suivre les ventes et gérer vos encaissements.</p>
+          <a href="organisateurs.html" class="split__link">
+            Découvrir
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <article class="split__item reveal" data-delay="1">
+        <img src="IMAGES/08-agent-scanner.png" alt="Agents" style="object-fit:contain; object-position:center; background:#0d0f14; padding: 30px;">
+        <div class="split__content">
+          <span>Agents</span>
+          <h3>Contrôlez les accès en un scan.</h3>
+          <p>Scannez les billets à l'entrée et validez chaque participant en un instant.</p>
+          <a href="agents.html" class="split__link">
+            Découvrir
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA FINAL ===================== -->
+<section class="cta">
+  <div class="cta__bg"></div>
+  <div class="cta__overlay"></div>
+
+  <div class="container cta__inner reveal">
+    <span class="eyebrow" style="justify-content:center;">Disponible gratuitement</span>
+    <h2>Téléchargez <span class="gold">bTicket</span> dès maintenant.</h2>
+    <p>
+      L'application est disponible sur Google Play Store et l'App Store.
+      Installez-la en un instant.
+    </p>
+    <div class="cta__actions">
+      <a href="telecharger.html" class="btn btn--primary">
+        Télécharger l'application
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <a href="tarifs.html" class="btn btn--ghost">Voir les tarifs</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="index.html" class="brand">
+          <img src="IMAGES/logo.png" alt="bTicket">
+          <span class="brand__text">b<span>Ticket</span></span>
+        </a>
+        <p>La plateforme africaine de billetterie numérique. Achetez, gérez et validez vos billets en toute simplicité.</p>
+        <div class="footer__socials">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3 0-1.3-.1-2.45-.1-2.4 0-4.05 1.5-4.05 4.2v2.2H7.5V14h2.7v8h3.3z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 3h3l-6.6 7.6L21.7 21h-5.9l-4.3-5.6L6.4 21H3.3l7-8.1L2.7 3h6l3.9 5.2L17.5 3zm-1 16h1.6L7.6 4.6H5.9L16.5 19z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3V9.5zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-4.9c0-1.17-.02-2.68-1.7-2.68-1.7 0-1.96 1.28-1.96 2.6V21h-4V9.5z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="application.html">Application</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="telecharger.html">Télécharger</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Ressources</h4>
+        <ul>
+          <li><a href="application.html">Fonctionnalités</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="conditions-utilisation.html">Conditions d'utilisation</a></li>
+          <li><a href="politique-remboursement.html">Politique de remboursement</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© <span id="year"></span> bTicket. Tous droits réservés.</span>
+      <span>Conçu pour l'Afrique</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   INIT
+   ========================================================= */
+document.body.classList.remove('no-js');
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* =========================================================
+   1. NAV + PROGRESSION
+   ========================================================= */
+const nav = document.getElementById('nav');
+const progressBar = document.getElementById('progressBar');
+
+function onScroll() {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 40);
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* =========================================================
+   2. MENU MOBILE
+   ========================================================= */
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileLinks = mobileMenu.querySelectorAll('a');
+
+function toggleMenu(force) {
+  const open = force !== undefined ? force : !mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', open);
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+  document.body.style.overflow = open ? 'hidden' : '';
+  mobileLinks.forEach((link, i) => {
+    link.style.transitionDelay = open ? (0.05 * i + 0.08) + 's' : '0s';
+  });
+}
+burger.addEventListener('click', () => toggleMenu());
+mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') toggleMenu(false);
+});
+
+/* =========================================================
+   3. RÉVÉLATION AU SCROLL
+   ========================================================= */
+const revealObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* =========================================================
+   4. VIDÉO HERO — fallback
+   ========================================================= */
+const heroVideo = document.querySelector('.hero__video');
+if (heroVideo) {
+  heroVideo.addEventListener('error', () => {
+    heroVideo.style.display = 'none';
+  });
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroVideo.pause();
+  }
+}
+
+/* =========================================================
+   5. APERÇU — DRAG horizontal + flèches clavier
+   ========================================================= */
+const apercuScroll = document.getElementById('apercuScroll');
+if (apercuScroll) {
+  let isDown = false, startX = 0, startScroll = 0, moved = false;
+
+  apercuScroll.addEventListener('mousedown', e => {
+    isDown = true; moved = false;
+    startX = e.pageX;
+    startScroll = apercuScroll.scrollLeft;
+    apercuScroll.classList.add('dragging');
+  });
+  window.addEventListener('mouseup', () => {
+    isDown = false;
+    apercuScroll.classList.remove('dragging');
+  });
+  window.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    const d = e.pageX - startX;
+    if (Math.abs(d) > 4) moved = true;
+    apercuScroll.scrollLeft = startScroll - d;
+  });
+  apercuScroll.addEventListener('click', e => {
+    if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+  }, true);
+
+  apercuScroll.setAttribute('tabindex', '0');
+  apercuScroll.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); apercuScroll.scrollBy({ left: 280, behavior: 'smooth' }); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); apercuScroll.scrollBy({ left: -280, behavior: 'smooth' }); }
+  });
+}
+
+/* =========================================================
+   6. DÉFILEMENT DOUX ANCres internes
+   ========================================================= */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', e => {
+    const id = anchor.getAttribute('href');
+    if (id === '#' || id.length < 2) return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const top = target.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+});
+</script>
+
+<script src="safi-ai.js" defer></script>
+</body>
+</html>

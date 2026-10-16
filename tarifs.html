@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Découvrez les offres bTicket — Standard, Pro et Élite — pour organiser, promouvoir et gérer vos événements en Afrique.">
+<title>Tarifs — bTicket</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   1. POLICE MONTSERRAT (chargée via Google Fonts dans le <head>)
+   ========================================================= */
+
+/* =========================================================
+   2. RESET & TOKENS
+   ========================================================= */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --noir:       #111318;
+  --anthracite: #252A34;
+  --or:         #D4AF37;
+  --ivoire:     #F4F0E6;
+  --blanc:      #FFFFFF;
+
+  --noir-soft:   #171a21;
+  --anthracite-2:#2f3540;
+  --line:        rgba(212,175,55,.18);
+  --line-soft:   rgba(255,255,255,.06);
+  --texte-muted: rgba(244,240,230,.62);
+  --texte-faint: rgba(244,240,230,.42);
+
+  --font: 'Montserrat', system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --max: 1240px;
+  --radius: 20px;
+  --radius-sm: 14px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+body {
+  background: var(--noir);
+  color: var(--ivoire);
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+ul { list-style: none; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--blanc);
+}
+
+::selection { background: var(--or); color: var(--noir); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--noir); }
+::-webkit-scrollbar-thumb { background: var(--anthracite-2); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--or); }
+
+/* =========================================================
+   3. HELPERS
+   ========================================================= */
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.section { padding: 130px 0; position: relative; }
+.section--compact { padding: 90px 0; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 22px;
+}
+.eyebrow::before {
+  content: "";
+  width: 32px; height: 1px;
+  background: var(--or);
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  margin-bottom: 18px;
+  line-height: 1.1;
+}
+
+.section-lead {
+  color: var(--texte-muted);
+  font-size: 1.05rem;
+  max-width: 560px;
+}
+
+.gold { color: var(--or); }
+
+/* =========================================================
+   4. BOUTONS
+   ========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border-radius: 100px;
+  font-size: .94rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease),
+              background .3s var(--ease), color .3s var(--ease),
+              border-color .3s var(--ease);
+  white-space: nowrap;
+}
+.btn svg { width: 16px; height: 16px; transition: transform .3s var(--ease); }
+
+.btn--primary {
+  background: var(--or);
+  color: var(--noir);
+}
+.btn--primary:hover {
+  background: #e0bb47;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -14px rgba(212,175,55,.75);
+}
+.btn--primary:hover svg { transform: translateX(3px); }
+
+.btn--ghost {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(244,240,230,.22);
+  color: var(--ivoire);
+  backdrop-filter: blur(10px);
+}
+.btn--ghost:hover {
+  border-color: var(--or);
+  color: var(--or);
+  transform: translateY(-2px);
+}
+
+.btn--sm { padding: 10px 22px; font-size: .86rem; }
+.btn--block { width: 100%; }
+
+/* =========================================================
+   5. NAVIGATION
+   ========================================================= */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--or);
+  z-index: 1000;
+  transition: width .1s linear;
+}
+
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  padding: 20px 0;
+  transition: padding .35s var(--ease), background .35s var(--ease),
+              border-color .35s var(--ease), backdrop-filter .35s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  padding: 12px 0;
+  background: rgba(17,19,24,.85);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-bottom-color: var(--line);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.brand img { height: 36px; width: auto; object-fit: contain; }
+.brand__text {
+  font-weight: 700;
+  font-size: 1.18rem;
+  letter-spacing: -.015em;
+  color: var(--blanc);
+}
+.brand__text span { color: var(--or); }
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+.nav__links a {
+  padding: 9px 14px;
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--texte-muted);
+  border-radius: 100px;
+  transition: color .3s var(--ease), background .3s var(--ease);
+}
+.nav__links a:hover { color: var(--blanc); background: rgba(244,240,230,.05); }
+.nav__links a.active { color: var(--or); }
+
+.nav__cta { display: flex; align-items: center; gap: 12px; }
+
+.burger {
+  display: none;
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  position: relative;
+  flex-shrink: 0;
+}
+.burger span {
+  position: absolute;
+  left: 50%;
+  width: 18px; height: 1.8px;
+  background: var(--ivoire);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: transform .35s var(--ease), opacity .25s var(--ease), top .35s var(--ease);
+}
+.burger span:nth-child(1) { top: 16px; }
+.burger span:nth-child(2) { top: 21px; }
+.burger span:nth-child(3) { top: 26px; }
+.burger.open span:nth-child(1) { top: 21px; transform: translateX(-50%) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { top: 21px; transform: translateX(-50%) rotate(-45deg); }
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 890;
+  background: var(--noir);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 32px 48px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s var(--ease), visibility .4s var(--ease);
+}
+.mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-menu a {
+  display: block;
+  font-size: clamp(1.4rem, 5.6vw, 1.9rem);
+  font-weight: 600;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--ivoire);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform .45s var(--ease), opacity .45s var(--ease), color .3s;
+}
+.mobile-menu.open a { transform: translateY(0); opacity: 1; }
+.mobile-menu a:hover { color: var(--or); }
+.mobile-menu .btn { margin-top: 30px; width: 100%; }
+
+/* =========================================================
+   6. HERO VIDÉO — Tarifs
+   ========================================================= */
+.hero {
+  position: relative;
+  min-height: 90svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  background-image: url("IMAGES/07. premium-event.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(17,19,24,.6) 0%, rgba(17,19,24,.78) 45%, rgba(17,19,24,.98) 100%),
+    linear-gradient(90deg, rgba(17,19,24,.85) 0%, rgba(17,19,24,.3) 60%, rgba(17,19,24,.7) 100%);
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  padding: 150px 0 90px;
+  max-width: 780px;
+}
+
+.hero__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ivoire);
+  margin-bottom: 30px;
+  animation: fadeUp .8s var(--ease) both;
+}
+.hero__tag i {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--or);
+  box-shadow: 0 0 12px var(--or);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 6vw, 4.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 22px;
+  animation: fadeUp .9s .08s var(--ease) both;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--or);
+}
+
+.hero p {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  color: rgba(244,240,230,.78);
+  max-width: 520px;
+  margin-bottom: 0;
+  animation: fadeUp .9s .16s var(--ease) both;
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: .66rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: rgba(244,240,230,.4);
+}
+.scroll-cue span {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--or), transparent);
+  animation: cue 2.4s ease-in-out infinite;
+}
+
+/* =========================================================
+   7. SLIDER DES OFFRES
+   ========================================================= */
+.offres {
+  padding: 110px 0 90px;
+  overflow: hidden;
+}
+
+.offres__head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 60px;
+}
+
+/* Slider horizontal */
+.offres__scroll {
+  display: flex;
+  gap: 28px;
+  padding: 30px 24px 50px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-inline: -24px;
+  cursor: grab;
+  scroll-behavior: smooth;
+}
+.offres__scroll.dragging { cursor: grabbing; scroll-behavior: auto; }
+.offres__scroll.dragging * { pointer-events: none; }
+.offres__scroll::-webkit-scrollbar { display: none; }
+
+/* Carte de prix */
+.price-card {
+  flex: 0 0 auto;
+  width: 380px;
+  scroll-snap-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 44px 38px 38px;
+  border-radius: var(--radius);
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  transition: transform .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease);
+}
+.price-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212,175,55,.4);
+}
+
+/* Carte mise en avant (Pro) */
+.price-card--pro {
+  border-color: var(--or);
+  background: linear-gradient(180deg, rgba(212,175,55,.08) 0%, var(--anthracite) 40%);
+  box-shadow: 0 30px 70px -30px rgba(212,175,55,.45);
+}
+.price-card--pro::before {
+  content: "Recommandé";
+  position: absolute;
+  top: -12px; left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 18px;
+  border-radius: 100px;
+  background: var(--or);
+  color: var(--noir);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Carte Élite (bordure dorée renforcée) */
+.price-card--elite {
+  border-color: rgba(212,175,55,.55);
+  background: linear-gradient(180deg, rgba(212,175,55,.14) 0%, var(--anthracite) 45%);
+  box-shadow: 0 30px 70px -30px rgba(212,175,55,.55);
+}
+.price-card--elite::before {
+  content: "★ Premium";
+  position: absolute;
+  top: -12px; left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 18px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, #e8c75a 0%, #D4AF37 50%, #b8932c 100%);
+  color: var(--noir);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Badge en haut à droite */
+.price-card__badge {
+  position: absolute;
+  top: 22px; right: 22px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+.price-card__badge--std {
+  color: var(--texte-muted);
+  border-color: var(--line-soft);
+  background: rgba(255,255,255,.03);
+}
+.price-card__badge--pro {
+  color: var(--or);
+  border-color: rgba(212,175,55,.5);
+  background: rgba(212,175,55,.1);
+}
+.price-card__badge--elite {
+  color: var(--noir);
+  border-color: transparent;
+  background: var(--or);
+}
+
+/* En-tête de carte */
+.price-card__tag {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 14px;
+}
+.price-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  line-height: 1.15;
+}
+.price-card__desc {
+  font-size: .9rem;
+  color: var(--texte-muted);
+  line-height: 1.55;
+  margin-bottom: 28px;
+  min-height: 46px;
+}
+
+/* Prix */
+.price-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-bottom: 26px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--line-soft);
+  flex-wrap: wrap;
+}
+.price-card__price b {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--blanc);
+  line-height: 1;
+  letter-spacing: -.025em;
+}
+.price-card__price b small {
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--or);
+  margin-left: 4px;
+  letter-spacing: .02em;
+}
+.price-card__price > span {
+  font-size: .82rem;
+  color: var(--texte-faint);
+  letter-spacing: .04em;
+}
+
+/* Fonctionnalités */
+.price-card__features {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 32px;
+  flex: 1;
+}
+.price-card__features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: .89rem;
+  color: var(--texte-muted);
+  line-height: 1.5;
+}
+.price-card__features li svg {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--or);
+}
+.price-card__features li strong {
+  color: var(--blanc);
+  font-weight: 600;
+}
+
+/* Séparateur de groupe */
+.price-card__group {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--texte-faint);
+  margin: 4px 0 2px;
+  padding-top: 6px;
+}
+
+.price-card .btn { width: 100%; }
+
+/* Indice de défilement */
+.offres__hint {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--texte-faint);
+  margin-top: 10px;
+}
+.offres__hint svg {
+  width: 18px; height: 18px;
+  animation: swipeHint 2.2s ease-in-out infinite;
+}
+
+/* Barre de progression du slider */
+.offres__progress {
+  max-width: 240px;
+  height: 3px;
+  margin: 24px auto 0;
+  background: rgba(255,255,255,.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.offres__progress-bar {
+  height: 100%;
+  width: 33%;
+  background: var(--or);
+  border-radius: 3px;
+  transition: width .3s var(--ease);
+}
+
+/* =========================================================
+   8. COMPARAISON RAPIDE (mini tableau visuel)
+   ========================================================= */
+.compare {
+  background: var(--noir-soft);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.compare__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  background: var(--noir);
+}
+.compare__row {
+  display: contents;
+}
+.compare__cell {
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: .9rem;
+  color: var(--texte-muted);
+  display: flex;
+  align-items: center;
+}
+.compare__row:last-child .compare__cell { border-bottom: none; }
+.compare__head .compare__cell {
+  background: var(--anthracite);
+  color: var(--blanc);
+  font-weight: 600;
+  font-size: .82rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 20px 24px;
+}
+.compare__head .compare__cell.gold-col { color: var(--or); }
+.compare__cell.label {
+  color: var(--blanc);
+  font-weight: 500;
+  background: rgba(255,255,255,.015);
+}
+.compare__cell.gold-col {
+  background: rgba(212,175,55,.04);
+}
+.compare__cell svg {
+  width: 16px; height: 16px;
+  color: var(--or);
+}
+.compare__cell .dash {
+  color: var(--texte-faint);
+}
+
+/* =========================================================
+   9. FAQ COURTE
+   ========================================================= */
+.faq__list {
+  max-width: 820px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.faq-item {
+  border-radius: var(--radius-sm);
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  overflow: hidden;
+  transition: border-color .3s var(--ease);
+}
+.faq-item:hover { border-color: rgba(212,175,55,.3); }
+.faq-item.open { border-color: rgba(212,175,55,.4); }
+
+.faq-item__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 26px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--blanc);
+  transition: color .3s var(--ease);
+  width: 100%;
+  text-align: left;
+}
+.faq-item__question:hover { color: var(--or); }
+.faq-item.open .faq-item__question { color: var(--or); }
+
+.faq-item__icon {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  color: var(--or);
+  transition: transform .3s var(--ease), background .3s var(--ease);
+}
+.faq-item.open .faq-item__icon {
+  transform: rotate(45deg);
+  background: rgba(212,175,55,.12);
+}
+.faq-item__icon svg { width: 15px; height: 15px; }
+
+.faq-item__answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .4s var(--ease), padding .4s var(--ease);
+  padding: 0 26px;
+}
+.faq-item.open .faq-item__answer {
+  max-height: 400px;
+  padding: 0 26px 24px;
+}
+.faq-item__answer p {
+  font-size: .92rem;
+  color: var(--texte-muted);
+  line-height: 1.65;
+}
+
+/* =========================================================
+   10. CTA FINAL
+   ========================================================= */
+.cta {
+  position: relative;
+  padding: 140px 0;
+  overflow: hidden;
+  text-align: center;
+}
+.cta__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("IMAGES/06. sports-event.jpg");
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+.cta__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(17,19,24,.7) 0%, rgba(17,19,24,.9) 100%);
+}
+.cta__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin-inline: auto;
+}
+.cta h2 {
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  margin-bottom: 22px;
+  line-height: 1.05;
+}
+.cta p {
+  color: rgba(244,240,230,.78);
+  font-size: 1.05rem;
+  margin-bottom: 36px;
+}
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
+/* =========================================================
+   11. FOOTER
+   ========================================================= */
+.footer {
+  padding: 80px 0 34px;
+  background: var(--noir);
+  border-top: 1px solid var(--line-soft);
+}
+.footer__top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+  gap: 44px;
+  padding-bottom: 52px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.footer__brand p {
+  color: var(--texte-muted);
+  font-size: .88rem;
+  margin: 20px 0 22px;
+  max-width: 320px;
+}
+.footer__socials { display: flex; gap: 10px; }
+.footer__socials a {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  color: var(--texte-muted);
+  transition: all .3s var(--ease);
+}
+.footer__socials a:hover {
+  background: var(--or);
+  border-color: var(--or);
+  color: var(--noir);
+  transform: translateY(-3px);
+}
+.footer__socials svg { width: 17px; height: 17px; }
+
+.footer__col h4 {
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 18px;
+}
+.footer__col ul { display: flex; flex-direction: column; gap: 11px; }
+.footer__col a {
+  font-size: .88rem;
+  color: var(--texte-muted);
+  transition: color .3s var(--ease), padding-left .3s var(--ease);
+}
+.footer__col a:hover { color: var(--or); padding-left: 4px; }
+
+.footer__bottom {
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: .82rem;
+  color: var(--texte-faint);
+}
+
+/* =========================================================
+   12. ANIMATIONS
+   ========================================================= */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cue {
+  0%   { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: scaleY(1); transform-origin: top; opacity: 0; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .6; transform: scale(1.2); }
+}
+@keyframes swipeHint {
+  0%, 100% { transform: translateX(0); opacity: .6; }
+  50%      { transform: translateX(6px); opacity: 1; }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity .9s var(--ease), transform .9s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal[data-delay="1"] { transition-delay: .08s; }
+.reveal[data-delay="2"] { transition-delay: .16s; }
+.reveal[data-delay="3"] { transition-delay: .24s; }
+
+.no-js .reveal { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   13. RESPONSIVE
+   ========================================================= */
+@media (max-width: 1080px) {
+  .nav__links { display: none; }
+  .burger { display: block; }
+  .nav__cta .btn { display: none; }
+
+  .compare__grid { grid-template-columns: 1fr; }
+  .compare__head { display: none; }
+  .compare__row { display: block; padding: 20px 24px; border-bottom: 1px solid var(--line-soft); background: var(--anthracite); margin-bottom: 12px; border-radius: var(--radius-sm); }
+  .compare__row:last-child { margin-bottom: 0; }
+  .compare__cell { border-bottom: none; padding: 8px 0; font-size: .88rem; }
+  .compare__cell.label { font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--or); background: transparent; padding-top: 0; }
+  .compare__cell.gold-col { background: transparent; }
+  .compare__cell.gold-col::before {
+    content: attr(data-label);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--texte-faint);
+    margin-right: 8px;
+  }
+
+  .footer__top { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer__brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 720px) {
+  .section { padding: 88px 0; }
+  .section--compact { padding: 70px 0; }
+  .container { padding-inline: 20px; }
+
+  .hero { min-height: 80svh; }
+  .hero__inner { padding: 130px 0 70px; }
+
+  .price-card { width: 300px; padding: 38px 28px 32px; }
+  .price-card h3 { font-size: 1.3rem; }
+  .price-card__price b { font-size: 1.8rem; }
+  .price-card__desc { min-height: auto; }
+
+  .offres__scroll { margin-inline: -20px; padding: 24px 20px 40px; gap: 20px; }
+
+  .cta { padding: 100px 0; }
+  .cta__actions .btn { width: 100%; }
+
+  .footer__top { grid-template-columns: 1fr; gap: 32px; }
+  .footer__bottom { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .brand img { height: 32px; }
+  .brand__text { font-size: 1.05rem; }
+  .price-card { width: 82vw; max-width: 320px; }
+}
+</style>
+</head>
+<body class="no-js">
+
+<!-- ===================== PROGRESS ===================== -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ===================== NAVIGATION ===================== -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand">
+      <img src="IMAGES/logo.png" alt="bTicket">
+      <span class="brand__text">b<span>Ticket</span></span>
+    </a>
+
+    <nav class="nav__links">
+      <a href="index.html">Accueil</a>
+      <a href="application.html">Application</a>
+      <a href="organisateurs.html">Organisateurs</a>
+      <a href="agents.html">Agents</a>
+      <a href="tarifs.html" class="active">Tarifs</a>
+      <a href="a-propos.html">À propos</a>
+    </nav>
+
+    <div class="nav__cta">
+      <a href="telecharger.html" class="btn btn--primary btn--sm">
+        Télécharger
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== MOBILE MENU ===================== -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Accueil</a>
+  <a href="application.html">Application</a>
+  <a href="organisateurs.html">Organisateurs</a>
+  <a href="agents.html">Agents</a>
+  <a href="tarifs.html">Tarifs</a>
+  <a href="a-propos.html">À propos</a>
+  <a href="telecharger.html" class="btn btn--primary">Télécharger l'app</a>
+</div>
+
+<main>
+
+<!-- ===================== HERO VIDÉO ===================== -->
+<section class="hero">
+  <video
+    class="hero__video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    poster="IMAGES/07. premium-event.jpg">
+    <source src="IMAGES/pricing-video.mp4" type="video/mp4">
+    <source src="IMAGES/pricing-video.webm" type="video/webm">
+  </video>
+
+  <div class="hero__overlay"></div>
+
+  <div class="container hero__inner">
+    <div class="hero__tag">
+      <i></i>
+      Offres &amp; tarifs
+    </div>
+
+    <h1>Choisissez l'offre <em>qui vous ressemble.</em></h1>
+
+    <p>
+      Des formules claires pour les organisateurs, du premier événement
+      aux grandes productions à travers l'Afrique.
+    </p>
+  </div>
+
+  <div class="scroll-cue">
+    Défiler
+    <span></span>
+  </div>
+</section>
+
+<!-- ===================== SLIDER DES OFFRES ===================== -->
+<section class="offres" id="offres">
+  <div class="container">
+    <div class="offres__head reveal">
+      <span class="eyebrow">Nos offres</span>
+      <h2 class="section-title">Trois formules, une même exigence.</h2>
+      <p class="section-lead" style="margin-inline:auto;">
+        Faites défiler pour découvrir chaque offre en détail.
+      </p>
+    </div>
+
+    <div class="offres__scroll" id="offresScroll">
+
+      <!-- ===================== STANDARD ===================== -->
+      <article class="price-card">
+        <span class="price-card__badge price-card__badge--std">Standard</span>
+        <span class="price-card__tag">Débuter</span>
+        <h3>Standard</h3>
+        <p class="price-card__desc">
+          Idéal pour tester la billetterie numérique et publier vos
+          premiers événements.
+        </p>
+
+        <div class="price-card__price">
+          <b>0 <small>FBU</small></b>
+          <span>gratuit</span>
+        </div>
+
+        <ul class="price-card__features">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>300 billets</strong> / mois</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>2 agents</strong> maximum</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Commission de <strong>5%</strong> par billet vendu</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Publication après validation admin</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Tableau de bord et suivi des ventes</span>
+          </li>
+        </ul>
+
+        <a href="telecharger.html" class="btn btn--ghost btn--block">
+          Commencer gratuitement
+        </a>
+      </article>
+
+      <!-- ===================== PRO ===================== -->
+      <article class="price-card price-card--pro">
+        <span class="price-card__badge price-card__badge--pro">Pro</span>
+        <span class="price-card__tag">Développer</span>
+        <h3>bTicket Pro</h3>
+        <p class="price-card__desc">
+          Pour les organisateurs réguliers qui veulent plus de visibilité
+          et plus de billets.
+        </p>
+
+        <div class="price-card__price">
+          <b>300 000 <small>FBU</small></b>
+          <span>/ mois</span>
+        </div>
+
+        <ul class="price-card__features">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>10 000 billets</strong> / mois</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Commission réduite à <strong>2,5%</strong></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Catégories de billets <strong>illimitées</strong></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>4 notifications</strong> / jour aux abonnés</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Vos événements <strong>mis en premier</strong></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Badge <strong>Pro</strong> affiché sur votre profil</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Validation prioritaire des événements</span>
+          </li>
+        </ul>
+
+        <a href="telecharger.html" class="btn btn--primary btn--block">
+          Choisir Pro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- ===================== ÉLITE ===================== -->
+      <article class="price-card price-card--elite">
+        <span class="price-card__badge price-card__badge--elite">Premium</span>
+        <span class="price-card__tag">Dom iner</span>
+        <h3>bTicket Élite</h3>
+        <p class="price-card__desc">
+          La formule complète pour les grandes structures et les
+          événements à forte visibilité.
+        </p>
+
+        <div class="price-card__price">
+          <b>700 000 <small>FBU</small></b>
+          <span>/ mois</span>
+        </div>
+
+        <ul class="price-card__features">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>Billets illimités</strong></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Catégories de billets <strong>illimitées</strong></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>Agents illimités</strong></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Badge <strong>Premium</strong> et profil personnalisé</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Événements en <strong>vedette dorée</strong> sur l'accueil</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>10 notifications</strong> / jour aux abonnés</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>Assistant IA</strong> intégré pour vous accompagner</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Notification <strong>à l'achat ou au scan</strong> si besoin</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Publication automatique des événements</span>
+          </li>
+        </ul>
+
+        <a href="telecharger.html" class="btn btn--primary btn--block">
+          Choisir Élite
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+    </div>
+
+    <!-- Indicateur défilement -->
+    <div class="offres__hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </svg>
+      Faites défiler
+    </div>
+
+    <div class="offres__progress">
+      <div class="offres__progress-bar" id="offresProgressBar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMPARAISON RAPIDE ===================== -->
+<section class="section compare">
+  <div class="container">
+    <div style="text-align:center; max-width:640px; margin:0 auto 60px;" class="reveal">
+      <span class="eyebrow" style="justify-content:center;">Comparer</span>
+      <h2 class="section-title">Vue d'ensemble.</h2>
+      <p class="section-lead" style="margin-inline:auto;">
+        Un résumé rapide des différences entre les trois offres.
+      </p>
+    </div>
+
+    <div class="compare__grid">
+
+      <!-- En-tête -->
+      <div class="compare__row compare__head">
+        <div class="compare__cell"></div>
+        <div class="compare__cell">Standard</div>
+        <div class="compare__cell gold-col">Pro</div>
+        <div class="compare__cell gold-col">Élite</div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Prix mensuel</div>
+        <div class="compare__cell" data-label="Standard">Gratuit</div>
+        <div class="compare__cell gold-col" data-label="Pro">300 000 FBU</div>
+        <div class="compare__cell gold-col" data-label="Élite">700 000 FBU</div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Billets / mois</div>
+        <div class="compare__cell" data-label="Standard">300</div>
+        <div class="compare__cell gold-col" data-label="Pro">10 000</div>
+        <div class="compare__cell gold-col" data-label="Élite">Illimités</div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Commission</div>
+        <div class="compare__cell" data-label="Standard">5%</div>
+        <div class="compare__cell gold-col" data-label="Pro">2,5%</div>
+        <div class="compare__cell gold-col" data-label="Élite">1,5 – 2%</div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Agents</div>
+        <div class="compare__cell" data-label="Standard">2 max.</div>
+        <div class="compare__cell gold-col" data-label="Pro">10 max.</div>
+        <div class="compare__cell gold-col" data-label="Élite">Illimités</div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Catégories de billets</div>
+        <div class="compare__cell" data-label="Standard">Limitées</div>
+        <div class="compare__cell gold-col" data-label="Pro">Illimitées</div>
+        <div class="compare__cell gold-col" data-label="Élite">Illimitées</div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Notifications / jour</div>
+        <div class="compare__cell" data-label="Standard"><span class="dash">—</span></div>
+        <div class="compare__cell gold-col" data-label="Pro">4</div>
+        <div class="compare__cell gold-col" data-label="Élite">10</div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Badge</div>
+        <div class="compare__cell" data-label="Standard"><span class="dash">—</span></div>
+        <div class="compare__cell gold-col" data-label="Pro">Pro</div>
+        <div class="compare__cell gold-col" data-label="Élite">Premium</div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Mise en avant</div>
+        <div class="compare__cell" data-label="Standard"><span class="dash">—</span></div>
+        <div class="compare__cell gold-col" data-label="Pro">Événement en premier</div>
+        <div class="compare__cell gold-col" data-label="Élite">Vedette dorée</div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Assistant IA</div>
+        <div class="compare__cell" data-label="Standard"><span class="dash">—</span></div>
+        <div class="compare__cell gold-col" data-label="Pro"><span class="dash">—</span></div>
+        <div class="compare__cell gold-col" data-label="Élite">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Notification à l'achat / scan</div>
+        <div class="compare__cell" data-label="Standard"><span class="dash">—</span></div>
+        <div class="compare__cell gold-col" data-label="Pro"><span class="dash">—</span></div>
+        <div class="compare__cell gold-col" data-label="Élite">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+      </div>
+
+      <div class="compare__row">
+        <div class="compare__cell label">Publication</div>
+        <div class="compare__cell" data-label="Standard">Validation admin</div>
+        <div class="compare__cell gold-col" data-label="Pro">Prioritaire</div>
+        <div class="compare__cell gold-col" data-label="Élite">Automatique</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ COURTE ===================== -->
+<section class="section">
+  <div class="container">
+    <div style="text-align:center; max-width:640px; margin:0 auto 60px;" class="reveal">
+      <span class="eyebrow" style="justify-content:center;">Questions fréquentes</span>
+      <h2 class="section-title">Tout ce qu'il faut savoir.</h2>
+    </div>
+
+    <div class="faq__list">
+
+      <div class="faq-item reveal">
+        <button class="faq-item__question" type="button">
+          Puis-je changer d'offre à tout moment ?
+          <span class="faq-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          </span>
+        </button>
+        <div class="faq-item__answer">
+          <p>Oui. Vous pouvez passer d'une offre à une autre directement depuis l'application. Le changement prend effet immédiatement, avec un ajustement au prorata.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" data-delay="1">
+        <button class="faq-item__question" type="button">
+          Comment fonctionne la commission ?
+          <span class="faq-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          </span>
+        </button>
+        <div class="faq-item__answer">
+          <p>La commission est prélevée automatiquement sur chaque billet vendu. Le taux dépend de l'offre choisie : 5% pour Standard, 2,5% pour Pro, et entre 1,5% et 2% pour Élite.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" data-delay="2">
+        <button class="faq-item__question" type="button">
+          Que se passe-t-il si je dépasse la limite de billets ?
+          <span class="faq-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          </span>
+        </button>
+        <div class="faq-item__answer">
+          <p>Si vous atteignez la limite mensuelle de votre offre, vous pouvez soit attendre le mois suivant, soit passer à l'offre supérieure pour continuer à vendre immédiatement.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" data-delay="3">
+        <button class="faq-item__question" type="button">
+          L'assistant IA est-il disponible sur toutes les offres ?
+          <span class="faq-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          </span>
+        </button>
+        <div class="faq-item__answer">
+          <p>Non, l'assistant IA est exclusivement réservé à l'offre bTicket Élite. Il vous aide à optimiser vos événements, gérer vos notifications et mieux comprendre vos performances.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-item__question" type="button">
+          Comment payer mon abonnement ?
+          <span class="faq-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          </span>
+        </button>
+        <div class="faq-item__answer">
+          <p>Le paiement de votre abonnement se fait directement depuis l'application, via les moyens de paiement disponibles (Mobile Money, carte bancaire).</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA FINAL ===================== -->
+<section class="cta">
+  <div class="cta__bg"></div>
+  <div class="cta__overlay"></div>
+
+  <div class="container cta__inner reveal">
+    <span class="eyebrow" style="justify-content:center;">Prêt à choisir</span>
+    <h2>Trouvez l'offre <span class="gold">qui vous correspond.</span></h2>
+    <p>
+      Téléchargez l'application bTicket, créez votre compte organisateur
+      et choisissez votre formule en quelques minutes.
+    </p>
+    <div class="cta__actions">
+      <a href="telecharger.html" class="btn btn--primary">
+        Télécharger l'application
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <a href="organisateurs.html" class="btn btn--ghost">En savoir plus</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="index.html" class="brand">
+          <img src="IMAGES/logo.png" alt="bTicket">
+          <span class="brand__text">b<span>Ticket</span></span>
+        </a>
+        <p>La plateforme africaine de billetterie numérique. Achetez, gérez et validez vos billets en toute simplicité.</p>
+        <div class="footer__socials">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3 0-1.3-.1-2.45-.1-2.4 0-4.05 1.5-4.05 4.2v2.2H7.5V14h2.7v8h3.3z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 3h3l-6.6 7.6L21.7 21h-5.9l-4.3-5.6L6.4 21H3.3l7-8.1L2.7 3h6l3.9 5.2L17.5 3zm-1 16h1.6L7.6 4.6H5.9L16.5 19z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3V9.5zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-4.9c0-1.17-.02-2.68-1.7-2.68-1.7 0-1.96 1.28-1.96 2.6V21h-4V9.5z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="application.html">Application</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="telecharger.html">Télécharger</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Ressources</h4>
+        <ul>
+          <li><a href="application.html">Fonctionnalités</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="conditions-utilisation.html">Conditions d'utilisation</a></li>
+          <li><a href="politique-remboursement.html">Politique de remboursement</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© <span id="year"></span> bTicket. Tous droits réservés.</span>
+      <span>Conçu pour l'Afrique</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   INIT
+   ========================================================= */
+document.body.classList.remove('no-js');
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* =========================================================
+   1. NAV + PROGRESSION
+   ========================================================= */
+const nav = document.getElementById('nav');
+const progressBar = document.getElementById('progressBar');
+
+function onScroll() {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 40);
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* =========================================================
+   2. MENU MOBILE
+   ========================================================= */
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileLinks = mobileMenu.querySelectorAll('a');
+
+function toggleMenu(force) {
+  const open = force !== undefined ? force : !mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', open);
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+  document.body.style.overflow = open ? 'hidden' : '';
+  mobileLinks.forEach((link, i) => {
+    link.style.transitionDelay = open ? (0.05 * i + 0.08) + 's' : '0s';
+  });
+}
+burger.addEventListener('click', () => toggleMenu());
+mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') toggleMenu(false);
+});
+
+/* =========================================================
+   3. RÉVÉLATION AU SCROLL
+   ========================================================= */
+const revealObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* =========================================================
+   4. VIDÉO HERO — fallback
+   ========================================================= */
+const heroVideo = document.querySelector('.hero__video');
+if (heroVideo) {
+  heroVideo.addEventListener('error', () => {
+    heroVideo.style.display = 'none';
+  });
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroVideo.pause();
+  }
+}
+
+/* =========================================================
+   5. SLIDER DES OFFRES — drag + progression
+   ========================================================= */
+const offresScroll = document.getElementById('offresScroll');
+const offresProgressBar = document.getElementById('offresProgressBar');
+
+if (offresScroll) {
+  let isDown = false, startX = 0, startScroll = 0, moved = false;
+
+  offresScroll.addEventListener('mousedown', e => {
+    isDown = true; moved = false;
+    startX = e.pageX;
+    startScroll = offresScroll.scrollLeft;
+    offresScroll.classList.add('dragging');
+  });
+  window.addEventListener('mouseup', () => {
+    isDown = false;
+    offresScroll.classList.remove('dragging');
+  });
+  window.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    const d = e.pageX - startX;
+    if (Math.abs(d) > 4) moved = true;
+    offresScroll.scrollLeft = startScroll - d;
+  });
+  offresScroll.addEventListener('click', e => {
+    if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+  }, true);
+
+  /* Progression du slider */
+  function updateOffresProgress() {
+    if (!offresProgressBar) return;
+    const max = offresScroll.scrollWidth - offresScroll.clientWidth;
+    const ratio = max > 0 ? offresScroll.scrollLeft / max : 0;
+    const minBar = 33;
+    offresProgressBar.style.width = (minBar + (100 - minBar) * ratio) + '%';
+  }
+  offresScroll.addEventListener('scroll', updateOffresProgress, { passive: true });
+  window.addEventListener('resize', updateOffresProgress);
+  updateOffresProgress();
+
+  /* Clavier */
+  offresScroll.setAttribute('tabindex', '0');
+  offresScroll.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); offresScroll.scrollBy({ left: 400, behavior: 'smooth' }); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); offresScroll.scrollBy({ left: -400, behavior: 'smooth' }); }
+  });
+}
+
+/* =========================================================
+   6. FAQ — accordéon
+   ========================================================= */
+const faqItems = document.querySelectorAll('.faq-item');
+faqItems.forEach(item => {
+  const question = item.querySelector('.faq-item__question');
+  question.addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    faqItems.forEach(other => other.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+/* =========================================================
+   7. DÉFILEMENT DOUX ANCres internes
+   ========================================================= */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', e => {
+    const id = anchor.getAttribute('href');
+    if (id === '#' || id.length < 2) return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const top = target.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+});
+</script>
+
+<script src="safi-ai.js" defer></script>
+</body>
+</html>

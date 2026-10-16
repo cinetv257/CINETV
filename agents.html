@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="bTicket pour les agents de contrôle — Scannez les QR codes, validez les billets et gérez les entrées de vos événements en un instant.">
+<title>Agents — bTicket</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   1. POLICE MONTSERRAT (chargée via Google Fonts dans le <head>)
+   ========================================================= */
+
+/* =========================================================
+   2. RESET & TOKENS
+   ========================================================= */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --noir:       #111318;
+  --anthracite: #252A34;
+  --or:         #D4AF37;
+  --ivoire:     #F4F0E6;
+  --blanc:      #FFFFFF;
+
+  --noir-soft:   #171a21;
+  --anthracite-2:#2f3540;
+  --line:        rgba(212,175,55,.18);
+  --line-soft:   rgba(255,255,255,.06);
+  --texte-muted: rgba(244,240,230,.62);
+  --texte-faint: rgba(244,240,230,.42);
+
+  /* Statuts fonctionnels */
+  --succes: #2ecc71;
+  --succes-soft: rgba(46,204,113,.12);
+  --erreur: #e74c3c;
+  --erreur-soft: rgba(231,76,60,.12);
+  --alerte: #f39c12;
+  --alerte-soft: rgba(243,156,18,.12);
+
+  --font: 'Montserrat', system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --max: 1240px;
+  --radius: 20px;
+  --radius-sm: 14px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+body {
+  background: var(--noir);
+  color: var(--ivoire);
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+ul { list-style: none; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--blanc);
+}
+
+::selection { background: var(--or); color: var(--noir); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--noir); }
+::-webkit-scrollbar-thumb { background: var(--anthracite-2); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--or); }
+
+/* =========================================================
+   3. HELPERS
+   ========================================================= */
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.section { padding: 130px 0; position: relative; }
+.section--compact { padding: 90px 0; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 22px;
+}
+.eyebrow::before {
+  content: "";
+  width: 32px; height: 1px;
+  background: var(--or);
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  margin-bottom: 18px;
+  line-height: 1.1;
+}
+
+.section-lead {
+  color: var(--texte-muted);
+  font-size: 1.05rem;
+  max-width: 560px;
+}
+
+.gold { color: var(--or); }
+
+/* =========================================================
+   4. BOUTONS
+   ========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border-radius: 100px;
+  font-size: .94rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease),
+              background .3s var(--ease), color .3s var(--ease),
+              border-color .3s var(--ease);
+  white-space: nowrap;
+}
+.btn svg { width: 16px; height: 16px; transition: transform .3s var(--ease); }
+
+.btn--primary {
+  background: var(--or);
+  color: var(--noir);
+}
+.btn--primary:hover {
+  background: #e0bb47;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -14px rgba(212,175,55,.75);
+}
+.btn--primary:hover svg { transform: translateX(3px); }
+
+.btn--ghost {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(244,240,230,.22);
+  color: var(--ivoire);
+  backdrop-filter: blur(10px);
+}
+.btn--ghost:hover {
+  border-color: var(--or);
+  color: var(--or);
+  transform: translateY(-2px);
+}
+
+.btn--sm { padding: 10px 22px; font-size: .86rem; }
+
+/* =========================================================
+   5. NAVIGATION
+   ========================================================= */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--or);
+  z-index: 1000;
+  transition: width .1s linear;
+}
+
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  padding: 20px 0;
+  transition: padding .35s var(--ease), background .35s var(--ease),
+              border-color .35s var(--ease), backdrop-filter .35s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  padding: 12px 0;
+  background: rgba(17,19,24,.85);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-bottom-color: var(--line);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.brand img { height: 36px; width: auto; object-fit: contain; }
+.brand__text {
+  font-weight: 700;
+  font-size: 1.18rem;
+  letter-spacing: -.015em;
+  color: var(--blanc);
+}
+.brand__text span { color: var(--or); }
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+.nav__links a {
+  padding: 9px 14px;
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--texte-muted);
+  border-radius: 100px;
+  transition: color .3s var(--ease), background .3s var(--ease);
+}
+.nav__links a:hover { color: var(--blanc); background: rgba(244,240,230,.05); }
+.nav__links a.active { color: var(--or); }
+
+.nav__cta { display: flex; align-items: center; gap: 12px; }
+
+.burger {
+  display: none;
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  position: relative;
+  flex-shrink: 0;
+}
+.burger span {
+  position: absolute;
+  left: 50%;
+  width: 18px; height: 1.8px;
+  background: var(--ivoire);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: transform .35s var(--ease), opacity .25s var(--ease), top .35s var(--ease);
+}
+.burger span:nth-child(1) { top: 16px; }
+.burger span:nth-child(2) { top: 21px; }
+.burger span:nth-child(3) { top: 26px; }
+.burger.open span:nth-child(1) { top: 21px; transform: translateX(-50%) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { top: 21px; transform: translateX(-50%) rotate(-45deg); }
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 890;
+  background: var(--noir);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 32px 48px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s var(--ease), visibility .4s var(--ease);
+}
+.mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-menu a {
+  display: block;
+  font-size: clamp(1.4rem, 5.6vw, 1.9rem);
+  font-weight: 600;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--ivoire);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform .45s var(--ease), opacity .45s var(--ease), color .3s;
+}
+.mobile-menu.open a { transform: translateY(0); opacity: 1; }
+.mobile-menu a:hover { color: var(--or); }
+.mobile-menu .btn { margin-top: 30px; width: 100%; }
+
+/* =========================================================
+   6. HERO VIDÉO — Agents
+   ========================================================= */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  background-image: url("IMAGES/08-agent-scanner.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(17,19,24,.55) 0%, rgba(17,19,24,.75) 45%, rgba(17,19,24,.98) 100%),
+    linear-gradient(90deg, rgba(17,19,24,.88) 0%, rgba(17,19,24,.35) 60%, rgba(17,19,24,.7) 100%);
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  padding: 160px 0 100px;
+  max-width: 780px;
+}
+
+.hero__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ivoire);
+  margin-bottom: 30px;
+  animation: fadeUp .8s var(--ease) both;
+}
+.hero__tag i {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--or);
+  box-shadow: 0 0 12px var(--or);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 6.4vw, 4.8rem);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  animation: fadeUp .9s .08s var(--ease) both;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--or);
+}
+
+.hero p {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  color: rgba(244,240,230,.78);
+  max-width: 520px;
+  margin-bottom: 40px;
+  animation: fadeUp .9s .16s var(--ease) both;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  animation: fadeUp .9s .24s var(--ease) both;
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: .66rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: rgba(244,240,230,.4);
+}
+.scroll-cue span {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--or), transparent);
+  animation: cue 2.4s ease-in-out infinite;
+}
+
+/* =========================================================
+   7. BANDEAU CONFIANCE
+   ========================================================= */
+.trust {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--noir-soft);
+}
+.trust__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 60px;
+  text-align: center;
+}
+.trust__item {
+  font-size: .8rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--texte-faint);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.trust__item b {
+  color: var(--or);
+  font-weight: 700;
+}
+
+/* =========================================================
+   8. ÉDITORIAL (image + texte)
+   ========================================================= */
+.editorial {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.editorial--reverse .editorial__visual { order: 1; }
+.editorial--reverse .editorial__text { order: 2; }
+
+.editorial__visual {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--line-soft);
+  box-shadow: 0 40px 80px -40px rgba(0,0,0,.8);
+  background: #0d0f14;
+}
+.editorial__visual img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  padding: 30px;
+  transition: transform 1.2s var(--ease);
+}
+.editorial__visual:hover img { transform: scale(1.04); }
+
+.editorial__text h2 {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  margin-bottom: 22px;
+}
+.editorial__text p {
+  color: var(--texte-muted);
+  font-size: 1.02rem;
+  max-width: 460px;
+}
+
+.mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 28px;
+}
+.mini-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: .95rem;
+  color: var(--texte-muted);
+}
+.mini-list li svg {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--or);
+}
+
+/* =========================================================
+   9. STATUTS DE VALIDATION (4 cartes colorées)
+   ========================================================= */
+.statuts {
+  background: var(--noir-soft);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.statuts__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+.statut-card {
+  padding: 30px 26px;
+  border-radius: var(--radius);
+  background: rgba(17,19,24,.55);
+  border: 1px solid var(--line-soft);
+  position: relative;
+  overflow: hidden;
+  transition: transform .35s var(--ease), border-color .35s var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+.statut-card:hover { transform: translateY(-4px); }
+
+.statut-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+}
+
+.statut-card--succes { border-color: rgba(46,204,113,.28); }
+.statut-card--succes::before { background: var(--succes); }
+.statut-card--succes .statut-card__label { color: var(--succes); }
+.statut-card--succes .statut-card__icon {
+  background: var(--succes-soft);
+  border-color: rgba(46,204,113,.4);
+  color: var(--succes);
+}
+
+.statut-card--erreur { border-color: rgba(231,76,60,.28); }
+.statut-card--erreur::before { background: var(--erreur); }
+.statut-card--erreur .statut-card__label { color: var(--erreur); }
+.statut-card--erreur .statut-card__icon {
+  background: var(--erreur-soft);
+  border-color: rgba(231,76,60,.4);
+  color: var(--erreur);
+}
+
+.statut-card--alerte { border-color: rgba(243,156,18,.28); }
+.statut-card--alerte::before { background: var(--alerte); }
+.statut-card--alerte .statut-card__label { color: var(--alerte); }
+.statut-card--alerte .statut-card__icon {
+  background: var(--alerte-soft);
+  border-color: rgba(243,156,18,.4);
+  color: var(--alerte);
+}
+
+.statut-card__icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: grid; place-items: center;
+  border: 1px solid;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+.statut-card__icon svg { width: 20px; height: 20px; }
+
+.statut-card__label {
+  display: inline-block;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.statut-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+.statut-card p {
+  font-size: .85rem;
+  color: var(--texte-muted);
+  line-height: 1.55;
+  margin-top: auto;
+}
+
+/* =========================================================
+   10. APERÇU SCANNER (image éditoriale)
+   ========================================================= */
+.scanner-block {
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 80px;
+  align-items: center;
+}
+.scanner-block__visual {
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--line-soft);
+  background: #0d0f14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 40px 80px -40px rgba(0,0,0,.8);
+}
+.scanner-block__visual img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  padding: 30px;
+}
+
+.scanner-block__text h2 {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  margin-bottom: 22px;
+}
+.scanner-block__text p {
+  color: var(--texte-muted);
+  font-size: 1.02rem;
+  max-width: 460px;
+}
+
+/* Liste de points */
+.scanner-points {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 34px;
+}
+.scanner-points li {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.scanner-points li:last-child { border-bottom: none; padding-bottom: 0; }
+.scanner-points__num {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  background: rgba(212,175,55,.12);
+  border: 1px solid var(--line);
+  color: var(--or);
+  font-size: .8rem;
+  font-weight: 700;
+}
+.scanner-points h4 {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+.scanner-points p {
+  font-size: .88rem;
+  color: var(--texte-muted);
+  line-height: 1.55;
+  max-width: 100%;
+}
+
+/* =========================================================
+   11. AVANTAGES (4 cartes courtes)
+   ========================================================= */
+.avantages__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+.av-card {
+  position: relative;
+  padding: 34px 28px;
+  border-radius: var(--radius);
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  transition: border-color .35s var(--ease), transform .35s var(--ease);
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+}
+.av-card:hover {
+  border-color: rgba(212,175,55,.4);
+  transform: translateY(-6px);
+}
+.av-card__icon {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  display: grid; place-items: center;
+  background: rgba(212,175,55,.1);
+  border: 1px solid var(--line);
+  color: var(--or);
+  margin-bottom: 22px;
+}
+.av-card__icon svg { width: 20px; height: 20px; }
+.av-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+.av-card p {
+  font-size: .88rem;
+  color: var(--texte-muted);
+  line-height: 1.55;
+  margin-top: auto;
+}
+
+/* =========================================================
+   12. CTA FINAL
+   ========================================================= */
+.cta {
+  position: relative;
+  padding: 140px 0;
+  overflow: hidden;
+  text-align: center;
+}
+.cta__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("IMAGES/02. events-atmosphere.jpg");
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+.cta__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(17,19,24,.72) 0%, rgba(17,19,24,.9) 100%);
+}
+.cta__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin-inline: auto;
+}
+.cta h2 {
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  margin-bottom: 22px;
+  line-height: 1.05;
+}
+.cta p {
+  color: rgba(244,240,230,.78);
+  font-size: 1.05rem;
+  margin-bottom: 36px;
+}
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
+/* =========================================================
+   13. FOOTER
+   ========================================================= */
+.footer {
+  padding: 80px 0 34px;
+  background: var(--noir);
+  border-top: 1px solid var(--line-soft);
+}
+.footer__top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+  gap: 44px;
+  padding-bottom: 52px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.footer__brand p {
+  color: var(--texte-muted);
+  font-size: .88rem;
+  margin: 20px 0 22px;
+  max-width: 320px;
+}
+.footer__socials { display: flex; gap: 10px; }
+.footer__socials a {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  color: var(--texte-muted);
+  transition: all .3s var(--ease);
+}
+.footer__socials a:hover {
+  background: var(--or);
+  border-color: var(--or);
+  color: var(--noir);
+  transform: translateY(-3px);
+}
+.footer__socials svg { width: 17px; height: 17px; }
+
+.footer__col h4 {
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 18px;
+}
+.footer__col ul { display: flex; flex-direction: column; gap: 11px; }
+.footer__col a {
+  font-size: .88rem;
+  color: var(--texte-muted);
+  transition: color .3s var(--ease), padding-left .3s var(--ease);
+}
+.footer__col a:hover { color: var(--or); padding-left: 4px; }
+
+.footer__bottom {
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: .82rem;
+  color: var(--texte-faint);
+}
+
+/* =========================================================
+   14. ANIMATIONS
+   ========================================================= */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cue {
+  0%   { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: scaleY(1); transform-origin: top; opacity: 0; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .6; transform: scale(1.2); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity .9s var(--ease), transform .9s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal[data-delay="1"] { transition-delay: .08s; }
+.reveal[data-delay="2"] { transition-delay: .16s; }
+.reveal[data-delay="3"] { transition-delay: .24s; }
+
+.no-js .reveal { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   15. RESPONSIVE
+   ========================================================= */
+@media (max-width: 1080px) {
+  .nav__links { display: none; }
+  .burger { display: block; }
+  .nav__cta .btn { display: none; }
+
+  .editorial { grid-template-columns: 1fr; gap: 50px; }
+  .editorial--reverse .editorial__visual,
+  .editorial--reverse .editorial__text { order: unset; }
+
+  .scanner-block { grid-template-columns: 1fr; gap: 50px; }
+  .statuts__grid { grid-template-columns: repeat(2, 1fr); }
+  .avantages__grid { grid-template-columns: repeat(2, 1fr); }
+
+  .footer__top { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer__brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 720px) {
+  .section { padding: 88px 0; }
+  .section--compact { padding: 70px 0; }
+  .container { padding-inline: 20px; }
+
+  .hero__inner { padding: 140px 0 80px; }
+  .hero__actions .btn { width: 100%; }
+
+  .trust__row { gap: 26px; }
+
+  .statuts__grid { grid-template-columns: 1fr; gap: 16px; }
+  .avantages__grid { grid-template-columns: 1fr; gap: 16px; }
+  .av-card { min-height: auto; padding: 30px 24px; }
+
+  .cta { padding: 100px 0; }
+  .cta__actions .btn { width: 100%; }
+
+  .footer__top { grid-template-columns: 1fr; gap: 32px; }
+  .footer__bottom { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .brand img { height: 32px; }
+  .brand__text { font-size: 1.05rem; }
+}
+</style>
+</head>
+<body class="no-js">
+
+<!-- ===================== PROGRESS ===================== -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ===================== NAVIGATION ===================== -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand">
+      <img src="IMAGES/logo.png" alt="bTicket">
+      <span class="brand__text">b<span>Ticket</span></span>
+    </a>
+
+    <nav class="nav__links">
+      <a href="index.html">Accueil</a>
+      <a href="application.html">Application</a>
+      <a href="organisateurs.html">Organisateurs</a>
+      <a href="agents.html" class="active">Agents</a>
+      <a href="tarifs.html">Tarifs</a>
+      <a href="a-propos.html">À propos</a>
+    </nav>
+
+    <div class="nav__cta">
+      <a href="telecharger.html" class="btn btn--primary btn--sm">
+        Télécharger
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== MOBILE MENU ===================== -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Accueil</a>
+  <a href="application.html">Application</a>
+  <a href="organisateurs.html">Organisateurs</a>
+  <a href="agents.html">Agents</a>
+  <a href="tarifs.html">Tarifs</a>
+  <a href="a-propos.html">À propos</a>
+  <a href="telecharger.html" class="btn btn--primary">Télécharger l'app</a>
+</div>
+
+<main>
+
+<!-- ===================== HERO VIDÉO ===================== -->
+<section class="hero">
+  <video
+    class="hero__video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    poster="IMAGES/08-agent-scanner.png">
+    <source src="IMAGES/agent-video.mp4" type="video/mp4">
+    <source src="IMAGES/agent-video.webm" type="video/webm">
+  </video>
+
+  <div class="hero__overlay"></div>
+
+  <div class="container hero__inner">
+    <div class="hero__tag">
+      <i></i>
+      Solution agents
+    </div>
+
+    <h1>Contrôlez les accès <em>en un scan.</em></h1>
+
+    <p>
+      Scannez les QR codes à l'entrée de vos événements et validez chaque
+      billet en un instant. Simple, rapide, sécurisé.
+    </p>
+
+    <div class="hero__actions">
+      <a href="#scanner" class="btn btn--primary">
+        Découvrir la solution agent
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="organisateurs.html" class="btn btn--ghost">Espace organisateurs</a>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    Défiler
+    <span></span>
+  </div>
+</section>
+
+<!-- ===================== BANDEAU CONFIANCE ===================== -->
+<section class="trust">
+  <div class="container">
+    <div class="trust__row">
+      <div class="trust__item"><b>Scan</b> instantané</div>
+      <div class="trust__item"><b>Anti-fraude</b> intégré</div>
+      <div class="trust__item"><b>Multi-agents</b> coordonnés</div>
+      <div class="trust__item"><b>Suivi</b> en temps réel</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ÉDITORIAL — SCANNER ===================== -->
+<section class="section" id="scanner">
+  <div class="container editorial">
+    <div class="editorial__visual reveal">
+      <img src="IMAGES/08-agent-scanner.png" alt="Écran scanner de l'agent">
+    </div>
+
+    <div class="editorial__text reveal" data-delay="1">
+      <span class="eyebrow">Le scanner</span>
+      <h2 class="section-title">Scannez. Vérifiez. Laissez entrer.</h2>
+      <p>
+        À l'entrée de l'événement, l'agent scanne le QR code présenté par
+        le participant. L'application vérifie le billet en temps réel.
+      </p>
+
+      <ul class="mini-list">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Lecture instantanée du QR code
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Vérification automatique du billet
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Décision immédiate : accès ou refus
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STATUTS DE VALIDATION ===================== -->
+<section class="section statuts">
+  <div class="container">
+    <div style="text-align:center; max-width:640px; margin:0 auto 70px;" class="reveal">
+      <span class="eyebrow" style="justify-content:center;">Validation</span>
+      <h2 class="section-title">Les statuts d'un billet.</h2>
+      <p class="section-lead" style="margin-inline:auto;">
+        Chaque scan affiche un statut clair : couleur, icône et texte.
+      </p>
+    </div>
+
+    <div class="statuts__grid">
+
+      <article class="statut-card statut-card--succes reveal">
+        <div class="statut-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+        </div>
+        <span class="statut-card__label">Billet valide</span>
+        <h3>Accès autorisé</h3>
+        <p>Le billet est authentique et n'a pas encore été utilisé.</p>
+      </article>
+
+      <article class="statut-card statut-card--erreur reveal" data-delay="1">
+        <div class="statut-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M15 9l-6 6M9 9l6 6"/>
+          </svg>
+        </div>
+        <span class="statut-card__label">Déjà utilisé</span>
+        <h3>Accès refusé</h3>
+        <p>Ce billet a déjà été scanné précédemment.</p>
+      </article>
+
+      <article class="statut-card statut-card--erreur reveal" data-delay="2">
+        <div class="statut-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>
+            <path d="M12 9v4M12 17h.01"/>
+          </svg>
+        </div>
+        <span class="statut-card__label">Invalide</span>
+        <h3>Accès refusé</h3>
+        <p>Le billet n'est pas reconnu par le système bTicket.</p>
+      </article>
+
+      <article class="statut-card statut-card--alerte reveal" data-delay="3">
+        <div class="statut-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v5M12 16h.01"/>
+          </svg>
+        </div>
+        <span class="statut-card__label">À vérifier</span>
+        <h3>Contrôle manuel</h3>
+        <p>Une vérification supplémentaire est demandée à l'agent.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMMENT SCANNER (3 étapes) ===================== -->
+<section class="section">
+  <div class="container">
+    <div class="scanner-block">
+      <div class="scanner-block__text reveal">
+        <span class="eyebrow">En 3 étapes</span>
+        <h2 class="section-title">Le parcours d'une validation.</h2>
+        <p>
+          Chaque billet passe par les mêmes étapes, dans un ordre clair
+          et rapide, même en pleine affluence.
+        </p>
+
+        <ul class="scanner-points">
+          <li>
+            <div class="scanner-points__num">01</div>
+            <div>
+              <h4>Le participant présente son billet</h4>
+              <p>Il affiche le QR code de son billet depuis son application bTicket.</p>
+            </div>
+          </li>
+          <li>
+            <div class="scanner-points__num">02</div>
+            <div>
+              <h4>L'agent scanne le QR code</h4>
+              <p>Le scanner de bTicket lit le code en un instant, même en faible luminosité.</p>
+            </div>
+          </li>
+          <li>
+            <div class="scanner-points__num">03</div>
+            <div>
+              <h4>Le système décide</h4>
+              <p>L'accès est accordé ou refusé selon le statut du billet.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="scanner-block__visual reveal" data-delay="1">
+        <img src="IMAGES/10-payment-success-ticket.png" alt="Billet numérique avec QR code">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== AVANTAGES ===================== -->
+<section class="section section--compact">
+  <div class="container">
+    <div style="text-align:center; max-width:640px; margin:0 auto 70px;" class="reveal">
+      <span class="eyebrow" style="justify-content:center;">Avantages</span>
+      <h2 class="section-title">Pourquoi choisir bTicket pour le contrôle.</h2>
+    </div>
+
+    <div class="avantages__grid">
+
+      <article class="av-card reveal">
+        <div class="av-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/>
+          </svg>
+        </div>
+        <h3>Rapidité</h3>
+        <p>Chaque billet est validé en moins d'une seconde, sans ralentir la file.</p>
+      </article>
+
+      <article class="av-card reveal" data-delay="1">
+        <div class="av-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <h3>Sécurité</h3>
+        <p>Chaque QR code est unique et vérifié auprès du système bTicket.</p>
+      </article>
+
+      <article class="av-card reveal" data-delay="2">
+        <div class="av-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18"/>
+            <path d="m19 9-5 5-4-4-3 3"/>
+          </svg>
+        </div>
+        <h3>Suivi en direct</h3>
+        <p>Les entrées sont comptées en temps réel pour les organisateurs.</p>
+      </article>
+
+      <article class="av-card reveal" data-delay="3">
+        <div class="av-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9.5" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+          </svg>
+        </div>
+        <h3>Multi-agents</h3>
+        <p>Plusieurs agents peuvent scanner en parallèle sur plusieurs entrées.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA FINAL ===================== -->
+<section class="cta">
+  <div class="cta__bg"></div>
+  <div class="cta__overlay"></div>
+
+  <div class="container cta__inner reveal">
+    <span class="eyebrow" style="justify-content:center;">Solution agents</span>
+    <h2>Prêt à <span class="gold">contrôler vos accès</span> plus efficacement ?</h2>
+    <p>
+      L'application bTicket permet aux agents de valider chaque billet en
+      un scan. Téléchargez-la et découvrez la solution.
+    </p>
+    <div class="cta__actions">
+      <a href="telecharger.html" class="btn btn--primary">
+        Télécharger l'application
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <a href="organisateurs.html" class="btn btn--ghost">Espace organisateurs</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="index.html" class="brand">
+          <img src="IMAGES/logo.png" alt="bTicket">
+          <span class="brand__text">b<span>Ticket</span></span>
+        </a>
+        <p>La plateforme africaine de billetterie numérique. Achetez, gérez et validez vos billets en toute simplicité.</p>
+        <div class="footer__socials">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3 0-1.3-.1-2.45-.1-2.4 0-4.05 1.5-4.05 4.2v2.2H7.5V14h2.7v8h3.3z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 3h3l-6.6 7.6L21.7 21h-5.9l-4.3-5.6L6.4 21H3.3l7-8.1L2.7 3h6l3.9 5.2L17.5 3zm-1 16h1.6L7.6 4.6H5.9L16.5 19z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3V9.5zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-4.9c0-1.17-.02-2.68-1.7-2.68-1.7 0-1.96 1.28-1.96 2.6V21h-4V9.5z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="application.html">Application</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="telecharger.html">Télécharger</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Ressources</h4>
+        <ul>
+          <li><a href="application.html">Fonctionnalités</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="conditions-utilisation.html">Conditions d'utilisation</a></li>
+          <li><a href="politique-remboursement.html">Politique de remboursement</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© <span id="year"></span> bTicket. Tous droits réservés.</span>
+      <span>Conçu pour l'Afrique</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   INIT
+   ========================================================= */
+document.body.classList.remove('no-js');
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* =========================================================
+   1. NAV + PROGRESSION
+   ========================================================= */
+const nav = document.getElementById('nav');
+const progressBar = document.getElementById('progressBar');
+
+function onScroll() {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 40);
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* =========================================================
+   2. MENU MOBILE
+   ========================================================= */
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileLinks = mobileMenu.querySelectorAll('a');
+
+function toggleMenu(force) {
+  const open = force !== undefined ? force : !mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', open);
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+  document.body.style.overflow = open ? 'hidden' : '';
+  mobileLinks.forEach((link, i) => {
+    link.style.transitionDelay = open ? (0.05 * i + 0.08) + 's' : '0s';
+  });
+}
+burger.addEventListener('click', () => toggleMenu());
+mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') toggleMenu(false);
+});
+
+/* =========================================================
+   3. RÉVÉLATION AU SCROLL
+   ========================================================= */
+const revealObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* =========================================================
+   4. VIDÉO HERO — fallback
+   ========================================================= */
+const heroVideo = document.querySelector('.hero__video');
+if (heroVideo) {
+  heroVideo.addEventListener('error', () => {
+    heroVideo.style.display = 'none';
+  });
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroVideo.pause();
+  }
+}
+
+/* =========================================================
+   5. DÉFILEMENT DOUX ANCres internes
+   ========================================================= */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', e => {
+    const id = anchor.getAttribute('href');
+    if (id === '#' || id.length < 2) return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const top = target.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+});
+</script>
+
+<script src="safi-ai.js" defer></script>
+</body>
+</html>
