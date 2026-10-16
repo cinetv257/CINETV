@@ -973,6 +973,117 @@ h1, h2, h3, h4 {
   .brand__text { font-size: 1.05rem; }
   .price-card { width: 82vw; max-width: 320px; }
 }
+
+/* =========================================================
+   OFFRES — cartes claires, couleurs distinctes, hauteurs égales
+   ========================================================= */
+@keyframes featIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+.offres { position: relative; }
+.offres::before, .offres::after {
+  content: ""; position: absolute; width: 440px; height: 440px; border-radius: 50%;
+  filter: blur(100px); opacity: .14; pointer-events: none;
+}
+.offres::before { top: 60px; left: -160px; background: #D4AF37; }
+.offres::after { bottom: 20px; right: -160px; background: #F4F0E6; opacity: .08; }
+.offres .container { position: relative; z-index: 1; }
+.offres__scroll { align-items: stretch; gap: 22px; padding: 44px 24px 50px; }
+
+.price-card {
+  --ink: #111318; --accent: #252A34;
+  width: 340px; padding: 28px 26px 24px; isolation: isolate;
+  color: var(--ink);
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(255,255,255,.75), transparent 46%),
+    linear-gradient(160deg, #F4F0E6 0%, #E4DBC2 100%);
+  box-shadow: 0 28px 55px -30px rgba(244,240,230,.4);
+  transition: translate .35s var(--ease), box-shadow .35s var(--ease), opacity .7s var(--ease), transform .7s var(--ease);
+}
+.price-card--pro {
+  --accent: #8A6A12;
+  background:
+    radial-gradient(circle at 100% 0, rgba(255,255,255,.75), transparent 46%),
+    linear-gradient(160deg, #FBF1C9 0%, #E8C75A 100%);
+  box-shadow: 0 28px 55px -30px rgba(212,175,55,.8);
+}
+.price-card--elite {
+  --accent: #9C7A1A;
+  border: 1.5px solid #D4AF37;
+  background:
+    radial-gradient(circle at 100% 0, rgba(255,255,255,.75), transparent 46%),
+    linear-gradient(160deg, #FFFFFF 0%, #FBF6E6 60%, #F1E2A6 100%);
+  box-shadow: 0 28px 55px -26px rgba(212,175,55,.75);
+}
+.price-card:hover { translate: 0 -8px; }
+.offres__scroll.anim .price-card:not(.is-in) { opacity: 0; transform: translateY(48px); }
+.offres__scroll.anim .price-card.is-in { transition-delay: 0s, 0s, calc(var(--i, 0) * .12s), calc(var(--i, 0) * .12s); }
+/* Reflet qui suit le curseur */
+.price-card::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), rgba(255,255,255,.7), transparent 62%);
+  opacity: 0; transition: opacity .3s;
+}
+.price-card:hover::after { opacity: 1; }
+.price-card--elite::before { background: linear-gradient(135deg, #e8c75a, #D4AF37 50%, #b8932c); color: #111318; }
+
+/* Textes sombres sur fond clair */
+.price-card__badge, .price-card__badge--std, .price-card__badge--pro, .price-card__badge--elite {
+  background: var(--ink); color: #fff; border-color: transparent;
+}
+.price-card__tag { color: var(--accent); margin-bottom: 8px; }
+.price-card h3 { color: var(--ink); font-size: 1.4rem; margin-bottom: 8px; }
+.price-card__desc { color: rgba(20,22,27,.68); font-size: .84rem; line-height: 1.5; margin-bottom: 18px; min-height: 0; }
+.price-card__price { border-bottom-color: rgba(20,22,27,.14); padding-bottom: 16px; margin-bottom: 16px; }
+.price-card__price b { color: var(--ink); font-size: 2.1rem; }
+.price-card__price b small { color: var(--accent); }
+.price-card__price > span { color: rgba(20,22,27,.58); }
+
+.price-card__features { gap: 9px; margin-bottom: 16px; flex: none; }
+.price-card__features li { color: rgba(20,22,27,.78); font-size: .83rem; line-height: 1.4; gap: 10px; }
+.price-card__features li strong { color: var(--ink); }
+.price-card__features li svg {
+  width: 18px; height: 18px; padding: 3.5px; margin-top: 0; border-radius: 50%;
+  background: var(--accent); color: #fff;
+}
+.price-card__features li.is-extra { display: none; }
+.price-card.is-open li.is-extra { display: flex; animation: featIn .4s var(--ease) both; }
+.price-card__more {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+  margin: 0 0 18px; padding: 0; background: none; border: 0; cursor: pointer;
+  color: var(--accent); font-family: inherit; font-size: .78rem; font-weight: 700; letter-spacing: .05em;
+}
+.price-card__more svg { width: 14px; height: 14px; transition: transform .3s var(--ease); }
+.price-card.is-open .price-card__more svg { transform: rotate(180deg); }
+
+/* Bouton en bas de carte : hauteurs égales */
+.price-card .btn {
+  margin-top: auto; padding-block: 13px; border-radius: 100px;
+  background: var(--ink); color: #fff; border: 1px solid var(--ink);
+}
+.price-card .btn--ghost { background: transparent; color: var(--ink); border-color: rgba(20,22,27,.55); }
+.price-card .btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* Bouton Safi Ai */
+.offres__ai { display: flex; justify-content: center; margin-top: 30px; }
+.offres__ai-btn {
+  display: inline-flex; align-items: center; gap: 10px; padding: 13px 24px; border-radius: 100px;
+  border: 1px solid rgba(212,175,55,.55); background: rgba(212,175,55,.1); color: var(--or);
+  font-size: .88rem; font-weight: 600; letter-spacing: .02em;
+  transition: background .3s var(--ease), color .3s var(--ease), transform .3s var(--ease);
+}
+.offres__ai-btn svg { width: 18px; height: 18px; }
+.offres__ai-btn:hover { background: var(--or); color: var(--noir); transform: translateY(-2px); }
+
+@media (max-width: 720px) {
+  .price-card { width: 300px; padding: 24px 22px 22px; }
+  .price-card__price b { font-size: 1.85rem; }
+}
+@media (max-width: 480px) { .price-card { width: 82vw; max-width: 320px; } }
+@media (prefers-reduced-motion: reduce) {
+  .price-card { transform: none !important; opacity: 1 !important; }
+}
 </style>
 </head>
 <body class="no-js">
@@ -1273,6 +1384,13 @@ h1, h2, h3, h4 {
 
     <div class="offres__progress">
       <div class="offres__progress-bar" id="offresProgressBar"></div>
+    </div>
+
+    <div class="offres__ai">
+      <a href="assistant.html" class="offres__ai-btn" id="offresAi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+        Un doute ? Demandez à Safi Ai
+      </a>
     </div>
   </div>
 </section>
@@ -1626,7 +1744,6 @@ if (offresScroll) {
     isDown = true; moved = false;
     startX = e.pageX;
     startScroll = offresScroll.scrollLeft;
-    offresScroll.classList.add('dragging');
   });
   window.addEventListener('mouseup', () => {
     isDown = false;
@@ -1635,7 +1752,7 @@ if (offresScroll) {
   window.addEventListener('mousemove', e => {
     if (!isDown) return;
     const d = e.pageX - startX;
-    if (Math.abs(d) > 4) moved = true;
+    if (Math.abs(d) > 4 && !moved) { moved = true; offresScroll.classList.add('dragging'); }
     offresScroll.scrollLeft = startScroll - d;
   });
   offresScroll.addEventListener('click', e => {
@@ -1691,6 +1808,65 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 </script>
 
+<script>
+(function () {
+  var scroller = document.getElementById('offresScroll');
+  var section = document.getElementById('offres');
+  if (!scroller || !section) return;
+  var cards = Array.prototype.slice.call(scroller.querySelectorAll('.price-card'));
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+
+  cards.forEach(function (card) {
+    // Avantages repliables : 6 visibles, le reste au clic
+    var ul = card.querySelector('.price-card__features');
+    var items = ul ? ul.querySelectorAll('li') : [];
+    if (items.length > 6) {
+      items.forEach(function (li, i) { if (i >= 6) li.classList.add('is-extra'); });
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'price-card__more';
+      btn.innerHTML = '<span></span>' + CHEV;
+      var txt = btn.firstChild;
+      var label = function () {
+        return card.classList.contains('is-open') ? 'Voir moins' : 'Voir les ' + items.length + ' avantages';
+      };
+      txt.textContent = label();
+      btn.addEventListener('click', function () {
+        card.classList.toggle('is-open');
+        txt.textContent = label();
+        btn.setAttribute('aria-expanded', card.classList.contains('is-open'));
+      });
+      ul.after(btn);
+    }
+    // Halo qui suit le curseur
+    card.addEventListener('pointermove', function (e) {
+      var r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  // Bouton Safi Ai : ouvre le chat flottant, sinon la page Assistant
+  var aiBtn = document.getElementById('offresAi');
+  if (aiBtn) aiBtn.addEventListener('click', function (e) {
+    var fab = document.getElementById('safiFab');
+    if (fab) { e.preventDefault(); fab.click(); }
+  });
+
+  if (reduce || !('IntersectionObserver' in window)) return;
+
+  // Apparition simple, du bas vers le haut, au défilement
+  cards.forEach(function (c, i) { c.style.setProperty('--i', i); });
+  scroller.classList.add('anim');
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.15 });
+  cards.forEach(function (c) { io.observe(c); });
+})();
+</script>
 <script src="safi-ai.js" defer></script>
 </body>
 </html>
