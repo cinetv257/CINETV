@@ -387,7 +387,16 @@
     return div;
   }
 
+  function majSuggestions() {
+    var conv = currentConv();
+    var masquer = !!(conv && conv.messages.length);
+    document.querySelectorAll('.safi-quick').forEach(function (el) {
+      el.classList.toggle('is-hidden', masquer);
+    });
+  }
+
   function renderMessages() {
+    majSuggestions();
     var body = document.getElementById('safiBody');
     if (!body) return;
     body.innerHTML = '';
@@ -482,6 +491,7 @@
     updateConvTitle(conv, text);
     conv.messages.push({ role: 'user', content: text, time: Date.now() });
     saveState();
+    majSuggestions();
 
     inputEl.value = '';
     sendBtn.disabled = true;
@@ -682,8 +692,11 @@
   font-family: inherit;
   cursor: pointer;
   white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 7px;
   transition: all .2s;
 }
+.safi-quick button svg { width: 14px; height: 14px; flex-shrink: 0; }
+.safi-quick.is-hidden { display: none; }
 .safi-quick button:hover {
   border-color: #D4AF37;
   color: #D4AF37;
@@ -893,15 +906,27 @@
       '</button>';
   }
 
+  function chipIcon(paths) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths + '</svg>';
+  }
+  var CHIP_ICONS = {
+    mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/>',
+    ticket: '<path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/>',
+    calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+    megaphone: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+    tag: '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>',
+    user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'
+  };
+
   function buildQuickChips() {
     return '' +
       '<div class="safi-quick">' +
-        '<button type="button" data-q="Aide-moi à préparer un concert">🎤 Préparer un concert</button>' +
-        '<button type="button" data-q="Propose-moi des idées de catégories de billets pour mon événement">🎟️ Catégories de billets</button>' +
-        '<button type="button" data-q="Propose-moi un planning J-30 / J-15 / J-7 / J-1 pour mon événement">📅 Planning</button>' +
-        '<button type="button" data-q="Donne-moi des idées de communication sur les réseaux sociaux pour mon événement">📱 Communication</button>' +
-        '<button type="button" data-q="Conseille-moi pour fixer le prix de mes billets et proposer des promotions">💡 Stratégie de prix</button>' +
-        '<button type="button" data-q="Qui est le fondateur de bTicket ?">👤 Fondateur</button>' +
+        '<button type="button" data-q="Aide-moi à préparer un concert">' + chipIcon(CHIP_ICONS.mic) + 'Préparer un concert</button>' +
+        '<button type="button" data-q="Propose-moi des idées de catégories de billets pour mon événement">' + chipIcon(CHIP_ICONS.ticket) + 'Catégories de billets</button>' +
+        '<button type="button" data-q="Propose-moi un planning J-30 / J-15 / J-7 / J-1 pour mon événement">' + chipIcon(CHIP_ICONS.calendar) + 'Planning</button>' +
+        '<button type="button" data-q="Donne-moi des idées de communication sur les réseaux sociaux pour mon événement">' + chipIcon(CHIP_ICONS.megaphone) + 'Communication</button>' +
+        '<button type="button" data-q="Conseille-moi pour fixer le prix de mes billets et proposer des promotions">' + chipIcon(CHIP_ICONS.tag) + 'Stratégie de prix</button>' +
+        '<button type="button" data-q="Qui est le fondateur de bTicket ?">' + chipIcon(CHIP_ICONS.user) + 'Fondateur</button>' +
       '</div>';
   }
 
