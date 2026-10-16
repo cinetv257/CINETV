@@ -450,6 +450,25 @@
     if (t) t.remove();
   }
 
+  function attendre(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  async function genererAvecRepli(modeles, hist) {
+    var derniere = null;
+    for (var tour = 0; tour < 3; tour++) {          // 3 tours maximum
+      for (var i = 0; i < modeles.length; i++) {
+        try {
+          var result = await modeles[i].generateContent({ contents: hist });
+          return result.response.text();
+        } catch (e) {
+          console.error('Modèle ' + MODELES[i] + ' en échec :', e);
+          derniere = e;
+        }
+      }
+      await attendre(1000 * Math.pow(2, tour));      // pause 1 s, 2 s, 4 s
+    }
+    throw derniere;
+  }
+
   async function envoyer() {
     var inputEl = document.getElementById('safiInput');
     var sendBtn = document.getElementById('safiSend');
@@ -477,23 +496,14 @@
     renderSidebar();
 
     var reponse = null;
-    var derniereErreur = null;
     try {
       var modeles = await chargerIA();
-      var hist = conv.messages.slice(-20).map(function (m) {
+      var hist = conv.messages.filter(function (m) {
+        return !(m.role !== 'user' && String(m.content).indexOf('Erreur technique') === 0);
+      }).slice(-20).map(function (m) {
         return { role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] };
       });
-      for (var i = 0; i < modeles.length; i++) {
-        try {
-          var result = await modeles[i].generateContent({ contents: hist });
-          reponse = result.response.text();
-          break;
-        } catch (e) {
-          console.error('Modèle ' + MODELES[i] + ' en échec :', e);
-          derniereErreur = e;
-        }
-      }
-      if (reponse === null) throw derniereErreur;
+      reponse = await genererAvecRepli(modeles, hist);
 
       hideTyping();
       conv.messages.push({ role: 'assistant', content: reponse, time: Date.now() });
@@ -507,9 +517,7 @@
     } catch (error) {
       console.error('Erreur Safi Ai :', error);
       hideTyping();
-      var msgErr = 'Erreur technique : ' + ((error && error.message) || 'problème de connexion.') + ' — Contact : +257 76389163 / info@bticket.com';
-      conv.messages.push({ role: 'assistant', content: msgErr, time: Date.now() });
-      saveState();
+      var msgErr = "Je rencontre un pic de demande en ce moment. Merci de réessayer dans quelques secondes. Si le problème persiste : +257 76389163 / info@bticket.com";
       if (body) {
         body.appendChild(createBubble(msgErr, 'assistant'));
         body.scrollTop = body.scrollHeight;
