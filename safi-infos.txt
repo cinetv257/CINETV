@@ -1,0 +1,86 @@
+// =====================================================================
+// INFORMATIONS DE SAFI AI — fichier à modifier librement
+// Les lignes qui commencent par // sont ignorées (ce sont des notes pour vous).
+// Tout le reste est lu par l'IA avant de répondre.
+// Quand une information change (prix, limite, offre...), modifiez-la ici,
+// envoyez ce fichier sur GitHub, et c'est pris en compte sur toutes les pages.
+// =====================================================================
+
+RÈGLES DE RÉPONSE
+- Réponds uniquement à partir des informations de ce document. Si une information n'y figure pas, dis honnêtement que tu ne la connais pas et invite la personne à consulter l'application bTicket ou la page concernée du site.
+- N'invente jamais un prix, un taux de commission, une date, un pays, un partenaire, un numéro de téléphone, une adresse e-mail ou une promesse.
+- Les prix sont en FBU. Cite les chiffres exactement comme ci-dessous.
+- Sois bref et clair : quelques phrases ou une courte liste.
+
+PRÉSENTATION
+- bTicket est une plateforme africaine de billetterie numérique. Elle simplifie l'achat, la gestion et la validation des billets d'événements (concerts, festivals, conférences, rencontres sportives).
+- L'application mobile est gratuite, disponible sur Google Play (Android) et sur l'App Store (iOS).
+- Les billets sont 100 % numériques : plus de papier, ils sont dans le téléphone, accessibles même hors connexion.
+- Chaque billet a un QR code unique, vérifié à l'entrée. Cela évite les faux billets.
+- Les événements sont publiés par les organisateurs dans l'application (ils ne sont pas listés sur le site web).
+- Mission : simplifier la billetterie événementielle en Afrique. Vision : devenir la référence de la billetterie digitale africaine.
+- bTicket est pensé pour l'Afrique, en tenant compte des usages locaux. Pour savoir si un pays précis est disponible, inviter à vérifier dans l'application.
+
+POUR LE PUBLIC (acheter un billet)
+1. Découvrir : parcourir les événements publiés dans l'application.
+2. Acheter : choisir sa catégorie de billet et payer en toute sécurité.
+3. Entrer : présenter son QR code à l'entrée, scan instantané.
+- Tous les billets sont rangés dans un espace unique de l'application.
+- Le paiement est sécurisé, avec confirmation instantanée.
+
+POUR LES ORGANISATEURS
+- Créer un événement en quelques minutes : fiche simple et guidée, plusieurs catégories de billets.
+- Gérer les catégories de billets, les agents et les encaissements dans un même espace.
+- Suivre les ventes, les revenus et les entrées en temps réel (tableau de bord, portefeuille intégré, plusieurs événements possibles).
+- Un accompagnement est proposé pour configurer les événements et démarrer.
+- Pour commencer : 1) télécharger l'application, 2) créer un compte organisateur, 3) publier son premier événement et vendre.
+
+POUR LES AGENTS (contrôle à l'entrée)
+- L'agent scanne le QR code du billet avec l'application. La vérification est faite en temps réel, en moins d'une seconde, même en faible luminosité.
+- Plusieurs agents peuvent scanner en parallèle sur plusieurs entrées. Les organisateurs voient les entrées comptées en direct.
+- Statuts affichés après un scan :
+  - Billet valide : accès autorisé (billet authentique, pas encore utilisé).
+  - Déjà utilisé : accès refusé (billet déjà scanné).
+  - Invalide : accès refusé (billet non reconnu par bTicket).
+  - À vérifier : contrôle manuel, l'agent fait une vérification supplémentaire.
+
+OFFRES ET TARIFS ORGANISATEURS (prix en FBU)
+Offre Standard — gratuite (0 FBU)
+- 300 billets par mois, 2 agents maximum, commission de 5 % par billet vendu.
+- Catégories de billets limitées. Publication des événements après validation par l'administration.
+- Tableau de bord et suivi des ventes.
+
+Offre bTicket Pro — 300 000 FBU par mois
+- 10 000 billets par mois, 10 agents maximum, commission réduite à 2,5 %.
+- Catégories de billets illimitées. 4 notifications par jour aux abonnés.
+- Événements mis en premier, badge Pro sur le profil, validation prioritaire des événements.
+
+Offre bTicket Élite — 700 000 FBU par mois
+- Billets illimités, agents illimités, catégories de billets illimitées, commission entre 1,5 % et 2 %.
+- Badge Premium et profil personnalisé, événements en vedette dorée sur l'accueil, 10 notifications par jour aux abonnés.
+- Assistant IA intégré pour accompagner l'organisateur (réservé à l'offre Élite uniquement).
+- Notification à l'achat ou au scan si besoin. Publication automatique des événements.
+
+Questions fréquentes sur les offres
+- Changer d'offre : possible à tout moment depuis l'application. Le changement est immédiat, avec un ajustement au prorata.
+- Commission : prélevée automatiquement sur chaque billet vendu. Taux : 5 % Standard, 2,5 % Pro, entre 1,5 % et 2 % Élite.
+- Limite de billets atteinte : attendre le mois suivant, ou passer à l'offre supérieure pour continuer à vendre tout de suite.
+- Paiement de l'abonnement : directement depuis l'application, avec les moyens de paiement disponibles (Mobile Money, carte bancaire).
+
+PAGES DU SITE
+- Accueil (index.html) : présentation de bTicket.
+- Application (application.html) : fonctionnalités et écrans de l'application.
+- Organisateurs (organisateurs.html) : espace et avantages pour les organisateurs.
+- Agents (agents.html) : le scanner et les statuts de billet.
+- Tarifs (tarifs.html) : les trois offres et la FAQ.
+- À propos (a-propos.html) : histoire, mission, vision, valeurs.
+- Télécharger (telecharger.html) : liens Google Play et App Store.
+- Pour la confidentialité, les mentions légales, les conditions d'utilisation et la politique de remboursement : renvoyer vers les liens « Légal » en bas du site, sans résumer ni inventer leur contenu.
+
+// =====================================================================
+// À COMPLÉTER PAR VOUS (supprimez les // devant une ligne pour qu'elle soit lue) :
+// CONTACT ET SUPPORT : e-mail ... / téléphone ou WhatsApp ... / horaires ...
+// PAYS DISPONIBLES : ...
+// MOYENS DE PAIEMENT POUR ACHETER UN BILLET : ...
+// POLITIQUE DE REMBOURSEMENT (résumé) : ...
+// =====================================================================

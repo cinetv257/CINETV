@@ -338,6 +338,11 @@
 </aside>`;
 
   // ---------- Réglages ----------
+  // Le fichier d'informations (safi-infos.txt) est cherché à côté de ce script
+  var URL_INFOS = (function () {
+    try { return new URL('safi-infos.txt', document.currentScript ? document.currentScript.src : location.href).href; }
+    catch (e) { return 'safi-infos.txt'; }
+  })();
   var VERSION_FIREBASE = '13.0.0';
   var firebaseConfig = {
     apiKey: "AIzaSyBcf1eysXtdI5vOgI02yd8sCFs3wGWJ90A",
@@ -533,6 +538,21 @@ Quand une de ces pages peut aider l'utilisateur, propose-lui le lien sous la for
       if (e.key === CLE_STOCKAGE || e.key === null) { charger(); afficherConversation(); }
     });
 
+    // ----- Informations de bTicket (fichier safi-infos.txt) -----
+    async function lireInfos() {
+      try {
+        var rep = await fetch(URL_INFOS, { cache: 'no-cache' });
+        if (!rep.ok) throw new Error('HTTP ' + rep.status);
+        var texte = await rep.text();
+        texte = texte.split('\n').filter(function (l) { return l.trim().indexOf('//') !== 0; }).join('\n').trim();
+        if (texte) console.info('Safi Ai : informations chargées (' + texte.length + ' caractères)');
+        return texte;
+      } catch (e) {
+        console.warn('Safi Ai : safi-infos.txt introuvable, réponses limitées aux consignes de base.', e);
+        return '';
+      }
+    }
+
     // ----- Chargement de l'IA (seulement quand on en a besoin) -----
     var promesseIA = null;
     function chargerIA() {
@@ -552,7 +572,10 @@ Quand une de ces pages peut aider l'utilisateur, propose-lui le lien sous la for
         });
         var ai = aiMod.getAI(app, { backend: new aiMod.GoogleAIBackend() });
         var page = nomPage();
-        var consigne = CONSIGNE_BASE + (page ? "\nLe visiteur se trouve actuellement sur la page « " + PAGES[page] + " » du site." : "");
+        var infos = await lireInfos();
+        var consigne = CONSIGNE_BASE
+          + (page ? "\nLe visiteur se trouve actuellement sur la page « " + PAGES[page] + " » du site." : "")
+          + (infos ? "\n\n===== INFORMATIONS OFFICIELLES DE BTICKET =====\n" + infos : "");
         return MODELES.map(function (nom) {
           return aiMod.getGenerativeModel(ai, { model: nom, systemInstruction: consigne });
         });
