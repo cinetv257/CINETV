@@ -7,34 +7,14 @@
 <meta name="google-site-verification" content="QU4RwVig48ZKkrqLn44_c5JYKU3fIos-jVKbz1Zby-o" />
 <title>bTicket — La billetterie numérique pour l'Afrique</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 /* =========================================================
-   1. POLICE ARTICULAT CF
+   1. POLICE MONTSERRAT (chargée via Google Fonts dans le <head>)
    ========================================================= */
-@font-face {
-  font-family: 'Articulat CF';
-  src: url('ArticulatCF-Regular.woff2') format('woff2'),
-       url('ArticulatCF-Regular.woff')  format('woff');
-  font-weight: 400; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Articulat CF';
-  src: url('ArticulatCF-Medium.woff2') format('woff2'),
-       url('ArticulatCF-Medium.woff')  format('woff');
-  font-weight: 500; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Articulat CF';
-  src: url('ArticulatCF-DemiBold.woff2') format('woff2'),
-       url('ArticulatCF-DemiBold.woff')  format('woff');
-  font-weight: 600; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Articulat CF';
-  src: url('ArticulatCF-Bold.woff2') format('woff2'),
-       url('ArticulatCF-Bold.woff')  format('woff');
-  font-weight: 700; font-style: normal; font-display: swap;
-}
 
 /* =========================================================
    2. RESET & TOKENS
@@ -55,7 +35,7 @@
   --texte-muted: rgba(244,240,230,.62);
   --texte-faint: rgba(244,240,230,.42);
 
-  --font: 'Articulat CF', system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font: 'Montserrat', system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --max: 1240px;
   --radius: 20px;
@@ -1465,6 +1445,11 @@ h1, h2, h3, h4 {
       <strong>Safi Ai</strong>
       <span class="bt-chat__status"><i></i> En ligne</span>
     </div>
+    <button class="bt-chat__close" id="btChatClear" aria-label="Nouvelle conversation" title="Nouvelle conversation" style="margin-right:8px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>
+      </svg>
+    </button>
     <button class="bt-chat__close" id="btChatClose" aria-label="Fermer">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 6L6 18M6 6l12 12"/>
@@ -1652,6 +1637,43 @@ Ne donne jamais d'informations inventées. Reste toujours dans le contexte de bT
 
   let chatHistory = [];
 
+  // --- Mémoire de la conversation sur cet appareil ---
+  const CLE_STOCKAGE = 'bticket_safi_chat_v1';
+  let messagesSauvegardes = [];
+
+  function sauvegarderChat() {
+    try {
+      localStorage.setItem(CLE_STOCKAGE, JSON.stringify(messagesSauvegardes.slice(-40)));
+    } catch (e) { /* stockage indisponible : on continue sans */ }
+  }
+
+  function restaurerChat() {
+    try {
+      const brut = localStorage.getItem(CLE_STOCKAGE);
+      if (!brut) return;
+      const liste = JSON.parse(brut);
+      if (!Array.isArray(liste)) return;
+      messagesSauvegardes = liste;
+      liste.forEach(m => {
+        const div = document.createElement('div');
+        div.classList.add('bt-msg', `bt-msg--${m.type}`);
+        div.textContent = m.text;
+        chatBody.appendChild(div);
+        chatHistory.push({ role: m.type === 'user' ? 'user' : 'model', parts: [{ text: m.text }] });
+      });
+      if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    } catch (e) { /* données illisibles : on repart de zéro */ }
+  }
+
+  function nouvelleConversation() {
+    messagesSauvegardes = [];
+    chatHistory = [];
+    try { localStorage.removeItem(CLE_STOCKAGE); } catch (e) {}
+    chatBody.innerHTML = '<div class="bt-msg bt-msg--ai">Bonjour 👋 Je suis Safi Ai, votre assistant bTicket. Comment puis-je vous aider aujourd\'hui ?</div>';
+  }
+  document.getElementById('btChatClear').addEventListener('click', nouvelleConversation);
+
   function openChat() {
     chat.classList.add('open');
     chat.setAttribute('aria-hidden', 'false');
@@ -1728,6 +1750,8 @@ Ne donne jamais d'informations inventées. Reste toujours dans le contexte de bT
 
       chatHistory.push({ role: 'user', parts: [{ text }] });
       chatHistory.push({ role: 'model', parts: [{ text: responseText }] });
+      messagesSauvegardes.push({ type: 'user', text }, { type: 'ai', text: responseText });
+      sauvegarderChat();
 
       if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
     } catch (error) {
@@ -1739,6 +1763,8 @@ Ne donne jamais d'informations inventées. Reste toujours dans le contexte de bT
       chatInput.focus();
     }
   }
+
+  restaurerChat();
 
   // Écouteurs d'événements pour le bouton et la touche Entrée
   chatSend.addEventListener('click', envoyerMessage);
