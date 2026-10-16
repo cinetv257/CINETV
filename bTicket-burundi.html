@@ -991,6 +991,16 @@ h1, h2, h3, h4 {
   color: var(--ivoire);
   border-bottom-left-radius: 4px;
 }
+/* Mise en forme des réponses de l'IA (gras, italique, listes, liens) */
+.bt-msg--ai p { margin: 0 0 .6em; }
+.bt-msg--ai p:last-child, .bt-msg--ai ul:last-child, .bt-msg--ai ol:last-child { margin-bottom: 0; }
+.bt-msg--ai ul, .bt-msg--ai ol { margin: 0 0 .6em; padding-left: 1.3em; }
+.bt-msg--ai li { margin-bottom: .25em; }
+.bt-msg--ai strong { font-weight: 700; color: var(--blanc); }
+.bt-msg--ai em { font-style: italic; }
+.bt-msg--ai code { background: rgba(255,255,255,.1); padding: 1px 6px; border-radius: 5px; font-size: .85em; }
+.bt-msg--ai a { color: var(--or); text-decoration: underline; word-break: break-all; }
+
 .bt-msg--user {
   align-self: flex-end;
   background: var(--or);
@@ -1657,7 +1667,8 @@ Ne donne jamais d'informations inventées. Reste toujours dans le contexte de bT
       liste.forEach(m => {
         const div = document.createElement('div');
         div.classList.add('bt-msg', `bt-msg--${m.type}`);
-        div.textContent = m.text;
+        if (m.type === 'ai') div.innerHTML = formaterTexte(m.text);
+        else div.textContent = m.text;
         chatBody.appendChild(div);
         chatHistory.push({ role: m.type === 'user' ? 'user' : 'model', parts: [{ text: m.text }] });
       });
@@ -1693,10 +1704,55 @@ Ne donne jamais d'informations inventées. Reste toujours dans le contexte de bT
   });
   chatClose.addEventListener('click', closeChat);
 
+  // --- Mise en forme du texte de l'IA (gras, italique, listes, liens) ---
+  function echapper(t) {
+    return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function enLigne(t) {
+    return t
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+      .replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/__([^_]+)__/g, '<strong>$1</strong>')
+      .replace(/\*([^*\s][^*]*?)\*/g, '<em>$1</em>');
+  }
+
+  function formaterTexte(brut) {
+    const lignes = echapper(brut).split('\n');
+    let html = '';
+    let liste = null; // 'ul' ou 'ol'
+    const fermer = () => { if (liste) { html += '</' + liste + '>'; liste = null; } };
+
+    lignes.forEach(l => {
+      const ligne = l.trim();
+      let m;
+      if (!ligne) { fermer(); return; }
+      if ((m = ligne.match(/^[*\-•]\s+(.*)$/))) {
+        if (liste !== 'ul') { fermer(); html += '<ul>'; liste = 'ul'; }
+        html += '<li>' + enLigne(m[1]) + '</li>';
+      } else if ((m = ligne.match(/^\d+[.)]\s+(.*)$/))) {
+        if (liste !== 'ol') { fermer(); html += '<ol>'; liste = 'ol'; }
+        html += '<li>' + enLigne(m[1]) + '</li>';
+      } else if ((m = ligne.match(/^#{1,6}\s+(.*)$/))) {
+        fermer();
+        html += '<p><strong>' + enLigne(m[1]) + '</strong></p>';
+      } else {
+        fermer();
+        html += '<p>' + enLigne(ligne) + '</p>';
+      }
+    });
+    fermer();
+    return html;
+  }
+
   function addMessage(text, type) {
     const div = document.createElement('div');
     div.classList.add('bt-msg', `bt-msg--${type}`);
-    div.textContent = text;
+    if (type === 'ai') div.innerHTML = formaterTexte(text);
+    else div.textContent = text;
     chatBody.appendChild(div);
     chatBody.scrollTop = chatBody.scrollHeight;
     return div;
