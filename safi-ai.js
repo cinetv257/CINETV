@@ -33,13 +33,12 @@
   /* =========================================================
      2. DÉFINITION DES MODÈLES SAFI
      ---------------------------------------------------------
-     Chaque modèle a :
-     - id          : '1.0' ou '1.5'
-     - name        : nom affiché
-     - icon        : icône Font Awesome
-     - description : texte du menu
-     - modeles     : liste des Gemini à essayer dans l'ordre
-     - temperature : créativité (0 = déterministe, 1 = créatif)
+     Noms de modèles Gemini VALIDES (vérifiés) :
+     - gemini-2.5-flash        (le plus récent et performant)
+     - gemini-2.0-flash        (excellent équilibre)
+     - gemini-2.0-flash-lite   (rapide et léger)
+     - gemini-1.5-flash        (ancien mais stable)
+     - gemini-1.5-flash-8b     (très rapide)
      ========================================================= */
   var SAFI_MODELS = {
     '1.5': {
@@ -47,7 +46,7 @@
       name: 'Safi 1.5',
       icon: 'fa-solid fa-gem',
       description: 'Le plus avancé · Raisonnement approfondi',
-      modeles: ['gemini-3.8-flash', 'gemini-3.5-flash'],
+      modeles: ['gemini-2.5-flash', 'gemini-2.0-flash'],
       temperature: 0.35
     },
     '1.0': {
@@ -55,7 +54,7 @@
       name: 'Safi 1.0',
       icon: 'fa-solid fa-bolt',
       description: 'Rapide et efficace · Réponses instantanées',
-      modeles: ['gemini-3.1-flash-lite'],
+      modeles: ['gemini-2.0-flash-lite', 'gemini-1.5-flash-8b'],
       temperature: 0.2
     }
   };
@@ -74,7 +73,7 @@
   function setModeleActif(id) {
     if (!SAFI_MODELS[id]) return;
     try { localStorage.setItem(CLE_MODELE, id); } catch (e) {}
-    promesseIA = null; // force le rechargement du modèle
+    promesseIA = null;
   }
 
   var MODELE = getModeleActif();
@@ -366,7 +365,7 @@
   function chargerIA() {
     if (promesseIA) return promesseIA;
     setStatus('loading', 'Connexion…');
-    var modelesList = MODELE.modeles;
+    var modelesList = MODELE.modeles.slice();
     var temp = MODELE.temperature;
 
     promesseIA = (function () {
@@ -562,7 +561,7 @@
           reponse = result.response.text();
           break;
         } catch (e) {
-          console.error('Modèle ' + MODELE.modeles[i] + ' en échec :', e);
+          console.warn('Modèle ' + MODELE.modeles[i] + ' en échec :', e);
           derniereErreur = e;
         }
       }
@@ -608,20 +607,16 @@
   }
 
   function updateModelUI() {
-    // Nom du modèle dans le bouton
     document.querySelectorAll('.safi-model-name').forEach(function (el) {
       el.textContent = MODELE.name;
     });
-    // Icône du badge
     document.querySelectorAll('.safi-model-badge').forEach(function (el) {
       el.className = MODELE.icon + ' safi-model-badge';
     });
-    // Options actives
     document.querySelectorAll('.safi-model-option').forEach(function (opt) {
       if (opt.getAttribute('data-model') === MODELE.id) opt.classList.add('active');
       else opt.classList.remove('active');
     });
-    // Status
     setStatus('ready', 'En ligne · ' + MODELE.name);
   }
 
@@ -635,7 +630,6 @@
     updateModelUI();
     closeModelDropdown();
 
-    // Info dans le chat : le changement s'applique aux prochains messages
     var body = document.getElementById('safiBody');
     if (body && currentConv() && currentConv().messages.length) {
       var notice = document.createElement('div');
@@ -679,7 +673,6 @@
      12. CSS
      ========================================================= */
   var CSS = `
-/* ===== FAB ===== */
 .safi-fab {
   position: fixed; right: 24px; bottom: 24px; z-index: 950;
   width: 60px; height: 60px; border-radius: 50%;
@@ -703,7 +696,6 @@
 .safi-fab.open .safi-fab__icon-close { display: block; }
 .safi-fab.open { transform: rotate(90deg); }
 
-/* ===== Chat ===== */
 .safi-chat {
   background: #252A34; border: 1px solid rgba(212,175,55,.18);
   border-radius: 20px;
@@ -759,44 +751,28 @@
 }
 .safi-head__btn:hover { background: rgba(255,255,255,.05); color: #F4F0E6; border-color: rgba(212,175,55,.35); }
 
-/* ===== Sélecteur de modèle ===== */
-.safi-model-selector {
-  position: relative;
-  flex-shrink: 0;
-}
+.safi-model-selector { position: relative; flex-shrink: 0; }
 .safi-model-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 10px;
-  border-radius: 9px;
+  padding: 6px 10px; border-radius: 9px;
   background: rgba(212,175,55,.1);
   border: 1px solid rgba(212,175,55,.3);
-  color: #F4F0E6;
-  font-family: inherit;
-  font-size: .72rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all .2s;
-  white-space: nowrap;
+  color: #F4F0E6; font-family: inherit; font-size: .72rem; font-weight: 700;
+  cursor: pointer; transition: all .2s; white-space: nowrap;
 }
-.safi-model-btn:hover {
-  background: rgba(212,175,55,.18);
-  border-color: #D4AF37;
-}
+.safi-model-btn:hover { background: rgba(212,175,55,.18); border-color: #D4AF37; }
 .safi-model-badge { color: #D4AF37; font-size: .85em; }
 .safi-model-chevron { color: rgba(244,240,230,.5); font-size: .7em; transition: transform .2s; }
 .safi-model-selector.open .safi-model-chevron { transform: rotate(180deg); }
 
 .safi-model-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
+  position: absolute; top: calc(100% + 8px); right: 0;
   min-width: 280px;
   background: #1a1e25;
   border: 1px solid rgba(212,175,55,.28);
   border-radius: 12px;
   box-shadow: 0 24px 48px -12px rgba(0,0,0,.9);
-  padding: 6px;
-  z-index: 200;
+  padding: 6px; z-index: 200;
   display: none;
   animation: safiFade .18s cubic-bezier(.22,.61,.36,1);
 }
@@ -804,49 +780,18 @@
 
 .safi-model-option {
   display: flex; align-items: flex-start; gap: 10px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background .15s;
-  text-align: left;
-  width: 100%;
-  border: none;
-  background: none;
-  font-family: inherit;
-  color: inherit;
+  padding: 10px 12px; border-radius: 8px;
+  cursor: pointer; transition: background .15s;
+  text-align: left; width: 100%; border: none; background: none;
+  font-family: inherit; color: inherit;
 }
 .safi-model-option:hover { background: rgba(255,255,255,.04); }
 .safi-model-option.active { background: rgba(212,175,55,.1); }
-
-.safi-model-option__icon {
-  color: #D4AF37;
-  font-size: 16px;
-  margin-top: 2px;
-  flex-shrink: 0;
-  width: 18px;
-  text-align: center;
-}
+.safi-model-option__icon { color: #D4AF37; font-size: 16px; margin-top: 2px; flex-shrink: 0; width: 18px; text-align: center; }
 .safi-model-option__info { flex: 1; min-width: 0; }
-.safi-model-option__name {
-  font-size: .86rem;
-  font-weight: 700;
-  color: #fff;
-  display: block;
-  margin-bottom: 3px;
-}
-.safi-model-option__desc {
-  font-size: .7rem;
-  color: rgba(244,240,230,.55);
-  line-height: 1.4;
-  display: block;
-}
-.safi-model-option__check {
-  color: #D4AF37;
-  font-size: 14px;
-  margin-top: 4px;
-  opacity: 0;
-  flex-shrink: 0;
-}
+.safi-model-option__name { font-size: .86rem; font-weight: 700; color: #fff; display: block; margin-bottom: 3px; }
+.safi-model-option__desc { font-size: .7rem; color: rgba(244,240,230,.55); line-height: 1.4; display: block; }
+.safi-model-option__check { color: #D4AF37; font-size: 14px; margin-top: 4px; opacity: 0; flex-shrink: 0; }
 .safi-model-option.active .safi-model-option__check { opacity: 1; }
 
 .safi-model-notice {
@@ -877,11 +822,7 @@
   word-wrap: break-word; overflow-wrap: break-word;
   animation: safiFade .3s cubic-bezier(.22,.61,.36,1);
 }
-.safi-msg--ai {
-  align-self: flex-start;
-  background: rgba(255,255,255,.05); color: #F4F0E6;
-  border-bottom-left-radius: 4px;
-}
+.safi-msg--ai { align-self: flex-start; background: rgba(255,255,255,.05); color: #F4F0E6; border-bottom-left-radius: 4px; }
 .safi-msg--ai p { margin: 0 0 .6em; }
 .safi-msg--ai p:last-child { margin-bottom: 0; }
 .safi-msg--ai ul, .safi-msg--ai ol { margin: .5em 0 .6em 1.3em; }
@@ -890,22 +831,14 @@
 .safi-msg--ai em { font-style: italic; color: #D4AF37; }
 .safi-msg--ai code { background: rgba(212,175,55,.12); color: #D4AF37; padding: 2px 6px; border-radius: 5px; font-size: .85em; }
 .safi-msg--ai a { color: #D4AF37; text-decoration: underline; word-break: break-all; }
-
-.safi-msg--user {
-  align-self: flex-end;
-  background: #D4AF37; color: #111318;
-  border-bottom-right-radius: 4px; font-weight: 500;
-}
+.safi-msg--user { align-self: flex-end; background: #D4AF37; color: #111318; border-bottom-right-radius: 4px; font-weight: 500; }
 
 .safi-typing {
   align-self: flex-start; display: flex; gap: 5px;
   padding: 12px 16px; background: rgba(255,255,255,.05);
   border-radius: 14px; border-bottom-left-radius: 4px;
 }
-.safi-typing span {
-  width: 6px; height: 6px; background: #D4AF37;
-  border-radius: 50%; animation: safiBounce 1.3s infinite ease-in-out both;
-}
+.safi-typing span { width: 6px; height: 6px; background: #D4AF37; border-radius: 50%; animation: safiBounce 1.3s infinite ease-in-out both; }
 .safi-typing span:nth-child(2) { animation-delay: .18s; }
 .safi-typing span:nth-child(3) { animation-delay: .36s; }
 
@@ -922,31 +855,18 @@
 .safi-quick::-webkit-scrollbar-thumb { background: #2f3540; border-radius: 5px; }
 .safi-quick button {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 14px;
-  border-radius: 100px;
+  padding: 7px 14px; border-radius: 100px;
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(212,175,55,.25);
   color: rgba(244,240,230,.78);
-  font-size: .74rem;
-  font-family: inherit;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all .2s;
+  font-size: .74rem; font-family: inherit;
+  cursor: pointer; white-space: nowrap; transition: all .2s;
 }
 .safi-quick button i { font-size: .8em; color: #D4AF37; }
-.safi-quick button:hover {
-  border-color: #D4AF37;
-  color: #D4AF37;
-  background: rgba(212,175,55,.1);
-  transform: translateY(-1px);
-}
+.safi-quick button:hover { border-color: #D4AF37; color: #D4AF37; background: rgba(212,175,55,.1); transform: translateY(-1px); }
 .safi-quick button:hover i { color: #e0bb47; }
 
-.safi-footer {
-  padding: 14px 16px;
-  border-top: 1px solid rgba(255,255,255,.06);
-  background: rgba(0,0,0,.15); flex-shrink: 0;
-}
+.safi-footer { padding: 14px 16px; border-top: 1px solid rgba(255,255,255,.06); background: rgba(0,0,0,.15); flex-shrink: 0; }
 .safi-form { display: flex; gap: 8px; align-items: center; }
 .safi-input {
   flex: 1; padding: 11px 16px; border-radius: 100px;
@@ -969,41 +889,13 @@
 .safi-send:active:not(:disabled) { transform: scale(.92); }
 .safi-send:disabled { background: #2f3540; color: rgba(244,240,230,.42); cursor: not-allowed; }
 
-/* ===== Plein écran ===== */
-.safi-full-wrap {
-  position: fixed; inset: 0;
-  padding: 84px 20px 20px;
-  background: #111318;
-  box-sizing: border-box;
-  z-index: 5;
-  display: flex;
-}
-.safi-app {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 16px;
-  width: 100%;
-  max-width: 1240px;
-  height: 100%;
-  margin: 0 auto;
-  min-height: 0;
-}
-.safi-sidebar {
-  background: #171a21;
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 20px;
-  display: flex; flex-direction: column;
-  overflow: hidden; min-height: 0;
-}
-.safi-sidebar__head {
-  padding: 16px 16px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-}
+.safi-full-wrap { position: fixed; inset: 0; padding: 84px 20px 20px; background: #111318; box-sizing: border-box; z-index: 5; display: flex; }
+.safi-app { display: grid; grid-template-columns: 300px 1fr; gap: 16px; width: 100%; max-width: 1240px; height: 100%; margin: 0 auto; min-height: 0; }
+.safi-sidebar { background: #171a21; border: 1px solid rgba(255,255,255,.06); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.safi-sidebar__head { padding: 16px 16px 14px; border-bottom: 1px solid rgba(255,255,255,.06); }
 .safi-sidebar__new {
-  width: 100%;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 11px 18px;
-  background: #D4AF37; color: #111318;
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 18px; background: #D4AF37; color: #111318;
   border: none; border-radius: 100px;
   font-family: inherit; font-size: .88rem; font-weight: 600;
   cursor: pointer; transition: all .25s;
@@ -1011,17 +903,8 @@
 .safi-sidebar__new:hover { background: #e0bb47; transform: translateY(-1px); box-shadow: 0 10px 24px -10px rgba(212,175,55,.6); }
 .safi-sidebar__new i { font-size: .9em; }
 
-.safi-sidebar__label {
-  padding: 18px 20px 8px;
-  font-size: .68rem; font-weight: 700;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: rgba(244,240,230,.42);
-}
-.safi-sidebar__list {
-  flex: 1; overflow-y: auto;
-  padding: 0 10px 14px;
-  min-height: 0;
-}
+.safi-sidebar__label { padding: 18px 20px 8px; font-size: .68rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: rgba(244,240,230,.42); }
+.safi-sidebar__list { flex: 1; overflow-y: auto; padding: 0 10px 14px; min-height: 0; }
 .safi-sidebar__list::-webkit-scrollbar { width: 6px; }
 .safi-sidebar__list::-webkit-scrollbar-thumb { background: #2f3540; border-radius: 6px; }
 
@@ -1029,41 +912,21 @@
   display: flex; align-items: center; gap: 10px;
   padding: 10px 12px; border-radius: 10px;
   font-size: .86rem; color: rgba(244,240,230,.62);
-  cursor: pointer;
-  transition: background .2s, color .2s;
-  overflow: hidden;
+  cursor: pointer; transition: background .2s, color .2s; overflow: hidden;
 }
 .safi-conv:hover { background: rgba(244,240,230,.04); color: #F4F0E6; }
 .safi-conv.active { background: rgba(212,175,55,.12); color: #F4F0E6; }
 .safi-conv__title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.safi-conv__del {
-  opacity: 0; font-size: 16px; line-height: 1;
-  color: rgba(244,240,230,.42); background: none; border: none;
-  cursor: pointer; padding: 2px 4px;
-  transition: opacity .2s, color .2s;
-}
+.safi-conv__del { opacity: 0; font-size: 16px; line-height: 1; color: rgba(244,240,230,.42); background: none; border: none; cursor: pointer; padding: 2px 4px; transition: opacity .2s, color .2s; }
 .safi-conv:hover .safi-conv__del { opacity: 1; }
 .safi-conv__del:hover { color: #ff6b6b; }
 
-.safi-sidebar__foot {
-  padding: 14px 18px;
-  border-top: 1px solid rgba(255,255,255,.06);
-  font-size: .72rem;
-  color: rgba(244,240,230,.42);
-  display: flex; align-items: center; gap: 8px;
-}
-.safi-sidebar__foot .dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #10b981; box-shadow: 0 0 10px #10b981; flex-shrink: 0;
-}
+.safi-sidebar__foot { padding: 14px 18px; border-top: 1px solid rgba(255,255,255,.06); font-size: .72rem; color: rgba(244,240,230,.42); display: flex; align-items: center; gap: 8px; }
+.safi-sidebar__foot .dot { width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981; flex-shrink: 0; }
 .safi-sidebar__foot .dot.loading { background: #D4AF37; box-shadow: 0 0 10px #D4AF37; animation: safiPulse 1.4s ease-in-out infinite; }
 .safi-sidebar__foot .dot.error { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
 
-.safi-app .safi-chat {
-  position: relative;
-  width: 100%; height: 100%;
-  min-height: 0;
-}
+.safi-app .safi-chat { position: relative; width: 100%; height: 100%; min-height: 0; }
 .safi-app .safi-chat .safi-head { padding: 16px 22px; }
 .safi-app .safi-chat .safi-body { padding: 24px 22px; gap: 18px; }
 .safi-app .safi-chat .safi-msg { max-width: 78%; font-size: .95rem; padding: 13px 18px; }
@@ -1072,28 +935,16 @@
 
 .safi-mobile-menu-btn { display: none; margin-left: auto; }
 
-/* ===== Animations ===== */
-@keyframes safiFade {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes safiBounce {
-  0%, 80%, 100% { transform: scale(0); opacity: .5; }
-  40% { transform: scale(1); opacity: 1; }
-}
-@keyframes safiPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .45; }
-}
+@keyframes safiFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes safiBounce { 0%, 80%, 100% { transform: scale(0); opacity: .5; } 40% { transform: scale(1); opacity: 1; } }
+@keyframes safiPulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
 
-/* ===== Responsive ===== */
 @media (max-width: 900px) {
   .safi-app { grid-template-columns: 1fr; }
   .safi-sidebar {
     position: fixed;
     top: 84px; left: 20px; bottom: 20px;
-    width: 300px;
-    max-width: calc(100vw - 40px);
+    width: 300px; max-width: calc(100vw - 40px);
     z-index: 20;
     transform: translateX(calc(-100% - 30px));
     transition: transform .35s cubic-bezier(.22,.61,.36,1);
@@ -1106,10 +957,7 @@
 @media (max-width: 600px) {
   .safi-model-name { display: none; }
   .safi-model-btn { padding: 6px 9px; }
-  .safi-model-btn::before {
-    content: attr(data-version);
-    font-weight: 700;
-  }
+  .safi-model-btn::before { content: attr(data-version); font-weight: 700; }
   .safi-model-dropdown { min-width: 260px; right: -40px; }
 }
 
