@@ -880,6 +880,39 @@
   .safi-app .safi-chat .safi-footer { padding: 12px 14px 14px; }
   .safi-sidebar { top: 76px; left: 10px; bottom: 10px; width: 280px; }
 }
+
+/* =========================================================
+   MOBILE : clavier virtuel et zones sûres
+   ========================================================= */
+:root { --safi-sb: env(safe-area-inset-bottom, 0px); }
+html.safi-kb-open { --safi-sb: 0px; }
+.safi-fab {
+  right: calc(24px + env(safe-area-inset-right, 0px));
+  bottom: calc(24px + var(--safi-sb));
+}
+html:has(.mobile-menu.open) .safi-fab { opacity: 0; pointer-events: none; }
+html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: var(--safi-vh, 100vh); }
+@media (max-width: 480px), (max-height: 520px) {
+  .safi-fab {
+    right: calc(16px + env(safe-area-inset-right, 0px));
+    bottom: calc(16px + var(--safi-sb));
+    transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s cubic-bezier(.22,.61,.36,1), opacity .2s;
+  }
+  html.safi-kb-open .safi-fab { opacity: 0; pointer-events: none; }
+  .safi-chat--float {
+    left: calc(8px + env(safe-area-inset-left, 0px));
+    right: calc(8px + env(safe-area-inset-right, 0px));
+    width: auto; max-width: none;
+    bottom: calc(84px + var(--safi-kb, 0px) + var(--safi-sb));
+    height: calc(var(--safi-vh, 100vh) - 84px - var(--safi-sb) - 12px);
+    max-height: none;
+  }
+  html.safi-kb-open .safi-chat--float {
+    bottom: calc(var(--safi-kb, 0px) + 8px);
+    height: calc(var(--safi-vh, 100vh) - 16px);
+  }
+  .safi-input { font-size: 16px; }
+}
 `;
 
   /* =========================================================
@@ -1129,6 +1162,39 @@
   }
 
   /* =========================================================
+     13b. CLAVIER MOBILE — synchronisation avec le viewport visuel
+     ========================================================= */
+  function synchroniserClavier() {
+    var vv = window.visualViewport;
+    if (!vv) return;
+    var root = document.documentElement;
+    var raf = 0;
+    function maj() {
+      raf = 0;
+      var zoom = vv.scale > 1.01;
+      var vh = zoom ? window.innerHeight : vv.height;
+      var vt = zoom ? 0 : vv.offsetTop;
+      var kb = zoom ? 0 : Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+      root.style.setProperty('--safi-vh', Math.round(vh) + 'px');
+      root.style.setProperty('--safi-vt', Math.round(vt) + 'px');
+      root.style.setProperty('--safi-kb', kb + 'px');
+      root.classList.add('safi-vv');
+      var ouvert = kb > 80;
+      var etait = root.classList.contains('safi-kb-open');
+      root.classList.toggle('safi-kb-open', ouvert);
+      if (ouvert !== etait) {
+        var corps = document.querySelector('.safi-body');
+        if (corps) corps.scrollTop = corps.scrollHeight;
+      }
+    }
+    function planifier() { if (!raf) raf = requestAnimationFrame(maj); }
+    vv.addEventListener('resize', planifier);
+    vv.addEventListener('scroll', planifier);
+    window.addEventListener('orientationchange', function () { setTimeout(maj, 250); });
+    maj();
+  }
+
+  /* =========================================================
      14. INIT
      ========================================================= */
   function demarrer() {
@@ -1136,6 +1202,7 @@
     style.id = 'safiStyles';
     style.textContent = CSS;
     document.head.appendChild(style);
+    synchroniserClavier();
 
     loadState();
 
