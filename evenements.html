@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Découvrez tous les événements publiés sur bTicket — concerts, festivals, conférences et rencontres sportives partout en Afrique.">
+<title>Événements — bTicket</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   2. RESET & TOKENS
+   ========================================================= */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --noir:       #111318;
+  --anthracite: #252A34;
+  --or:         #D4AF37;
+  --ivoire:     #F4F0E6;
+  --blanc:      #FFFFFF;
+
+  --noir-soft:   #171a21;
+  --anthracite-2:#2f3540;
+  --line:        rgba(212,175,55,.18);
+  --line-soft:   rgba(255,255,255,.06);
+  --texte-muted: rgba(244,240,230,.62);
+  --texte-faint: rgba(244,240,230,.42);
+
+  --font: 'Montserrat', system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --max: 1240px;
+  --radius: 20px;
+  --radius-sm: 14px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+body {
+  background: var(--noir);
+  color: var(--ivoire);
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+ul { list-style: none; }
+input, select { font-family: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--blanc);
+}
+
+::selection { background: var(--or); color: var(--noir); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--noir); }
+::-webkit-scrollbar-thumb { background: var(--anthracite-2); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--or); }
+
+/* =========================================================
+   3. HELPERS
+   ========================================================= */
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.section { padding: 130px 0; position: relative; }
+.section--compact { padding: 90px 0; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 22px;
+}
+.eyebrow::before {
+  content: "";
+  width: 32px; height: 1px;
+  background: var(--or);
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  margin-bottom: 18px;
+  line-height: 1.1;
+}
+
+.gold { color: var(--or); }
+
+/* =========================================================
+   4. BOUTONS
+   ========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border-radius: 100px;
+  font-size: .94rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease),
+              background .3s var(--ease), color .3s var(--ease),
+              border-color .3s var(--ease);
+  white-space: nowrap;
+}
+.btn svg { width: 16px; height: 16px; transition: transform .3s var(--ease); }
+
+.btn--primary { background: var(--or); color: var(--noir); }
+.btn--primary:hover {
+  background: #e0bb47;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -14px rgba(212,175,55,.75);
+}
+.btn--primary:hover svg { transform: translateX(3px); }
+
+.btn--ghost {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(244,240,230,.22);
+  color: var(--ivoire);
+  backdrop-filter: blur(10px);
+}
+.btn--ghost:hover { border-color: var(--or); color: var(--or); transform: translateY(-2px); }
+
+.btn--sm { height: 40px; padding: 0 20px; font-size: .84rem; }
+
+/* =========================================================
+   5. PROGRESS + NAVIGATION
+   ========================================================= */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px; width: 0%;
+  background: var(--or);
+  z-index: 1000;
+  transition: width .1s linear;
+}
+
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  padding: 20px 0;
+  transition: padding .35s var(--ease), background .35s var(--ease),
+              border-color .35s var(--ease), backdrop-filter .35s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  padding: 12px 0;
+  background: rgba(17,19,24,.85);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-bottom-color: var(--line);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.brand img { height: 36px; width: auto; object-fit: contain; }
+.brand__text {
+  font-weight: 700;
+  font-size: 1.18rem;
+  letter-spacing: -.015em;
+  color: var(--blanc);
+}
+.brand__text span { color: var(--or); }
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+.nav__links a {
+  padding: 9px 14px;
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--texte-muted);
+  border-radius: 100px;
+  transition: color .3s var(--ease), background .3s var(--ease);
+}
+.nav__links a:hover { color: var(--blanc); background: rgba(244,240,230,.05); }
+.nav__links a.active { color: var(--or); }
+
+.nav__cta { display: flex; align-items: center; gap: 12px; }
+
+.burger {
+  display: none;
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  position: relative;
+  flex-shrink: 0;
+}
+.burger span {
+  position: absolute;
+  left: 50%;
+  width: 18px; height: 1.8px;
+  background: var(--ivoire);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: transform .35s var(--ease), opacity .25s var(--ease), top .35s var(--ease);
+}
+.burger span:nth-child(1) { top: 16px; }
+.burger span:nth-child(2) { top: 21px; }
+.burger span:nth-child(3) { top: 26px; }
+.burger.open span:nth-child(1) { top: 21px; transform: translateX(-50%) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { top: 21px; transform: translateX(-50%) rotate(-45deg); }
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 890;
+  background: var(--noir);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 32px 48px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s var(--ease), visibility .4s var(--ease);
+}
+.mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-menu a {
+  display: block;
+  font-size: clamp(1.02rem, 4.2vw, 1.2rem);
+  font-weight: 500;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--ivoire);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform .45s var(--ease), opacity .45s var(--ease), color .3s;
+}
+.mobile-menu.open a { transform: translateY(0); opacity: 1; }
+.mobile-menu a:hover { color: var(--or); }
+.mobile-menu .btn { margin-top: 30px; width: 100%; }
+
+/* =========================================================
+   6. HERO — Événements (court, image floutée, pas de vidéo)
+   ========================================================= */
+.hero-ev {
+  position: relative;
+  min-height: 55svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 140px 0 70px;
+}
+.hero-ev__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("IMAGES/02. events-atmosphere.jpg");
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  filter: blur(2px);
+  transform: scale(1.05);
+}
+.hero-ev__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(17,19,24,.7) 0%, rgba(17,19,24,.88) 55%, rgba(17,19,24,1) 100%);
+}
+.hero-ev__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+}
+.hero-ev__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ivoire);
+  margin-bottom: 24px;
+  animation: fadeUp .8s var(--ease) both;
+}
+.hero-ev__tag i {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--or);
+  box-shadow: 0 0 12px var(--or);
+  animation: pulse 2s ease-in-out infinite;
+}
+.hero-ev h1 {
+  font-size: clamp(2.2rem, 5.6vw, 4.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 18px;
+  animation: fadeUp .9s .08s var(--ease) both;
+}
+.hero-ev h1 em { font-style: normal; color: var(--or); }
+.hero-ev p {
+  font-size: clamp(1rem, 1.4vw, 1.12rem);
+  color: rgba(244,240,230,.78);
+  max-width: 560px;
+  animation: fadeUp .9s .16s var(--ease) both;
+}
+
+/* =========================================================
+   7. FILTRES (sticky sous la nav)
+   ========================================================= */
+.filters {
+  position: sticky;
+  top: 68px;
+  z-index: 800;
+  background: rgba(17,19,24,.92);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-bottom: 1px solid var(--line-soft);
+  padding: 16px 0;
+  transition: top .35s var(--ease);
+}
+body.nav-scrolled .filters { top: 62px; }
+
+.filters__row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.filters__cats {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.filters__cats::-webkit-scrollbar { display: none; }
+
+.cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--line-soft);
+  color: var(--texte-muted);
+  font-size: .82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all .25s var(--ease);
+}
+.cat-pill:hover { color: var(--blanc); border-color: rgba(212,175,55,.4); }
+.cat-pill.active {
+  background: var(--or);
+  border-color: var(--or);
+  color: var(--noir);
+}
+
+.filters__selects {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.filters__select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 9px 32px 9px 14px;
+  border-radius: 100px;
+  background: rgba(255,255,255,.04);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  border: 1px solid var(--line-soft);
+  color: var(--ivoire);
+  font-size: .82rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: border-color .25s var(--ease);
+  min-width: 130px;
+}
+.filters__select:hover, .filters__select:focus { border-color: rgba(212,175,55,.4); }
+.filters__select option { background: var(--anthracite); color: var(--ivoire); }
+
+.filters__search {
+  position: relative;
+  flex-shrink: 0;
+}
+.filters__search input {
+  width: 220px;
+  padding: 9px 14px 9px 38px;
+  border-radius: 100px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--line-soft);
+  color: var(--ivoire);
+  font-size: .82rem;
+  outline: none;
+  transition: border-color .25s var(--ease), width .3s var(--ease);
+}
+.filters__search input::placeholder { color: var(--texte-faint); }
+.filters__search input:focus { border-color: rgba(212,175,55,.55); }
+.filters__search svg {
+  position: absolute;
+  left: 14px; top: 50%;
+  transform: translateY(-50%);
+  width: 14px; height: 14px;
+  color: var(--texte-faint);
+  pointer-events: none;
+}
+
+/* =========================================================
+   8. GRILLE D'ÉVÉNEMENTS
+   ========================================================= */
+.events-section { padding: 60px 0 100px; }
+
+.events-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.events-count {
+  font-size: .88rem;
+  color: var(--texte-muted);
+}
+.events-count b { color: var(--or); font-weight: 700; }
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+/* Carte événement */
+.event-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform .4s var(--ease), border-color .4s var(--ease),
+              box-shadow .4s var(--ease);
+  animation: cardIn .45s var(--ease) both;
+}
+.event-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212,175,55,.4);
+  box-shadow: 0 24px 48px -24px rgba(0,0,0,.75);
+}
+
+.event-card__media {
+  position: relative;
+  background: #0d0f14;
+  overflow: hidden;
+}
+.event-card__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 1.2s var(--ease);
+}
+.event-card:hover .event-card__media img { transform: scale(1.05); }
+
+.event-card__badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  z-index: 2;
+  padding: 5px 12px;
+  border-radius: 100px;
+  background: rgba(17,19,24,.85);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--or);
+  line-height: 1.2;
+}
+
+.event-card__date {
+  position: absolute;
+  top: 12px; right: 12px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  padding: 8px 8px 7px;
+  border-radius: 12px;
+  background: var(--or);
+  color: var(--noir);
+  line-height: 1;
+}
+.event-card__date b {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+.event-card__date span {
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-top: 3px;
+  opacity: .8;
+}
+
+.event-card__body {
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.event-card__title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--blanc);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.event-card__location {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .8rem;
+  color: var(--texte-muted);
+}
+.event-card__location svg {
+  width: 13px; height: 13px;
+  color: var(--or);
+  flex-shrink: 0;
+}
+
+.event-card__desc {
+  font-size: .84rem;
+  color: var(--texte-muted);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.event-card__desc strong { color: var(--ivoire); font-weight: 700; }
+.event-card__desc em { color: var(--or); font-style: italic; }
+
+.event-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.event-card__price {
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--or);
+}
+
+.event-card__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  background: var(--or);
+  color: var(--noir);
+  font-size: .78rem;
+  font-weight: 700;
+  transition: background .25s var(--ease), transform .2s var(--ease);
+}
+.event-card__cta:hover { background: #e0bb47; transform: translateX(2px); }
+.event-card__cta svg { width: 12px; height: 12px; }
+
+/* Skeleton */
+.event-card--skeleton {
+  min-height: 380px;
+  position: relative;
+  overflow: hidden;
+}
+.event-card--skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.05) 50%, transparent 100%);
+  animation: shimmer 1.6s infinite;
+}
+
+/* État vide */
+.events-empty {
+  display: none;
+  padding: 80px 24px;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.015);
+}
+.events-empty.is-visible { display: block; }
+.events-empty svg {
+  width: 32px; height: 32px;
+  color: var(--or);
+  opacity: .7;
+  margin: 0 auto 18px;
+}
+.events-empty p {
+  color: var(--ivoire);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.events-empty small {
+  color: var(--texte-faint);
+  font-size: .88rem;
+  line-height: 1.5;
+  display: block;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   9. PETIT CTA FINAL
+   ========================================================= */
+.simple-cta {
+  padding: 80px 0;
+  text-align: center;
+  border-top: 1px solid var(--line-soft);
+  background: var(--noir-soft);
+}
+.simple-cta p {
+  color: var(--texte-muted);
+  font-size: 1rem;
+  margin-bottom: 20px;
+  max-width: 540px;
+  margin-inline: auto;
+}
+.simple-cta p b { color: var(--ivoire); font-weight: 600; }
+
+/* =========================================================
+   10. FOOTER
+   ========================================================= */
+.footer {
+  padding: 80px 0 34px;
+  background: var(--noir);
+  border-top: 1px solid var(--line-soft);
+}
+.footer__top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+  gap: 44px;
+  padding-bottom: 52px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.footer__brand p {
+  color: var(--texte-muted);
+  font-size: .88rem;
+  margin: 20px 0 22px;
+  max-width: 320px;
+}
+.footer__socials { display: flex; gap: 10px; }
+.footer__socials a {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  color: var(--texte-muted);
+  transition: all .3s var(--ease);
+}
+.footer__socials a:hover {
+  background: var(--or);
+  border-color: var(--or);
+  color: var(--noir);
+  transform: translateY(-3px);
+}
+.footer__socials svg { width: 17px; height: 17px; }
+
+.footer__col h4 {
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 18px;
+}
+.footer__col ul { display: flex; flex-direction: column; gap: 11px; }
+.footer__col a {
+  font-size: .88rem;
+  color: var(--texte-muted);
+  transition: color .3s var(--ease), padding-left .3s var(--ease);
+}
+.footer__col a:hover { color: var(--or); padding-left: 4px; }
+
+.footer__bottom {
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: .82rem;
+  color: var(--texte-faint);
+}
+
+/* =========================================================
+   11. ANIMATIONS
+   ========================================================= */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .6; transform: scale(1.2); }
+}
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity .9s var(--ease), transform .9s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.no-js .reveal { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  .event-card { animation: none !important; }
+}
+
+/* =========================================================
+   12. RESPONSIVE
+   ========================================================= */
+@media (max-width: 1080px) {
+  .nav__links { display: none; }
+  .burger { display: block; }
+  .nav__cta .btn { display: none; }
+
+  .events-grid { grid-template-columns: 1fr 1fr; }
+
+  .filters__selects { order: 3; width: 100%; }
+  .filters__select { flex: 1; min-width: 0; }
+  .filters__search { order: 4; width: 100%; }
+  .filters__search input { width: 100%; }
+
+  .footer__top { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer__brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 720px) {
+  .section { padding: 88px 0; }
+  .section--compact { padding: 70px 0; }
+  .container { padding-inline: 20px; }
+
+  .hero-ev { min-height: 45svh; padding: 120px 0 50px; }
+
+  .filters { top: 62px; padding: 12px 0; }
+  .filters__cats { gap: 4px; }
+  .cat-pill { padding: 7px 13px; font-size: .78rem; }
+
+  .events-section { padding: 40px 0 80px; }
+  .events-grid { grid-template-columns: 1fr; }
+
+  .simple-cta { padding: 60px 0; }
+
+  .footer__top { grid-template-columns: 1fr; gap: 32px; }
+  .footer__bottom { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .brand img { height: 32px; }
+  .brand__text { font-size: 1.05rem; }
+  h1 { font-size: clamp(2rem, 8.8vw, 2.5rem); }
+}
+
+/* =========================================================
+   13. CORRECTIFS — nav étendue, boutons, gouttière mobile
+   ========================================================= */
+:root { --gutter: 24px; }
+@media (max-width: 720px) { :root { --gutter: 20px; } }
+@media (max-width: 480px) { :root { --gutter: 26px; } }
+.container {
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+
+.btn { min-height: 50px; line-height: 1.2; }
+.btn--sm { height: 40px; min-height: 40px; padding: 0 20px; font-size: .84rem; line-height: 1; }
+.nav .btn { transform: none; }
+.nav .btn:hover { transform: none; box-shadow: none; }
+
+.nav__links { gap: 0; }
+.nav__links a, .nav__more-btn {
+  padding: 8px 10px;
+  font-size: .8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.nav__more { position: relative; display: none; }
+.nav__more-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--texte-muted);
+  border-radius: 100px;
+  transition: color .3s var(--ease), background .3s var(--ease);
+}
+.nav__more-btn:hover, .nav__more.open .nav__more-btn { color: var(--blanc); background: rgba(244,240,230,.05); }
+.nav__more-btn.active { color: var(--or); }
+.nav__more-btn svg { width: 11px; height: 11px; transition: transform .3s var(--ease); }
+.nav__more.open .nav__more-btn svg { transform: rotate(180deg); }
+.nav__more-menu {
+  position: absolute; top: calc(100% + 10px); right: 0;
+  min-width: 170px; padding: 8px;
+  background: var(--anthracite);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 24px 48px -20px rgba(0,0,0,.8);
+  opacity: 0; visibility: hidden; transform: translateY(6px);
+  transition: opacity .25s var(--ease), transform .25s var(--ease), visibility .25s;
+}
+.nav__more.open .nav__more-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+.nav__more-menu a { display: block; padding: 10px 14px; border-radius: 10px; }
+@media (min-width: 1081px) and (max-width: 1359px) {
+  .nav__links a.nav__sec { display: none; }
+  .nav__more { display: block; }
+  .nav__inner { gap: 16px; }
+}
+@media (min-width: 1081px) and (max-width: 1199px) {
+  .nav__links a, .nav__more-btn { padding: 8px 8px; font-size: .78rem; }
+  .nav__cta .btn { padding: 0 14px; }
+}
+@media (min-width: 1360px) {
+  .nav__links a, .nav__more-btn { padding: 8px 11px; font-size: .82rem; }
+}
+
+.mobile-menu {
+  justify-content: flex-start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 84px 28px calc(24px + env(safe-area-inset-bottom, 0px));
+}
+.mobile-menu > a:first-child { margin-top: auto; }
+.mobile-menu > .btn { margin-top: 20px; margin-bottom: auto; flex-shrink: 0; }
+.mobile-menu > a:not(.btn) { flex-shrink: 0; }
+.mobile-menu a.active { color: var(--or); }
+.mobile-menu a.btn { display: inline-flex; color: var(--noir); border-bottom: none; padding: 0 30px; }
+.mobile-menu a.btn:hover { color: var(--noir); }
+
+@media (max-width: 480px) {
+  h1 { font-size: clamp(2rem, 8.8vw, 2.5rem); line-height: 1.08; }
+  .section-title { font-size: clamp(1.6rem, 7vw, 2rem); }
+  main p { line-height: 1.7; }
+  h1, h2, h3, p, li { overflow-wrap: break-word; }
+}
+</style>
+</head>
+<body class="no-js">
+
+<!-- ===================== PROGRESS ===================== -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ===================== NAVIGATION ===================== -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand">
+      <img src="IMAGES/logo.png" alt="bTicket">
+      <span class="brand__text">b<span>Ticket</span></span>
+    </a>
+
+    <nav class="nav__links" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="evenements.html" class="active">Événements</a>
+      <a href="application.html">Application</a>
+      <a href="organisateurs.html">Organisateurs</a>
+      <a href="agents.html">Agents</a>
+      <a href="tarifs.html">Tarifs</a>
+      <a href="actualites.html">Actualités</a>
+      <a href="blog.html">Blog</a>
+      <a href="a-propos.html" class="nav__sec">À propos</a>
+      <a href="assistant.html" class="nav__sec">Assistant</a>
+      <div class="nav__more">
+        <button type="button" class="nav__more-btn" aria-haspopup="true" aria-expanded="false" aria-controls="navMore">Plus <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nav__more-menu" id="navMore">
+          <a href="a-propos.html">À propos</a>
+          <a href="assistant.html">Assistant</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="nav__cta">
+      <a href="telecharger.html" class="btn btn--primary btn--sm">
+        Télécharger
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== MOBILE MENU ===================== -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Accueil</a>
+  <a href="evenements.html" class="active">Événements</a>
+  <a href="application.html">Application</a>
+  <a href="organisateurs.html">Organisateurs</a>
+  <a href="agents.html">Agents</a>
+  <a href="tarifs.html">Tarifs</a>
+  <a href="actualites.html">Actualités</a>
+  <a href="blog.html">Blog</a>
+  <a href="a-propos.html">À propos</a>
+  <a href="assistant.html">Assistant</a>
+  <a href="telecharger.html" class="btn btn--primary">Télécharger l'app</a>
+</div>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero-ev">
+  <div class="hero-ev__bg"></div>
+  <div class="hero-ev__overlay"></div>
+
+  <div class="container hero-ev__inner">
+    <div class="hero-ev__tag">
+      <i></i>
+      Agenda bTicket
+    </div>
+    <h1>Tous les <em>événements.</em></h1>
+    <p>
+      Concerts, festivals, conférences, rencontres sportives —
+      retrouvez tout ce qui fait vibrer l'Afrique, au même endroit.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== FILTRES ===================== -->
+<section class="filters" aria-label="Filtres">
+  <div class="container">
+    <div class="filters__row">
+
+      <div class="filters__cats" role="group" aria-label="Catégories">
+        <button type="button" class="cat-pill active" data-cat="all">Tout</button>
+        <button type="button" class="cat-pill" data-cat="concert">Concerts</button>
+        <button type="button" class="cat-pill" data-cat="festival">Festivals</button>
+        <button type="button" class="cat-pill" data-cat="conference">Conférences</button>
+        <button type="button" class="cat-pill" data-cat="sport">Sport</button>
+        <button type="button" class="cat-pill" data-cat="autre">Autres</button>
+      </div>
+
+      <div class="filters__selects">
+        <select class="filters__select" id="filterCity" aria-label="Ville">
+          <option value="all">Toutes les villes</option>
+        </select>
+        <select class="filters__select" id="filterPeriod" aria-label="Période">
+          <option value="upcoming">À venir</option>
+          <option value="weekend">Ce week-end</option>
+          <option value="month">Ce mois</option>
+          <option value="all">Toutes les dates</option>
+        </select>
+      </div>
+
+      <div class="filters__search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input type="search" id="filterSearch" placeholder="Rechercher un événement…" autocomplete="off">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GRILLE D'ÉVÉNEMENTS ===================== -->
+<section class="events-section">
+  <div class="container">
+
+    <div class="events-meta">
+      <span class="events-count" id="eventsCount" aria-live="polite">
+        Chargement des événements…
+      </span>
+    </div>
+
+    <!-- Grille (dynamique) -->
+    <div class="events-grid" id="eventsGrid" aria-live="polite">
+      <article class="event-card event-card--skeleton" aria-hidden="true"></article>
+      <article class="event-card event-card--skeleton" aria-hidden="true"></article>
+      <article class="event-card event-card--skeleton" aria-hidden="true"></article>
+    </div>
+
+    <!-- État vide -->
+    <div class="events-empty" id="eventsEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="4.5" width="18" height="16" rx="2.5"/>
+        <path d="M8 2.5v4M16 2.5v4M3 10h18"/>
+      </svg>
+      <p>Aucun événement ne correspond à votre recherche.</p>
+      <small>Essayez d'élargir vos filtres ou revenez bientôt : de nouveaux événements sont publiés régulièrement.</small>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== PETIT CTA ===================== -->
+<section class="simple-cta">
+  <div class="container">
+    <p>
+      Vous organisez un événement et souhaitez le rendre visible ?
+      <b>Publiez-le sur bTicket</b> en quelques minutes.
+    </p>
+    <a href="organisateurs.html" class="btn btn--ghost">
+      Devenir organisateur
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="index.html" class="brand">
+          <img src="IMAGES/logo.png" alt="bTicket">
+          <span class="brand__text">b<span>Ticket</span></span>
+        </a>
+        <p>La plateforme africaine de billetterie numérique. Achetez, gérez et validez vos billets en toute simplicité.</p>
+        <div class="footer__socials">
+          <a href="https://wa.me/25776389163" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.89-9.89 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 7c0 5.45-4.44 9.88-9.88 9.88zM20.46 3.49A11.8 11.8 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.48-8.42z"/></svg></a>
+          <a href="https://www.facebook.com/bTicket-Africa" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3 0-1.3-.1-2.45-.1-2.4 0-4.05 1.5-4.05 4.2v2.2H7.5V14h2.7v8h3.3z"/></svg></a>
+          <a href="https://www.instagram.com/bTicket-Africa" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://x.com/bTicket-Africa" target="_blank" rel="noopener noreferrer" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 3h3l-6.6 7.6L21.7 21h-5.9l-4.3-5.6L6.4 21H3.3l7-8.1L2.7 3h6l3.9 5.2L17.5 3zm-1 16h1.6L7.6 4.6H5.9L16.5 19z"/></svg></a>
+          <a href="https://www.linkedin.com/company/bTicket-Africa" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3V9.5zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-4.9c0-1.17-.02-2.68-1.7-2.68-1.7 0-1.96 1.28-1.96 2.6V21h-4V9.5z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="evenements.html">Événements</a></li>
+          <li><a href="application.html">Application</a></li>
+          <li><a href="actualites.html">Actualités</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="assistant.html">Assistant</a></li>
+          <li><a href="telecharger.html">Télécharger</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Ressources</h4>
+        <ul>
+          <li><a href="application.html">Fonctionnalités</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="conditions-utilisation.html">Conditions d'utilisation</a></li>
+          <li><a href="politique-remboursement.html">Politique de remboursement</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© <span id="year"></span> bTicket. Tous droits réservés.</span>
+      <span>Conçu pour l'Afrique</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script>
+document.body.classList.remove('no-js');
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const nav = document.getElementById('nav');
+const progressBar = document.getElementById('progressBar');
+
+function onScroll() {
+  const y = window.scrollY;
+  const scrolled = y > 40;
+  nav.classList.toggle('scrolled', scrolled);
+  document.body.classList.toggle('nav-scrolled', scrolled);
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileLinks = mobileMenu.querySelectorAll('a');
+
+function toggleMenu(force) {
+  const open = force !== undefined ? force : !mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', open);
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+  document.body.style.overflow = open ? 'hidden' : '';
+  mobileLinks.forEach((link, i) => {
+    link.style.transitionDelay = open ? (0.05 * i + 0.08) + 's' : '0s';
+  });
+}
+burger.addEventListener('click', () => toggleMenu());
+mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleMenu(false); });
+
+const revealObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+
+<script>
+(function () {
+  var w = document.querySelector('.nav__more');
+  if (!w) return;
+  var b = w.querySelector('.nav__more-btn');
+  function set(o) { w.classList.toggle('open', o); b.setAttribute('aria-expanded', o ? 'true' : 'false'); }
+  b.addEventListener('click', function (e) { e.stopPropagation(); set(!w.classList.contains('open')); });
+  document.addEventListener('click', function (e) { if (!w.contains(e.target)) set(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+  w.addEventListener('focusout', function (e) { if (!w.contains(e.relatedTarget)) set(false); });
+})();
+</script>
+
+<script src="safi-ai.js" defer></script>
+
+<!-- =========================================================
+     CHARGEMENT + FILTRES + GRILLE DYNAMIQUE
+     ========================================================= -->
+<script>
+window.__bticketEventsLoaded = false;
+window.addEventListener('load', function () {
+  setTimeout(function () {
+    if (window.__bticketEventsLoaded) return;
+    var grid = document.getElementById('eventsGrid');
+    var empty = document.getElementById('eventsEmpty');
+    var count = document.getElementById('eventsCount');
+    if (grid) { grid.innerHTML = ''; grid.style.display = 'none'; }
+    if (empty) empty.classList.add('is-visible');
+    if (count) count.textContent = 'Aucun événement disponible pour le moment.';
+  }, 8000);
+});
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBcf1eysXtdI5vOgI02yd8sCFs3wGWJ90A",
+  authDomain: "bticket-burundi.firebaseapp.com",
+  databaseURL: "https://bticket-burundi-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "bticket-burundi",
+  storageBucket: "bticket-burundi.firebasestorage.app",
+  messagingSenderId: "407762427157",
+  appId: "1:407762427157:web:1e0f2ef5458fdbaa575d1c",
+  measurementId: "G-J60JBTZ647"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+/* ---------- Helpers ---------- */
+function esc(t) {
+  if (t == null) return '';
+  return String(t)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatCaption(text) {
+  if (text == null) return '';
+  let html = String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+function formatPrice(price) {
+  if (price == null || price === 0 || price === '') return 'Gratuit';
+  const n = Number(price);
+  if (!isFinite(n) || n <= 0) return 'Gratuit';
+  return 'Dès ' + new Intl.NumberFormat('fr-FR').format(n) + ' FBU';
+}
+
+function parseDate(iso) {
+  if (!iso) return null;
+  try {
+    const d = new Date(iso);
+    return isNaN(d) ? null : d;
+  } catch { return null; }
+}
+
+function dateBlockParts(d) {
+  if (!d) return { day: '—', month: '' };
+  return {
+    day: String(d.getDate()),
+    month: d.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '').toUpperCase()
+  };
+}
+
+const PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const FALLBACK_IMG = 'IMAGES/02. events-atmosphere.jpg';
+
+/* ---------- État ---------- */
+let allEvents = [];
+let activeCategory = 'all';
+const citySelect   = document.getElementById('filterCity');
+const periodSelect = document.getElementById('filterPeriod');
+const searchInput  = document.getElementById('filterSearch');
+const grid         = document.getElementById('eventsGrid');
+const empty        = document.getElementById('eventsEmpty');
+const countEl      = document.getElementById('eventsCount');
+
+/* ---------- Normalisation des catégories ---------- */
+function normalizeCategory(raw) {
+  if (!raw) return 'autre';
+  const s = String(raw).toLowerCase().trim();
+  if (s.startsWith('concert'))   return 'concert';
+  if (s.startsWith('festival'))  return 'festival';
+  if (s.startsWith('conf') || s.startsWith('forum') || s.startsWith('sémin') || s.startsWith('sem')) return 'conference';
+  if (s.startsWith('sport') || s.startsWith('match') || s.startsWith('tournoi')) return 'sport';
+  return 'autre';
+}
+
+/* ---------- Filtres ---------- */
+function isThisWeekend(d) {
+  if (!d) return false;
+  const now = new Date();
+  const dow = now.getDay(); // 0 = dim, 6 = sam
+  const diffToSat = (6 - dow + 7) % 7;
+  const saturday = new Date(now);
+  saturday.setDate(now.getDate() + diffToSat);
+  saturday.setHours(0, 0, 0, 0);
+  const sunday = new Date(saturday);
+  sunday.setDate(saturday.getDate() + 1);
+  sunday.setHours(23, 59, 59, 999);
+  return d >= saturday && d <= sunday;
+}
+
+function isThisMonth(d) {
+  if (!d) return false;
+  const now = new Date();
+  return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+}
+
+function isUpcoming(d) {
+  if (!d) return true; // pas de date → on garde
+  return d.getTime() >= Date.now() - 24 * 3600 * 1000; // tolérance 1 jour
+}
+
+function applyFilters() {
+  const city   = citySelect.value;
+  const period = periodSelect.value;
+  const search = searchInput.value.toLowerCase().trim();
+
+  const filtered = allEvents.filter(ev => {
+    const meta = ev.meta || {};
+    const cat = normalizeCategory(meta.category);
+    if (activeCategory !== 'all' && cat !== activeCategory) return false;
+
+    if (city !== 'all' && (meta.location || '') !== city) return false;
+
+    const d = parseDate(meta.date);
+    if (period === 'upcoming' && !isUpcoming(d)) return false;
+    if (period === 'weekend' && !isThisWeekend(d)) return false;
+    if (period === 'month' && !isThisMonth(d)) return false;
+
+    if (search) {
+      const hay = ((ev.title || '') + ' ' + (ev.description || '') + ' ' + (meta.location || '')).toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  renderGrid(filtered);
+}
+
+/* ---------- Rendu ---------- */
+function cardHtml(ev) {
+  const meta = ev.meta || {};
+  const d = parseDate(meta.date);
+  const dp = dateBlockParts(d);
+  const img = ev.imageUrl || FALLBACK_IMG;
+  const location = meta.location || '';
+  const description = ev.description || '';
+
+  return `<article class="event-card">
+    <div class="event-card__media">
+      <span class="event-card__badge">${esc(meta.category || 'Événement')}</span>
+      <div class="event-card__date">
+        <b>${dp.day}</b>
+        <span>${dp.month}</span>
+      </div>
+      <img src="${esc(img)}" alt="${esc(ev.title || '')}" loading="lazy"
+           onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
+    </div>
+    <div class="event-card__body">
+      <h3 class="event-card__title">${esc(ev.title || 'Sans titre')}</h3>
+      ${location ? `<div class="event-card__location">${PIN}<span>${esc(location)}</span></div>` : ''}
+      ${description ? `<p class="event-card__desc">${formatCaption(description)}</p>` : ''}
+      <div class="event-card__foot">
+        <span class="event-card__price">${formatPrice(meta.price)}</span>
+        <a href="${esc(meta.ticketUrl || 'telecharger.html')}" class="event-card__cta">
+          Réserver ${ARROW}
+        </a>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderGrid(list) {
+  grid.innerHTML = '';
+
+  if (!list.length) {
+    grid.style.display = 'none';
+    empty.classList.add('is-visible');
+    countEl.innerHTML = 'Aucun événement ne correspond à votre recherche.';
+    return;
+  }
+
+  empty.classList.remove('is-visible');
+  grid.style.display = '';
+
+  /* Tri : événements futurs d'abord, par date croissante ; sans date à la fin */
+  const sorted = [...list].sort((a, b) => {
+    const da = parseDate(a.meta && a.meta.date);
+    const db_ = parseDate(b.meta && b.meta.date);
+    if (da && db_) return da - db_;
+    if (da) return -1;
+    if (db_) return 1;
+    return (b.createdAt || 0) - (a.createdAt || 0);
+  });
+
+  sorted.forEach((ev, i) => {
+    const wrap = document.createElement('div');
+    wrap.innerHTML = cardHtml(ev);
+    const card = wrap.firstElementChild;
+    card.style.animationDelay = (i * 0.06) + 's';
+    grid.appendChild(card);
+  });
+
+  countEl.innerHTML = `<b>${list.length}</b> événement${list.length > 1 ? 's' : ''} à découvrir`;
+}
+
+/* ---------- Remplir les villes ---------- */
+function fillCities() {
+  const cities = new Set();
+  allEvents.forEach(ev => {
+    const loc = ev.meta && ev.meta.location;
+    if (loc) cities.add(loc);
+  });
+  const sorted = Array.from(cities).sort((a, b) => a.localeCompare(b, 'fr'));
+  const current = citySelect.value || 'all';
+  citySelect.innerHTML = '<option value="all">Toutes les villes</option>' +
+    sorted.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  if (sorted.includes(current)) citySelect.value = current;
+}
+
+/* ---------- Écouteurs ---------- */
+document.querySelectorAll('.cat-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCategory = btn.dataset.cat;
+    applyFilters();
+  });
+});
+
+citySelect.addEventListener('change', applyFilters);
+periodSelect.addEventListener('change', applyFilters);
+
+let searchTimer;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(applyFilters, 200);
+});
+
+/* ---------- Chargement Firebase ---------- */
+onValue(ref(db, 'posts'), (snapshot) => {
+  window.__bticketEventsLoaded = true;
+  const data = snapshot.val() || {};
+  allEvents = Object.entries(data)
+    .map(([id, p]) => ({ id, ...p }))
+    .filter(p => p && p.type === 'evenement' && p.published !== false);
+
+  fillCities();
+  applyFilters();
+}, (error) => {
+  window.__bticketEventsLoaded = true;
+  console.warn('[bTicket] Firebase indisponible :', error);
+  grid.style.display = 'none';
+  empty.classList.add('is-visible');
+  countEl.textContent = 'Impossible de charger les événements pour le moment.';
+});
+</script>
+</body>
+</html>

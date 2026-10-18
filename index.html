@@ -13,10 +13,6 @@
 
 <style>
 /* =========================================================
-   1. POLICE MONTSERRAT (chargée via Google Fonts dans le <head>)
-   ========================================================= */
-
-/* =========================================================
    2. RESET & TOKENS
    ========================================================= */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -108,18 +104,6 @@ h1, h2, h3, h4 {
   background: var(--or);
 }
 
-.display-title {
-  font-size: clamp(2.4rem, 6.2vw, 4.6rem);
-  font-weight: 700;
-  line-height: 1.04;
-  letter-spacing: -0.03em;
-  margin-bottom: 26px;
-}
-.display-title em {
-  font-style: normal;
-  color: var(--or);
-}
-
 .section-title {
   font-size: clamp(1.9rem, 4.2vw, 3rem);
   margin-bottom: 18px;
@@ -154,10 +138,7 @@ h1, h2, h3, h4 {
 }
 .btn svg { width: 16px; height: 16px; transition: transform .3s var(--ease); }
 
-.btn--primary {
-  background: var(--or);
-  color: var(--noir);
-}
+.btn--primary { background: var(--or); color: var(--noir); }
 .btn--primary:hover {
   background: #e0bb47;
   transform: translateY(-2px);
@@ -171,11 +152,7 @@ h1, h2, h3, h4 {
   color: var(--ivoire);
   backdrop-filter: blur(10px);
 }
-.btn--ghost:hover {
-  border-color: var(--or);
-  color: var(--or);
-  transform: translateY(-2px);
-}
+.btn--ghost:hover { border-color: var(--or); color: var(--or); transform: translateY(-2px); }
 
 .btn--sm { height: 40px; padding: 0 20px; font-size: .84rem; }
 
@@ -185,8 +162,7 @@ h1, h2, h3, h4 {
 .progress-bar {
   position: fixed;
   top: 0; left: 0;
-  height: 2px;
-  width: 0%;
+  height: 2px; width: 0%;
   background: var(--or);
   z-index: 1000;
   transition: width .1s linear;
@@ -369,10 +345,7 @@ h1, h2, h3, h4 {
   margin-bottom: 26px;
   animation: fadeUp .9s .08s var(--ease) both;
 }
-.hero h1 em {
-  font-style: normal;
-  color: var(--or);
-}
+.hero h1 em { font-style: normal; color: var(--or); }
 
 .hero p {
   font-size: clamp(1rem, 1.4vw, 1.18rem);
@@ -418,9 +391,6 @@ h1, h2, h3, h4 {
   gap: 80px;
   align-items: center;
 }
-.editorial--reverse .editorial__visual { order: 1; }
-.editorial--reverse .editorial__text { order: 2; }
-
 .editorial__visual {
   position: relative;
   border-radius: var(--radius);
@@ -472,10 +442,7 @@ h1, h2, h3, h4 {
   background: radial-gradient(circle, rgba(212,175,55,.14), transparent 65%);
   pointer-events: none;
 }
-.mv-card:hover {
-  border-color: rgba(212,175,55,.4);
-  transform: translateY(-4px);
-}
+.mv-card:hover { border-color: rgba(212,175,55,.4); transform: translateY(-4px); }
 .mv-card__label {
   display: inline-block;
   font-size: 11px;
@@ -490,11 +457,7 @@ h1, h2, h3, h4 {
   margin-bottom: 16px;
   line-height: 1.15;
 }
-.mv-card p {
-  color: var(--texte-muted);
-  font-size: 1rem;
-  max-width: 420px;
-}
+.mv-card p { color: var(--texte-muted); font-size: 1rem; max-width: 420px; }
 
 /* =========================================================
    9. SECTION POURQUOI
@@ -525,10 +488,7 @@ h1, h2, h3, h4 {
   display: flex;
   flex-direction: column;
 }
-.av-card:hover {
-  border-color: rgba(212,175,55,.4);
-  transform: translateY(-6px);
-}
+.av-card:hover { border-color: rgba(212,175,55,.4); transform: translateY(-6px); }
 .av-card__num {
   font-size: .72rem;
   font-weight: 700;
@@ -546,11 +506,7 @@ h1, h2, h3, h4 {
   margin-bottom: 22px;
 }
 .av-card__icon svg { width: 20px; height: 20px; }
-.av-card h3 {
-  font-size: 1.05rem;
-  margin-bottom: 10px;
-  line-height: 1.25;
-}
+.av-card h3 { font-size: 1.05rem; margin-bottom: 10px; line-height: 1.25; }
 .av-card p {
   font-size: .88rem;
   color: var(--texte-muted);
@@ -624,10 +580,7 @@ h1, h2, h3, h4 {
   text-transform: uppercase;
   color: var(--texte-faint);
 }
-.apercu__hint svg {
-  width: 18px; height: 18px;
-  animation: swipeHint 2.2s ease-in-out infinite;
-}
+.apercu__hint svg { width: 18px; height: 18px; animation: swipeHint 2.2s ease-in-out infinite; }
 
 /* =========================================================
    11. CTA FINAL
@@ -639,19 +592,16 @@ h1, h2, h3, h4 {
   text-align: center;
 }
 .cta__bg {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background-image: url("IMAGES/05. cultural-event.jpg");
   background-size: cover;
   background-position: center;
   z-index: 0;
 }
 .cta__overlay {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   z-index: 1;
-  background:
-    linear-gradient(180deg, rgba(17,19,24,.7) 0%, rgba(17,19,24,.85) 100%);
+  background: linear-gradient(180deg, rgba(17,19,24,.7) 0%, rgba(17,19,24,.85) 100%);
 }
 .cta__inner {
   position: relative;
@@ -794,9 +744,6 @@ h1, h2, h3, h4 {
   .nav__cta .btn { display: none; }
 
   .editorial { grid-template-columns: 1fr; gap: 50px; }
-  .editorial--reverse .editorial__visual,
-  .editorial--reverse .editorial__text { order: unset; }
-
   .avantages__grid { grid-template-columns: repeat(2, 1fr); }
   .mv-grid { grid-template-columns: 1fr; }
 
@@ -814,7 +761,6 @@ h1, h2, h3, h4 {
 
   .avantages__grid { grid-template-columns: 1fr; gap: 16px; }
   .av-card { min-height: auto; padding: 30px 24px; }
-
   .mv-card { padding: 40px 30px; }
 
   .apercu__scroll { margin-inline: -20px; padding: 16px 20px 32px; }
@@ -848,13 +794,11 @@ h1, h2, h3, h4 {
   padding-inline: var(--gutter);
 }
 
-/* Boutons : hauteurs cohérentes */
 .btn { min-height: 50px; line-height: 1.2; }
 .btn--sm { height: 40px; min-height: 40px; padding: 0 20px; font-size: .84rem; line-height: 1; }
 .nav .btn { transform: none; }
 .nav .btn:hover { transform: none; box-shadow: none; }
 
-/* Navigation à dix liens */
 .nav__links { gap: 0; }
 .nav__links a, .nav__more-btn {
   padding: 8px 10px;
@@ -898,7 +842,6 @@ h1, h2, h3, h4 {
   .nav__links a, .nav__more-btn { padding: 8px 11px; font-size: .82rem; }
 }
 
-/* Menu mobile plus léger */
 .mobile-menu {
   justify-content: flex-start;
   overflow-y: auto;
@@ -913,13 +856,294 @@ h1, h2, h3, h4 {
 .mobile-menu a.btn { display: inline-flex; color: var(--noir); border-bottom: none; padding: 0 30px; }
 .mobile-menu a.btn:hover { color: var(--noir); }
 
-/* Petits écrans : lecture confortable */
 @media (max-width: 480px) {
   h1, .display-title { font-size: clamp(2rem, 8.8vw, 2.5rem); line-height: 1.08; }
   .section-title { font-size: clamp(1.6rem, 7vw, 2rem); }
   .section-lead { font-size: .98rem; line-height: 1.7; }
   main p { line-height: 1.7; }
   h1, h2, h3, p, li { overflow-wrap: break-word; }
+}
+
+/* =========================================================
+   15. BLOCS "À LA UNE" — 100% dynamiques
+   ---------------------------------------------------------
+   • Skeleton pendant le chargement Firebase
+   • Données réelles → 2 cartes + "Voir plus" (si plus de 2)
+   • Aucune donnée → état vide élégant
+   • Erreur Firebase → même état vide (pas de skeleton infini)
+   ========================================================= */
+.une { position: relative; }
+.une.section { padding: 100px 0 110px; }
+
+.une__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+.une__head .eyebrow { margin-bottom: 10px; }
+.une__head .section-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  margin-bottom: 0;
+}
+
+/* Conteneur scroll horizontal */
+.une__scroll {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 12px;
+  scroll-behavior: smooth;
+}
+.une__scroll::-webkit-scrollbar { display: none; }
+.une__scroll > * {
+  flex: 0 0 calc(50% - 12px);
+  scroll-snap-align: start;
+}
+.une__scroll[hidden] { display: none; }
+
+/* Carte standard */
+.une-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform .4s var(--ease), border-color .4s var(--ease),
+              box-shadow .4s var(--ease);
+}
+.une-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212,175,55,.4);
+  box-shadow: 0 24px 48px -24px rgba(0,0,0,.75);
+}
+
+.une-card__media {
+  position: relative;
+  background: #0d0f14;
+  overflow: hidden;
+}
+.une-card__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 1.2s var(--ease);
+}
+.une-card:hover .une-card__media img { transform: scale(1.04); }
+
+.une-card__badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  z-index: 2;
+  padding: 5px 12px;
+  border-radius: 100px;
+  background: rgba(17,19,24,.85);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--or);
+  line-height: 1.2;
+}
+
+.une-card__body {
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.une-card__meta {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--or);
+}
+.une-card__title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--blanc);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.une-card__desc {
+  font-size: .86rem;
+  color: var(--texte-muted);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.une-card__desc strong { color: var(--ivoire); font-weight: 700; }
+.une-card__desc em { color: var(--or); font-style: italic; }
+.une-card__desc a { color: var(--or); text-decoration: underline; }
+
+.une-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
+}
+.une-card__price { font-size: .85rem; font-weight: 700; color: var(--or); }
+.une-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--ivoire);
+  transition: color .3s var(--ease), gap .3s var(--ease);
+  white-space: nowrap;
+}
+.une-card__link:hover { color: var(--or); gap: 10px; }
+.une-card__link svg { width: 14px; height: 14px; }
+
+.une-card__social {
+  display: flex;
+  gap: 16px;
+  font-size: .78rem;
+  color: var(--texte-muted);
+}
+.une-card__social span { display: inline-flex; align-items: center; gap: 5px; }
+.une-card__social svg { width: 14px; height: 14px; }
+
+/* Carte "Voir plus" — 3ᵉ élément, hors écran au repos */
+.une-card--more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(212,175,55,.08) 0%, var(--anthracite) 100%);
+  border: 1px dashed rgba(212,175,55,.4);
+  min-height: 280px;
+  transition: border-style .3s var(--ease), border-color .3s var(--ease),
+              background .3s var(--ease), transform .3s var(--ease);
+}
+.une-card--more:hover {
+  border-style: solid;
+  border-color: var(--or);
+  background: linear-gradient(135deg, rgba(212,175,55,.16) 0%, var(--anthracite) 100%);
+  transform: translateY(-4px);
+}
+.une-card__more-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  padding: 24px;
+}
+.une-card__more-inner svg {
+  width: 22px;
+  height: 22px;
+  padding: 12px;
+  border-radius: 50%;
+  background: rgba(212,175,55,.12);
+  border: 1px solid var(--line);
+  color: var(--or);
+  box-sizing: content-box;
+}
+.une-card__more-label { font-size: .95rem; font-weight: 700; color: var(--blanc); line-height: 1.3; }
+.une-card__more-count {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--or);
+}
+
+/* Skeleton de chargement */
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+.une-card--skeleton {
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  min-height: 360px;
+  position: relative;
+  overflow: hidden;
+}
+.une-card--skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.05) 50%, transparent 100%);
+  animation: shimmer 1.6s infinite;
+}
+
+/* Animation d'apparition des cartes injectées */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.une__scroll.is-dynamic .une-card {
+  animation: cardIn .45s var(--ease) both;
+}
+.une__scroll.is-dynamic > :nth-child(1) { animation-delay: 0s; }
+.une__scroll.is-dynamic > :nth-child(2) { animation-delay: .08s; }
+.une__scroll.is-dynamic > :nth-child(3) { animation-delay: .16s; }
+
+/* État vide */
+.une-empty {
+  display: none;
+  padding: 56px 24px;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.015);
+}
+.une-empty.is-visible { display: block; }
+.une-empty svg {
+  width: 28px;
+  height: 28px;
+  color: var(--or);
+  opacity: .7;
+  margin: 0 auto 16px;
+}
+.une-empty p {
+  color: var(--ivoire);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.une-empty small {
+  color: var(--texte-faint);
+  font-size: .84rem;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 1080px) {
+  .une__scroll > * { flex: 0 0 calc(50% - 12px); }
+}
+@media (max-width: 720px) {
+  .une.section { padding: 80px 0 90px; }
+  .une__scroll { gap: 16px; }
+  .une__scroll > * { flex: 0 0 82%; }
+  .une__head { margin-bottom: 28px; }
+  .une-card__body { padding: 18px 20px 20px; }
+  .une-card--more { min-height: 240px; }
+  .une-card--skeleton { min-height: 300px; }
 }
 </style>
 </head>
@@ -970,7 +1194,7 @@ h1, h2, h3, h4 {
 
 <!-- ===================== MOBILE MENU ===================== -->
 <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html" class="active">Accueil</a>
+  <a href="index.html" class="active">Accueil</a>
   <a href="evenements.html">Événements</a>
   <a href="application.html">Application</a>
   <a href="organisateurs.html">Organisateurs</a>
@@ -1029,7 +1253,35 @@ h1, h2, h3, h4 {
   </div>
 </section>
 
-<!-- ===================== ÉDITORIAL ===================== -->
+<!-- ===================== ÉVÉNEMENTS (100% DYNAMIQUE) ===================== -->
+<section class="section une" id="une-evenements">
+  <div class="container">
+    <div class="une__head reveal">
+      <div>
+        <span class="eyebrow">Agenda</span>
+        <h2 class="section-title">Les prochains événements.</h2>
+      </div>
+    </div>
+
+    <!-- Skeleton visible pendant le chargement Firebase -->
+    <div class="une__scroll" id="eventsScroll" aria-live="polite">
+      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
+      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
+    </div>
+
+    <!-- État vide (affiché si aucune donnée) -->
+    <div class="une-empty" id="eventsEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="4.5" width="18" height="16" rx="2.5"/>
+        <path d="M8 2.5v4M16 2.5v4M3 10h18"/>
+      </svg>
+      <p>Aucun événement pour le moment.</p>
+      <small>Revenez bientôt pour découvrir les prochains événements.</small>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ÉDITORIAL (intercalé) ===================== -->
 <section class="section">
   <div class="container editorial">
     <div class="editorial__text reveal">
@@ -1050,7 +1302,32 @@ h1, h2, h3, h4 {
   </div>
 </section>
 
-<!-- ===================== MISSION & VISION ===================== -->
+<!-- ===================== ACTUALITÉS (100% DYNAMIQUE) ===================== -->
+<section class="section une" id="une-actualites">
+  <div class="container">
+    <div class="une__head reveal">
+      <div>
+        <span class="eyebrow">Le fil</span>
+        <h2 class="section-title">Ce qui se passe chez bTicket.</h2>
+      </div>
+    </div>
+
+    <div class="une__scroll" id="actualitesScroll" aria-live="polite">
+      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
+      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
+    </div>
+
+    <div class="une-empty" id="actualitesEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <p>Aucune actualité pour le moment.</p>
+      <small>Suivez-nous pour ne rien manquer des prochaines annonces.</small>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MISSION & VISION (intercalé) ===================== -->
 <section class="section section--compact">
   <div class="container">
     <div class="mv-grid">
@@ -1071,6 +1348,32 @@ h1, h2, h3, h4 {
           une expérience moderne et sécurisée.
         </p>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BLOG (100% DYNAMIQUE) ===================== -->
+<section class="section une" id="une-blog">
+  <div class="container">
+    <div class="une__head reveal">
+      <div>
+        <span class="eyebrow">Le journal</span>
+        <h2 class="section-title">Guides et coulisses.</h2>
+      </div>
+    </div>
+
+    <div class="une__scroll" id="blogScroll" aria-live="polite">
+      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
+      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
+    </div>
+
+    <div class="une-empty" id="blogEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+      <p>Aucun article pour le moment.</p>
+      <small>Nos guides et interviews arrivent très bientôt.</small>
     </div>
   </div>
 </section>
@@ -1231,10 +1534,13 @@ h1, h2, h3, h4 {
         <h4>Navigation</h4>
         <ul>
           <li><a href="index.html">Accueil</a></li>
+          <li><a href="evenements.html">Événements</a></li>
           <li><a href="application.html">Application</a></li>
+          <li><a href="actualites.html">Actualités</a></li>
           <li><a href="organisateurs.html">Organisateurs</a></li>
           <li><a href="agents.html">Agents</a></li>
           <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="blog.html">Blog</a></li>
           <li><a href="a-propos.html">À propos</a></li>
           <li><a href="assistant.html">Assistant</a></li>
           <li><a href="telecharger.html">Télécharger</a></li>
@@ -1269,16 +1575,13 @@ h1, h2, h3, h4 {
   </div>
 </footer>
 
+<!-- =========================================================
+     SCRIPTS EXISTANTS
+     ========================================================= -->
 <script>
-/* =========================================================
-   INIT
-   ========================================================= */
 document.body.classList.remove('no-js');
 document.getElementById('year').textContent = new Date().getFullYear();
 
-/* =========================================================
-   1. NAV — état au scroll + progression
-   ========================================================= */
 const nav = document.getElementById('nav');
 const progressBar = document.getElementById('progressBar');
 
@@ -1291,9 +1594,6 @@ function onScroll() {
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
-/* =========================================================
-   2. MENU MOBILE
-   ========================================================= */
 const burger = document.getElementById('burger');
 const mobileMenu = document.getElementById('mobileMenu');
 const mobileLinks = mobileMenu.querySelectorAll('a');
@@ -1314,9 +1614,6 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') toggleMenu(false);
 });
 
-/* =========================================================
-   3. RÉVÉLATION AU SCROLL
-   ========================================================= */
 const revealObserver = new IntersectionObserver((entries, obs) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -1325,39 +1622,25 @@ const revealObserver = new IntersectionObserver((entries, obs) => {
     }
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-/* =========================================================
-   4. VIDÉO HERO — fallback si non supportée
-   ========================================================= */
 const heroVideo = document.querySelector('.hero__video');
 if (heroVideo) {
-  heroVideo.addEventListener('error', () => {
-    heroVideo.style.display = 'none';
-  });
+  heroVideo.addEventListener('error', () => { heroVideo.style.display = 'none'; });
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     heroVideo.pause();
   }
 }
 
-/* =========================================================
-   5. APERÇU — drag horizontal simple (desktop)
-   ========================================================= */
 const apercuScroll = document.querySelector('.apercu__scroll');
 if (apercuScroll) {
   let isDown = false, startX = 0, startScroll = 0, moved = false;
-
   apercuScroll.addEventListener('mousedown', e => {
     isDown = true; moved = false;
-    startX = e.pageX;
-    startScroll = apercuScroll.scrollLeft;
+    startX = e.pageX; startScroll = apercuScroll.scrollLeft;
     apercuScroll.style.cursor = 'grabbing';
   });
-  window.addEventListener('mouseup', () => {
-    isDown = false;
-    apercuScroll.style.cursor = '';
-  });
+  window.addEventListener('mouseup', () => { isDown = false; apercuScroll.style.cursor = ''; });
   window.addEventListener('mousemove', e => {
     if (!isDown) return;
     const d = e.pageX - startX;
@@ -1371,7 +1654,6 @@ if (apercuScroll) {
 </script>
 
 <script>
-/* Navigation — menu "Plus" */
 (function () {
   var w = document.querySelector('.nav__more');
   if (!w) return;
@@ -1382,7 +1664,6 @@ if (apercuScroll) {
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
   w.addEventListener('focusout', function (e) { if (!w.contains(e.relatedTarget)) set(false); });
 })();
-/* Vidéo hero — relance si l'autoplay est bloqué (iOS) */
 (function () {
   var v = document.querySelector('.hero__video');
   if (!v) return;
@@ -1406,6 +1687,266 @@ if (apercuScroll) {
   events.forEach(function (n) { document.addEventListener(n, essayer, { capture: true, passive: true }); });
 })();
 </script>
+
 <script src="safi-ai.js" defer></script>
+
+<!-- =========================================================
+     CHARGEMENT DYNAMIQUE FIREBASE — 100% données réelles
+     ---------------------------------------------------------
+     • Aucun contenu statique dans le HTML
+     • Skeleton shimmer pendant le chargement
+     • Données Firebase → 2 cartes + "Voir plus" si >2
+     • Aucune donnée OU erreur → état vide élégant
+     ========================================================= -->
+<script>
+/* Filet de sécurité : si le module Firebase ne charge pas (CDN bloqué, etc.),
+   on bascule les skeletons en états vides après 8 secondes. */
+window.__bticketContentLoaded = false;
+window.addEventListener('load', function () {
+  setTimeout(function () {
+    if (window.__bticketContentLoaded) return;
+    ['events', 'actualites', 'blog'].forEach(function (key) {
+      var scroll = document.getElementById(key + 'Scroll');
+      var empty  = document.getElementById(key + 'Empty');
+      if (scroll && scroll.querySelector('.une-card--skeleton')) {
+        scroll.hidden = true;
+        scroll.style.display = 'none';
+        if (empty) empty.classList.add('is-visible');
+      }
+    });
+  }, 8000);
+});
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBcf1eysXtdI5vOgI02yd8sCFs3wGWJ90A",
+  authDomain: "bticket-burundi.firebaseapp.com",
+  databaseURL: "https://bticket-burundi-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "bticket-burundi",
+  storageBucket: "bticket-burundi.firebasestorage.app",
+  messagingSenderId: "407762427157",
+  appId: "1:407762427157:web:1e0f2ef5458fdbaa575d1c",
+  measurementId: "G-J60JBTZ647"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+/* ---------- Helpers ---------- */
+function esc(t) {
+  if (t == null) return '';
+  return String(t)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/* Markdown minimal pour captions : **gras**, *italique*, sauts de ligne, liens [texte](url) */
+function formatCaption(text) {
+  if (text == null) return '';
+  let html = String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+function formatPrice(price) {
+  if (price == null || price === 0 || price === '') return 'Gratuit';
+  const n = Number(price);
+  if (!isFinite(n) || n <= 0) return 'Gratuit';
+  return 'Dès ' + new Intl.NumberFormat('fr-FR').format(n) + ' FBU';
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  try {
+    const d = new Date(iso);
+    if (isNaN(d)) return '';
+    return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch { return ''; }
+}
+
+function formatRelative(ts) {
+  if (!ts) return '';
+  const diff = Date.now() - ts;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1)   return "À l'instant";
+  if (mins < 60)  return `Il y a ${mins} min`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `Il y a ${hours} h`;
+  const days = Math.floor(hours / 24);
+  if (days < 7)   return `Il y a ${days} j`;
+  return new Date(ts).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+}
+
+const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const HEART = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+const BUBBLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+
+const FALLBACK_IMG = 'IMAGES/02. events-atmosphere.jpg';
+
+function cardImage(post) {
+  const src = post.imageUrl || FALLBACK_IMG;
+  return `<div class="une-card__media">
+    <span class="une-card__badge">${esc((post.meta && post.meta.category) || 'Info')}</span>
+    <img src="${esc(src)}" alt="${esc(post.title || '')}" loading="lazy"
+         onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
+  </div>`;
+}
+
+/* ---------- Renderers ---------- */
+function renderEventCard(post) {
+  const meta = post.meta || {};
+  const dateStr = formatDate(meta.date);
+  const loc = meta.location ? esc(meta.location) : '';
+  const metaLine = [dateStr, loc].filter(Boolean).join(' · ') || 'Bientôt';
+  return `<article class="une-card">
+    ${cardImage(post)}
+    <div class="une-card__body">
+      <div class="une-card__meta">${metaLine}</div>
+      <h3 class="une-card__title">${esc(post.title || '')}</h3>
+      <p class="une-card__desc">${formatCaption(post.description || '')}</p>
+      <div class="une-card__foot">
+        <span class="une-card__price">${formatPrice(meta.price)}</span>
+        <a href="${esc(meta.ticketUrl || 'evenements.html')}" class="une-card__link">Réserver ${ARROW}</a>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderActualiteCard(post) {
+  const likes = Number(post.likes) || 0;
+  const comments = post.comments ? Object.keys(post.comments).length : 0;
+  const caption = post.caption || post.description || '';
+  return `<article class="une-card">
+    ${cardImage(post)}
+    <div class="une-card__body">
+      <div class="une-card__meta">${formatRelative(post.createdAt)}</div>
+      <h3 class="une-card__title">${esc(post.title || '')}</h3>
+      <p class="une-card__desc">${formatCaption(caption)}</p>
+      <div class="une-card__foot">
+        <div class="une-card__social">
+          <span>${HEART} ${likes}</span>
+          <span>${BUBBLE} ${comments}</span>
+        </div>
+        <a href="actualites.html" class="une-card__link">Lire ${ARROW}</a>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderArticleCard(post) {
+  const meta = post.meta || {};
+  const readTime = Number(meta.readTime) || 5;
+  const dateStr = formatDate(post.createdAt);
+  return `<article class="une-card">
+    ${cardImage(post)}
+    <div class="une-card__body">
+      <div class="une-card__meta">${dateStr ? dateStr + ' · ' : ''}${readTime} min</div>
+      <h3 class="une-card__title">${esc(post.title || '')}</h3>
+      <p class="une-card__desc">${formatCaption(post.description || '')}</p>
+      <div class="une-card__foot">
+        <span class="une-card__price">Gratuit</span>
+        <a href="blog-article.html?id=${esc(post.id || '')}" class="une-card__link">Lire ${ARROW}</a>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderMoreCard(href, label, extra) {
+  const count = extra > 0
+    ? `<span class="une-card__more-count">+${extra} à découvrir</span>`
+    : '';
+  return `<a href="${esc(href)}" class="une-card une-card--more" aria-label="${esc(label)}">
+    <div class="une-card__more-inner">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <span class="une-card__more-label">${esc(label)}</span>
+      ${count}
+    </div>
+  </a>`;
+}
+
+/* ---------- Injection avec gestion des états ---------- */
+function renderSection(scrollId, emptyId, posts, renderFn, moreHref, moreLabel) {
+  const scroll = document.getElementById(scrollId);
+  const empty  = document.getElementById(emptyId);
+  if (!scroll || !empty) return;
+
+  /* Aucune donnée → état vide */
+  if (!posts || posts.length === 0) {
+    scroll.hidden = true;
+    scroll.style.display = 'none';
+    scroll.innerHTML = '';
+    empty.classList.add('is-visible');
+    return;
+  }
+
+  /* Données présentes → affichage */
+  scroll.hidden = false;
+  scroll.style.display = 'flex';
+  scroll.style.removeProperty('display');
+  empty.classList.remove('is-visible');
+
+  const displayed = posts.slice(0, 2);
+  let html = displayed.map(renderFn).join('');
+
+  /* "Voir plus" seulement s'il y a plus de 2 posts */
+  if (posts.length > 2) {
+    html += renderMoreCard(moreHref, moreLabel, posts.length - 2);
+  }
+
+  scroll.innerHTML = html;
+  scroll.classList.remove('is-dynamic');
+  /* Force le reflow pour relancer l'animation */
+  void scroll.offsetWidth;
+  scroll.classList.add('is-dynamic');
+}
+
+/* ---------- Chargement Firebase ---------- */
+const postsRef = ref(db, 'posts');
+
+onValue(postsRef, (snapshot) => {
+  window.__bticketContentLoaded = true;
+
+  const data = snapshot.val() || {};
+  const all = Object.keys(data)
+    .map(k => ({ id: k, ...data[k] }))
+    .filter(p => p && p.published !== false)
+    .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+  const events     = all.filter(p => p.type === 'evenement');
+  const actualites = all.filter(p => p.type === 'actualite');
+  const articles   = all.filter(p => p.type === 'article');
+
+  renderSection('eventsScroll',     'eventsEmpty',     events,     renderEventCard,     'evenements.html', 'Voir tous les événements');
+  renderSection('actualitesScroll', 'actualitesEmpty', actualites, renderActualiteCard, 'actualites.html', 'Toutes les actualités');
+  renderSection('blogScroll',       'blogEmpty',       articles,   renderArticleCard,   'blog.html',       'Tous les articles');
+}, (error) => {
+  window.__bticketContentLoaded = true;
+  console.warn('[bTicket] Firebase indisponible :', error);
+
+  ['events', 'actualites', 'blog'].forEach(function (key) {
+    var scroll = document.getElementById(key + 'Scroll');
+    var empty  = document.getElementById(key + 'Empty');
+    if (scroll) {
+      scroll.hidden = true;
+      scroll.style.display = 'none';
+      scroll.innerHTML = '';
+    }
+    if (empty) empty.classList.add('is-visible');
+  });
+});
+</script>
 </body>
 </html>
