@@ -1145,6 +1145,25 @@ h1, h2, h3, h4 {
   .une-card--more { min-height: 240px; }
   .une-card--skeleton { min-height: 300px; }
 }
+
+/* =========================================================
+   16. RANGEMENT — section soft + fusion éditorial/MV
+   ---------------------------------------------------------
+   .section--soft : fond légèrement plus clair pour marquer
+   la rupture entre les blocs éditoriaux et les blocs
+   institutionnels (alterne avec --noir par défaut).
+   ========================================================= */
+.section--soft {
+  background: var(--noir-soft);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* Fusion éditorial + mission/vision : un peu d'air entre les deux blocs */
+.editorial + .mv-grid { margin-top: 80px; }
+@media (max-width: 720px) {
+  .editorial + .mv-grid { margin-top: 48px; }
+}
 </style>
 </head>
 <body class="no-js">
@@ -1209,7 +1228,9 @@ h1, h2, h3, h4 {
 
 <main>
 
-<!-- ===================== HERO VIDÉO ===================== -->
+<!-- ============================================================
+     1) HERO VIDÉO
+     ============================================================ -->
 <section class="hero">
   <video
     class="hero__video"
@@ -1253,7 +1274,12 @@ h1, h2, h3, h4 {
   </div>
 </section>
 
-<!-- ===================== ÉVÉNEMENTS (100% DYNAMIQUE) ===================== -->
+<!-- ============================================================
+     2) ÉVÉNEMENTS À LA UNE (100% dynamique)
+     ------------------------------------------------------------
+     Contenu actionnable immédiatement après le hero : le visiteur
+     peut acheter un billet dès la deuxième section.
+     ============================================================ -->
 <section class="section une" id="une-evenements">
   <div class="container">
     <div class="une__head reveal">
@@ -1281,55 +1307,33 @@ h1, h2, h3, h4 {
   </div>
 </section>
 
-<!-- ===================== ÉDITORIAL (intercalé) ===================== -->
-<section class="section">
-  <div class="container editorial">
-    <div class="editorial__text reveal">
-      <span class="eyebrow">La nouvelle façon</span>
-      <h2 class="section-title">
-        bTicket, la nouvelle façon de vivre les événements en Afrique.
-      </h2>
-      <p>
-        Concerts, festivals, conférences, rencontres sportives : bTicket
-        connecte les organisateurs et le public autour d'une expérience
-        simple et moderne.
-      </p>
-    </div>
-
-    <div class="editorial__visual reveal" data-delay="1">
-      <img src="IMAGES/04. dj-live-event.jpg" alt="Ambiance d'un événement africain">
-    </div>
-  </div>
-</section>
-
-<!-- ===================== ACTUALITÉS (100% DYNAMIQUE) ===================== -->
-<section class="section une" id="une-actualites">
+<!-- ============================================================
+     3) ÉDITORIAL + MISSION / VISION (fusionnés)
+     ------------------------------------------------------------
+     Un seul bloc institutionnel qui raconte bTicket ET sa mission
+     ET sa vision — évite la redondance de deux sections séparées.
+     Fond --noir-soft pour marquer la rupture après les événements.
+     ============================================================ -->
+<section class="section section--soft" id="a-propos">
   <div class="container">
-    <div class="une__head reveal">
-      <div>
-        <span class="eyebrow">Le fil</span>
-        <h2 class="section-title">Ce qui se passe chez bTicket.</h2>
+    <div class="editorial">
+      <div class="editorial__text reveal">
+        <span class="eyebrow">La nouvelle façon</span>
+        <h2 class="section-title">
+          bTicket, la nouvelle façon de vivre les événements en Afrique.
+        </h2>
+        <p>
+          Concerts, festivals, conférences, rencontres sportives : bTicket
+          connecte les organisateurs et le public autour d'une expérience
+          simple et moderne.
+        </p>
+      </div>
+
+      <div class="editorial__visual reveal" data-delay="1">
+        <img src="IMAGES/04. dj-live-event.jpg" alt="Ambiance d'un événement africain">
       </div>
     </div>
 
-    <div class="une__scroll" id="actualitesScroll" aria-live="polite">
-      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
-      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
-    </div>
-
-    <div class="une-empty" id="actualitesEmpty">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-      </svg>
-      <p>Aucune actualité pour le moment.</p>
-      <small>Suivez-nous pour ne rien manquer des prochaines annonces.</small>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== MISSION & VISION (intercalé) ===================== -->
-<section class="section section--compact">
-  <div class="container">
     <div class="mv-grid">
       <article class="mv-card reveal">
         <span class="mv-card__label">Notre mission</span>
@@ -1352,34 +1356,13 @@ h1, h2, h3, h4 {
   </div>
 </section>
 
-<!-- ===================== BLOG (100% DYNAMIQUE) ===================== -->
-<section class="section une" id="une-blog">
-  <div class="container">
-    <div class="une__head reveal">
-      <div>
-        <span class="eyebrow">Le journal</span>
-        <h2 class="section-title">Guides et coulisses.</h2>
-      </div>
-    </div>
-
-    <div class="une__scroll" id="blogScroll" aria-live="polite">
-      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
-      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
-    </div>
-
-    <div class="une-empty" id="blogEmpty">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-      </svg>
-      <p>Aucun article pour le moment.</p>
-      <small>Nos guides et interviews arrivent très bientôt.</small>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== POURQUOI BTICKET ===================== -->
-<section class="section">
+<!-- ============================================================
+     4) POURQUOI BTICKET — argumentaire principal
+     ------------------------------------------------------------
+     Position stratégique : juste après l'intro de marque, avant
+     la preuve visuelle de l'app.
+     ============================================================ -->
+<section class="section" id="pourquoi">
   <div class="container">
     <div class="avantages__head reveal">
       <div>
@@ -1446,8 +1429,10 @@ h1, h2, h3, h4 {
   </div>
 </section>
 
-<!-- ===================== APERÇU APPLICATION ===================== -->
-<section class="section apercu">
+<!-- ============================================================
+     5) APERÇU APPLICATION — preuve visuelle
+     ============================================================ -->
+<section class="section apercu" id="apercu-app">
   <div class="container">
     <div class="apercu__head reveal">
       <div>
@@ -1487,7 +1472,67 @@ h1, h2, h3, h4 {
   </div>
 </section>
 
-<!-- ===================== CTA FINAL ===================== -->
+<!-- ============================================================
+     6) ACTUALITÉS (100% dynamique)
+     ------------------------------------------------------------
+     Deux sections de contenu rapprochées (actu + blog) mais
+     séparées visuellement par le fond (--noir puis --noir-soft).
+     ============================================================ -->
+<section class="section une" id="une-actualites">
+  <div class="container">
+    <div class="une__head reveal">
+      <div>
+        <span class="eyebrow">Le fil</span>
+        <h2 class="section-title">Ce qui se passe chez bTicket.</h2>
+      </div>
+    </div>
+
+    <div class="une__scroll" id="actualitesScroll" aria-live="polite">
+      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
+      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
+    </div>
+
+    <div class="une-empty" id="actualitesEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <p>Aucune actualité pour le moment.</p>
+      <small>Suivez-nous pour ne rien manquer des prochaines annonces.</small>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     7) BLOG (100% dynamique)
+     ============================================================ -->
+<section class="section une section--soft" id="une-blog">
+  <div class="container">
+    <div class="une__head reveal">
+      <div>
+        <span class="eyebrow">Le journal</span>
+        <h2 class="section-title">Guides et coulisses.</h2>
+      </div>
+    </div>
+
+    <div class="une__scroll" id="blogScroll" aria-live="polite">
+      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
+      <article class="une-card une-card--skeleton" aria-hidden="true"></article>
+    </div>
+
+    <div class="une-empty" id="blogEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+      <p>Aucun article pour le moment.</p>
+      <small>Nos guides et interviews arrivent très bientôt.</small>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     8) CTA FINAL
+     ============================================================ -->
 <section class="cta">
   <div class="cta__bg"></div>
   <div class="cta__overlay"></div>
