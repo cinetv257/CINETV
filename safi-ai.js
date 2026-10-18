@@ -3,9 +3,10 @@
    ---------------------------------------------------------
    • Mode FLOTTANT (défaut) : bouton bas-droite + petite fenêtre
    • Mode PLEIN ÉCRAN : activé si la page contient [data-safi-full]
-     → affiche une sidebar avec historique + nouvelle conversation
    • Mode CONSEIL ORGANISATEUR : aide créative pour préparer
      un événement (idées, planning, thèmes, catégories, etc.)
+   • SUGGESTIONS DYNAMIQUES : générées par l'IA, variées à chaque
+     conversation, scroll infini pour en découvrir toujours plus
 
    IA FERMÉE sur le reste · MULTILINGUE · Fondateur : Audry Paulin Dushime
    ========================================================= */
@@ -32,6 +33,22 @@
 
   var CLE_SITE_RECAPTCHA = '6LfCFfEtAAAAAFhBn3JVI6cZ8qIp7tOafOjYkWDC';
   var MODELES = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite"];
+  var MODELE_SUGGESTIONS = "gemini-3.8-flash";
+
+  /* Suggestions de secours si l'IA échoue (rare, mais on ne laisse jamais vide) */
+  var FALLBACK_SUGGESTIONS = [
+    'Comment acheter un billet ?',
+    'Quelles sont les offres de prix ?',
+    'Comment organiser mon événement ?',
+    'Comment valider un QR code ?',
+    'Comment fonctionne le paiement ?',
+    'Comment télécharger l\'application ?',
+    'Comment contacter le support ?',
+    'Quelle est la mission de bTicket ?'
+  ];
+
+  var MAX_SUGGESTIONS = 30;     // plafond par conversation
+  var SUGGESTIONS_PAR_BATCH = 12;
 
   /* =========================================================
      2. CONNAISSANCES BTICKET
@@ -77,7 +94,7 @@
     "Prix : gratuite à télécharger. Disponible partout en Afrique.",
     "Fonctionnalités : achat de billets numériques ; gestion des tickets ; validation par QR code ; découverte d'événements.",
     "Comment acheter (3 étapes) : 1) Découvrir les événements. 2) Choisir un billet et payer. 3) Présenter le QR code à l'entrée.",
-    "Paiement : Mobile Money et carte bancaire. Transactions sécurisées et confirmations instantanées.",
+    "Paiement : Mobile Money (Lumicash, Ecocash, Airtel Money) et carte bancaire. Transactions sécurisées et confirmations instantanées.",
     "",
     "=== ESPACE ORGANISATEURS ===",
     "Créer et publier des événements ; gérer les catégories de billets ; suivre les ventes en temps réel ; gérer les agents et encaissements ; portefeuille intégré.",
@@ -145,8 +162,40 @@
     "Tu restes dans le contexte africain (Burundi, région des Grands Lacs, continent) et tu proposes des solutions réalistes et accessibles.",
     "",
     "=== PAGES DU SITE ===",
-    "Accueil (index.html), Application (application.html), Organisateurs (organisateurs.html), Agents (agents.html), Tarifs (tarifs.html), À propos (a-propos.html), Télécharger (telecharger.html), Assistant (assistant.html), Politique de confidentialité (politique-confidentialite.html), Mentions légales (mentions-legales.html), Conditions d'utilisation (conditions-utilisation.html), Politique de remboursement (politique-remboursement.html).",
-    "Propose les liens au format [Tarifs](tarifs.html) quand une page peut aider."
+    "Le site bTicket comporte les pages suivantes :",
+    "- Accueil (index.html) : hero vidéo, section « À la une » en 3 blocs (Agenda = 2 derniers événements, Le fil = 2 dernières actualités, Le journal = 2 derniers articles, chacun avec un bouton « Voir tout »), section éditoriale, Mission & Vision, Pourquoi bTicket, aperçu de l'application, CTA final.",
+    "- Événements (evenements.html) : liste des événements à venir avec filtres par catégorie (Concert, Festival, Conférence, Sport), par ville, par période (ce week-end, ce mois) et par recherche. Chaque carte affiche une image, un badge catégorie, une date calendrier, un lieu, un prix et un bouton « Réserver ».",
+    "- Actualités (actualites.html) : fil d'actualités type réseau social avec likes, commentaires, partage et filtres par catégorie (Annonces, Coulisses, Nouveautés, Promos). Les visiteurs peuvent commenter avec leur nom ou en anonyme.",
+    "- Blog (blog.html) : articles du journal avec un article à la une, filtres par catégorie (Guides, Interviews, Culture, Actualité produit) et grille d'articles.",
+    "- Article de blog (blog-article.html?id=...) : lecture d'un article individuel avec mise en forme riche (gras, italique, listes, citations, images, liens), boutons de partage et articles similaires.",
+    "- Application (application.html) : présentation détaillée de l'application mobile et de ses fonctionnalités.",
+    "- Organisateurs (organisateurs.html) : espace dédié aux organisateurs d'événements.",
+    "- Agents (agents.html) : espace dédié aux agents de contrôle d'accès.",
+    "- Tarifs (tarifs.html) : comparatif des 3 offres (Standard, Pro, Élite).",
+    "- À propos (a-propos.html) : histoire, mission, vision et valeurs de bTicket.",
+    "- Assistant (assistant.html) : version plein écran de Safi Ai avec historique des conversations.",
+    "- Télécharger (telecharger.html) : liens de téléchargement de l'application.",
+    "- Pages légales : Politique de confidentialité, Mentions légales, Conditions d'utilisation, Politique de remboursement.",
+    "",
+    "Propose les liens au format [Nom de la page](nom.html) quand une page peut aider.",
+    "",
+    "=== FONCTIONNALITÉS PUBLIQUES DU SITE ===",
+    "- Consultation des événements à venir avec filtres (catégorie, ville, période, recherche par mot-clé).",
+    "- Fil d'actualités : les visiteurs peuvent aimer (like) et commenter les posts.",
+    "- Commentaires : possibilité de commenter avec son nom ou en anonyme.",
+    "- Partage : chaque post peut être partagé (WhatsApp, X, Facebook ou copier le lien).",
+    "- Blog : articles consultables avec mise en forme riche (gras, italique, listes, citations, images, liens).",
+    "- Articles similaires suggérés en bas de chaque article.",
+    "- Mise en forme des textes supportée : gras (**gras**), italique (*italique*), liens [texte](url), listes, citations, hashtags.",
+    "",
+    "=== SECTIONS DE LA PAGE D'ACCUEIL ===",
+    "1) Hero vidéo avec slogan « Vivez vos événements sans limites » et boutons « Découvrir l'application » et « Devenir organisateur ».",
+    "2) Section « À la une » : 3 blocs (Agenda, Le fil, Le journal) avec 2 cartes chacun et un bouton « Voir tout ».",
+    "3) Section éditoriale sur l'expérience bTicket.",
+    "4) Mission & Vision en 2 cartes.",
+    "5) Pourquoi bTicket : 4 avantages (billets 100% numériques, paiement sécurisé, validation par QR code, pensé pour l'Afrique).",
+    "6) Aperçu de l'application en images (carrousel).",
+    "7) CTA final pour télécharger l'application."
   ].join('\n');
 
   /* =========================================================
@@ -198,6 +247,12 @@
     currentId: null
   };
 
+  /* État des suggestions (par conversation, en mémoire) */
+  var suggestionsState = {
+    loading: false,
+    exhausted: false
+  };
+
   /* =========================================================
      5. HELPERS ÉTAT
      ========================================================= */
@@ -228,8 +283,17 @@
 
   function saveState() {
     try {
+      /* On ne persiste pas conv.suggestions — elles sont régénérées à chaque session */
+      var conversations = state.conversations.map(function (c) {
+        return {
+          id: c.id,
+          title: c.title,
+          createdAt: c.createdAt,
+          messages: c.messages
+        };
+      });
       localStorage.setItem(CLE_STOCKAGE, JSON.stringify({
-        conversations: state.conversations,
+        conversations: conversations,
         currentId: state.currentId
       }));
     } catch (e) {}
@@ -244,10 +308,14 @@
       id: uid(),
       title: 'Nouvelle conversation',
       createdAt: Date.now(),
-      messages: []
+      messages: [],
+      suggestions: []       // ← suggestions propres à cette conversation
     };
     state.conversations.unshift(conv);
     state.currentId = conv.id;
+    /* Reset l'état des suggestions */
+    suggestionsState.loading = false;
+    suggestionsState.exhausted = false;
     saveState();
     if (render) {
       renderSidebar();
@@ -262,6 +330,8 @@
     state.conversations.splice(idx, 1);
     if (!state.conversations.length) createConversation(false);
     if (state.currentId === id) state.currentId = state.conversations[0].id;
+    suggestionsState.loading = false;
+    suggestionsState.exhausted = false;
     saveState();
     renderSidebar();
     renderMessages();
@@ -313,6 +383,8 @@
           });
         } catch (e) {}
         var ai = aiMod.getAI(app, { backend: new aiMod.GoogleAIBackend() });
+
+        /* Modèles de chat (avec consigne système) */
         var modeles = MODELES.map(function (nom) {
           return aiMod.getGenerativeModel(ai, {
             model: nom,
@@ -320,8 +392,15 @@
             generationConfig: { temperature: 0.3 }
           });
         });
+
+        /* Modèle dédié aux suggestions (sans consigne, temperature élevée pour la variété) */
+        var modeleSuggestions = aiMod.getGenerativeModel(ai, {
+          model: MODELE_SUGGESTIONS,
+          generationConfig: { temperature: 1.0 }
+        });
+
         setStatus('ready', 'En ligne · multilingue');
-        return modeles;
+        return { modeles: modeles, modeleSuggestions: modeleSuggestions };
       });
     })();
     promesseIA.catch(function (err) {
@@ -342,7 +421,7 @@
   function formatInline(t) {
     return t
       .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/\[([^\]]+)\]\(((?:index|application|organisateurs|agents|tarifs|a-propos|telecharger|assistant|politique-confidentialite|mentions-legales|conditions-utilisation|politique-remboursement)\.html(?:#[\w-]+)?)\)/g, '<a href="$2">$1</a>')
+      .replace(/\[([^\]]+)\]\(((?:index|application|organisateurs|agents|tarifs|a-propos|telecharger|assistant|evenements|actualites|blog|politique-confidentialite|mentions-legales|conditions-utilisation|politique-remboursement)\.html(?:[?#][\w-]+)?)\)/g, '<a href="$2">$1</a>')
       .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
       .replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>')
       .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
@@ -377,7 +456,247 @@
   }
 
   /* =========================================================
-     8. RENDU
+     8. SUGGESTIONS DYNAMIQUES (générées par l'IA)
+     ========================================================= */
+  function buildSuggestionPrompt(nombre, dejaAffichees) {
+    var exclusion = '';
+    if (dejaAffichees && dejaAffichees.length) {
+      exclusion = '\n\nNE PROPOSE PAS ces suggestions déjà affichées (évite les doublons) :\n' +
+        dejaAffichees.map(function (s) { return '  • ' + s; }).join('\n');
+    }
+    return 'Tu génères des suggestions de questions courtes pour Safi Ai, l\'assistant virtuel de bTicket.\n\n' +
+      'CONTEXTE bTicket :\n' +
+      '- Plateforme africaine de billetterie numérique\n' +
+      '- Application mobile iOS/Android pour acheter et valider des billets\n' +
+      '- Espace organisateurs (créer des événements, suivre les ventes)\n' +
+      '- Espace agents (scanner les QR codes à l\'entrée)\n' +
+      '- 3 offres : Standard (gratuit), Pro, Élite\n' +
+      '- Sections du site : Événements, Actualités, Blog, Tarifs, Application, Organisateurs, Agents, Assistant\n' +
+      '- Paiement par Mobile Money (Lumicash, Ecocash, Airtel Money) et carte bancaire\n' +
+      '- Support : +257 76389163 / info@bticket.com\n\n' +
+      'MISSION : Génère exactement ' + nombre + ' suggestions de questions COURTES (max 6 mots) en français.\n\n' +
+      'RÈGLES STRICTES :\n' +
+      '- Une suggestion par ligne\n' +
+      '- Pas de numéro, pas de tiret, pas de guillemets, pas de point final\n' +
+      '- Varie les thèmes : application, tarifs, organisateurs, agents, paiement, QR code, événements, actualités, blog, support, téléchargement\n' +
+      '- Formule sous forme de question courte ou d\'action directe\n' +
+      '- Évite les répétitions' +
+      exclusion +
+      '\n\nRéponds UNIQUEMENT avec les ' + nombre + ' lignes, sans introduction ni conclusion ni commentaire.';
+
+  }
+
+  function parseSuggestions(text, max) {
+    if (!text) return [];
+    var cleaned = String(text)
+      .split('\n')
+      .map(function (l) { return l.trim(); })
+      .filter(function (l) { return l.length > 3 && l.length < 90; })
+      .map(function (l) {
+        return l
+          .replace(/^[•\-\*\d\.\)\]\s]+/, '')
+          .replace(/^["'`«»]+|["'`«»]+$/g, '')
+          .replace(/[\.\:;]+$/, '')
+          .trim();
+      })
+      .filter(function (l) { return l.length > 3; });
+
+    /* Dédoublonne (insensible à la casse) */
+    var vus = {};
+    var uniques = [];
+    cleaned.forEach(function (s) {
+      var k = s.toLowerCase();
+      if (!vus[k]) { vus[k] = true; uniques.push(s); }
+    });
+
+    return uniques.slice(0, max);
+  }
+
+  async function genererSuggestions(nombre, dejaAffichees) {
+    try {
+      var ctx = await chargerIA();
+      if (!ctx || !ctx.modeleSuggestions) throw new Error('Modèle suggestions indisponible');
+      var prompt = buildSuggestionPrompt(nombre, dejaAffichees || []);
+      var result = await ctx.modeleSuggestions.generateContent(prompt);
+      var text = result.response.text();
+      var suggestions = parseSuggestions(text, nombre);
+      if (suggestions.length < Math.ceil(nombre / 2)) {
+        throw new Error('Pas assez de suggestions valides (' + suggestions.length + '/' + nombre + ')');
+      }
+      return suggestions;
+    } catch (e) {
+      console.warn('Safi Ai : échec génération suggestions', e);
+      return [];
+    }
+  }
+
+  async function chargerPlusDeSuggestions() {
+    if (suggestionsState.loading || suggestionsState.exhausted) return;
+    var conv = currentConv();
+    if (!conv) return;
+    if (!conv.suggestions) conv.suggestions = [];
+    if (conv.messages.length > 0) return; // seulement sur conversation vide
+    if (conv.suggestions.length >= MAX_SUGGESTIONS) {
+      suggestionsState.exhausted = true;
+      return;
+    }
+
+    suggestionsState.loading = true;
+    afficherSkeletons();
+
+    var nouvelles = await genererSuggestions(SUGGESTIONS_PAR_BATCH, conv.suggestions);
+
+    /* Fallback si l'IA échoue ET qu'on n'a encore rien */
+    if (!nouvelles.length && conv.suggestions.length === 0) {
+      nouvelles = FALLBACK_SUGGESTIONS.slice();
+    }
+    if (!nouvelles.length) {
+      suggestionsState.exhausted = true;
+    }
+
+    conv.suggestions = conv.suggestions.concat(nouvelles).slice(0, MAX_SUGGESTIONS);
+    if (conv.suggestions.length >= MAX_SUGGESTIONS) suggestionsState.exhausted = true;
+
+    suggestionsState.loading = false;
+    renderSuggestions();
+  }
+
+  /* =========================================================
+     9. RENDU DES SUGGESTIONS (arc + scroll infini)
+     ========================================================= */
+  var ICON_SPARKLE =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3L12 3z"/>' +
+    '</svg>';
+
+  function afficherSkeletons() {
+    var scroll = document.getElementById('safiQuickScroll');
+    if (!scroll) return;
+    var widths = [110, 140, 95, 125, 100, 135];
+    scroll.innerHTML = widths.map(function (w) {
+      return '<div class="safi-quick__skeleton" style="width:' + w + 'px;"></div>';
+    }).join('');
+  }
+
+  function renderSuggestions() {
+    var scroll = document.getElementById('safiQuickScroll');
+    if (!scroll) return;
+    var conv = currentConv();
+    if (!conv) return;
+
+    if (!conv.suggestions || !conv.suggestions.length) {
+      afficherSkeletons();
+      return;
+    }
+
+    scroll.innerHTML = conv.suggestions.map(function (sug) {
+      return '<button type="button" class="safi-quick__chip" data-q="' + escapeHtml(sug) + '">' +
+        ICON_SPARKLE + '<span>' + escapeHtml(sug) + '</span>' +
+        '</button>';
+    }).join('');
+
+    /* Attache les handlers */
+    scroll.querySelectorAll('.safi-quick__chip').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        var inputEl = document.getElementById('safiInput');
+        var sendBtn = document.getElementById('safiSend');
+        if (inputEl) {
+          inputEl.value = chip.getAttribute('data-q') || '';
+          inputEl.focus();
+          if (sendBtn) sendBtn.disabled = !inputEl.value.trim();
+        }
+      });
+    });
+
+    /* Met à jour l'arc */
+    requestAnimationFrame(updateArc);
+    scroll.scrollLeft = 0;
+  }
+
+  function majSuggestions() {
+    var conv = currentConv();
+    var afficher = !!(conv && conv.messages.length === 0);
+    var container = document.getElementById('safiQuick');
+    if (!container) return;
+    container.classList.toggle('is-hidden', !afficher);
+
+    if (afficher) {
+      if (!conv.suggestions || !conv.suggestions.length) {
+        chargerPlusDeSuggestions();
+      } else {
+        renderSuggestions();
+      }
+    }
+  }
+
+  /* =========================================================
+     10. ARC + SCROLL INFINI
+     ========================================================= */
+  var arcRaf = 0;
+  function requestArcUpdate() {
+    if (arcRaf) return;
+    arcRaf = requestAnimationFrame(function () {
+      arcRaf = 0;
+      updateArc();
+    });
+  }
+
+  function updateArc() {
+    var scroll = document.getElementById('safiQuickScroll');
+    if (!scroll) return;
+    var chips = scroll.querySelectorAll('.safi-quick__chip');
+    if (!chips.length) return;
+
+    var rect = scroll.getBoundingClientRect();
+    var centerX = rect.left + rect.width / 2;
+    var maxDist = rect.width / 2;
+    if (maxDist <= 0) return;
+
+    chips.forEach(function (chip) {
+      var r = chip.getBoundingClientRect();
+      var cx = r.left + r.width / 2;
+      var dist = Math.abs(cx - centerX);
+      var ratio = Math.min(dist / maxDist, 1);
+      /* Courbe plus "circulaire" : plat au centre, accentué aux bords */
+      var offset = Math.pow(ratio, 1.8) * 20;
+      chip.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
+    });
+  }
+
+  function setupSuggestionsScroll() {
+    var scroll = document.getElementById('safiQuickScroll');
+    if (!scroll) return;
+
+    /* Arc au scroll */
+    scroll.addEventListener('scroll', function () {
+      requestArcUpdate();
+
+      /* Détection fin de scroll → charge plus */
+      var nearEnd = scroll.scrollLeft + scroll.clientWidth >= scroll.scrollWidth - 80;
+      if (nearEnd) {
+        var conv = currentConv();
+        if (conv && conv.messages.length === 0 &&
+            !suggestionsState.loading &&
+            !suggestionsState.exhausted &&
+            (conv.suggestions ? conv.suggestions.length : 0) < MAX_SUGGESTIONS) {
+          chargerPlusDeSuggestions();
+        }
+      }
+    }, { passive: true });
+
+    /* Arc initial */
+    requestArcUpdate();
+
+    /* Arc au resize */
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(requestArcUpdate, 100);
+    }, { passive: true });
+  }
+
+  /* =========================================================
+     11. RENDU DES MESSAGES
      ========================================================= */
   function createBubble(text, role) {
     var div = document.createElement('div');
@@ -387,27 +706,20 @@
     return div;
   }
 
-  function majSuggestions() {
-    var conv = currentConv();
-    var masquer = !!(conv && conv.messages.length);
-    document.querySelectorAll('.safi-quick').forEach(function (el) {
-      el.classList.toggle('is-hidden', masquer);
-    });
-  }
-
   function renderMessages() {
-    majSuggestions();
     var body = document.getElementById('safiBody');
     if (!body) return;
     body.innerHTML = '';
     var conv = currentConv();
     if (!conv || !conv.messages.length) {
       body.appendChild(createBubble(ACCUEIL, 'assistant'));
+      majSuggestions();
       return;
     }
     conv.messages.forEach(function (m) {
       body.appendChild(createBubble(m.content, m.role));
     });
+    majSuggestions();
     body.scrollTop = body.scrollHeight;
   }
 
@@ -425,6 +737,8 @@
       item.addEventListener('click', function (e) {
         if (e.target.classList.contains('safi-conv__del')) return;
         state.currentId = conv.id;
+        suggestionsState.loading = false;
+        suggestionsState.exhausted = false;
         saveState();
         renderSidebar();
         renderMessages();
@@ -442,7 +756,7 @@
   }
 
   /* =========================================================
-     9. ENVOI
+     12. ENVOI
      ========================================================= */
   function showTyping() {
     var body = document.getElementById('safiBody');
@@ -463,7 +777,7 @@
 
   async function genererAvecRepli(modeles, hist) {
     var derniere = null;
-    for (var tour = 0; tour < 3; tour++) {          // 3 tours maximum
+    for (var tour = 0; tour < 3; tour++) {
       for (var i = 0; i < modeles.length; i++) {
         try {
           var result = await modeles[i].generateContent({ contents: hist });
@@ -473,7 +787,7 @@
           derniere = e;
         }
       }
-      await attendre(1000 * Math.pow(2, tour));      // pause 1 s, 2 s, 4 s
+      await attendre(1000 * Math.pow(2, tour));
     }
     throw derniere;
   }
@@ -491,7 +805,6 @@
     updateConvTitle(conv, text);
     conv.messages.push({ role: 'user', content: text, time: Date.now() });
     saveState();
-    majSuggestions();
 
     inputEl.value = '';
     sendBtn.disabled = true;
@@ -502,18 +815,19 @@
       conv.messages.forEach(function (m) { body.appendChild(createBubble(m.content, m.role)); });
       body.scrollTop = body.scrollHeight;
     }
+    /* Cache les suggestions dès qu'un message est envoyé */
+    majSuggestions();
     showTyping();
     renderSidebar();
 
-    var reponse = null;
     try {
-      var modeles = await chargerIA();
+      var ctx = await chargerIA();
       var hist = conv.messages.filter(function (m) {
         return !(m.role !== 'user' && String(m.content).indexOf('Erreur technique') === 0);
       }).slice(-20).map(function (m) {
         return { role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] };
       });
-      reponse = await genererAvecRepli(modeles, hist);
+      var reponse = await genererAvecRepli(ctx.modeles, hist);
 
       hideTyping();
       conv.messages.push({ role: 'assistant', content: reponse, time: Date.now() });
@@ -527,7 +841,7 @@
     } catch (error) {
       console.error('Erreur Safi Ai :', error);
       hideTyping();
-      var msgErr = "Je rencontre un pic de demande en ce moment. Merci de réessayer dans quelques secondes. Si le problème persiste : +257 76389163 / info@bticket.com";
+      var msgErr = "Je rencontre un pic de demande en ce moment. Merci de réessayer dans quelques secondes. Si le problème persiste : +257 257 76389163 / info@bticket.com";
       if (body) {
         body.appendChild(createBubble(msgErr, 'assistant'));
         body.scrollTop = body.scrollHeight;
@@ -540,7 +854,7 @@
   }
 
   /* =========================================================
-     10. CSS
+     13. CSS
      ========================================================= */
   var CSS = `
 /* ===== FAB ===== */
@@ -670,38 +984,100 @@
 .safi-typing span:nth-child(2) { animation-delay: .18s; }
 .safi-typing span:nth-child(3) { animation-delay: .36s; }
 
-/* Quick chips */
+/* ===== SUGGESTIONS (arc + scroll infini) ===== */
 .safi-quick {
-  display: flex; flex-wrap: wrap; gap: 8px;
-  padding: 10px 14px;
+  position: relative;
   border-top: 1px solid rgba(255,255,255,.06);
-  background: rgba(0,0,0,.1);
-  max-height: 100px;
-  overflow-y: auto;
+  background: linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.15) 100%);
+  padding: 14px 0 12px;
   flex-shrink: 0;
+  transition: opacity .3s, max-height .35s cubic-bezier(.22,.61,.36,1);
+  max-height: 160px;
+  overflow: hidden;
 }
-.safi-quick::-webkit-scrollbar { width: 5px; }
-.safi-quick::-webkit-scrollbar-thumb { background: #2f3540; border-radius: 5px; }
-.safi-quick button {
-  padding: 7px 14px;
+.safi-quick.is-hidden {
+  opacity: 0;
+  max-height: 0;
+  padding: 0;
+  pointer-events: none;
+  border-top-width: 0;
+}
+.safi-quick__label {
+  font-size: .64rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(212,175,55,.75);
+  padding: 0 18px 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.safi-quick__label svg { width: 11px; height: 11px; }
+
+.safi-quick__scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 18px 18px 8px;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+}
+.safi-quick__scroll::-webkit-scrollbar { display: none; }
+
+.safi-quick__chip {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  padding: 8px 14px;
   border-radius: 100px;
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(212,175,55,.25);
-  color: rgba(244,240,230,.78);
+  color: rgba(244,240,230,.85);
   font-size: .74rem;
+  font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   white-space: nowrap;
-  display: inline-flex; align-items: center; gap: 7px;
-  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: border-color .2s, color .2s, background .2s, transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .2s;
+  will-change: transform;
+  line-height: 1.2;
 }
-.safi-quick button svg { width: 14px; height: 14px; flex-shrink: 0; }
-.safi-quick.is-hidden { display: none; }
-.safi-quick button:hover {
+.safi-quick__chip svg {
+  width: 12px;
+  height: 12px;
+  color: #D4AF37;
+  flex-shrink: 0;
+}
+.safi-quick__chip:hover {
   border-color: #D4AF37;
   color: #D4AF37;
   background: rgba(212,175,55,.1);
-  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -4px rgba(212,175,55,.4);
+}
+.safi-quick__chip:active {
+  transform: scale(.96) !important;
+}
+
+.safi-quick__skeleton {
+  flex: 0 0 auto;
+  height: 30px;
+  border-radius: 100px;
+  background: linear-gradient(90deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.08) 50%, rgba(255,255,255,.03) 100%);
+  background-size: 200% 100%;
+  animation: safiShimmer 1.4s infinite;
+}
+@keyframes safiShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* Footer */
@@ -833,7 +1209,9 @@
 .safi-app .safi-chat .safi-body { padding: 24px 22px; gap: 18px; }
 .safi-app .safi-chat .safi-msg { max-width: 78%; font-size: .95rem; padding: 13px 18px; }
 .safi-app .safi-chat .safi-footer { padding: 14px 18px 18px; }
-.safi-app .safi-chat .safi-quick { padding: 12px 18px; max-height: 120px; }
+.safi-app .safi-chat .safi-quick { padding: 18px 0 16px; }
+.safi-app .safi-chat .safi-quick__scroll { padding: 20px 22px 10px; }
+.safi-app .safi-chat .safi-quick__label { padding: 0 22px 8px; }
 
 .safi-mobile-menu-btn { display: none; margin-left: auto; }
 
@@ -879,6 +1257,7 @@
   .safi-app .safi-chat .safi-body { padding: 16px; }
   .safi-app .safi-chat .safi-footer { padding: 12px 14px 14px; }
   .safi-sidebar { top: 76px; left: 10px; bottom: 10px; width: 280px; }
+  .safi-quick__chip { font-size: .72rem; padding: 7px 12px; }
 }
 
 /* =========================================================
@@ -916,7 +1295,7 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
 `;
 
   /* =========================================================
-     11. ICÔNES
+     14. ICÔNES
      ========================================================= */
   var ICON_STAR =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
@@ -924,7 +1303,7 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
     '</svg>';
 
   /* =========================================================
-     12. HTML BUILDERS
+     15. HTML BUILDERS
      ========================================================= */
   function buildFabHtml() {
     return '' +
@@ -939,27 +1318,18 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
       '</button>';
   }
 
-  function chipIcon(paths) {
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths + '</svg>';
-  }
-  var CHIP_ICONS = {
-    mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/>',
-    ticket: '<path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/>',
-    calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
-    megaphone: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
-    tag: '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>',
-    user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'
-  };
-
   function buildQuickChips() {
     return '' +
-      '<div class="safi-quick">' +
-        '<button type="button" data-q="Aide-moi à préparer un concert">' + chipIcon(CHIP_ICONS.mic) + 'Préparer un concert</button>' +
-        '<button type="button" data-q="Propose-moi des idées de catégories de billets pour mon événement">' + chipIcon(CHIP_ICONS.ticket) + 'Catégories de billets</button>' +
-        '<button type="button" data-q="Propose-moi un planning J-30 / J-15 / J-7 / J-1 pour mon événement">' + chipIcon(CHIP_ICONS.calendar) + 'Planning</button>' +
-        '<button type="button" data-q="Donne-moi des idées de communication sur les réseaux sociaux pour mon événement">' + chipIcon(CHIP_ICONS.megaphone) + 'Communication</button>' +
-        '<button type="button" data-q="Conseille-moi pour fixer le prix de mes billets et proposer des promotions">' + chipIcon(CHIP_ICONS.tag) + 'Stratégie de prix</button>' +
-        '<button type="button" data-q="Qui est le fondateur de bTicket ?">' + chipIcon(CHIP_ICONS.user) + 'Fondateur</button>' +
+      '<div class="safi-quick" id="safiQuick">' +
+        '<div class="safi-quick__label">' +
+          ICON_SPARKLE.replace('width: 12px', 'width: 11px') +
+          'Suggestions' +
+        '</div>' +
+        '<div class="safi-quick__scroll" id="safiQuickScroll" aria-label="Suggestions de questions">' +
+          '<div class="safi-quick__skeleton" style="width:110px;"></div>' +
+          '<div class="safi-quick__skeleton" style="width:140px;"></div>' +
+          '<div class="safi-quick__skeleton" style="width:95px;"></div>' +
+        '</div>' +
       '</div>';
   }
 
@@ -1040,7 +1410,7 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
   }
 
   /* =========================================================
-     13. ÉVÉNEMENTS
+     16. ÉVÉNEMENTS
      ========================================================= */
   function attachInputEvents() {
     var inputEl = document.getElementById('safiInput');
@@ -1054,19 +1424,6 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
     inputEl.addEventListener('input', function () {
       sendBtn.disabled = !inputEl.value.trim();
     });
-
-    // Quick chips
-    document.querySelectorAll('.safi-quick button').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var inputEl = document.getElementById('safiInput');
-        var sendBtn = document.getElementById('safiSend');
-        if (inputEl) {
-          inputEl.value = btn.getAttribute('data-q') || '';
-          inputEl.focus();
-          if (sendBtn) sendBtn.disabled = !inputEl.value.trim();
-        }
-      });
-    });
   }
 
   function setupFullMode(mount) {
@@ -1076,6 +1433,7 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
     chatEl.classList.add('open');
 
     attachInputEvents();
+    setupSuggestionsScroll();
 
     var newBtn = document.getElementById('safiNew');
     if (newBtn) newBtn.addEventListener('click', function () {
@@ -1110,12 +1468,16 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
     chatEl = document.getElementById('safiChat');
     if (!fabEl || !chatEl) return;
 
+    setupSuggestionsScroll();
+
     function memoriserOuvert(v) {
       try { sessionStorage.setItem(CLE_OUVERT, v ? '1' : '0'); } catch (e) {}
     }
     function ouvrir(avecFocus) {
       if (state.conversations[0]) {
         state.currentId = state.conversations[0].id;
+        suggestionsState.loading = false;
+        suggestionsState.exhausted = false;
         saveState();
       }
       renderMessages();
@@ -1132,6 +1494,7 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
       }
       var body = document.getElementById('safiBody');
       if (body) body.scrollTop = body.scrollHeight;
+      requestArcUpdate();
     }
     function fermer() {
       chatEl.classList.remove('open');
@@ -1162,7 +1525,7 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
   }
 
   /* =========================================================
-     13b. CLAVIER MOBILE — synchronisation avec le viewport visuel
+     17. CLAVIER MOBILE
      ========================================================= */
   function synchroniserClavier() {
     var vv = window.visualViewport;
@@ -1195,7 +1558,7 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
   }
 
   /* =========================================================
-     14. INIT
+     18. INIT
      ========================================================= */
   function demarrer() {
     var style = document.createElement('style');
