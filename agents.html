@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 
 <style>
 /* =========================================================
@@ -109,11 +109,7 @@ h1, h2, h3, h4 {
   color: var(--or);
   margin-bottom: 22px;
 }
-.eyebrow::before {
-  content: "";
-  width: 32px; height: 1px;
-  background: var(--or);
-}
+.eyebrow::before { /* remplacé par point doré via patch v3 */ }
 
 .section-title {
   font-size: clamp(1.9rem, 4.2vw, 3rem);
@@ -283,7 +279,6 @@ h1, h2, h3, h4 {
   font-size: clamp(1.02rem, 4.2vw, 1.2rem);
   font-weight: 500;
   padding: 10px 0;
-  border-bottom: 1px solid var(--line-soft);
   color: var(--ivoire);
   transform: translateY(20px);
   opacity: 0;
@@ -409,7 +404,6 @@ h1, h2, h3, h4 {
    ========================================================= */
 .trust {
   padding: 40px 0;
-  border-bottom: 1px solid var(--line-soft);
   background: var(--noir-soft);
 }
 .trust__row {
@@ -497,8 +491,6 @@ h1, h2, h3, h4 {
    ========================================================= */
 .statuts {
   background: var(--noir-soft);
-  border-top: 1px solid var(--line-soft);
-  border-bottom: 1px solid var(--line-soft);
 }
 .statuts__grid {
   display: grid;
@@ -630,7 +622,7 @@ h1, h2, h3, h4 {
   display: flex;
   gap: 16px;
   padding-bottom: 20px;
-  border-bottom: 1px solid var(--line-soft);
+  /* border supprimé */
 }
 .scanner-points li:last-child { border-bottom: none; padding-bottom: 0; }
 .scanner-points__num {
@@ -753,14 +745,13 @@ h1, h2, h3, h4 {
 .footer {
   padding: 80px 0 34px;
   background: var(--noir);
-  border-top: 1px solid var(--line-soft);
+  /* border-top removed */
 }
 .footer__top {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
   gap: 44px;
   padding-bottom: 52px;
-  border-bottom: 1px solid var(--line-soft);
 }
 .footer__brand p {
   color: var(--texte-muted);
@@ -986,6 +977,227 @@ h1, h2, h3, h4 {
   main p { line-height: 1.7; }
   h1, h2, h3, p, li { overflow-wrap: break-word; }
 }
+/* bTicket v3 design */
+/* =================================================================
+   bTicket — Design system v3 (Cormorant accent, sans traits inutiles)
+   ================================================================= */
+
+/* ── 0. Police d'accent : Cormorant Garamond italic en remplacement
+       de "Orliet Pro Medium Italic" ─────────────────────────────── */
+:root {
+  --font-accent: 'Cormorant Garamond', 'Georgia', serif;
+}
+
+/* ── 1. Tokens resserrés ─────────────────────────────────────────── */
+:root {
+  --radius: 10px;
+  --radius-sm: 7px;
+  --radius-pill: 100px;
+}
+
+/* ── 2. Supprimer TOUS les traits horizontaux section-séparateurs ── */
+.eyebrow::before,
+.eyebrow::after {
+  display: none !important;
+  content: none !important;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: .2em;
+  font-weight: 600;
+  gap: 10px;
+}
+/* Point lumineux doré à gauche */
+.eyebrow::before {
+  display: inline-block !important;
+  content: "" !important;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--or);
+  box-shadow: 0 0 10px rgba(212,175,55,.8);
+  flex-shrink: 0;
+  order: -1;
+}
+
+.section--soft {
+  border-top: none !important;
+  border-bottom: none !important;
+  background: var(--noir-soft);
+}
+.apercu {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+.footer {
+  border-top: none !important;
+  background: #0c0e13 !important;
+  padding-top: 70px !important;
+}
+.footer__top {
+  border-bottom: none !important;
+  position: relative;
+}
+.footer__top::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 52px; height: 1px;
+  background: var(--or);
+  opacity: .6;
+}
+.mobile-menu a {
+  border-bottom: none !important;
+}
+
+/* ── 3. Accents typographiques avec Cormorant Garamond italic ────── */
+/* Au lieu de mettre le texte en italique Montserrat (IA), on utilise
+   une vraie police serif élégante — différence immédiatement visible */
+.section-title .gold,
+.hero h1 em,
+.cta h2 .gold,
+.editorial__text h2 .gold,
+.one h2 .gold,
+.avantages__head .section-title .gold {
+  font-family: var(--font-accent) !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  font-size: 1.08em;
+  color: var(--or) !important;
+  letter-spacing: -.01em;
+}
+
+/* ── 4. Hero : plus d'impact, moins de template ──────────────────── */
+.hero h1 {
+  font-size: clamp(2.9rem, 7.8vw, 5.8rem) !important;
+  line-height: .98 !important;
+  letter-spacing: -.038em !important;
+}
+.hero h1 em {
+  font-family: var(--font-accent) !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  color: var(--or) !important;
+  font-size: 1.1em;
+  display: inline-block;
+}
+.hero__tag {
+  padding: 7px 14px !important;
+  border-radius: var(--radius) !important;
+  background: rgba(212,175,55,.09) !important;
+  border: 1px solid rgba(212,175,55,.22) !important;
+  font-size: .73rem !important;
+  font-weight: 500 !important;
+  letter-spacing: .05em !important;
+  text-transform: none !important;
+  color: rgba(244,240,230,.88) !important;
+}
+
+/* ── 5. Border-radius partout — 10px, fini le 20px qui crie template */
+.av-card,
+.mv-card,
+.apercu__phone,
+.une-card,
+.safi-chat,
+.safi-sidebar,
+.editorial__visual {
+  border-radius: var(--radius) !important;
+}
+.btn {
+  border-radius: var(--radius) !important;
+  min-height: 48px !important;
+}
+.btn--sm {
+  border-radius: 7px !important;
+  min-height: 38px !important;
+}
+.nav__more-menu {
+  border-radius: var(--radius) !important;
+}
+.nav .btn--primary {
+  border-radius: 7px !important;
+  padding: 9px 16px !important;
+  font-size: .81rem !important;
+}
+.une-card--skeleton, .une-empty { border-radius: var(--radius) !important; }
+
+/* ── 6. Cartes : hover discret, pas de translateY mécanique ─────── */
+.av-card:hover,
+.mv-card:hover,
+.une-card:hover {
+  transform: none !important;
+  border-color: rgba(212,175,55,.3) !important;
+  box-shadow: 0 0 0 1px rgba(212,175,55,.12), 0 10px 36px -12px rgba(0,0,0,.55) !important;
+}
+.apercu__phone:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(212,175,55,.3) !important;
+}
+
+/* ── 7. Supprimer radial-gradient ::before sur chaque carte ───────── */
+.mv-card::before {
+  display: none !important;
+}
+
+/* ── 8. Scroll-cue masqué ─────────────────────────────────────────── */
+.scroll-cue { display: none !important; }
+
+/* ── 9. Nav border allégée ──────────────────────────────────────────*/
+.nav.scrolled {
+  border-bottom-color: rgba(212,175,55,.1) !important;
+}
+
+/* ── 10. Section-title : plus de taille ─────────────────────────── */
+.section-title {
+  font-size: clamp(2rem, 4.4vw, 3.1rem);
+}
+
+/* ── 11. Grille Pourquoi : première carte plus large sur desktop ──── */
+@media (min-width: 1081px) {
+  .avantages__grid {
+    grid-template-columns: 1.3fr 1fr 1fr 1fr !important;
+    gap: 16px !important;
+  }
+  .avantages__grid .av-card:first-child {
+    background: linear-gradient(135deg, rgba(212,175,55,.09) 0%, var(--anthracite) 55%) !important;
+    border-color: rgba(212,175,55,.18) !important;
+  }
+}
+
+/* ── 12. Numéros av-card : ultra discrets ─────────────────────────── */
+.av-card__num {
+  font-size: .58rem !important;
+  color: rgba(212,175,55,.3) !important;
+  letter-spacing: .1em !important;
+  font-weight: 600 !important;
+}
+@media (max-width: 1080px) { .av-card__num { display: none !important; } }
+
+/* ── 13. Rythme de padding varié (cassé par rapport au 130px partout) */
+.section { padding: 110px 0; }
+@media (max-width: 720px) { .section { padding: 86px 0; } }
+.une.section { padding: 90px 0 100px; }
+
+/* ── 14. Boutons nav : sans animation de sortie ─────────────────── */
+.btn--ghost:hover { transform: none !important; }
+.btn--primary:hover { transform: none !important; }
+.footer__socials a:hover { transform: translateY(-2px) !important; }
+
+/* ── 15. Logo brand__text : toujours en gras ─────────────────────── */
+.brand__text,
+.brand__text span {
+  font-weight: 700 !important;
+}
+
+/* ── 16. Section-title accent global (pages légales et secondaires) ─ */
+.page-hero h1 em,
+.page-hero h1 span.gold {
+  font-family: var(--font-accent) !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  color: var(--or) !important;
+}
+
 </style>
 </head>
 <body class="no-js">

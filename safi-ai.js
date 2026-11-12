@@ -1,5 +1,5 @@
 /* =========================================================
-   Safi Ai — Assistant IA officiel de bTicket
+   Tix — Assistant IA officiel de bTicket
    ---------------------------------------------------------
    • Mode FLOTTANT (défaut) : bouton bas-droite + petite fenêtre
    • Mode PLEIN ÉCRAN : activé si la page contient [data-safi-full]
@@ -12,8 +12,8 @@
    ========================================================= */
 (function () {
   'use strict';
-  if (window.__safiAi) return;
-  window.__safiAi = true;
+  if (window.__tixAi) return;
+  window.__tixAi = true;
 
   /* =========================================================
      1. CONFIG
@@ -32,8 +32,8 @@
   };
 
   var CLE_SITE_RECAPTCHA = '6LfCFfEtAAAAAFhBn3JVI6cZ8qIp7tOafOjYkWDC';
-  var MODELES = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite"];
-  var MODELE_SUGGESTIONS = "gemini-3.8-flash";
+  var MODELES = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-flash-8b"];
+  var MODELE_SUGGESTIONS = "gemini-2.0-flash";
 
   /* Suggestions de secours si l'IA échoue (rare, mais on ne laisse jamais vide) */
   var FALLBACK_SUGGESTIONS = [
@@ -173,7 +173,7 @@
     "- Agents (agents.html) : espace dédié aux agents de contrôle d'accès.",
     "- Tarifs (tarifs.html) : comparatif des 3 offres (Standard, Pro, Élite).",
     "- À propos (a-propos.html) : histoire, mission, vision et valeurs de bTicket.",
-    "- Assistant (assistant.html) : version plein écran de Safi Ai avec historique des conversations.",
+    "- Assistant (assistant.html) : version plein écran de Tix avec historique des conversations.",
     "- Télécharger (telecharger.html) : liens de téléchargement de l'application.",
     "- Pages légales : Politique de confidentialité, Mentions légales, Conditions d'utilisation, Politique de remboursement.",
     "",
@@ -202,16 +202,16 @@
      3. PROMPT SYSTÈME
      ========================================================= */
   var CONSIGNE_BASE = [
-    "Tu es Safi Ai, l'assistant virtuel officiel de bTicket (plateforme africaine de billetterie numérique), fondée par Audry Paulin Dushime.",
+    "Tu es Tix, l'assistant IA officiel de bTicket (plateforme africaine de billetterie numérique), fondée par Audry Paulin Dushime.",
     "",
     "RÈGLE ABSOLUE : tu réponds UNIQUEMENT aux questions dont la réponse figure EXPLICITEMENT dans la section « INFORMATIONS OFFICIELLES BTICKET ». Tu n'utilises JAMAIS tes connaissances générales et tu n'inventes JAMAIS — SAUF dans le cas prévu par la règle 2bis (mode conseil organisateur).",
     "",
     "=== LANGUE ===",
-    "Tu réponds TOUJOURS dans la langue de l'utilisateur : français, anglais, kirundi, swahili, arabe, ou toute autre langue. En cas de mélange, utilise la langue dominante. En cas de doute, réponds en français. Les noms propres (bTicket, Safi Ai, Audry Paulin Dushime, FBU, Mobile Money) restent inchangés.",
+    "Tu réponds TOUJOURS dans la langue de l'utilisateur : français, anglais, kirundi, swahili, arabe, ou toute autre langue. En cas de mélange, utilise la langue dominante. En cas de doute, réponds en français. Les noms propres (bTicket, Tix, Audry Paulin Dushime, FBU, Mobile Money) restent inchangés.",
     "",
     "=== COMPORTEMENT ===",
     "1) Réponse dans le périmètre → réponds dans la langue de l'utilisateur, chaleureusement, avec du Markdown si utile.",
-    "2) Hors périmètre OU réponse absente → refuse poliment dans la même langue. Exemple (FR) : « Je suis Safi Ai, l'assistant officiel de bTicket, et je ne peux répondre qu'aux questions concernant nos services. »",
+    "2) Hors périmètre OU réponse absente → refuse poliment dans la même langue. Exemple (FR) : « Je suis Tix, l'assistant officiel de bTicket, et je ne peux répondre qu'aux questions concernant nos services. »",
     "2bis) MODE CONSEIL ORGANISATEUR — EXCEPTION IMPORTANTE :",
     "  Si l'utilisateur se présente comme organisateur (ou demande clairement de l'aide pour préparer / améliorer / organiser son événement), tu peux SORTIR du périmètre strict des informations officielles et utiliser tes connaissances générales en organisation d'événements pour lui donner des idées, suggestions et conseils concrets.",
     "  Cette exception s'applique UNIQUEMENT aux sujets liés à la préparation d'un événement : thème, nom, catégories de billets, prix, planning, communication, animations, artistes, logistique, sécurité, partenariats, expérience public.",
@@ -233,9 +233,9 @@
   /* =========================================================
      4. ÉTAT
      ========================================================= */
-  var CLE_STOCKAGE = 'bticket_safi_conversations_v1';
-  var CLE_OUVERT = 'bticket_safi_ouvert';
-  var ACCUEIL = "Bonjour 👋 Je suis Safi Ai, l'assistant officiel de bTicket.\n\nVous pouvez me poser des questions sur l'application, les tarifs, les organisateurs ou les agents — dans la langue de votre choix.\n\nVous organisez un événement ? Je peux aussi vous aider à le préparer : choix du thème, catégories de billets, planning, communication, animations… Dites-moi simplement quel type d'événement vous préparez 🎉";
+  var CLE_STOCKAGE = 'bticket_tix_conversations_v1';
+  var CLE_OUVERT = 'bticket_tix_ouvert';
+  var ACCUEIL = "Bonjour 👋 Je suis Tix, l'assistant IA de bTicket.\n\nPosez-moi vos questions sur les billets, les événements, les tarifs, les organisateurs ou les agents — dans la langue de votre choix.\n\nVous organisez un événement ? Je peux aussi vous aider à le préparer : choix du thème, catégories de billets, planning, communication, animations… Dites-moi simplement quel type d'événement vous préparez 🎉";
 
   var isFullMode = false;
   var fabEl = null;
@@ -404,7 +404,7 @@
       });
     })();
     promesseIA.catch(function (err) {
-      console.error('Safi Ai : erreur de chargement IA', err);
+      console.error('Tix : erreur de chargement IA', err);
       promesseIA = null;
       setStatus('error', 'Hors ligne');
     });
@@ -464,7 +464,7 @@
       exclusion = '\n\nNE PROPOSE PAS ces suggestions déjà affichées (évite les doublons) :\n' +
         dejaAffichees.map(function (s) { return '  • ' + s; }).join('\n');
     }
-    return 'Tu génères des suggestions de questions courtes pour Safi Ai, l\'assistant virtuel de bTicket.\n\n' +
+    return 'Tu génères des suggestions de questions courtes pour Tix, l\'assistant IA de bTicket.\n\n' +
       'CONTEXTE bTicket :\n' +
       '- Plateforme africaine de billetterie numérique\n' +
       '- Application mobile iOS/Android pour acheter et valider des billets\n' +
@@ -525,7 +525,7 @@
       }
       return suggestions;
     } catch (e) {
-      console.warn('Safi Ai : échec génération suggestions', e);
+      console.warn('Tix : échec génération suggestions', e);
       return [];
     }
   }
@@ -839,7 +839,7 @@
       }
       setStatus('ready', 'En ligne · multilingue');
     } catch (error) {
-      console.error('Erreur Safi Ai :', error);
+      console.error('Tix :', error);
       hideTyping();
       var msgErr = "Je rencontre un pic de demande en ce moment. Merci de réessayer dans quelques secondes. Si le problème persiste : +257 257 76389163 / info@bticket.com";
       if (body) {
@@ -861,11 +861,13 @@
 .safi-fab {
   position: fixed; right: 24px; bottom: 24px; z-index: 950;
   width: 60px; height: 60px; border-radius: 50%;
-  background: linear-gradient(135deg, #D4AF37 0%, #b8912a 100%);
-  color: #111318; display: grid; place-items: center;
-  box-shadow: 0 12px 28px -8px rgba(212,175,55,.65), 0 4px 12px -4px rgba(0,0,0,.5);
+  padding: 3px;
+  background: linear-gradient(135deg, #F1E2A6 0%, #D4AF37 48%, #B8932C 100%);
+  color: #111318; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 12px 28px -8px rgba(212,175,55,.7), 0 4px 12px -4px rgba(0,0,0,.5);
   border: none; cursor: pointer;
   transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s cubic-bezier(.22,.61,.36,1);
+  overflow: hidden;
 }
 .safi-fab:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 18px 36px -10px rgba(212,175,55,.85); }
 .safi-fab:active { transform: translateY(-1px) scale(.98); }
@@ -910,8 +912,12 @@
 }
 .safi-head__avatar {
   width: 40px; height: 40px; border-radius: 50%;
-  background: linear-gradient(135deg, #D4AF37, #b8912a);
-  display: grid; place-items: center; color: #111318; flex-shrink: 0;
+  background: linear-gradient(135deg, #D4AF37 0%, #b8912a 100%);
+  display: flex; align-items: center; justify-content: center;
+  color: #111318; flex-shrink: 0;
+  font-weight: 700; font-size: .78rem; letter-spacing: .04em;
+  font-family: 'Montserrat', sans-serif;
+  overflow: hidden;
 }
 .safi-head__avatar svg { width: 22px; height: 22px; }
 .safi-head__title { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -1307,7 +1313,7 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
      ========================================================= */
   function buildFabHtml() {
     return '' +
-      '<button class="safi-fab" id="safiFab" aria-label="Ouvrir l\'assistant Safi Ai">' +
+      '<button class="safi-fab" id="safiFab" aria-label="Ouvrir Tix, l\'assistant bTicket">' +
         '<span class="safi-fab__badge"></span>' +
         '<svg class="safi-fab__icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
           '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>' +
@@ -1360,9 +1366,9 @@ html.safi-vv .safi-full-wrap { bottom: auto; top: var(--safi-vt, 0px); height: v
     return '' +
       '<div class="safi-chat ' + extraClass + '" id="safiChat" aria-hidden="false">' +
         '<div class="safi-head">' +
-          '<div class="safi-head__avatar">' + ICON_STAR + '</div>' +
+          '<div class="safi-head__avatar"><img src="IMAGES/ailogo.png" alt="Tix" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div>' +
           '<div class="safi-head__title">' +
-            '<strong>Safi Ai</strong>' +
+            '<strong>Tix</strong>' +
             '<span class="safi-head__status" data-safi-status><i></i> Connexion…</span>' +
           '</div>' +
           clearBtn +

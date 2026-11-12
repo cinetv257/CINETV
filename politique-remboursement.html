@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Politique de remboursement de bTicket — Conditions, processus et responsabilités des organisateurs.">
+<title>Politique de remboursement — bTicket</title>
+
+<style>
+@font-face {
+  font-family: 'Articulat CF';
+  src: url('ArticulatCF-Regular.woff2') format('woff2'),
+       url('ArticulatCF-Regular.woff')  format('woff');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Articulat CF';
+  src: url('ArticulatCF-Medium.woff2') format('woff2'),
+       url('ArticulatCF-Medium.woff')  format('woff');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Articulat CF';
+  src: url('ArticulatCF-DemiBold.woff2') format('woff2'),
+       url('ArticulatCF-DemiBold.woff')  format('woff');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Articulat CF';
+  src: url('ArticulatCF-Bold.woff2') format('woff2'),
+       url('ArticulatCF-Bold.woff')  format('woff');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --noir: #111318; --anthracite: #252A34; --or: #D4AF37;
+  --ivoire: #F4F0E6; --blanc: #FFFFFF;
+  --noir-soft: #171a21; --anthracite-2: #2f3540;
+  --line: rgba(212,175,55,.18); --line-soft: rgba(255,255,255,.06);
+  --texte-muted: rgba(244,240,230,.62); --texte-faint: rgba(244,240,230,.42);
+  --succes: #2ecc71; --succes-soft: rgba(46,204,113,.12);
+  --erreur: #e74c3c; --erreur-soft: rgba(231,76,60,.12);
+  --alerte: #f39c12; --alerte-soft: rgba(243,156,18,.12);
+  --font: 'Articulat CF', system-ui, -apple-system, "Segoe UI", sans-serif;
+  --max: 1240px; --radius: 20px; --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+body { background: var(--noir); color: var(--ivoire); font-family: var(--font); font-weight: 400; font-size: 16px; line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+ul { list-style: none; }
+h1, h2, h3, h4 { font-family: var(--font); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: var(--blanc); }
+::selection { background: var(--or); color: var(--noir); }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--noir); }
+::-webkit-scrollbar-thumb { background: var(--anthracite-2); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--or); }
+
+.container { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: 24px; }
+.gold { color: var(--or); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 15px 30px; border-radius: 100px; font-size: .94rem; font-weight: 600; transition: transform .3s var(--ease), box-shadow .3s var(--ease), background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease); white-space: nowrap; }
+.btn svg { width: 16px; height: 16px; }
+.btn--primary { background: var(--or); color: var(--noir); }
+.btn--primary:hover { background: #e0bb47; transform: translateY(-2px); box-shadow: 0 14px 32px -14px rgba(212,175,55,.75); }
+.btn--sm { padding: 10px 22px; font-size: .86rem; }
+
+.progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: var(--or); z-index: 1000; transition: width .1s linear; }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 900; padding: 20px 0; transition: padding .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease), backdrop-filter .35s var(--ease); border-bottom: 1px solid transparent; }
+.nav.scrolled { padding: 12px 0; background: rgba(17,19,24,.85); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); border-bottom-color: var(--line); }
+.nav__inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.brand img { height: 36px; width: auto; object-fit: contain; }
+.brand__text { font-weight: 700; font-size: 1.18rem; color: var(--blanc); }
+.brand__text span { color: var(--or); }
+.nav__links { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+.nav__links a { padding: 9px 14px; font-size: .88rem; font-weight: 500; color: var(--texte-muted); border-radius: 100px; transition: color .3s var(--ease), background .3s var(--ease); }
+.nav__links a:hover { color: var(--blanc); background: rgba(244,240,230,.05); }
+.nav__cta { display: flex; align-items: center; gap: 12px; }
+.burger { display: none; width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--line); background: transparent; position: relative; flex-shrink: 0; }
+.burger span { position: absolute; left: 50%; width: 18px; height: 1.8px; background: var(--ivoire); border-radius: 2px; transform: translateX(-50%); transition: transform .35s var(--ease), opacity .25s var(--ease), top .35s var(--ease); }
+.burger span:nth-child(1) { top: 16px; }
+.burger span:nth-child(2) { top: 21px; }
+.burger span:nth-child(3) { top: 26px; }
+.burger.open span:nth-child(1) { top: 21px; transform: translateX(-50%) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { top: 21px; transform: translateX(-50%) rotate(-45deg); }
+
+.mobile-menu { position: fixed; inset: 0; z-index: 890; background: var(--noir); display: flex; flex-direction: column; justify-content: center; padding: 100px 32px 48px; opacity: 0; visibility: hidden; transition: opacity .4s var(--ease), visibility .4s var(--ease); }
+.mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-menu a { display: block; font-size: clamp(1.4rem, 5.6vw, 1.9rem); font-weight: 600; padding: 14px 0; color: var(--ivoire); transform: translateY(20px); opacity: 0; transition: transform .45s var(--ease), opacity .45s var(--ease), color .3s; }
+.mobile-menu.open a { transform: translateY(0); opacity: 1; }
+.mobile-menu a:hover { color: var(--or); }
+.mobile-menu .btn { margin-top: 30px; width: 100%; }
+
+.legal-header { padding: 170px 0 60px; background: linear-gradient(180deg, var(--noir-soft) 0%, var(--noir) 100%); position: relative; overflow: hidden; }
+.legal-header::before { content: ""; position: absolute; top: -40%; right: -10%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(212,175,55,.1), transparent 65%); pointer-events: none; }
+.legal-header .container { position: relative; z-index: 1; }
+.breadcrumb { display: flex; align-items: center; gap: 10px; font-size: .82rem; color: var(--texte-faint); margin-bottom: 22px; }
+.breadcrumb a { color: var(--texte-muted); transition: color .3s; }
+.breadcrumb a:hover { color: var(--or); }
+.legal-header h1 { font-size: clamp(1.9rem, 4.6vw, 3rem); margin-bottom: 18px; animation: fadeUp .7s var(--ease) both; }
+.legal-header p { font-size: 1rem; color: rgba(244,240,230,.72); max-width: 620px; animation: fadeUp .7s .08s var(--ease) both; }
+.legal-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 28px; padding-top: 24px; border-top: 1px solid rgba(212,175,55,.12); font-size: .8rem; color: var(--texte-faint); }
+.legal-meta strong { color: var(--or); font-weight: 600; margin-right: 6px; }
+
+.legal-content { padding: 70px 0 100px; }
+.legal-layout { display: grid; grid-template-columns: 260px 1fr; gap: 60px; align-items: start; }
+.legal-toc { position: sticky; top: 110px; padding: 26px 22px; border-radius: var(--radius); background: var(--anthracite); border: 1px solid var(--line-soft); }
+.legal-toc h3 { font-size: .74rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--or); margin-bottom: 18px; }
+.legal-toc ul { display: flex; flex-direction: column; gap: 6px; }
+.legal-toc a { font-size: .86rem; color: var(--texte-muted); padding: 7px 0; transition: color .3s var(--ease), padding-left .3s var(--ease); display: block; line-height: 1.4; }
+.legal-toc a:hover { color: var(--or); padding-left: 6px; }
+
+.legal-body { max-width: 780px; }
+.legal-body > section { padding-bottom: 44px; margin-bottom: 44px; }
+.legal-body > section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.legal-body h2 { font-size: 1.4rem; margin-bottom: 18px; display: flex; align-items: baseline; gap: 12px; scroll-margin-top: 110px; line-height: 1.25; }
+.legal-body h2 .num { color: var(--or); font-size: .95rem; font-weight: 700; flex-shrink: 0; }
+.legal-body h3 { font-size: 1.02rem; margin: 22px 0 12px; color: var(--or); }
+.legal-body p { color: var(--texte-muted); font-size: .95rem; margin-bottom: 14px; }
+.legal-body ul { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+.legal-body ul li { position: relative; padding-left: 22px; font-size: .93rem; color: var(--texte-muted); line-height: 1.6; }
+.legal-body ul li::before { content: ""; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--or); }
+.legal-body a { color: var(--or); border-bottom: 1px solid rgba(212,175,55,.35); transition: border-color .3s; }
+.legal-body a:hover { border-color: var(--or); }
+.legal-body .highlight { padding: 22px 24px; border-radius: 12px; background: rgba(212,175,55,.07); border-left: 3px solid var(--or); margin: 20px 0; }
+.legal-body .highlight p { margin: 0; color: rgba(244,240,230,.85); font-size: .92rem; }
+
+/* Cas de remboursement */
+.cas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.cas-card {
+  padding: 22px 20px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--line-soft);
+  position: relative;
+  overflow: hidden;
+}
+.cas-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 3px;
+}
+.cas-card--succes { border-color: rgba(46,204,113,.28); }
+.cas-card--succes::before { background: var(--succes); }
+.cas-card--succes .cas-card__label { color: var(--succes); }
+.cas-card--erreur { border-color: rgba(231,76,60,.28); }
+.cas-card--erreur::before { background: var(--erreur); }
+.cas-card--erreur .cas-card__label { color: var(--erreur); }
+.cas-card--alerte { border-color: rgba(243,156,18,.28); }
+.cas-card--alerte::before { background: var(--alerte); }
+.cas-card--alerte .cas-card__label { color: var(--alerte); }
+
+.cas-card__label {
+  display: block;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.cas-card h4 { font-size: .96rem; margin-bottom: 8px; color: var(--blanc); }
+.cas-card p { font-size: .85rem; color: var(--texte-muted); margin: 0; line-height: 1.5; }
+
+/* Étapes de demande */
+.demande-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 22px 0;
+}
+.demande-step {
+  padding: 22px 20px;
+  border-radius: 12px;
+  background: var(--anthracite);
+  border: 1px solid var(--line-soft);
+}
+.demande-step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  background: rgba(212,175,55,.12);
+  border: 1px solid var(--line);
+  color: var(--or);
+  font-size: .74rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.demande-step h4 { font-size: .92rem; margin-bottom: 6px; }
+.demande-step p { font-size: .82rem; color: var(--texte-muted); margin: 0; line-height: 1.5; }
+
+.footer { padding: 80px 0 34px; background: var(--noir); }
+.footer__top { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr; gap: 44px; padding-bottom: 52px; }
+.footer__brand p { color: var(--texte-muted); font-size: .88rem; margin: 20px 0 22px; max-width: 320px; }
+.footer__socials { display: flex; gap: 10px; }
+.footer__socials a { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: var(--anthracite); border: 1px solid var(--line-soft); color: var(--texte-muted); transition: all .3s var(--ease); }
+.footer__socials a:hover { background: var(--or); border-color: var(--or); color: var(--noir); transform: translateY(-3px); }
+.footer__socials svg { width: 17px; height: 17px; }
+.footer__col h4 { font-size: .74rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--or); margin-bottom: 18px; }
+.footer__col ul { display: flex; flex-direction: column; gap: 11px; }
+.footer__col a { font-size: .88rem; color: var(--texte-muted); transition: color .3s var(--ease), padding-left .3s var(--ease); }
+.footer__col a:hover { color: var(--or); padding-left: 4px; }
+.footer__bottom { padding-top: 28px; display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; font-size: .82rem; color: var(--texte-faint); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 1080px) {
+  .nav__links { display: none; }
+  .burger { display: block; }
+  .nav__cta .btn { display: none; }
+  .legal-layout { grid-template-columns: 1fr; gap: 40px; }
+  .legal-toc { position: static; }
+  .footer__top { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer__brand { grid-column: 1 / -1; }
+}
+@media (max-width: 720px) {
+  .container { padding-inline: 20px; }
+  .legal-header { padding: 140px 0 50px; }
+  .legal-content { padding: 50px 0 70px; }
+  .legal-body h2 { font-size: 1.2rem; }
+  .footer__top { grid-template-columns: 1fr; gap: 32px; }
+  .footer__bottom { flex-direction: column; text-align: center; }
+}
+@media (max-width: 480px) {
+  .brand img { height: 32px; }
+  .brand__text { font-size: 1.05rem; }
+  .legal-header h1 { font-size: 1.7rem; }
+}
+/* bTicket v3 design */
+/* =================================================================
+   bTicket — Design system v3 (Cormorant accent, sans traits inutiles)
+   ================================================================= */
+
+/* ── 0. Police d'accent : Cormorant Garamond italic en remplacement
+       de "Orliet Pro Medium Italic" ─────────────────────────────── */
+:root {
+  --font-accent: 'Cormorant Garamond', 'Georgia', serif;
+}
+
+/* ── 1. Tokens resserrés ─────────────────────────────────────────── */
+:root {
+  --radius: 10px;
+  --radius-sm: 7px;
+  --radius-pill: 100px;
+}
+
+/* ── 2. Supprimer TOUS les traits horizontaux section-séparateurs ── */
+.eyebrow::before,
+.eyebrow::after {
+  display: none !important;
+  content: none !important;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: .2em;
+  font-weight: 600;
+  gap: 10px;
+}
+/* Point lumineux doré à gauche */
+.eyebrow::before {
+  display: inline-block !important;
+  content: "" !important;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--or);
+  box-shadow: 0 0 10px rgba(212,175,55,.8);
+  flex-shrink: 0;
+  order: -1;
+}
+
+.section--soft {
+  border-top: none !important;
+  border-bottom: none !important;
+  background: var(--noir-soft);
+}
+.apercu {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+.footer {
+  border-top: none !important;
+  background: #0c0e13 !important;
+  padding-top: 70px !important;
+}
+.footer__top {
+  border-bottom: none !important;
+  position: relative;
+}
+.footer__top::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 52px; height: 1px;
+  background: var(--or);
+  opacity: .6;
+}
+.mobile-menu a {
+  border-bottom: none !important;
+}
+
+/* ── 3. Accents typographiques avec Cormorant Garamond italic ────── */
+/* Au lieu de mettre le texte en italique Montserrat (IA), on utilise
+   une vraie police serif élégante — différence immédiatement visible */
+.section-title .gold,
+.hero h1 em,
+.cta h2 .gold,
+.editorial__text h2 .gold,
+.one h2 .gold,
+.avantages__head .section-title .gold {
+  font-family: var(--font-accent) !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  font-size: 1.08em;
+  color: var(--or) !important;
+  letter-spacing: -.01em;
+}
+
+/* ── 4. Hero : plus d'impact, moins de template ──────────────────── */
+.hero h1 {
+  font-size: clamp(2.9rem, 7.8vw, 5.8rem) !important;
+  line-height: .98 !important;
+  letter-spacing: -.038em !important;
+}
+.hero h1 em {
+  font-family: var(--font-accent) !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  color: var(--or) !important;
+  font-size: 1.1em;
+  display: inline-block;
+}
+.hero__tag {
+  padding: 7px 14px !important;
+  border-radius: var(--radius) !important;
+  background: rgba(212,175,55,.09) !important;
+  border: 1px solid rgba(212,175,55,.22) !important;
+  font-size: .73rem !important;
+  font-weight: 500 !important;
+  letter-spacing: .05em !important;
+  text-transform: none !important;
+  color: rgba(244,240,230,.88) !important;
+}
+
+/* ── 5. Border-radius partout — 10px, fini le 20px qui crie template */
+.av-card,
+.mv-card,
+.apercu__phone,
+.une-card,
+.safi-chat,
+.safi-sidebar,
+.editorial__visual {
+  border-radius: var(--radius) !important;
+}
+.btn {
+  border-radius: var(--radius) !important;
+  min-height: 48px !important;
+}
+.btn--sm {
+  border-radius: 7px !important;
+  min-height: 38px !important;
+}
+.nav__more-menu {
+  border-radius: var(--radius) !important;
+}
+.nav .btn--primary {
+  border-radius: 7px !important;
+  padding: 9px 16px !important;
+  font-size: .81rem !important;
+}
+.une-card--skeleton, .une-empty { border-radius: var(--radius) !important; }
+
+/* ── 6. Cartes : hover discret, pas de translateY mécanique ─────── */
+.av-card:hover,
+.mv-card:hover,
+.une-card:hover {
+  transform: none !important;
+  border-color: rgba(212,175,55,.3) !important;
+  box-shadow: 0 0 0 1px rgba(212,175,55,.12), 0 10px 36px -12px rgba(0,0,0,.55) !important;
+}
+.apercu__phone:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(212,175,55,.3) !important;
+}
+
+/* ── 7. Supprimer radial-gradient ::before sur chaque carte ───────── */
+.mv-card::before {
+  display: none !important;
+}
+
+/* ── 8. Scroll-cue masqué ─────────────────────────────────────────── */
+.scroll-cue { display: none !important; }
+
+/* ── 9. Nav border allégée ──────────────────────────────────────────*/
+.nav.scrolled {
+  border-bottom-color: rgba(212,175,55,.1) !important;
+}
+
+/* ── 10. Section-title : plus de taille ─────────────────────────── */
+.section-title {
+  font-size: clamp(2rem, 4.4vw, 3.1rem);
+}
+
+/* ── 11. Grille Pourquoi : première carte plus large sur desktop ──── */
+@media (min-width: 1081px) {
+  .avantages__grid {
+    grid-template-columns: 1.3fr 1fr 1fr 1fr !important;
+    gap: 16px !important;
+  }
+  .avantages__grid .av-card:first-child {
+    background: linear-gradient(135deg, rgba(212,175,55,.09) 0%, var(--anthracite) 55%) !important;
+    border-color: rgba(212,175,55,.18) !important;
+  }
+}
+
+/* ── 12. Numéros av-card : ultra discrets ─────────────────────────── */
+.av-card__num {
+  font-size: .58rem !important;
+  color: rgba(212,175,55,.3) !important;
+  letter-spacing: .1em !important;
+  font-weight: 600 !important;
+}
+@media (max-width: 1080px) { .av-card__num { display: none !important; } }
+
+/* ── 13. Rythme de padding varié (cassé par rapport au 130px partout) */
+.section { padding: 110px 0; }
+@media (max-width: 720px) { .section { padding: 86px 0; } }
+.une.section { padding: 90px 0 100px; }
+
+/* ── 14. Boutons nav : sans animation de sortie ─────────────────── */
+.btn--ghost:hover { transform: none !important; }
+.btn--primary:hover { transform: none !important; }
+.footer__socials a:hover { transform: translateY(-2px) !important; }
+
+/* ── 15. Logo brand__text : toujours en gras ─────────────────────── */
+.brand__text,
+.brand__text span {
+  font-weight: 700 !important;
+}
+
+/* ── 16. Section-title accent global (pages légales et secondaires) ─ */
+.page-hero h1 em,
+.page-hero h1 span.gold {
+  font-family: var(--font-accent) !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  color: var(--or) !important;
+}
+
+
+/* == Alignement design bTicket v3 == */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap');
+
+body { font-family: 'Montserrat', 'Articulat CF', system-ui, sans-serif; }
+:root { --radius: 10px; --radius-sm: 7px; }
+
+/* Accentuation gold avec Cormorant */
+h1 em, h2 em, .gold {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  color: var(--or) !important;
+}
+
+/* Supprimer les traits inutiles */
+.section--soft { border-top: none !important; border-bottom: none !important; }
+.footer { border-top: none !important; }
+.footer__top { border-bottom: none !important; }
+.mobile-menu a { border-bottom: none !important; }
+.nav.scrolled { border-bottom-color: rgba(212,175,55,.1) !important; }
+
+/* Border-radius cohérent */
+.btn { border-radius: var(--radius) !important; }
+.btn--sm { border-radius: 7px !important; }
+.nav .btn--primary { border-radius: 7px !important; }
+
+/* Logo bold */
+.brand__text, .brand__text span { font-weight: 700 !important; }
+
+/* Sections légales : style éditorial propre */
+.legal-section {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.legal-section h2 {
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  margin: 48px 0 16px;
+  letter-spacing: -.02em;
+  color: var(--blanc);
+}
+.legal-section h2:first-child { margin-top: 0; }
+.legal-section h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 28px 0 10px;
+  color: var(--ivoire);
+}
+.legal-section p, .legal-section li {
+  color: var(--texte-muted);
+  font-size: .95rem;
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
+.legal-section ul, .legal-section ol {
+  padding-left: 1.4em;
+  margin-bottom: 16px;
+}
+.legal-section li { margin-bottom: 6px; }
+.legal-section strong { color: var(--ivoire); font-weight: 600; }
+.legal-section a { color: var(--or); text-decoration: underline; }
+.legal-section a:hover { opacity: .8; }
+.legal-section .info-box {
+  background: rgba(212,175,55,.06);
+  border: 1px solid rgba(212,175,55,.18);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 24px 0;
+}
+.legal-section .info-box p { margin-bottom: 0; color: var(--ivoire); }
+
+
+/* == bTicket Legal Pages — Design v3 == */
+
+/* Police Montserrat à la place d'Articulat CF */
+body { font-family: 'Montserrat', 'Articulat CF', system-ui, sans-serif; }
+
+/* Cormorant sur les mots gold */
+h1 .gold, h2 .gold, h1 em, h2 em {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  font-size: 1.08em;
+}
+
+/* Radius cohérent */
+:root { --radius: 10px; }
+.btn { border-radius: 10px !important; }
+.btn--sm { border-radius: 7px !important; }
+.nav__more-menu { border-radius: 10px !important; }
+.nav .btn--primary { border-radius: 7px !important; }
+.legal-toc { border-radius: 10px !important; }
+.legal-section-block, .legal-toc, .legal-info { border-radius: 10px !important; }
+
+/* Supprimer traits */
+.footer { border-top: none !important; }
+.footer__top { border-bottom: none !important; }
+.mobile-menu a { border-bottom: none !important; }
+.nav.scrolled { border-bottom-color: rgba(212,175,55,.1) !important; }
+
+/* Logo bold */
+.brand__text, .brand__text span { font-weight: 700 !important; }
+
+/* Hero légal : scroll-cue masqué */
+.scroll-cue { display: none !important; }
+
+/* Footer trait or court */
+.footer__top { position: relative; }
+.footer__top::after {
+  content: "";
+  position: absolute; bottom: 0; left: 0;
+  width: 52px; height: 1px;
+  background: var(--or); opacity: .6;
+}
+
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand">
+      <img src="IMAGES/logo.png" alt="bTicket">
+      <span class="brand__text">b<span>Ticket</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html">Accueil</a>
+      <a href="application.html">Application</a>
+      <a href="organisateurs.html">Organisateurs</a>
+      <a href="agents.html">Agents</a>
+      <a href="tarifs.html">Tarifs</a>
+      <a href="a-propos.html">À propos</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="telecharger.html" class="btn btn--primary btn--sm">
+        Télécharger
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M6 10l6 6 6-6M5 21h14"/></svg>
+      </a>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Accueil</a>
+  <a href="application.html">Application</a>
+  <a href="organisateurs.html">Organisateurs</a>
+  <a href="agents.html">Agents</a>
+  <a href="tarifs.html">Tarifs</a>
+  <a href="a-propos.html">À propos</a>
+  <a href="telecharger.html" class="btn btn--primary">Télécharger l'app</a>
+</div>
+
+<main>
+
+<section class="legal-header">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="index.html">Accueil</a>
+      <span>/</span>
+      <span>Politique de remboursement</span>
+    </nav>
+    <h1>Politique de <span class="gold">remboursement</span></h1>
+    <p>
+      Cette politique précise les conditions dans lesquelles un billet
+      acheté via bTicket peut faire l'objet d'un remboursement, ainsi
+      que le processus de demande.
+    </p>
+    <div class="legal-meta">
+      <span><strong>Mise à jour :</strong> Janvier 2025</span>
+      <span><strong>Version :</strong> 1.0</span>
+    </div>
+  </div>
+</section>
+
+<section class="legal-content">
+  <div class="container legal-layout">
+
+    <aside class="legal-toc">
+      <h3>Sommaire</h3>
+      <ul>
+        <li><a href="#principe">1. Principe général</a></li>
+        <li><a href="#cas">2. Cas de remboursement</a></li>
+        <li><a href="#non-remboursable">3. Cas non remboursables</a></li>
+        <li><a href="#processus">4. Processus de demande</a></li>
+        <li><a href="#delais">5. Délais de traitement</a></li>
+        <li><a href="#organisateurs">6. Responsabilité des organisateurs</a></li>
+        <li><a href="#annulation">7. Annulation d'événement</a></li>
+        <li><a href="#contact">8. Nous contacter</a></li>
+      </ul>
+    </aside>
+
+    <div class="legal-body">
+
+      <section id="principe">
+        <h2><span class="num">01.</span> Principe général</h2>
+        <p>Les billets achetés via bTicket sont des billets numériques émis pour un événement précis. Une fois l'achat confirmé, le billet est émis et rattaché à l'événement concerné.</p>
+        <p>Les demandes de remboursement sont examinées au cas par cas, selon les conditions décrites ci-dessous et selon les règles propres à chaque organisateur d'événement.</p>
+        <div class="highlight">
+          <p>bTicket agit en tant qu'intermédiaire technique entre l'utilisateur et l'organisateur. La décision finale de remboursement peut dépendre de l'organisateur.</p>
+        </div>
+      </section>
+
+      <section id="cas">
+        <h2><span class="num">02.</span> Cas de remboursement</h2>
+        <p>Un remboursement peut être accordé dans les situations suivantes :</p>
+        <div class="cas-grid">
+          <div class="cas-card cas-card--succes">
+            <span class="cas-card__label">Remboursable</span>
+            <h4>Annulation de l'événement</h4>
+            <p>L'événement est annulé par l'organisateur : les billets sont remboursés intégralement.</p>
+          </div>
+          <div class="cas-card cas-card--succes">
+            <span class="cas-card__label">Remboursable</span>
+            <h4>Report de l'événement</h4>
+            <p>Si la nouvelle date ne vous convient pas, vous pouvez demander le remboursement du billet.</p>
+          </div>
+          <div class="cas-card cas-card--alerte">
+            <span class="cas-card__label">À examiner</span>
+            <h4>Erreur technique</h4>
+            <p>En cas de double paiement ou d'erreur imputable à la plateforme, une demande peut être déposée.</p>
+          </div>
+          <div class="cas-card cas-card--alerte">
+            <span class="cas-card__label">À examiner</span>
+            <h4>Changement majeur</h4>
+            <p>En cas de modification importante (lieu, horaire), le remboursement est étudié avec l'organisateur.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="non-remboursable">
+        <h2><span class="num">03.</span> Cas non remboursables</h2>
+        <p>Sauf accord spécifique de l'organisateur, les situations suivantes ne donnent pas lieu à remboursement :</p>
+        <ul>
+          <li>Un changement d'avis personnel de l'utilisateur.</li>
+          <li>Une impossibilité personnelle d'assister à l'événement.</li>
+          <li>Un billet déjà utilisé ou scanné à l'entrée.</li>
+          <li>Un billet non présenté à l'entrée pour quelque raison que ce soit.</li>
+          <li>Une demande formulée après l'événement.</li>
+        </ul>
+        <div class="highlight">
+          <p>Nous vous invitons à vérifier attentivement les détails de l'événement (date, lieu, conditions) avant d'acheter votre billet.</p>
+        </div>
+      </section>
+
+      <section id="processus">
+        <h2><span class="num">04.</span> Processus de demande</h2>
+        <p>Pour demander un remboursement, l'utilisateur doit suivre les étapes suivantes :</p>
+        <div class="demande-steps">
+          <div class="demande-step">
+            <span class="demande-step__num">01</span>
+            <h4>Ouvrir une demande</h4>
+            <p>Contactez notre support depuis l'application ou par email.</p>
+          </div>
+          <div class="demande-step">
+            <span class="demande-step__num">02</span>
+            <h4>Fournir les informations</h4>
+            <p>Indiquez votre nom, l'événement concerné et la référence du billet.</p>
+          </div>
+          <div class="demande-step">
+            <span class="demande-step__num">03</span>
+            <h4>Examen de la demande</h4>
+            <p>Notre équipe examine votre demande avec l'organisateur concerné.</p>
+          </div>
+          <div class="demande-step">
+            <span class="demande-step__num">04</span>
+            <h4>Notification</h4>
+            <p>Vous êtes informé de la décision par email ou via l'application.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="delais">
+        <h2><span class="num">05.</span> Délais de traitement</h2>
+        <p>Les demandes de remboursement sont examinées dans les meilleurs délais, généralement dans un délai indicatif de quelques jours ouvrés suivant la réception de la demande complète.</p>
+        <p>Une fois la décision favorable rendue, le remboursement est traité selon le moyen de paiement utilisé lors de l'achat. Le délai de réception dépend ensuite de l'établissement ou du service de paiement concerné.</p>
+      </section>
+
+      <section id="organisateurs">
+        <h2><span class="num">06.</span> Responsabilité des organisateurs</h2>
+        <p>Les organisateurs d'événements sont responsables de la politique de remboursement applicable à leurs événements. Ils s'engagent à :</p>
+        <ul>
+          <li>Communiquer clairement leurs conditions de remboursement aux participants.</li>
+          <li>Informer rapidement bTicket en cas d'annulation ou de modification d'un événement.</li>
+          <li>Coopérer avec bTicket dans le traitement des demandes de remboursement.</li>
+        </ul>
+      </section>
+
+      <section id="annulation">
+        <h2><span class="num">07.</span> Annulation d'événement</h2>
+        <p>En cas d'annulation d'un événement par l'organisateur :</p>
+        <ul>
+          <li>Les utilisateurs sont informés via l'application ou par email.</li>
+          <li>Les billets concernés font l'objet d'un remboursement selon les conditions en vigueur.</li>
+          <li>Les modalités pratiques (montant, délai) sont précisées au moment de l'annonce.</li>
+        </ul>
+        <p>bTicket accompagne les utilisateurs et les organisateurs pour faciliter la gestion de ces situations.</p>
+      </section>
+
+      <section id="contact">
+        <h2><span class="num">08.</span> Nous contacter</h2>
+        <p>Pour toute demande de remboursement ou question relative à cette politique :</p>
+        <ul>
+          <li>Par email : <a href="mailto:contact@bticket.africa">contact@bticket.africa</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="index.html" class="brand">
+          <img src="IMAGES/logo.png" alt="bTicket">
+          <span class="brand__text">b<span>Ticket</span></span>
+        </a>
+        <p>La plateforme africaine de billetterie numérique. Achetez, gérez et validez vos billets en toute simplicité.</p>
+        <div class="footer__socials">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3 0-1.3-.1-2.45-.1-2.4 0-4.05 1.5-4.05 4.2v2.2H7.5V14h2.7v8h3.3z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 3h3l-6.6 7.6L21.7 21h-5.9l-4.3-5.6L6.4 21H3.3l7-8.1L2.7 3h6l3.9 5.2L17.5 3zm-1 16h1.6L7.6 4.6H5.9L16.5 19z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3V9.5zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-4.9c0-1.17-.02-2.68-1.7-2.68-1.7 0-1.96 1.28-1.96 2.6V21h-4V9.5z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="application.html">Application</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="telecharger.html">Télécharger</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Ressources</h4>
+        <ul>
+          <li><a href="application.html">Fonctionnalités</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="organisateurs.html">Organisateurs</a></li>
+          <li><a href="agents.html">Agents</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="politique-confidentialite.html">Politique de confidentialité</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="conditions-utilisation.html">Conditions d'utilisation</a></li>
+          <li><a href="politique-remboursement.html">Politique de remboursement</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span id="year"></span> bTicket. Tous droits réservés.</span>
+      <span>Conçu pour l'Afrique</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+const nav = document.getElementById('nav');
+const progressBar = document.getElementById('progressBar');
+function onScroll() {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 40);
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileLinks = mobileMenu.querySelectorAll('a');
+function toggleMenu(force) {
+  const open = force !== undefined ? force : !mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', open);
+  burger.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+  mobileLinks.forEach((link, i) => { link.style.transitionDelay = open ? (0.05 * i + 0.08) + 's' : '0s'; });
+}
+burger.addEventListener('click', () => toggleMenu());
+mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleMenu(false); });
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', e => {
+    const id = anchor.getAttribute('href');
+    if (id === '#' || id.length < 2) return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const top = target.getBoundingClientRect().top + window.scrollY - 100;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+});
+</script>
+
+
+<!-- Tix — Assistant IA bTicket -->
+<script src="safi-ai.js" defer></script>
+</body>
+</html>
