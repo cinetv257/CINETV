@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script>
+/* Anti-flash : restaurer le thème sauvegardé avant le premier rendu */
+(function(){
+  var t = localStorage.getItem('bticket-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 <meta name="description" content="bTicket — La plateforme africaine de billetterie numérique. Notre histoire, notre mission, notre vision pour les événements en Afrique.">
 <title>À propos — bTicket</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.bunny.net/css?family=nexa:400,600,700,800&display=swap" rel="stylesheet">
 
 <style>
 /* =========================================================
@@ -101,7 +108,11 @@ h1, h2, h3, h4 {
   color: var(--or);
   margin-bottom: 22px;
 }
-.eyebrow::before { /* remplacé par point doré via patch v3 */ }
+.eyebrow::before {
+  content: "";
+  width: 32px; height: 1px;
+  background: var(--or);
+}
 
 .section-title {
   font-size: clamp(1.9rem, 4.2vw, 3rem);
@@ -271,6 +282,7 @@ h1, h2, h3, h4 {
   font-size: clamp(1.02rem, 4.2vw, 1.2rem);
   font-weight: 500;
   padding: 10px 0;
+  border-bottom: 1px solid var(--line-soft);
   color: var(--ivoire);
   transform: translateY(20px);
   opacity: 0;
@@ -388,6 +400,7 @@ h1, h2, h3, h4 {
    ========================================================= */
 .stats {
   padding: 45px 0;
+  border-bottom: 1px solid var(--line-soft);
   background: var(--noir-soft);
 }
 .stats__row {
@@ -456,6 +469,8 @@ h1, h2, h3, h4 {
    ========================================================= */
 .mv {
   background: var(--noir-soft);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
 }
 .mv__grid {
   display: grid;
@@ -647,13 +662,14 @@ h1, h2, h3, h4 {
 .footer {
   padding: 80px 0 34px;
   background: var(--noir);
-  /* border-top removed */
+  border-top: 1px solid var(--line-soft);
 }
 .footer__top {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
   gap: 44px;
   padding-bottom: 52px;
+  border-bottom: 1px solid var(--line-soft);
 }
 .footer__brand p {
   color: var(--texte-muted);
@@ -879,226 +895,339 @@ h1, h2, h3, h4 {
   main p { line-height: 1.7; }
   h1, h2, h3, p, li { overflow-wrap: break-word; }
 }
-/* bTicket v3 design */
+
 /* =================================================================
-   bTicket — Design system v3 (Cormorant accent, sans traits inutiles)
+   bTicket — Palette Emerald v1 (mode clair par défaut + Nexa)
    ================================================================= */
 
-/* ── 0. Police d'accent : Cormorant Garamond italic en remplacement
-       de "Orliet Pro Medium Italic" ─────────────────────────────── */
-:root {
-  --font-accent: 'Cormorant Garamond', 'Georgia', serif;
-}
+/* ── 1. Police Nexa depuis Bunny Fonts (libre, pas de GDPR) ───────── */
+@import url('https://fonts.bunny.net/css?family=nexa:400,600,700,800&display=swap');
 
-/* ── 1. Tokens resserrés ─────────────────────────────────────────── */
+/* ── 2. Tokens palette verte ────────────────────────────────────────
+   Mode clair par défaut — dark via [data-theme="dark"]
+   ──────────────────────────────────────────────────────────────── */
 :root {
+  /* Palette principale */
+  --brunswick:   #0C4137;
+  --emerald:     #06D6A0;
+  --polar:       #E6FBF6;
+
+  /* Tokens sémantiques — LIGHT MODE (défaut) */
+  --bg:          #F0FAF7;        /* fond page */
+  --bg-soft:     #E6FBF6;        /* fond sections alternées = Polar */
+  --bg-card:     #FFFFFF;        /* fond cartes */
+  --bg-nav:      rgba(240,250,247,.92);
+
+  --surface:     #FFFFFF;
+  --surface-2:   #E6FBF6;
+
+  --accent:      #06D6A0;        /* Emerald */
+  --accent-dark: #04BF8F;        /* Emerald assombri au hover */
+  --accent-glow: rgba(6,214,160,.25);
+
+  --brand-dark:  #0C4137;        /* Brunswick */
+  --brand-dark2: #0F5447;
+
+  --text-primary:   #0C2B23;     /* Très foncé sur fond clair */
+  --text-secondary: #2D5248;     /* Vert moyen */
+  --text-muted:     rgba(12,65,55,.65);
+  --text-faint:     rgba(12,65,55,.42);
+
+  --line:        rgba(6,214,160,.22);
+  --line-soft:   rgba(6,214,160,.12);
+
+  --blanc: #FFFFFF;
+  --ivoire: var(--polar);
+
+  /* Compatibilité ancien code */
+  --noir:        var(--bg);
+  --noir-soft:   var(--bg-soft);
+  --anthracite:  var(--bg-card);
+  --anthracite-2:#C8EDDF;
+  --or:          var(--accent);
+
+  --font: 'Nexa', 'Montserrat', system-ui, sans-serif;
   --radius: 10px;
   --radius-sm: 7px;
-  --radius-pill: 100px;
 }
 
-/* ── 2. Supprimer TOUS les traits horizontaux section-séparateurs ── */
-.eyebrow::before,
-.eyebrow::after {
-  display: none !important;
-  content: none !important;
-}
-.eyebrow {
-  font-size: 10px;
-  letter-spacing: .2em;
-  font-weight: 600;
-  gap: 10px;
-}
-/* Point lumineux doré à gauche */
-.eyebrow::before {
-  display: inline-block !important;
-  content: "" !important;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--or);
-  box-shadow: 0 0 10px rgba(212,175,55,.8);
-  flex-shrink: 0;
-  order: -1;
+/* ── 3. Mode sombre ──────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg:          #0C1A17;
+  --bg-soft:     #0F2318;
+  --bg-card:     #132D24;
+  --bg-nav:      rgba(12,26,23,.92);
+
+  --surface:     #132D24;
+  --surface-2:   #0F2318;
+
+  --text-primary:   #E6FBF6;
+  --text-secondary: #A8E6D4;
+  --text-muted:     rgba(230,251,246,.65);
+  --text-faint:     rgba(230,251,246,.42);
+
+  --line:        rgba(6,214,160,.2);
+  --line-soft:   rgba(6,214,160,.1);
+
+  --noir:        var(--bg);
+  --noir-soft:   var(--bg-soft);
+  --anthracite:  var(--bg-card);
+  --anthracite-2:#1A3D2F;
+  --ivoire:      var(--text-primary);
+  --blanc:       var(--text-primary);
 }
 
-.section--soft {
-  border-top: none !important;
-  border-bottom: none !important;
-  background: var(--noir-soft);
-}
-.apercu {
-  border-top: none !important;
-  border-bottom: none !important;
-}
-.footer {
-  border-top: none !important;
-  background: #0c0e13 !important;
-  padding-top: 70px !important;
-}
-.footer__top {
-  border-bottom: none !important;
-  position: relative;
-}
-.footer__top::after {
-  content: "";
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 52px; height: 1px;
-  background: var(--or);
-  opacity: .6;
-}
-.mobile-menu a {
-  border-bottom: none !important;
+/* ── 4. Base : fond clair, texte foncé ──────────────────────────── */
+html { background: var(--bg); }
+body {
+  background: var(--bg) !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font) !important;
 }
 
-/* ── 3. Accents typographiques avec Cormorant Garamond italic ────── */
-/* Au lieu de mettre le texte en italique Montserrat (IA), on utilise
-   une vraie police serif élégante — différence immédiatement visible */
-.section-title .gold,
-.hero h1 em,
-.cta h2 .gold,
-.editorial__text h2 .gold,
-.one h2 .gold,
-.avantages__head .section-title .gold {
-  font-family: var(--font-accent) !important;
-  font-style: italic !important;
-  font-weight: 500 !important;
-  font-size: 1.08em;
-  color: var(--or) !important;
-  letter-spacing: -.01em;
+h1, h2, h3, h4 {
+  color: var(--brand-dark) !important;
+  font-family: var(--font) !important;
+}
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4 { color: var(--text-primary) !important; }
+
+p, li, span { color: inherit; }
+.section-lead, .mv-card p, .av-card p, .editorial__text p {
+  color: var(--text-muted) !important;
 }
 
-/* ── 4. Hero : plus d'impact, moins de template ──────────────────── */
-.hero h1 {
-  font-size: clamp(2.9rem, 7.8vw, 5.8rem) !important;
-  line-height: .98 !important;
-  letter-spacing: -.038em !important;
+/* ── 5. Accent Emerald partout où il y avait de l'or ────────────── */
+.gold, .eyebrow, .nav__links a.active,
+.mv-card__label, .av-card__num, .brand__text span,
+.footer__col a:hover, .nav__links a:hover-gold {
+  color: var(--accent) !important;
 }
-.hero h1 em {
-  font-family: var(--font-accent) !important;
-  font-style: italic !important;
-  font-weight: 500 !important;
-  color: var(--or) !important;
-  font-size: 1.1em;
-  display: inline-block;
+::selection { background: var(--accent); color: var(--brand-dark); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+.progress-bar { background: var(--accent) !important; }
+.hero__tag i { background: var(--accent) !important; box-shadow: 0 0 12px var(--accent) !important; }
+.scroll-cue span { background: linear-gradient(to bottom, var(--accent), transparent) !important; }
+
+/* ── 6. Boutons ──────────────────────────────────────────────────── */
+.btn--primary {
+  background: var(--accent) !important;
+  color: var(--brand-dark) !important;
 }
-.hero__tag {
-  padding: 7px 14px !important;
-  border-radius: var(--radius) !important;
-  background: rgba(212,175,55,.09) !important;
-  border: 1px solid rgba(212,175,55,.22) !important;
-  font-size: .73rem !important;
-  font-weight: 500 !important;
-  letter-spacing: .05em !important;
-  text-transform: none !important;
-  color: rgba(244,240,230,.88) !important;
+.btn--primary:hover {
+  background: var(--accent-dark) !important;
+  box-shadow: 0 14px 32px -14px var(--accent-glow) !important;
+}
+.btn--ghost {
+  background: rgba(6,214,160,.06) !important;
+  border-color: var(--line) !important;
+  color: var(--text-primary) !important;
+}
+.btn--ghost:hover { border-color: var(--accent) !important; color: var(--accent) !important; }
+[data-theme="dark"] .btn--ghost {
+  color: var(--text-primary) !important;
+  border-color: var(--line) !important;
 }
 
-/* ── 5. Border-radius partout — 10px, fini le 20px qui crie template */
-.av-card,
-.mv-card,
-.apercu__phone,
-.une-card,
-.safi-chat,
-.safi-sidebar,
-.editorial__visual {
-  border-radius: var(--radius) !important;
-}
-.btn {
-  border-radius: var(--radius) !important;
-  min-height: 48px !important;
-}
-.btn--sm {
-  border-radius: 7px !important;
-  min-height: 38px !important;
-}
-.nav__more-menu {
-  border-radius: var(--radius) !important;
-}
-.nav .btn--primary {
-  border-radius: 7px !important;
-  padding: 9px 16px !important;
-  font-size: .81rem !important;
-}
-.une-card--skeleton, .une-empty { border-radius: var(--radius) !important; }
-
-/* ── 6. Cartes : hover discret, pas de translateY mécanique ─────── */
-.av-card:hover,
-.mv-card:hover,
-.une-card:hover {
-  transform: none !important;
-  border-color: rgba(212,175,55,.3) !important;
-  box-shadow: 0 0 0 1px rgba(212,175,55,.12), 0 10px 36px -12px rgba(0,0,0,.55) !important;
-}
-.apercu__phone:hover {
-  transform: translateY(-5px) !important;
-  border-color: rgba(212,175,55,.3) !important;
-}
-
-/* ── 7. Supprimer radial-gradient ::before sur chaque carte ───────── */
-.mv-card::before {
-  display: none !important;
-}
-
-/* ── 8. Scroll-cue masqué ─────────────────────────────────────────── */
-.scroll-cue { display: none !important; }
-
-/* ── 9. Nav border allégée ──────────────────────────────────────────*/
+/* ── 7. Navigation ───────────────────────────────────────────────── */
+.nav { border-color: transparent; }
 .nav.scrolled {
-  border-bottom-color: rgba(212,175,55,.1) !important;
+  background: var(--bg-nav) !important;
+  backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+.brand__text { color: var(--brand-dark) !important; }
+[data-theme="dark"] .brand__text { color: var(--text-primary) !important; }
+.nav__links a { color: var(--text-secondary) !important; }
+.nav__links a:hover {
+  color: var(--brand-dark) !important;
+  background: rgba(6,214,160,.08) !important;
+}
+[data-theme="dark"] .nav__links a { color: var(--text-muted) !important; }
+[data-theme="dark"] .nav__links a:hover { color: var(--text-primary) !important; }
+.burger { border-color: var(--line) !important; }
+.burger span { background: var(--brand-dark) !important; }
+[data-theme="dark"] .burger span { background: var(--text-primary) !important; }
+
+/* ── 8. Mobile menu ──────────────────────────────────────────────── */
+.mobile-menu {
+  background: var(--bg) !important;
+  backdrop-filter: none;
+}
+[data-theme="dark"] .mobile-menu { background: var(--bg) !important; }
+.mobile-menu a { color: var(--brand-dark) !important; }
+[data-theme="dark"] .mobile-menu a { color: var(--text-primary) !important; }
+.mobile-menu a:hover { color: var(--accent) !important; }
+
+/* ── 9. Hero ──────────────────────────────────────────────────────── */
+.hero h1 em { color: var(--accent) !important; }
+.hero__overlay {
+  background:
+    linear-gradient(180deg, rgba(12,65,55,.45) 0%, rgba(12,65,55,.65) 45%, rgba(12,65,55,.97) 100%),
+    linear-gradient(90deg, rgba(12,65,55,.8) 0%, rgba(12,65,55,.2) 60%, rgba(12,65,55,.65) 100%) !important;
+}
+.cta__overlay {
+  background: linear-gradient(180deg, rgba(12,65,55,.65) 0%, rgba(12,65,55,.88) 100%) !important;
 }
 
-/* ── 10. Section-title : plus de taille ─────────────────────────── */
-.section-title {
-  font-size: clamp(2rem, 4.4vw, 3.1rem);
+/* ── 10. Sections ─────────────────────────────────────────────────── */
+.section--soft, .apercu, .une {
+  background: var(--bg-soft) !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+.editorial__visual { border-color: var(--line) !important; }
+
+/* ── 11. Cartes MV & AV ──────────────────────────────────────────── */
+.mv-card, .av-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: 0 2px 16px -8px rgba(12,65,55,.08);
+}
+.mv-card::before { background: radial-gradient(circle, rgba(6,214,160,.1), transparent 65%) !important; }
+.mv-card:hover, .av-card:hover {
+  border-color: rgba(6,214,160,.45) !important;
+  box-shadow: 0 8px 32px -12px rgba(6,214,160,.18) !important;
+  transform: none !important;
+}
+.mv-card h3, .av-card h3 { color: var(--brand-dark) !important; }
+[data-theme="dark"] .mv-card h3,
+[data-theme="dark"] .av-card h3 { color: var(--text-primary) !important; }
+.av-card__icon {
+  background: rgba(6,214,160,.1) !important;
+  border-color: var(--line) !important;
+  color: var(--accent) !important;
+}
+.av-card__num { color: rgba(6,214,160,.4) !important; }
+
+/* ── 12. Apercu phones ───────────────────────────────────────────── */
+.apercu__phone {
+  background: var(--bg-card) !important;
+  border-color: var(--line) !important;
+}
+.apercu__phone:hover { border-color: rgba(6,214,160,.4) !important; transform: translateY(-5px) !important; }
+
+/* ── 13. Footer ──────────────────────────────────────────────────── */
+.footer {
+  background: var(--brunswick) !important;
+  border-top: none !important;
+}
+.footer, .footer h4, .footer__col a, .footer p, .footer__brand p {
+  color: rgba(230,251,246,.85) !important;
+}
+.footer__col a:hover { color: var(--emerald) !important; }
+.footer__socials a {
+  background: rgba(6,214,160,.12) !important;
+  border-color: rgba(6,214,160,.22) !important;
+  color: var(--polar) !important;
+}
+.footer__socials a:hover {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--brunswick) !important;
+}
+.footer__bottom { color: rgba(230,251,246,.5) !important; }
+.footer__top::after { background: var(--emerald) !important; }
+/* Le footer reste vert Brunswick même en mode clair — c'est voulu */
+
+/* ── 14. Nav scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar-track { background: var(--bg) !important; }
+::-webkit-scrollbar-thumb { background: var(--line) !important; }
+
+/* ── 15. Hero tag ────────────────────────────────────────────────── */
+.hero__tag {
+  background: rgba(6,214,160,.1) !important;
+  border-color: rgba(6,214,160,.3) !important;
+  color: var(--polar) !important;
 }
 
-/* ── 11. Grille Pourquoi : première carte plus large sur desktop ──── */
-@media (min-width: 1081px) {
-  .avantages__grid {
-    grid-template-columns: 1.3fr 1fr 1fr 1fr !important;
-    gap: 16px !important;
-  }
-  .avantages__grid .av-card:first-child {
-    background: linear-gradient(135deg, rgba(212,175,55,.09) 0%, var(--anthracite) 55%) !important;
-    border-color: rgba(212,175,55,.18) !important;
-  }
+/* ── 16. Eyebrow point ───────────────────────────────────────────── */
+.eyebrow::before {
+  background: var(--accent) !important;
+  box-shadow: 0 0 10px rgba(6,214,160,.7) !important;
+}
+.eyebrow { color: var(--accent) !important; }
+
+/* ── 17. CTA fond plein Brunswick ───────────────────────────────── */
+.cta { background: var(--brunswick); }
+.cta h2, .cta p { color: var(--polar) !important; }
+
+/* ── 18. Transition mode claire/sombre ──────────────────────────── */
+html { transition: background .35s ease, color .35s ease; }
+*, *::before, *::after { transition-property: background-color, border-color, color; transition-duration: .3s; }
+/* Annuler la transition sur les animations */
+.hero__inner *, .hero__tag *, .scroll-cue * { transition: none !important; }
+
+/* ── 19. Comparaison tarifs ──────────────────────────────────────── */
+.compare__row { background: var(--bg-card) !important; border-color: var(--line) !important; }
+.compare__check { color: var(--accent) !important; }
+
+/* ── 20. Badge/Chip styles ───────────────────────────────────────── */
+.badge, .plan-badge, .status-badge {
+  background: rgba(6,214,160,.12) !important;
+  color: var(--brunswick) !important;
+  border: 1px solid var(--line) !important;
 }
 
-/* ── 12. Numéros av-card : ultra discrets ─────────────────────────── */
-.av-card__num {
-  font-size: .58rem !important;
-  color: rgba(212,175,55,.3) !important;
-  letter-spacing: .1em !important;
-  font-weight: 600 !important;
+
+/* ── Toggle thème + langue dans le menu hamburger ─────────── */
+.menu-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-soft);
 }
-@media (max-width: 1080px) { .av-card__num { display: none !important; } }
-
-/* ── 13. Rythme de padding varié (cassé par rapport au 130px partout) */
-.section { padding: 110px 0; }
-@media (max-width: 720px) { .section { padding: 86px 0; } }
-.une.section { padding: 90px 0 100px; }
-
-/* ── 14. Boutons nav : sans animation de sortie ─────────────────── */
-.btn--ghost:hover { transform: none !important; }
-.btn--primary:hover { transform: none !important; }
-.footer__socials a:hover { transform: translateY(-2px) !important; }
-
-/* ── 15. Logo brand__text : toujours en gras ─────────────────────── */
-.brand__text,
-.brand__text span {
-  font-weight: 700 !important;
+.menu-controls button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .25s, border-color .25s, color .25s;
+  flex: 1;
+  justify-content: center;
 }
-
-/* ── 16. Section-title accent global (pages légales et secondaires) ─ */
-.page-hero h1 em,
-.page-hero h1 span.gold {
-  font-family: var(--font-accent) !important;
-  font-style: italic !important;
-  font-weight: 500 !important;
-  color: var(--or) !important;
+.menu-controls button:hover {
+  background: rgba(6,214,160,.1);
+  border-color: var(--accent);
+  color: var(--accent);
 }
+[data-theme="dark"] .menu-controls {
+  border-top-color: rgba(6,214,160,.12);
+}
+/* Bouton thème/langue dans la nav desktop */
+.nav__extras {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav__extras button {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 12px; border-radius: 7px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: .78rem; font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.nav__extras button:hover {
+  background: rgba(6,214,160,.08);
+  border-color: var(--accent); color: var(--accent);
+}
+[data-theme="dark"] .nav__extras button { color: var(--text-muted); }
 
 </style>
 </head>
@@ -1160,6 +1289,11 @@ h1, h2, h3, h4 {
   <a href="a-propos.html" class="active">À propos</a>
   <a href="assistant.html">Assistant</a>
   <a href="telecharger.html" class="btn btn--primary">Télécharger l'app</a>
+
+  <div class="menu-controls">
+    <button class="theme-toggle" aria-label="Changer de mode"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Mode sombre</button>
+    <button class="lang-toggle" aria-label="Changer de langue">🌐 English</button>
+  </div>
 </div>
 
 <main>
@@ -1548,5 +1682,81 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 })();
 </script>
 <script src="safi-ai.js" defer></script>
+
+<script>
+/* ── Thème : mode clair/sombre ───────────────────────────── */
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'light';
+  var next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('bticket-theme', next);
+  updateThemeBtn();
+}
+
+function updateThemeBtn() {
+  var theme = document.documentElement.getAttribute('data-theme') || 'light';
+  var btns = document.querySelectorAll('.theme-toggle');
+  btns.forEach(function(btn) {
+    btn.innerHTML = theme === 'dark'
+      ? '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Mode clair'
+      : '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Mode sombre';
+    btn.setAttribute('aria-label', theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre');
+  });
+}
+
+/* ── Langue : FR / EN ────────────────────────────────────── */
+var translations = {
+  fr: {
+    'nav.events': 'Événements', 'nav.app': 'Application', 'nav.prices': 'Tarifs',
+    'nav.about': 'À propos', 'nav.blog': 'Blog', 'nav.organizers': 'Organisateurs',
+    'nav.agents': 'Agents', 'nav.assistant': 'Tix', 'nav.download': 'Télécharger',
+    'nav.cta': 'Commencer', 'lang.toggle': 'English',
+  },
+  en: {
+    'nav.events': 'Events', 'nav.app': 'App', 'nav.prices': 'Pricing',
+    'nav.about': 'About', 'nav.blog': 'Blog', 'nav.organizers': 'Organizers',
+    'nav.agents': 'Agents', 'nav.assistant': 'Tix', 'nav.download': 'Download',
+    'nav.cta': 'Get started', 'lang.toggle': 'Français',
+  }
+};
+
+function setLang(lang) {
+  document.documentElement.setAttribute('lang', lang);
+  localStorage.setItem('bticket-lang', lang);
+  var t = translations[lang] || translations.fr;
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+  document.querySelectorAll('.lang-toggle').forEach(function(btn) {
+    btn.textContent = t['lang.toggle'];
+  });
+}
+
+function toggleLang() {
+  var current = document.documentElement.getAttribute('lang') || 'fr';
+  setLang(current === 'fr' ? 'en' : 'fr');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Restaurer le thème sauvegardé
+  var savedTheme = localStorage.getItem('bticket-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeBtn();
+
+  // Restaurer la langue
+  var savedLang = localStorage.getItem('bticket-lang') || 'fr';
+  setLang(savedLang);
+
+  // Écouter les boutons
+  document.querySelectorAll('.theme-toggle').forEach(function(btn) {
+    btn.addEventListener('click', toggleTheme);
+  });
+  document.querySelectorAll('.lang-toggle').forEach(function(btn) {
+    btn.addEventListener('click', toggleLang);
+  });
+});
+</script>
+
 </body>
 </html>
